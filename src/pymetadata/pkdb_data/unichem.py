@@ -1,5 +1,5 @@
 """
-Unichem metadata
+Unichem metadata.
 
 Additional substance information based on inchikeys
 
@@ -16,10 +16,6 @@ from typing import Dict, List
 import requests
 
 from pymetadata.pkdb_data.xref import CrossReference
-
-
-logger = logging.getLogger(__name__)
-
 from pymetadata import CACHE_PATH, CACHE_USE
 from pymetadata.pkdb_data.cache import (
     DataclassJSONEncoder,
@@ -27,6 +23,7 @@ from pymetadata.pkdb_data.cache import (
     write_json_cache,
 )
 
+logger = logging.getLogger(__name__)
 
 @dataclass
 class UnichemSource:

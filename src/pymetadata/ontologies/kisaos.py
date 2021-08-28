@@ -18,7 +18,7 @@ kisao_pattern = re.compile(r"^KISAO_\d{7}$")
 
 
 def create_kisao_lookup() -> Dict[str, str]:
-    """Creates dictionary for lookup by name."""
+    """Create dictionary for lookup by name."""
     pronto_ontology: Ontology = kisao_ontology._ontology
     name_to_kisao: Dict[str, str] = {}
     for term_id in pronto_ontology:
@@ -44,7 +44,7 @@ kisao_lookup = create_kisao_lookup()
 
 
 def validate_kisao(kisao: str) -> str:
-    """Validates and normalizes kisao id against pattern."""
+    """Validate and normalizes kisao id against pattern."""
     if not kisao.startswith("KISAO"):
         # try lookup by name
         kisao = kisao_lookup.get(kisao, kisao)

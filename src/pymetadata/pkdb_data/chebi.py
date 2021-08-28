@@ -1,3 +1,4 @@
+"""Module for working with chebi."""
 import logging
 from pprint import pprint
 from typing import Dict
@@ -17,9 +18,7 @@ logger = logging.getLogger(__name__)
 
 
 class ChebiQuery:
-    """
-    Querying information from ChEBI.
-    """
+    """Class to query information from ChEBI."""
 
     @staticmethod
     def query(chebi, cache=CACHE_USE, cache_path=CACHE_PATH) -> Dict:

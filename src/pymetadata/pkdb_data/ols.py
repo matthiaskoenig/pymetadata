@@ -1,6 +1,4 @@
-"""
-Lookup of ontology information.
-"""
+"""Lookup of ontology information from the ontology lookup service (OLS)."""
 import logging
 from dataclasses import dataclass, field
 from pathlib import Path
@@ -57,6 +55,8 @@ ONTOLOGIES = [
 
 
 class OLSQuery:
+    """Handling OLS queries."""
+
     url_term_query = "https://www.ebi.ac.uk/ols/api/ontologies/{}/terms/{}"
 
     def __init__(
@@ -75,6 +75,7 @@ class OLSQuery:
             self.cache_path.mkdir(parents=True)
 
     def get_iri(self, ontology: str, term: str):
+        """Get IRI information."""
         ols_ontology = self.ontologies.get(ontology, None)  # type: OLSOntology
         # remove prefix if existing
         if term.startswith(ontology.upper()):
@@ -129,17 +130,16 @@ class OLSQuery:
         return data
 
     def process_response(self, term: Dict):
+        """Process the response dictionary."""
         if term is None:
             return None
 
-        # pprint("-" * 80)
-        # pprint(term)
         label = term.get("label", None)
         description = term.get("description", None)
         if description and isinstance(description, list):
             description = description[0]
         synonyms = term.get("obo_synonym", [])
-        xrefs = term.get("obo_xref", [])
+        _ = term.get("obo_xref", [])
 
         return {
             "label": label,

@@ -11,7 +11,7 @@ from typing import Dict, List
 
 import requests
 
-from pymetadata import CACHE_PATH, CACHE_USE
+from pymetadata import RESOURCES_DIR, CACHE_USE
 from pymetadata.pkdb_data.cache import (
     DataclassJSONEncoder,
     read_json_cache,
@@ -245,7 +245,7 @@ class Registry:
         **misc_namespaces(),
     }
 
-    def __init__(self, cache_path: Path = CACHE_PATH, cache: bool = CACHE_USE):
+    def __init__(self, cache_path: Path = RESOURCES_DIR, cache: bool = CACHE_USE):
         """
 
         :param cache: retrieve the latest MIRIAM definition
