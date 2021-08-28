@@ -1,5 +1,6 @@
 """Module for working with chebi."""
 import logging
+from pathlib import Path
 from pprint import pprint
 from typing import Dict
 
@@ -21,7 +22,9 @@ class ChebiQuery:
     """Class to query information from ChEBI."""
 
     @staticmethod
-    def query(chebi, cache=CACHE_USE, cache_path=CACHE_PATH) -> Dict:
+    def query(
+        chebi: str, cache: bool = CACHE_USE, cache_path: Path = CACHE_PATH
+    ) -> Dict:
         """Query additional chebi information."""
 
         if not chebi:

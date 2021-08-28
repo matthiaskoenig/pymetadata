@@ -11,7 +11,7 @@ from typing import Dict, List
 
 import requests
 
-from pymetadata import RESOURCES_DIR, CACHE_USE
+from pymetadata import CACHE_USE, RESOURCES_DIR
 from pymetadata.pkdb_data.cache import (
     DataclassJSONEncoder,
     read_json_cache,

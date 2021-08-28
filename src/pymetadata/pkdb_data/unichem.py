@@ -15,13 +15,14 @@ from typing import Dict, List
 
 import requests
 
-from pymetadata.pkdb_data.xref import CrossReference
 from pymetadata import CACHE_PATH, CACHE_USE
 from pymetadata.pkdb_data.cache import (
     DataclassJSONEncoder,
     read_json_cache,
     write_json_cache,
 )
+from pymetadata.pkdb_data.xref import CrossReference
+
 
 logger = logging.getLogger(__name__)
 

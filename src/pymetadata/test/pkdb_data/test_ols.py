@@ -2,7 +2,7 @@ from pymetadata.pkdb_data.annotation import BQB, Annotation
 from pymetadata.pkdb_data.ols import ONTOLOGIES, OLSQuery
 
 
-def test_ols_query():
+def test_ols_query() -> None:
     data = [
         (BQB.IS, "chebi/CHEBI:37924"),
         (BQB.IS, "ncit/C66872"),
