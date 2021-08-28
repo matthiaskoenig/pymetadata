@@ -24,7 +24,7 @@ logger = logging.getLogger(__name__)
 
 @dataclass
 class Resource:
-    """Resource"""
+    """Resource."""
 
     id: int
     providerCode: str
@@ -44,7 +44,7 @@ class Resource:
 
 @dataclass
 class Namespace:
-    """Namespace"""
+    """Namespace."""
 
     id: int
     prefix: str
@@ -61,6 +61,7 @@ class Namespace:
     deprecationDate: str = field(repr=False, default=None)
 
     def __post_init__(self):
+        """Set resources."""
         if self.resources is not None:
             self.resources = [Resource(**d) for d in self.resources]
         else:
@@ -68,7 +69,7 @@ class Namespace:
 
 
 def ols_namespaces() -> Dict[str, Namespace]:
-    """Ontologies available from OLS but not in identifiers.org"""
+    """Define Ontologies available from OLS but not in identifiers.org."""
     ols_info = {
         "deprecated": False,
         "deprecationDate": None,
@@ -104,7 +105,7 @@ def ols_namespaces() -> Dict[str, Namespace]:
         Namespace(
             id=None,
             prefix="cmo",
-            pattern="^CMO:\d+$",
+            pattern=r"^CMO:\d+$",
             name="Chemical methods ontology",
             description="Morphological and physiological measurement records "
             "generated from clinical and model organism research and health programs.",
@@ -112,7 +113,7 @@ def ols_namespaces() -> Dict[str, Namespace]:
         ),
         Namespace(
             id=None,
-            pattern="^CHMO:\d+$",
+            pattern=r"^CHMO:\d+$",
             name="Chemical methods ontology",
             prefix="chmo",
             description="CHMO, the chemical methods ontology",
@@ -120,7 +121,7 @@ def ols_namespaces() -> Dict[str, Namespace]:
         ),
         Namespace(
             id=None,
-            pattern="^VTO:\d+$",
+            pattern=r"^VTO:\d+$",
             name="Vertebrate Taxonomy Ontology",
             prefix="vto",
             description="VTO Vertebrate Taxonomy Ontology",
@@ -128,7 +129,7 @@ def ols_namespaces() -> Dict[str, Namespace]:
         ),
         Namespace(
             id=None,
-            pattern="^OPMI:\d+$",
+            pattern=r"^OPMI:\d+$",
             name="Ontology of Precision Medicine and Investigation",
             prefix="opmi",
             description="OPMI: Ontology of Precision Medicine and Investigation",
@@ -136,7 +137,7 @@ def ols_namespaces() -> Dict[str, Namespace]:
         ),
         Namespace(
             id=None,
-            pattern="^MONDO:\d+$",
+            pattern=r"^MONDO:\d+$",
             name="MONDO",
             prefix="mondo",
             description="MONDO",
@@ -144,7 +145,7 @@ def ols_namespaces() -> Dict[str, Namespace]:
         ),
         Namespace(
             id=None,
-            pattern="^SIO:\d+$",
+            pattern=r"^SIO:\d+$",
             name="SIO",
             prefix="sio",
             description="Semanticscience Integrated Ontology",
@@ -152,7 +153,7 @@ def ols_namespaces() -> Dict[str, Namespace]:
         ),
         Namespace(
             id=None,
-            pattern="^STATO:\d+$",
+            pattern=r"^STATO:\d+$",
             name="STATO",
             prefix="stato",
             description="STATO is the statistical methods ontology. It contains concepts and properties related to "
@@ -162,7 +163,7 @@ def ols_namespaces() -> Dict[str, Namespace]:
         ),
         Namespace(
             id=None,
-            pattern="^ATOL:\d+$",
+            pattern=r"^ATOL:\d+$",
             name="ATOL",
             prefix="atol",
             description="Animal Trait Ontology for Livestock",
@@ -170,7 +171,7 @@ def ols_namespaces() -> Dict[str, Namespace]:
         ),
         Namespace(
             id=None,
-            pattern="^NBO:\d+$",
+            pattern=r"^NBO:\d+$",
             name="NBO",
             prefix="nbo",
             description="Neuro Behavior Ontology",
@@ -178,7 +179,7 @@ def ols_namespaces() -> Dict[str, Namespace]:
         ),
         Namespace(
             id=None,
-            pattern="^SCDO:\d+$",
+            pattern=r"^SCDO:\d+$",
             name="Sickle Cell Disease Ontology",
             prefix="scdo",
             description="Sickle Cell Disease Ontology",
@@ -186,7 +187,7 @@ def ols_namespaces() -> Dict[str, Namespace]:
         ),
         Namespace(
             id=None,
-            pattern="^FIX:\d+$",
+            pattern=r"^FIX:\d+$",
             name="Physico-chemical methods and properties Ontology",
             prefix="fix",
             description="Physico-chemical methods and properties Ontology",
@@ -194,7 +195,7 @@ def ols_namespaces() -> Dict[str, Namespace]:
         ),
         Namespace(
             id=None,
-            pattern="^OBA:\d+$",
+            pattern=r"^OBA:\d+$",
             name="Ontology of Biological Attributes",
             prefix="oba",
             description="PubChem is an open chemistry database at the National Institutes of Health (NIH).",
@@ -202,7 +203,7 @@ def ols_namespaces() -> Dict[str, Namespace]:
         ),
         Namespace(
             id=None,
-            pattern="^MMO:\d+$",
+            pattern=r"^MMO:\d+$",
             name="Measurement method ontology",
             prefix="mmo",
             description="Measurement method ontology",
@@ -229,6 +230,7 @@ def ols_namespaces() -> Dict[str, Namespace]:
 
 
 def misc_namespaces() -> List[Namespace]:
+    """Define misc namespaces."""
     namespaces = []
     return {ns.prefix: ns for ns in namespaces}
 
@@ -246,7 +248,7 @@ class Registry:
     }
 
     def __init__(self, cache_path: Path = RESOURCES_DIR, cache: bool = CACHE_USE):
-        """
+        """Initialize registry.
 
         :param cache: retrieve the latest MIRIAM definition
         """
@@ -256,6 +258,7 @@ class Registry:
         )  # type: Dict[str, Namespace]
 
     def update(self) -> Dict[str, Namespace]:
+        """Update registry."""
         Registry.update_registry(registry_path=self.registry_path)
         return Registry.load_registry(registry_path=self.registry_path)
 
@@ -270,7 +273,7 @@ class Registry:
         namespaces = response.json()["payload"]["namespaces"]
 
         ns_dict = {}
-        for k, data in enumerate(namespaces):
+        for _, data in enumerate(namespaces):
             ns = Namespace(**data)
             # for resource in ns.resources:
             #    print(resource)
@@ -299,7 +302,7 @@ class Registry:
 
     @staticmethod
     def load_registry(registry_path: Path) -> Dict[str, Namespace]:
-        """Loads namespaces with resources from path."""
+        """Load namespaces with resources from path."""
         if not registry_path.exists():
             Registry.update_registry(registry_path=registry_path)
 

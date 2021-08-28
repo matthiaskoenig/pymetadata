@@ -25,9 +25,10 @@ from pymetadata.pkdb_data.cache import (
 
 logger = logging.getLogger(__name__)
 
+
 @dataclass
 class UnichemSource:
-    """Unichem source
+    """Unichem source.
 
     src_id (the src_id for this source),
     src_url (the main home page of the source),
@@ -52,6 +53,8 @@ class UnichemSource:
 
 
 class UnichemQuery:
+    """Query unichem."""
+
     @classmethod
     def _get_all_src_information(
         cls, cache_path: Path = CACHE_PATH, cache: bool = CACHE_USE
@@ -81,7 +84,7 @@ class UnichemQuery:
 
     @staticmethod
     def _get_src_information(src_id: int) -> Dict:
-        """Get unichem source information for given source id"""
+        """Get unichem source information for given source id."""
         url = f"https://www.ebi.ac.uk/unichem/rest/sources/{src_id}"
         response = requests.get(url)
         d = response.json()
@@ -129,7 +132,7 @@ class UnichemQuery:
             for d in data:
                 try:
                     d["source"] = cls.sources[d["src_id"]]
-                except KeyError as err:
+                except KeyError:
                     logger.error(
                         f"inchikey/{inchikey}: Key <{d['src_id']}> missing from {cls.sources.keys()}"
                     )

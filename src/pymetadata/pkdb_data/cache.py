@@ -1,6 +1,6 @@
+"""Caching of information."""
 import json
 import logging
-from json import JSONEncoder
 from json.encoder import JSONEncoder
 from pathlib import Path
 from typing import Dict
@@ -13,6 +13,7 @@ class DataclassJSONEncoder(JSONEncoder):
     """JSON serialization of dataclasses."""
 
     def default(self, o):
+        """Serialize to JSON."""
         return o.__dict__
 
 

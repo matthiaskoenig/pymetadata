@@ -1,3 +1,4 @@
+"""Module for crossreferences (xref)."""
 import logging
 import re
 from dataclasses import dataclass, field
@@ -41,13 +42,15 @@ class CrossReference:
     url: str
 
     def __post_init__(self):
+        """Validate."""
         self.validate()
 
     def to_dict(self) -> Dict:
+        """Convert to dict."""
         return self.__dict__
 
     def validate(self, warnings=True) -> bool:
-        """Validate the cross reference
+        """Validate the cross reference.
 
         :return:
         """

@@ -16,10 +16,13 @@ logger = logging.getLogger(__name__)
 
 @dataclass
 class OLSOntology:
+    """OLSOntology."""
+
     name: str
     iri_pattern: str = field(default=None)
 
     def __post_init__(self):
+        """Fix IRI patterns."""
         if self.iri_pattern is None:
             self.iri_pattern = (
                 f"http://purl.obolibrary.org/obo/{self.name.upper()}" + "_{$Id}"

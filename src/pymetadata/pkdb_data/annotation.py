@@ -1,3 +1,4 @@
+"""Annotation helpers."""
 import logging
 import re
 import urllib
@@ -16,6 +17,8 @@ OLS_QUERY = OLSQuery(ontologies=ONTOLOGIES)
 
 
 class BQB(Enum):
+    """Biological qualifier."""
+
     IS = "BQB_IS"
     HAS_PART = "BQB_HAS_PART"
     IS_PART_OF = "BQB_IS_PART_OF"
@@ -33,6 +36,8 @@ class BQB(Enum):
 
 
 class Annotation(object):
+    """Annotation."""
+
     def __init__(self, relation, resource, url=None, description=None, label=None):
         self.relation = relation
         self.description = description
@@ -102,6 +107,7 @@ class Annotation(object):
                     self.xrefs.append(_xref)
 
     def query_ols(self):
+        """Query ontology lookup service."""
         d = OLS_QUERY.query_ols(ontology=self.collection, term=self.term)
         info = OLS_QUERY.process_response(d)
         if info is not None:
@@ -118,9 +124,11 @@ class Annotation(object):
         return info
 
     def __repr__(self):
+        """Get representation string."""
         return f"Annotation({self.collection}|{self.term}|{self.description}|{self.synonyms}|{self.xrefs})"
 
     def to_dict(self):
+        """Convert to dict."""
         return {
             "term": self.term,
             "relation": self.relation.value,
@@ -133,12 +141,7 @@ class Annotation(object):
 
     @staticmethod
     def check_term(collection, term):
-        """Checks that a given term follows id pattern for existing collection.
-
-        :param collection:
-        :param term:
-        :return:
-        """
+        """Check that a given term follows id pattern for existing collection."""
         namespace = REGISTRY.ns_dict.get(collection, None)
         if not namespace:
             raise ValueError(
@@ -157,19 +160,16 @@ class Annotation(object):
         return True
 
     @staticmethod
-    def check_qualifier(qualifier):
-        """Checks that the qualifier is an allowed qualifier.
-
-        :param qualifier:
-        :return:
-        """
+    def check_qualifier(qualifier) -> None:
+        """Check that the qualifier is an allowed qualifier."""
         if not isinstance(qualifier, BQB):
             raise ValueError(
                 f"relation `{qualifier}``> is not in allowed qualifiers: "
                 f"{[e.value for e in BQB]}"
             )
 
-    def validate(self):
+    def validate(self) -> None:
+        """Validate."""
         self.check_qualifier(self.relation)
         if self.collection:
             self.check_term(collection=self.collection, term=self.term)
