@@ -1,4 +1,4 @@
-.. image:: https://github.com/matthiaskoenig/sbmlutils/raw/develop/docs/images/favicon/favicon-32x32.png
+.. image:: https://github.com/matthiaskoenig/pymetadata/raw/develop/docs/images/favicon/favicon-32x32.png
    :align: left
    :alt: pymetadata logo
 
