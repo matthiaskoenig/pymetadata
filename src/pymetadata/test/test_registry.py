@@ -1,4 +1,4 @@
-from pymetadata.pkdb_data.registry import Registry
+from pymetadata.identifiers.registry import Registry
 
 
 def test_registry() -> None:

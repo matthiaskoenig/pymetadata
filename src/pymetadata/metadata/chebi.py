@@ -8,7 +8,7 @@ import numpy as np
 from libchebipy import ChebiEntity, ChebiException
 
 from pymetadata import CACHE_PATH, CACHE_USE
-from pymetadata.pkdb_data.cache import (
+from pymetadata.cache import (
     DataclassJSONEncoder,
     read_json_cache,
     write_json_cache,

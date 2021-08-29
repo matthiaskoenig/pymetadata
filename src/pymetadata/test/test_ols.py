@@ -1,5 +1,4 @@
-from pymetadata.pkdb_data.annotation import BQB, Annotation
-from pymetadata.pkdb_data.ols import ONTOLOGIES, OLSQuery
+from pymetadata.core.annotation import BQB, Annotation
 
 
 def test_ols_query() -> None:

@@ -11,14 +11,10 @@ A standard workflow is looking up the components for instance in things like OLS
 ontology lookup service.
 """
 import logging
-import os
 import re
-from pathlib import Path
-from typing import Dict, Iterable, List, Optional, Tuple, Union
+from typing import Dict, Optional, Tuple, Union
 
-import pandas as pd
-
-from .miriam import (
+from pymetadata.identifiers.miriam import (
     BQB,
     BQM,
     IDENTIFIERS_ORG_PATTERN,

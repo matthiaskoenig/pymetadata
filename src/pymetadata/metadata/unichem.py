@@ -10,18 +10,17 @@ import logging
 import urllib
 from dataclasses import dataclass, field
 from pathlib import Path
-from pprint import pprint
 from typing import Dict, List
 
 import requests
 
 from pymetadata import CACHE_PATH, CACHE_USE
-from pymetadata.pkdb_data.cache import (
+from pymetadata.cache import (
     DataclassJSONEncoder,
     read_json_cache,
     write_json_cache,
 )
-from pymetadata.pkdb_data.xref import CrossReference
+from pymetadata.core.xref import CrossReference
 
 
 logger = logging.getLogger(__name__)

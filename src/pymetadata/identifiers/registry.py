@@ -1,5 +1,5 @@
 """
-Helper tools to work with miriam metadata.
+Helper tools to work with identifiers registry.
 
 https://identifiers.org/
 https://docs.identifiers.org/articles/api.html
@@ -12,7 +12,7 @@ from typing import Dict, List
 import requests
 
 from pymetadata import CACHE_USE, RESOURCES_DIR
-from pymetadata.pkdb_data.cache import (
+from pymetadata.cache import (
     DataclassJSONEncoder,
     read_json_cache,
     write_json_cache,
@@ -104,6 +104,14 @@ def ols_namespaces() -> Dict[str, Namespace]:
     namespaces = [
         Namespace(
             id=None,
+            prefix="omim",
+            pattern=r"^MI:\d+$",
+            name="OMIM",
+            description="Molecular Interactions Controlled Vocabulary",
+            namespaceEmbeddedInLui=True,
+        ),
+        Namespace(
+            id=None,
             prefix="cmo",
             pattern=r"^CMO:\d+$",
             name="Chemical methods ontology",
@@ -141,14 +149,6 @@ def ols_namespaces() -> Dict[str, Namespace]:
             name="MONDO",
             prefix="mondo",
             description="MONDO",
-            namespaceEmbeddedInLui=True,
-        ),
-        Namespace(
-            id=None,
-            pattern=r"^SIO:\d+$",
-            name="SIO",
-            prefix="sio",
-            description="Semanticscience Integrated Ontology",
             namespaceEmbeddedInLui=True,
         ),
         Namespace(
@@ -231,8 +231,27 @@ def ols_namespaces() -> Dict[str, Namespace]:
 
 def misc_namespaces() -> List[Namespace]:
     """Define misc namespaces."""
-    namespaces = []
-    return {ns.prefix: ns for ns in namespaces}
+    namespaces = [
+        Namespace(
+            id="brenda.ligand",
+            pattern=r"^\d+$",
+            name="BRENDA Ligand",
+            prefix=None,
+            description="BRENDA Ligand Information",
+            namespaceEmbeddedInLui=False,
+        ),
+        Namespace(
+            id="metabolights.compound",
+            pattern=r"^MTBLC\d+$",
+            name="Metabolights compound",
+            prefix=None,
+            description="metabolights compound",
+            namespaceEmbeddedInLui=False,
+        ),
+
+    ]
+
+    return {ns.id: ns for ns in namespaces}
 
 
 class Registry:

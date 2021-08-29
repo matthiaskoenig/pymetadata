@@ -1,6 +1,4 @@
-import pytest
-
-from pymetadata.pkdb_data.unichem import UnichemQuery
+from pymetadata.metadata.unichem import UnichemQuery
 
 
 def test_unichem() -> None:

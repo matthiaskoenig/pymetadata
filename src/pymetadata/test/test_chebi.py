@@ -1,10 +1,3 @@
-from pathlib import Path
-
-import pytest
-
-from pymetadata.pkdb_data.chebi import ChebiQuery
-
-
 # @pytest.mark.parametrize("chebi", ["CHEBI:2668", "CHEBI:138366", "CHEBI:9637", "CHEBI:155897"])
 # def test_chebi(tmp_path, chebi):
 #     cache_path = tmp_path / "cache"

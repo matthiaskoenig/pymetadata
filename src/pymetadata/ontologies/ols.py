@@ -2,13 +2,12 @@
 import logging
 from dataclasses import dataclass, field
 from pathlib import Path
-from pprint import pprint
 from typing import Dict, List
 
 import requests
 
 from pymetadata import CACHE_PATH, CACHE_USE
-from pymetadata.pkdb_data.cache import read_json_cache, write_json_cache
+from pymetadata.cache import read_json_cache, write_json_cache
 
 
 logger = logging.getLogger(__name__)
