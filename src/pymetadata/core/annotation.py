@@ -85,7 +85,7 @@ class RDFAnnotation:
                 # other urls are directly stored as resources without collection
                 self.collection = None
                 self.term = resource
-                logger.warning(
+                logger.debug(
                     f"{resource} does not conform to "
                     f"http(s)://identifiers.org/collection/id or http(s)://identifiers.org/id",
                 )
@@ -94,7 +94,7 @@ class RDFAnnotation:
             if match3:
                 self.collection, self.term = match3.group(1), match3.group(2)
                 logger.warning(
-                    f"Deprecated urn pattern `{resource}`, use " f"{self.resource}"
+                    f"Deprecated urn pattern `{resource}`, update to " f"{self.resource}"
                 )
 
         else:
