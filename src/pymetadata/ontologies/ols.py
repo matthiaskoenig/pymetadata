@@ -1,9 +1,10 @@
 """Lookup of ontology information from the ontology lookup service (OLS)."""
 import logging
+import urllib.parse
 from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Dict, List
-import urllib.parse
+
 import requests
 
 from pymetadata import CACHE_PATH, CACHE_USE
@@ -89,7 +90,7 @@ class OLSQuery:
             )
             iri = f"http://purl.obolibrary.org/obo/{ontology.upper()}_{term}"
         else:
-                iri = ols_ontology.iri_pattern.replace("{$Id}", term)
+            iri = ols_ontology.iri_pattern.replace("{$Id}", term)
 
         return iri
 
@@ -113,8 +114,8 @@ class OLSQuery:
 
         # double urlencode iri for OLS
 
-        urliri = urllib.parse.quote(iri, safe='')
-        urliri = urllib.parse.quote(urliri, safe='')
+        urliri = urllib.parse.quote(iri, safe="")
+        urliri = urllib.parse.quote(urliri, safe="")
         # urliri = iri.replace(":", "%253A")
         # urliri = urliri.replace("/", "%252F")
 
@@ -126,7 +127,7 @@ class OLSQuery:
 
         if not data:
             url = self.url_term_query.format(ontology, urliri)
-            logger.debug(f"Query: {iri}, {url}")
+            logger.warning(f"Query: {iri}, {url}")
             response = requests.get(url)
             response.raise_for_status()
 
@@ -156,7 +157,6 @@ class OLSQuery:
                 definition = annotation.get("definition")
                 if definition:
                     description = definition[0]
-
 
         if description and isinstance(description, list):
             description = description[0]

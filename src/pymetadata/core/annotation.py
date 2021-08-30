@@ -1,18 +1,15 @@
-"""Annotation"""
+"""Annotation."""
 import logging
 import re
 import urllib
 from typing import Dict, Optional, Tuple, Union
 
 import requests
-from pymetadata.core.xref import CrossReference, is_url
 
-from pymetadata.ontologies.ols import ONTOLOGIES, OLSQuery
+from pymetadata.core.xref import CrossReference, is_url
+from pymetadata.identifiers.miriam import BQB, BQM
 from pymetadata.identifiers.registry import Registry
-from pymetadata.identifiers.miriam import (
-    BQB,
-    BQM,
-)
+from pymetadata.ontologies.ols import ONTOLOGIES, OLSQuery
 
 
 REGISTRY = Registry()
@@ -79,8 +76,10 @@ class RDFAnnotation:
                         self.collection = tokens[0].lower()
                         self.term = match2.group(1)
                     else:
-                        logger.warning(f"Identifiers.org URL does not conform to new"
-                                       f"short pattern: {resource}")
+                        logger.warning(
+                            f"Identifiers.org URL does not conform to new"
+                            f"short pattern: {resource}"
+                        )
 
             if not self.collection:
                 # other urls are directly stored as resources without collection
@@ -94,8 +93,9 @@ class RDFAnnotation:
             match3 = MIRIAM_URN_PATTERN.match(resource)
             if match3:
                 self.collection, self.term = match3.group(1), match3.group(2)
-                logger.warning(f"Deprecated urn pattern `{resource}`, use "
-                               f"{self.resource}")
+                logger.warning(
+                    f"Deprecated urn pattern `{resource}`, use " f"{self.resource}"
+                )
 
         else:
             # handle short notation
@@ -125,7 +125,9 @@ class RDFAnnotation:
         qualifier, resource = t[0], t[1]
         return RDFAnnotation(qualifier=qualifier, resource=resource)
 
-    def from_collection_term(qualifier: Union[BQB, BQM], collection: str, term: str) -> "RDFAnnotation":
+    def from_collection_term(
+        qualifier: Union[BQB, BQM], collection: str, term: str
+    ) -> "RDFAnnotation":
         """Construct from tuple."""
 
         return RDFAnnotation(qualifier=qualifier, resource=f"{collection}/{term}")
@@ -175,7 +177,6 @@ class RDFAnnotation:
             return False
 
         return True
-
 
     @staticmethod
     def check_qualifier(qualifier: Union[BQB, BQM]) -> None:
@@ -242,7 +243,8 @@ class RDFAnnotationData(RDFAnnotation):
                 url = url.replace("{$Id}", term)
                 url = url.replace("{$id}", term)
                 url = url.replace(
-                    f"{namespace.prefix.upper}:", urllib.parse.quote(f"{namespace.prefix.upper}:")
+                    f"{namespace.prefix.upper}:",
+                    urllib.parse.quote(f"{namespace.prefix.upper}:"),
                 )
 
                 if not self.url:
@@ -260,7 +262,7 @@ class RDFAnnotationData(RDFAnnotation):
 
     def __repr__(self):
         """Get representation string."""
-        return f"RDFAnnotationData({self.collection}|{self.term}|{self.description}|{self.synonyms}|{self.xrefs})"
+        return f"RDFAnnotationData({self.collection}|{self.term}|{self.label}|{self.description}|{self.synonyms}|{self.xrefs})"
 
     def to_dict(self):
         """Convert to dict."""
@@ -283,7 +285,8 @@ class RDFAnnotationData(RDFAnnotation):
             d = {}
 
         info = OLS_QUERY.process_response(d)
-        # print(info)
+        print(info)
+        self.info = info
         if info is not None:
             if self.label is None:
                 self.label = info.get("label")
@@ -296,18 +299,32 @@ class RDFAnnotationData(RDFAnnotation):
 
         return info
 
+
 # TODO: caching of information; fill local storage nosql
 # caching: https://realpython.com/python-memcache-efficient-caching/
 
 
 if __name__ == "__main__":
     for annotation in [
-        RDFAnnotation(qualifier=BQB.IS, resource="https://en.wikipedia.org/wiki/Cytosol"),
-        RDFAnnotation(qualifier=BQB.IS_VERSION_OF, resource="urn:miriam:uniprot:P03023"),
-        RDFAnnotation(qualifier=BQB.IS_VERSION_OF, resource="https://identifiers.org/go/GO:0005829"),
-        RDFAnnotation(qualifier=BQB.IS_VERSION_OF, resource="http://identifiers.org/go/GO:0005829"),
-        RDFAnnotation(qualifier=BQB.IS_VERSION_OF, resource="https://identifiers.org/GO:0005829"),
-        RDFAnnotation(qualifier=BQB.IS_VERSION_OF, resource="http://identifiers.org/GO:0005829"),
+        RDFAnnotation(
+            qualifier=BQB.IS, resource="https://en.wikipedia.org/wiki/Cytosol"
+        ),
+        RDFAnnotation(
+            qualifier=BQB.IS_VERSION_OF, resource="urn:miriam:uniprot:P03023"
+        ),
+        RDFAnnotation(
+            qualifier=BQB.IS_VERSION_OF,
+            resource="https://identifiers.org/go/GO:0005829",
+        ),
+        RDFAnnotation(
+            qualifier=BQB.IS_VERSION_OF, resource="http://identifiers.org/go/GO:0005829"
+        ),
+        RDFAnnotation(
+            qualifier=BQB.IS_VERSION_OF, resource="https://identifiers.org/GO:0005829"
+        ),
+        RDFAnnotation(
+            qualifier=BQB.IS_VERSION_OF, resource="http://identifiers.org/GO:0005829"
+        ),
         RDFAnnotation(qualifier=BQB.IS_VERSION_OF, resource="bto/BTO:0000089"),
         RDFAnnotation(qualifier=BQB.IS_VERSION_OF, resource="BTO:0000089"),
         RDFAnnotation(qualifier=BQB.IS_VERSION_OF, resource="chebi/CHEBI:000012"),

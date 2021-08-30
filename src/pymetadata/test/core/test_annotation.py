@@ -1,8 +1,10 @@
 from typing import Union
 
 import pytest
+
 from pymetadata.core.annotation import RDFAnnotation
 from pymetadata.identifiers.miriam import BQB, BQM
+
 
 rdf_annotation_data = [
     (
@@ -39,7 +41,9 @@ rdf_annotation_data = [
 
 
 @pytest.mark.parametrize("qualifier,resource,expected", rdf_annotation_data)
-def test_rdf_annotation(qualifier: Union[BQB, BQM], resource: str, expected: str) -> None:
+def test_rdf_annotation(
+    qualifier: Union[BQB, BQM], resource: str, expected: str
+) -> None:
     """Test various RDF annotation patterns"""
     a = RDFAnnotation(qualifier=qualifier, resource=resource)
     assert a

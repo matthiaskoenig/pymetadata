@@ -15,11 +15,7 @@ from typing import Dict, List
 import requests
 
 from pymetadata import CACHE_PATH, CACHE_USE
-from pymetadata.cache import (
-    DataclassJSONEncoder,
-    read_json_cache,
-    write_json_cache,
-)
+from pymetadata.cache import DataclassJSONEncoder, read_json_cache, write_json_cache
 from pymetadata.core.xref import CrossReference
 
 

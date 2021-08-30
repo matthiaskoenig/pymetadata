@@ -12,11 +12,7 @@ from typing import Dict, List
 import requests
 
 from pymetadata import CACHE_USE, RESOURCES_DIR
-from pymetadata.cache import (
-    DataclassJSONEncoder,
-    read_json_cache,
-    write_json_cache,
-)
+from pymetadata.cache import DataclassJSONEncoder, read_json_cache, write_json_cache
 
 
 logger = logging.getLogger(__name__)
@@ -248,7 +244,6 @@ def misc_namespaces() -> List[Namespace]:
             description="metabolights compound",
             namespaceEmbeddedInLui=False,
         ),
-
     ]
 
     return {ns.id: ns for ns in namespaces}
