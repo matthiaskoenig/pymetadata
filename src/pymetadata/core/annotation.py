@@ -4,6 +4,7 @@ import re
 import urllib
 from typing import Dict, Optional, Tuple, Union
 
+import requests
 from pymetadata.core.xref import CrossReference, is_url
 
 from pymetadata.ontologies.ols import ONTOLOGIES, OLSQuery
@@ -124,6 +125,11 @@ class RDFAnnotation:
         qualifier, resource = t[0], t[1]
         return RDFAnnotation(qualifier=qualifier, resource=resource)
 
+    def from_collection_term(qualifier: Union[BQB, BQM], collection: str, term: str) -> "RDFAnnotation":
+        """Construct from tuple."""
+
+        return RDFAnnotation(qualifier=qualifier, resource=f"{collection}/{term}")
+
     @property
     def resource(self) -> Optional[str]:
         """Resource for annotation."""
@@ -193,18 +199,21 @@ class RDFAnnotation:
             self.check_term(collection=self.collection, term=self.term)
 
 
-class ResolvedRDFAnnotation(RDFAnnotation):
+class RDFAnnotationData(RDFAnnotation):
     """Annotation with resolved information.
 
     queries for the resource should happen here;
     this resolves additional information.
     """
-    pass
 
-    def __init__(self):
-        self.description = description
-        self.label = label
-        self.url = None
+    def __init__(self, annotation: RDFAnnotation):
+
+        self.qualifier = annotation.qualifier
+        self.collection = annotation.collection
+        self.term = annotation.term
+        self.url: str = None
+        self.description: str = None
+        self.label: str = None
         self.synonyms = []
         self.xrefs = []
 
@@ -233,7 +242,7 @@ class ResolvedRDFAnnotation(RDFAnnotation):
                 url = url.replace("{$Id}", term)
                 url = url.replace("{$id}", term)
                 url = url.replace(
-                    f"{prefix.upper}:", urllib.parse.quote(f"{prefix.upper}:")
+                    f"{namespace.prefix.upper}:", urllib.parse.quote(f"{namespace.prefix.upper}:")
                 )
 
                 if not self.url:
@@ -246,18 +255,19 @@ class ResolvedRDFAnnotation(RDFAnnotation):
                 if valid:
                     self.xrefs.append(_xref)
 
+        # query OLS information
+        self.query_ols()
+
     def __repr__(self):
         """Get representation string."""
-        return f"Annotation({self.collection}|{self.term}|{self.description}|{self.synonyms}|{self.xrefs})"
+        return f"RDFAnnotationData({self.collection}|{self.term}|{self.description}|{self.synonyms}|{self.xrefs})"
 
     def to_dict(self):
         """Convert to dict."""
         return {
-
-            # FIXME: resource?
-            "term": self.term,
-            "relation": self.relation.value,  # FIXME: qualifier?
+            "qualifier": self.qualifier.value,
             "collection": self.collection,
+            "term": self.term,
             "description": self.description,
             "label": self.label,
             "url": self.url,
@@ -266,8 +276,14 @@ class ResolvedRDFAnnotation(RDFAnnotation):
 
     def query_ols(self):
         """Query ontology lookup service."""
-        d = OLS_QUERY.query_ols(ontology=self.collection, term=self.term)
+        try:
+            d = OLS_QUERY.query_ols(ontology=self.collection, term=self.term)
+        except requests.HTTPError as err:
+            logger.error(err)
+            d = {}
+
         info = OLS_QUERY.process_response(d)
+        # print(info)
         if info is not None:
             if self.label is None:
                 self.label = info.get("label")
@@ -275,7 +291,6 @@ class ResolvedRDFAnnotation(RDFAnnotation):
             if self.description is None:
                 self.description = info.get("description")
 
-            # TODO: process synonmys and xrefs
             self.synonyms = info["synonyms"]
             self.xrefs = info["xrefs"]
 
@@ -295,5 +310,9 @@ if __name__ == "__main__":
         RDFAnnotation(qualifier=BQB.IS_VERSION_OF, resource="http://identifiers.org/GO:0005829"),
         RDFAnnotation(qualifier=BQB.IS_VERSION_OF, resource="bto/BTO:0000089"),
         RDFAnnotation(qualifier=BQB.IS_VERSION_OF, resource="BTO:0000089"),
+        RDFAnnotation(qualifier=BQB.IS_VERSION_OF, resource="chebi/CHEBI:000012"),
     ]:
         print(annotation, annotation.resource)
+
+        data = RDFAnnotationData(annotation)
+        print(data)
