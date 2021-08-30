@@ -50,15 +50,15 @@ def test_rdf_annotation(
     assert str(a) == expected
 
 
-def test_check_term_pass():
+def test_check_term_pass() -> None:
     assert RDFAnnotation.check_term("chebi", "CHEBI:000012") is True
 
 
 @pytest.mark.xfail(raises=ValueError)
-def test_check_collection_fail():
+def test_check_collection_fail() -> None:
     assert RDFAnnotation.check_term("234234sdf", "CHEBI:000012") is True
 
 
 @pytest.mark.xfail(raises=ValueError)
-def test_check_term_fail():
+def test_check_term_fail() -> None:
     assert RDFAnnotation.check_term("chebi", "CHEB:000012") is False

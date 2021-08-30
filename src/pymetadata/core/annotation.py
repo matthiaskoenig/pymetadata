@@ -94,7 +94,8 @@ class RDFAnnotation:
             if match3:
                 self.collection, self.term = match3.group(1), match3.group(2)
                 logger.warning(
-                    f"Deprecated urn pattern `{resource}`, update to " f"{self.resource}"
+                    f"Deprecated urn pattern `{resource}`, update to "
+                    f"{self.resource}"
                 )
 
         else:
@@ -124,13 +125,6 @@ class RDFAnnotation:
         """Construct from tuple."""
         qualifier, resource = t[0], t[1]
         return RDFAnnotation(qualifier=qualifier, resource=resource)
-
-    def from_collection_term(
-        qualifier: Union[BQB, BQM], collection: str, term: str
-    ) -> "RDFAnnotation":
-        """Construct from tuple."""
-
-        return RDFAnnotation(qualifier=qualifier, resource=f"{collection}/{term}")
 
     @property
     def resource(self) -> Optional[str]:

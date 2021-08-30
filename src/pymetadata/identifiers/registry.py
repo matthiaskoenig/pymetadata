@@ -267,18 +267,25 @@ class Registry:
         self,
         registry_path: Path = RESOURCES_DIR / "identifiers_registry.json",
         cache_duration: int = 24,
+        cache: bool = True,
     ):
         """Initialize registry.
 
         :param cache_path: Path of cached identifiers.org path
         :param cache_duration: Duration of caching in hours.
+        :param cache: boolean flag to stop caching
         """
         self.registry_path = registry_path
 
         # check if update needed
-        if os.path.exists(self.registry_path):
-            registry_age = (time.time() - os.path.getmtime(registry_path))/3600  # [hr]
-            update = registry_age > cache_duration
+        if cache:
+            if os.path.exists(self.registry_path):
+                registry_age = (
+                    time.time() - os.path.getmtime(registry_path)
+                ) / 3600  # [hr]
+                update = registry_age > cache_duration
+            else:
+                update = True
         else:
             update = True
 
