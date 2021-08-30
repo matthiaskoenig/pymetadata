@@ -5,13 +5,15 @@ https://identifiers.org/
 https://docs.identifiers.org/articles/api.html
 """
 import logging
+import os
+import time
 from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Dict, List
 
 import requests
 
-from pymetadata import CACHE_USE, RESOURCES_DIR
+from pymetadata import RESOURCES_DIR
 from pymetadata.cache import DataclassJSONEncoder, read_json_cache, write_json_cache
 
 
@@ -261,15 +263,28 @@ class Registry:
         **misc_namespaces(),
     }
 
-    def __init__(self, cache_path: Path = RESOURCES_DIR, cache: bool = CACHE_USE):
+    def __init__(
+        self,
+        registry_path: Path = RESOURCES_DIR / "identifiers_registry.json",
+        cache_duration: int = 24,
+    ):
         """Initialize registry.
 
-        :param cache: retrieve the latest MIRIAM definition
+        :param cache_path: Path of cached identifiers.org path
+        :param cache_duration: Duration of caching in hours.
         """
-        self.registry_path = cache_path / "identifiers.json"
-        self.ns_dict = (
-            self.update() if not cache else Registry.load_registry(self.registry_path)
-        )  # type: Dict[str, Namespace]
+        self.registry_path = registry_path
+
+        # check if update needed
+        if os.path.exists(self.registry_path):
+            registry_age = (time.time() - os.path.getmtime(registry_path))/3600  # [hr]
+            update = registry_age > cache_duration
+        else:
+            update = True
+
+        self.ns_dict: Dict[str, Namespace] = (
+            self.update() if update else Registry.load_registry(self.registry_path)
+        )
 
     def update(self) -> Dict[str, Namespace]:
         """Update registry."""
@@ -326,4 +341,4 @@ class Registry:
 
 
 if __name__ == "__main__":
-    registry = Registry(cache=False)
+    registry = Registry()
