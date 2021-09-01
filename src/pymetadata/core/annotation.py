@@ -2,24 +2,23 @@
 import logging
 import re
 import urllib
-from typing import Dict, Optional, Tuple, Union
+from pprint import pprint
+from typing import Dict, List, Optional, Tuple, Union
 
 import requests
 
 from pymetadata.core.xref import CrossReference, is_url
 from pymetadata.identifiers.miriam import BQB, BQM
-from pymetadata.identifiers.registry import Registry
+from pymetadata.identifiers.registry import REGISTRY
 from pymetadata.ontologies.ols import ONTOLOGIES, OLSQuery
 
 
-REGISTRY = Registry()
 OLS_QUERY = OLSQuery(ontologies=ONTOLOGIES)
-
 
 IDENTIFIERS_ORG_PREFIX = "https://identifiers.org"
 IDENTIFIERS_ORG_PATTERN1 = re.compile(r"^https?://identifiers.org/(.+?)/(.+)")
 IDENTIFIERS_ORG_PATTERN2 = re.compile(r"^https?://identifiers.org/(.+)")
-MIRIAM_URN_PATTERN = re.compile(r"^urn:miriam:(.+):(.+)")
+MIRIAM_URN_PATTERN = re.compile(r"^urn:miriam:(.+)")
 
 logger = logging.getLogger(__name__)
 
@@ -44,6 +43,7 @@ class RDFAnnotation:
         self.qualifier: Union[BQB, BQM] = qualifier
         self.collection: Optional[str] = None
         self.term: Optional[str] = None
+        self.resource: str = resource
 
         if not qualifier:
             raise ValueError(
@@ -92,10 +92,13 @@ class RDFAnnotation:
         elif resource.startswith("urn:miriam:"):
             match3 = MIRIAM_URN_PATTERN.match(resource)
             if match3:
-                self.collection, self.term = match3.group(1), match3.group(2)
+
+                tokens = match3.group(1).split(":")
+                self.collection = tokens[0]
+                self.term = ":".join(tokens[1:]).replace("%3A", ":")
                 logger.warning(
                     f"Deprecated urn pattern `{resource}`, update to "
-                    f"{self.resource}"
+                    f"{self.resource_normalized}"
                 )
 
         else:
@@ -118,7 +121,18 @@ class RDFAnnotation:
                 self.collection = None
                 self.term = resource
 
+        self.clean()
+
         self.validate()
+
+    def clean(self):
+        """Clean collection and term information."""
+        if self.collection:
+            # FIXME: resolve SBO information
+            if self.collection == "biomodels.sbo":
+                self.collection = "sbo"
+            if self.collection == "obo.go":
+                self.collection = "go"
 
     @staticmethod
     def from_tuple(t: Tuple[Union[BQB, BQM], str]) -> "RDFAnnotation":
@@ -127,8 +141,11 @@ class RDFAnnotation:
         return RDFAnnotation(qualifier=qualifier, resource=resource)
 
     @property
-    def resource(self) -> Optional[str]:
-        """Resource for annotation."""
+    def resource_normalized(self) -> Optional[str]:
+        """Normalized resource for annotation.
+
+        This is the correct usage.
+        """
         if self.collection:
             if self.term.startswith(f"{self.collection.upper()}:"):
                 return f"{IDENTIFIERS_ORG_PREFIX}/{self.term}"
@@ -203,14 +220,17 @@ class RDFAnnotationData(RDFAnnotation):
 
     def __init__(self, annotation: RDFAnnotation):
 
+        self.resource = annotation.resource
         self.qualifier = annotation.qualifier
         self.collection = annotation.collection
         self.term = annotation.term
-        self.url: str = None
-        self.description: str = None
-        self.label: str = None
-        self.synonyms = []
-        self.xrefs = []
+        self.url: Optional[str] = None
+        self.description: Optional[str] = None
+        self.label: Optional[str] = None
+        self.synonyms: List = []
+        self.xrefs: List = []
+        self.warnings: List = []
+        self.errors: List = []
 
         if self.collection:
 
@@ -220,10 +240,10 @@ class RDFAnnotationData(RDFAnnotation):
             # print("-" * 80)
             # print(namespace.prefix, "embedded=", namespace_embedded)
 
-            for resource in namespace.resources:  # Resource
+            for ns_resource in namespace.resources:  # Resource
 
                 # create url
-                url = resource.urlPattern
+                url = ns_resource.urlPattern
                 term = self.term
 
                 # remove prefix
@@ -246,7 +266,9 @@ class RDFAnnotationData(RDFAnnotation):
                     self.url = url
 
                 # print(url)
-                _xref = CrossReference(name=resource.name, accession=self.term, url=url)
+                _xref = CrossReference(
+                    name=ns_resource.name, accession=self.term, url=url
+                )
                 valid = _xref.validate() and is_url(self.url)
                 if valid:
                     self.xrefs.append(_xref)
@@ -260,14 +282,20 @@ class RDFAnnotationData(RDFAnnotation):
 
     def to_dict(self):
         """Convert to dict."""
+
         return {
-            "qualifier": self.qualifier.value,
+            "resource": self.resource,
+            "resource_normalized": self.resource_normalized,
+            # "qualifier": self.qualifier.value,
             "collection": self.collection,
             "term": self.term,
-            "description": self.description,
             "label": self.label,
+            "description": self.description,
             "url": self.url,
-            # synonyms and xrefs are not serialized
+            "synonyms": self.synonyms,
+            "xrefs": self.xrefs,
+            "errors": self.errors,
+            "warnings": self.warnings,
         }
 
     def query_ols(self):
@@ -276,30 +304,40 @@ class RDFAnnotationData(RDFAnnotation):
             d = OLS_QUERY.query_ols(ontology=self.collection, term=self.term)
         except requests.HTTPError as err:
             logger.error(err)
-            d = {}
+            d = {
+                "errors": [err],
+                "warnings": [],
+            }
 
         info = OLS_QUERY.process_response(d)
-        print(info)
-        self.info = info
-        if info is not None:
-            if self.label is None:
-                self.label = info.get("label")
 
-            if self.description is None:
-                self.description = info.get("description")
+        if self.label is None:
+            self.label = info["label"]
 
-            self.synonyms = info["synonyms"]
-            self.xrefs = info["xrefs"]
+        if self.description is None:
+            self.description = info["description"]
+
+        self.synonyms = info["synonyms"]
+        self.xrefs = info["xrefs"]
+        self.warnings.extend(info["warnings"])
+        self.errors.extend(info["errors"])
 
         return info
 
 
-# TODO: caching of information; fill local storage nosql
-# caching: https://realpython.com/python-memcache-efficient-caching/
-
-
 if __name__ == "__main__":
     for annotation in [
+        RDFAnnotation(
+            qualifier=BQB.IS_VERSION_OF,
+            resource="http://identifiers.org/biomodels.sbo/SBO:0000247",
+        ),
+        RDFAnnotation(
+            qualifier=BQB.IS_VERSION_OF, resource="urn:miriam:obo.go:GO%3A0005623"
+        ),
+        RDFAnnotation(
+            qualifier=BQB.IS_VERSION_OF, resource="urn:miriam:chebi:CHEBI%3A33699"
+        ),
+        RDFAnnotation(qualifier=BQB.IS_VERSION_OF, resource="chebi/CHEBI:456215"),
         RDFAnnotation(
             qualifier=BQB.IS, resource="https://en.wikipedia.org/wiki/Cytosol"
         ),
@@ -323,7 +361,7 @@ if __name__ == "__main__":
         RDFAnnotation(qualifier=BQB.IS_VERSION_OF, resource="BTO:0000089"),
         RDFAnnotation(qualifier=BQB.IS_VERSION_OF, resource="chebi/CHEBI:000012"),
     ]:
-        print(annotation, annotation.resource)
-
+        print("-" * 80)
         data = RDFAnnotationData(annotation)
         print(data)
+        pprint(data.to_dict())

@@ -9,8 +9,10 @@ import requests
 
 from pymetadata import CACHE_PATH, CACHE_USE
 from pymetadata.cache import read_json_cache, write_json_cache
+from pymetadata.identifiers.registry import Registry
 
 
+registry = Registry()
 logger = logging.getLogger(__name__)
 
 
@@ -31,6 +33,7 @@ class OLSOntology:
 
 ONTOLOGIES = [
     # ontologies which are used in the project
+    OLSOntology(name="sbo", iri_pattern="http://biomodels.net/SBO/SBO_{$Id}"),
     OLSOntology(name="bto"),
     OLSOntology(name="chebi"),
     OLSOntology(name="cmo"),
@@ -97,28 +100,31 @@ class OLSQuery:
     def query_ols(self, ontology: str, term: str) -> Dict:
         """Query the ontology lookup service."""
         if not ontology:
-            return None
+            return {"errors": [], "warnings": [f"No collection: '{ontology}'"]}
 
-        if ontology in {
-            "inchikey",
-            "taxonomy",
-            "pubchem.substance",
-            "pubchem.compound",
-            "wikidata",
-            "uniprot",
-        }:
-            # exclude some annotation from query
-            return None
+        namespace = registry.ns_dict.get(ontology)
+        ols_pattern = None
+        for ns_resource in namespace.resources:
+            if ns_resource.providerCode == "ols":
+                ols_pattern = ns_resource.urlPattern
+                break
+
+        if not ols_pattern:
+            return {
+                "errors": [],
+                "warnings": [f"Collection '{ontology}' is not on OLS."],
+            }
 
         iri = self.get_iri(ontology=ontology, term=term)
 
         # double urlencode iri for OLS
-
         urliri = urllib.parse.quote(iri, safe="")
         urliri = urllib.parse.quote(urliri, safe="")
         # urliri = iri.replace(":", "%253A")
         # urliri = urliri.replace("/", "%252F")
 
+        # term_id = term.split(":")[-1]
+        # url = ols_pattern.replace('{$id}', term_id)
         cache_path = self.cache_path / f"{urliri}.json"
         if self.cache:
             data = read_json_cache(cache_path=cache_path)
@@ -127,26 +133,40 @@ class OLSQuery:
 
         if not data:
             url = self.url_term_query.format(ontology, urliri)
-            logger.warning(f"Query: {iri}, {url}")
+            logger.warning(f"Query: {url}")
             response = requests.get(url)
-            response.raise_for_status()
 
-            # print(response.text)
-            data = response.json()
-            if "error" in data:
-                logger.warning(
-                    f"Error in OLS query <{ontology}|{term}> at {iri}: {data}"
-                )
-                return None
-
-            write_json_cache(data=data, cache_path=cache_path)
+            if response.status_code != 200:
+                data = {
+                    "errors": [f"{response.status_code} response for: '{url}'"],
+                    "warnings": [],
+                }
+            else:
+                # print(response.text)
+                data = response.json()
+                if "error" in data:
+                    error_msg = (
+                        f"Error in OLS query <{ontology}|{term}> at {url}: {data}"
+                    )
+                    logger.error(error_msg)
+                    data = {
+                        "errors": [error_msg],
+                        "warnings": [],
+                    }
+                    return data
+                else:
+                    data["errors"] = []
+                    data["warnings"] = []
+                    write_json_cache(data=data, cache_path=cache_path)
 
         return data
 
     def process_response(self, term: Dict):
         """Process the response dictionary."""
-        if term is None:
-            return None
+        data = {
+            "errors": term["errors"],
+            "warnings": term["warnings"],
+        }
 
         label = term.get("label", None)
         description = term.get("description", None)
@@ -164,6 +184,7 @@ class OLSQuery:
         xrefs = term.get("obo_xref", [])
 
         return {
+            **data,
             "label": label,
             "description": description,
             "synonyms": synonyms,

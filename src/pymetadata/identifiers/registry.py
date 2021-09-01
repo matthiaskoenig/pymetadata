@@ -347,5 +347,7 @@ class Registry:
         return {k: Namespace(**v) for k, v in d.items()}
 
 
+REGISTRY = Registry()
+
 if __name__ == "__main__":
     registry = Registry()
