@@ -34,6 +34,9 @@ class OLSOntology:
 ONTOLOGIES = [
     # ontologies which are used in the project
     OLSOntology(name="sbo", iri_pattern="http://biomodels.net/SBO/SBO_{$Id}"),
+    OLSOntology(
+        name="ncbitaxon", iri_pattern="http://purl.obolibrary.org/obo/NCBITaxon_{$Id}"
+    ),
     OLSOntology(name="bto"),
     OLSOntology(name="chebi"),
     OLSOntology(name="cmo"),
@@ -112,8 +115,11 @@ class OLSQuery:
         if not ols_pattern:
             return {
                 "errors": [],
-                "warnings": [f"Collection '{ontology}' is not on OLS."],
+                "warnings": [f"'{ontology}' is not on OLS."],
             }
+
+        if ontology == "taxonomy":
+            ontology = "ncbitaxon"
 
         iri = self.get_iri(ontology=ontology, term=term)
 

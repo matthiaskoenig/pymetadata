@@ -40,6 +40,8 @@ class RDFAnnotation:
 
     def __init__(self, qualifier: Union[BQB, BQM], resource: str):
 
+        print(qualifier, resource)
+
         self.qualifier: Union[BQB, BQM] = qualifier
         self.collection: Optional[str] = None
         self.term: Optional[str] = None
@@ -142,7 +144,7 @@ class RDFAnnotation:
 
     @property
     def resource_normalized(self) -> Optional[str]:
-        """Normalized resource for annotation.
+        """Normalize resource for given annotation.
 
         This is the correct usage.
         """
@@ -327,39 +329,47 @@ class RDFAnnotationData(RDFAnnotation):
 
 if __name__ == "__main__":
     for annotation in [
+        # RDFAnnotation(
+        #     qualifier=BQB.IS_VERSION_OF,
+        #     resource="taxonomy/562",
+        # ),
         RDFAnnotation(
             qualifier=BQB.IS_VERSION_OF,
-            resource="http://identifiers.org/biomodels.sbo/SBO:0000247",
+            resource="http://identifiers.org/taxonomy/9606",
         ),
-        RDFAnnotation(
-            qualifier=BQB.IS_VERSION_OF, resource="urn:miriam:obo.go:GO%3A0005623"
-        ),
-        RDFAnnotation(
-            qualifier=BQB.IS_VERSION_OF, resource="urn:miriam:chebi:CHEBI%3A33699"
-        ),
-        RDFAnnotation(qualifier=BQB.IS_VERSION_OF, resource="chebi/CHEBI:456215"),
-        RDFAnnotation(
-            qualifier=BQB.IS, resource="https://en.wikipedia.org/wiki/Cytosol"
-        ),
-        RDFAnnotation(
-            qualifier=BQB.IS_VERSION_OF, resource="urn:miriam:uniprot:P03023"
-        ),
-        RDFAnnotation(
-            qualifier=BQB.IS_VERSION_OF,
-            resource="https://identifiers.org/go/GO:0005829",
-        ),
-        RDFAnnotation(
-            qualifier=BQB.IS_VERSION_OF, resource="http://identifiers.org/go/GO:0005829"
-        ),
-        RDFAnnotation(
-            qualifier=BQB.IS_VERSION_OF, resource="https://identifiers.org/GO:0005829"
-        ),
-        RDFAnnotation(
-            qualifier=BQB.IS_VERSION_OF, resource="http://identifiers.org/GO:0005829"
-        ),
-        RDFAnnotation(qualifier=BQB.IS_VERSION_OF, resource="bto/BTO:0000089"),
-        RDFAnnotation(qualifier=BQB.IS_VERSION_OF, resource="BTO:0000089"),
-        RDFAnnotation(qualifier=BQB.IS_VERSION_OF, resource="chebi/CHEBI:000012"),
+        # RDFAnnotation(
+        #     qualifier=BQB.IS_VERSION_OF,
+        #     resource="http://identifiers.org/biomodels.sbo/SBO:0000247",
+        # ),
+        # RDFAnnotation(
+        #     qualifier=BQB.IS_VERSION_OF, resource="urn:miriam:obo.go:GO%3A0005623"
+        # ),
+        # RDFAnnotation(
+        #     qualifier=BQB.IS_VERSION_OF, resource="urn:miriam:chebi:CHEBI%3A33699"
+        # ),
+        # RDFAnnotation(qualifier=BQB.IS_VERSION_OF, resource="chebi/CHEBI:456215"),
+        # RDFAnnotation(
+        #     qualifier=BQB.IS, resource="https://en.wikipedia.org/wiki/Cytosol"
+        # ),
+        # RDFAnnotation(
+        #     qualifier=BQB.IS_VERSION_OF, resource="urn:miriam:uniprot:P03023"
+        # ),
+        # RDFAnnotation(
+        #     qualifier=BQB.IS_VERSION_OF,
+        #     resource="https://identifiers.org/go/GO:0005829",
+        # ),
+        # RDFAnnotation(
+        #     qualifier=BQB.IS_VERSION_OF, resource="http://identifiers.org/go/GO:0005829"
+        # ),
+        # RDFAnnotation(
+        #     qualifier=BQB.IS_VERSION_OF, resource="https://identifiers.org/GO:0005829"
+        # ),
+        # RDFAnnotation(
+        #     qualifier=BQB.IS_VERSION_OF, resource="http://identifiers.org/GO:0005829"
+        # ),
+        # RDFAnnotation(qualifier=BQB.IS_VERSION_OF, resource="bto/BTO:0000089"),
+        # RDFAnnotation(qualifier=BQB.IS_VERSION_OF, resource="BTO:0000089"),
+        # RDFAnnotation(qualifier=BQB.IS_VERSION_OF, resource="chebi/CHEBI:000012"),
     ]:
         print("-" * 80)
         data = RDFAnnotationData(annotation)

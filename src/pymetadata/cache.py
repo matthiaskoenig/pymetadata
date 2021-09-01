@@ -3,7 +3,7 @@ import json
 import logging
 from json.encoder import JSONEncoder
 from pathlib import Path
-from typing import Dict
+from typing import Any, Dict, Optional
 
 
 logger = logging.getLogger(__name__)
@@ -12,12 +12,12 @@ logger = logging.getLogger(__name__)
 class DataclassJSONEncoder(JSONEncoder):
     """JSON serialization of dataclasses."""
 
-    def default(self, o):
+    def default(self, o: Any) -> Dict:
         """Serialize to JSON."""
         return o.__dict__
 
 
-def read_json_cache(cache_path: Path) -> Dict:
+def read_json_cache(cache_path: Path) -> Optional[Dict]:
     """Read JSON cache file.
 
     :param cache_path:
