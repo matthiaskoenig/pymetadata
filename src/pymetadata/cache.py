@@ -3,7 +3,7 @@ import json
 import logging
 from json.encoder import JSONEncoder
 from pathlib import Path
-from typing import Any, Dict, Optional
+from typing import Any, Dict, Optional, Type
 
 
 logger = logging.getLogger(__name__)
@@ -31,12 +31,12 @@ def read_json_cache(cache_path: Path) -> Optional[Dict]:
     return None
 
 
-def write_json_cache(data: Dict, cache_path: Path, json_encoder: JSONEncoder = None):
+def write_json_cache(data: Dict, cache_path: Path, json_encoder: Optional[Type[JSONEncoder]] = None) -> None:
     """Write JSON cache file.
 
-    :param data:
-    :param cache_path:
-    :param json_encoder:
+    :param data: data to serialize
+    :param cache_path: path for the cache file
+    :param json_encoder: optional JSON encoder
     :return:
     """
     with open(cache_path, "w") as fp:

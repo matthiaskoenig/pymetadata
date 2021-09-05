@@ -4,7 +4,7 @@ import logging
 import re
 from collections import namedtuple
 from enum import Enum, unique
-from typing import Dict
+from typing import Dict, Optional
 
 from kisao import Kisao
 from kisao.data_model import IdDialect
@@ -32,7 +32,7 @@ def create_kisao_lookup() -> Dict[str, str]:
             term: Term = kisao_ontology.get_term(kisao_id)
             name = term.name
             if name in name_to_kisao:
-                raise ValueError
+                raise ValueError(f"Duplicate KISAO name '{name}'.")
             name_to_kisao[name] = kisao_id
         except (KeyError, ValueError) as err:
             logger.warning(f"{err}")
@@ -63,16 +63,26 @@ def validate_kisao(kisao: str) -> str:
     return kisao
 
 
-def name_kisao(kisao: str, name: str = None) -> str:
-    """Get name for kisao id."""
+def name_kisao(kisao: str, name: str = None) -> Optional[str]:
+    """[summary]
+
+    :param kisao: [description]
+    :type kisao: str
+    :param name: [description], defaults to None
+    :type name: str, optional
+    :raises ValueError: [description]
+    :return: [description]
+    :rtype: Optional[str]
+    """
     term: Term = kisao_ontology.get_term(kisao)
     if not term:
         raise ValueError(f"No term in kisao ontology for: '{kisao}'")
 
-    kisao_name = term.name
-    if kisao_name != term.name:
-        logger.warning(f"Name '{name}' does not match kisao name '{kisao_name}'")
-    if name:
-        return name
-    else:
+    kisao_name: Optional[str] = term.name
+
+    kisao_name: str
+    if term.name:
+        kisao_name = term.name
+    elif name:
+
         return kisao_name

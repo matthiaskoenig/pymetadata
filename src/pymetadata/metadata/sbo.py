@@ -1,40 +1,84 @@
 """Systems biology ontology (SBO) terms and information."""
 
-SBO_EXCHANGE_REACTION = "SBO:0000627"
-SBO_DEMAND_REACTION = "SBO:0000628"
-SBO_SINK_REACTION = "SBO:0000632"
 
-SBO_BIOCHEMICAL_REACTION = "SBO:0000176"
-SBO_TRANSPORT_REACTION = "SBO:0000655"
 
-SBO_SIMPLE_CHEMICAL = "SBO:0000247"
-SBO_MACROMOLECULE = "SBO:0000245"
+from typing import Dict
 
-SBO_FLUX_BOUND = "SBO:0000612"
 
-SBO_MAXIMAL_VELOCITY = "SBO:0000186"
-SBO_MICHAELIS_CONSTANT = "SBO:0000371"
-SBO_KINETIC_CONSTANT = "SBO:0000009"
+class OntologyLookup:
+    """Helper class for simple lookup by name or definition.
+    
+    
+    - access by id attribute
+    - access by name attribute
+    - search functionality
+    - get resource term.
+    """
 
-SBO_PHYSICAL_COMPARTMENT = "SBO:0000290"
+    mapping: Dict[str, str] = {
+        "SBO_0000628": "DEMAND_REACTION"
+    }
+    mapping_reverse: Dict[str, str] = {v: k for k, v in mapping.items()}
 
-SBO_CONTINOUS_FRAMEWORK = "SBO:0000293"
-SBO_FLUX_BALANCE_FRAMEWORK = "SBO:0000624"
+    def __init__(self):
+
+        for key, value in {"SBO_0000628": "DEMAND_REACTION"}.items():
+            setattr(self, key, value)
+            setattr(self, key, key)
+
+        self.EXCHANGE_REACTION = "SBO:0000627"
+        self.SBO_0000627 = "SBO:0000627"
+
+    def __getattr__(self, item):
+        if item in self.mapping:
+            return self.mapping[item]
+        elif item in self.mapping_reverse:
+            return self.mapping_reverse[item]
+
+    def __dir__(self):
+        return self.mapping.keys() +  self.mapping_reverse.keys()
+
+
+class OntologyLookupFactory():
+
+    @staticmethod
+    def parse_obo(obo_path) -> OntologyLookup:
+        pass 
+
+
+class SBO(OntologyLookup):
+    pass
+
+SBO = OntologyLookup()
+
+
+
+#FIXME: create an SBO enum with all terms.
+
+SBO.exchange_reaction = "SBO:0000627"
+
+SBO.EXCHANGE_REACTION = "SBO:0000627"
+SBO.DEMAND_REACTION = "SBO:0000628"
+SBO.SINK_REACTION = "SBO:0000632"
+
+SBO.BIOCHEMICAL_REACTION = "SBO:0000176"
+SBO.TRANSPORT_REACTION = "SBO:0000655"
+
+SBO.SIMPLE_CHEMICAL = "SBO:0000247"
+SBO.MACROMOLECULE = "SBO:0000245"
+
+SBO.FLUX_BOUND = "SBO:0000612"
+
+SBO.MAXIMAL_VELOCITY = "SBO:0000186"
+SBO.MICHAELIS_CONSTANT = "SBO:0000371"
+SBO.KINETIC_CONSTANT = "SBO:0000009"
+
+SBO.PHYSICAL_COMPARTMENT = "SBO:0000290"
+
+SBO.CONTINOUS_FRAMEWORK = "SBO:0000293"
+SBO.FLUX_BALANCE_FRAMEWORK = "SBO:0000624"
 
 
 __all__ = [
-    "SBO_EXCHANGE_REACTION",
-    "SBO_DEMAND_REACTION",
-    "SBO_SINK_REACTION",
-    "SBO_BIOCHEMICAL_REACTION",
-    "SBO_TRANSPORT_REACTION",
-    "SBO_SIMPLE_CHEMICAL",
-    "SBO_MACROMOLECULE",
-    "SBO_FLUX_BOUND",
-    "SBO_MAXIMAL_VELOCITY",
-    "SBO_MICHAELIS_CONSTANT",
-    "SBO_KINETIC_CONSTANT",
-    "SBO_PHYSICAL_COMPARTMENT",
-    "SBO_CONTINOUS_FRAMEWORK",
-    "SBO_FLUX_BALANCE_FRAMEWORK",
+    "SBO",
 ]
