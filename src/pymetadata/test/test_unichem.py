@@ -1,4 +1,4 @@
-from pymetadata.metadata.unichem import UnichemQuery
+from pymetadata.unichem import UnichemQuery
 
 
 def test_unichem() -> None:

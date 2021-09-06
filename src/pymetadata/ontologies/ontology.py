@@ -1,25 +1,25 @@
-"""Hardcoded ontologies."""
-from dataclasses import dataclass
-from enum import Enum
-from typing import Dict, List, Tuple
-import pronto
-import tempfile
+"""Ontology support."""
 import gzip
-import shutil
 import importlib
-import requests
-import logging
 import re
-from pronto.term import Term as ProntoTerm
-from pronto.ontology import Ontology as ProntoOntology
-from pathlib import Path
-import rich
-from jinja2 import Template
+import shutil
+import tempfile
 import warnings
 from concurrent.futures import ThreadPoolExecutor
+from dataclasses import dataclass
+from enum import Enum
+from pathlib import Path
+from typing import Dict, List, Optional, Union
 
+import pronto
+import requests
+from jinja2 import Template
+from pronto.ontology import Ontology as ProntoOntology
+from pronto.relationship import Relationship as ProntoRelationship
+from pronto.term import Term as ProntoTerm
+
+from pymetadata import ENUM_DIR, RESOURCES_DIR
 from pymetadata.log import *
-from pymetadata import RESOURCES_DIR, ENUM_DIR
 
 
 logger = logging.getLogger(__name__)
@@ -27,11 +27,16 @@ console = Console()
 
 
 class OntologyFormat(str, Enum):
-    OBO = 'obo'
-    OWL = 'owl'
+    """Formats for ontologies."""
+
+    OBO = "obo"
+    OWL = "owl"
+
 
 @dataclass
 class OntologyFile:
+    """Definition file for ontology."""
+
     id: str
     name: str
     format: OntologyFormat
@@ -54,80 +59,76 @@ class OntologyFile:
         data = str(self.path)
         print(data)
         return data
-    
-    @property
-    def bioportal_url(self) -> str:
-        return f"https://bioportal.bioontology.org/ontologies/{self.id}"
-    
+
 
 _ontology_files: List[OntologyFile] = [
     OntologyFile(
-        "BTO", 
-        name="The BRENDA Tissue Ontology (BTO)", 
+        "BTO",
+        name="The BRENDA Tissue Ontology (BTO)",
         format=OntologyFormat.OWL,
         source="https://www.ebi.ac.uk/ols/ontologies/bto/download",
         bioportal=False,
         ols=True,
     ),
     OntologyFile(
-        "CHEBI", 
-        name="Chemical Entities of Biological Interest Ontology", 
+        "CHEBI",
+        name="Chemical Entities of Biological Interest Ontology",
         format=OntologyFormat.OWL,
         source="https://www.ebi.ac.uk/ols/ontologies/chebi/download",
         bioportal=True,
         ols=True,
     ),
     OntologyFile(
-        "FMA", 
-        name="Foundational Model of Anatomy", 
+        "FMA",
+        name="Foundational Model of Anatomy",
         format=OntologyFormat.OWL,
         source="https://www.ebi.ac.uk/ols/ontologies/fma/download",
         bioportal=True,
         ols=True,
     ),
     OntologyFile(
-        "ECO", 
-        name="Evidence & Conclusion Ontology (ECO)", 
+        "ECO",
+        name="Evidence & Conclusion Ontology (ECO)",
         format=OntologyFormat.OWL,
         source="https://www.ebi.ac.uk/ols/ontologies/eco/download",
         bioportal=True,
         ols=True,
     ),
     OntologyFile(
-        "GO", 
-        name="Gene Ontology", 
+        "GO",
+        name="Gene Ontology",
         format=OntologyFormat.OWL,
         source="https://www.ebi.ac.uk/ols/ontologies/go/download",
         bioportal=True,
         ols=True,
     ),
     OntologyFile(
-        "KISAO", 
-        name="Kinetic Simulation Algorithm Ontology", 
+        "KISAO",
+        name="Kinetic Simulation Algorithm Ontology",
         format=OntologyFormat.OWL,
         source="https://raw.githubusercontent.com/SED-ML/KiSAO/deploy/kisao.owl",
         bioportal=True,
         ols=True,
     ),
     OntologyFile(
-        "SBO", 
-        name="Systems Biology Ontology", 
+        "SBO",
+        name="Systems Biology Ontology",
         format=OntologyFormat.OWL,
         source="https://www.ebi.ac.uk/ols/ontologies/sbo/download",
         bioportal=True,
         ols=True,
     ),
     OntologyFile(
-        "NCIT", 
-        name="National Cancer Institute Thesaurus", 
+        "NCIT",
+        name="National Cancer Institute Thesaurus",
         format=OntologyFormat.OWL,
         source="https://www.ebi.ac.uk/ols/ontologies/ncit/download",
         bioportal=True,
         ols=True,
     ),
     #     OntologyFile(
-    #     "NCBITAXON", 
-    #     name="NCBI organismal classification", 
+    #     "NCBITAXON",
+    #     name="NCBI organismal classification",
     #     format=OntologyFormat.OWL,
     #     source="https://www.ebi.ac.uk/ols/ontologies/ncbitaxon/download",
     #     bioportal=False,
@@ -142,10 +143,10 @@ ontology_files: Dict[str, OntologyFile] = {
 
 
 def update_ontology_file(ofile: OntologyFile) -> None:
-    """Downloads latest versions of ontologies."""
-    
+    """Download latest versions of ontologies."""
+
     oid = ofile.id
-    
+
     console.log(f"Update ontology: `{oid}`")
 
     with tempfile.TemporaryDirectory() as tmp_dir:
@@ -154,19 +155,20 @@ def update_ontology_file(ofile: OntologyFile) -> None:
         url = ofile.source
         with requests.get(url, stream=True) as r:
             r.raise_for_status()
-            with open(owl_path, 'wb') as f:
-                for chunk in r.iter_content(chunk_size=8192): 
+            with open(owl_path, "wb") as f:
+                for chunk in r.iter_content(chunk_size=8192):
 
                     f.write(chunk)
 
-        #only store gzip version
-        with open(owl_path, 'rb') as f_in:
+        # only store gzip version
+        with open(owl_path, "rb") as f_in:
             gzip_path = RESOURCES_DIR / "ontologies" / f"{oid.lower()}.owl.gz"
-            with gzip.open(gzip_path, 'wb') as f_out:
+            with gzip.open(gzip_path, "wb") as f_out:
                 shutil.copyfileobj(f_in, f_out)
 
 
 def update_ontology_files() -> None:
+    """Download latest ontology files."""
     with ThreadPoolExecutor(max_workers=4) as pool:
         for ofile in ontology_files.values():
             pool.submit(update_ontology_file, ofile)
@@ -174,20 +176,21 @@ def update_ontology_files() -> None:
 
 class Ontology:
     """Ontology."""
-    _ontology: ProntoOntology = None
 
-    def __init__(self, ontology_id):
-        
+    _ontology: Optional[ProntoOntology] = None
+
+    def __init__(self, ontology_id: str):
+        """Construct ontology."""
         ontology_file = ontology_files[ontology_id]
         logger.info(f"Read ontology: `{ontology_id}`")
-        
+
         # read ontology with pronto
         with warnings.catch_warnings():
             warnings.simplefilter("ignore", pronto.utils.warnings.SyntaxWarning)
             warnings.simplefilter("ignore", pronto.utils.warnings.NotImplementedWarning)
             self.__class__._ontology = pronto.Ontology(ontology_file.filename)
 
-    def get_proto_ontology(self):
+    def get_pronto_ontology(self) -> ProntoOntology:
         """Get a proto object for the ontology.
 
         :return: `pronto.Ontology`: pronto object for the ontology
@@ -196,30 +199,29 @@ class Ontology:
         return self._ontology
 
 
-def create_ontology_enum(ontology_id: str, dir: Path):
+def create_ontology_enum(ontology_id: str) -> None:
     """Create enum of the ontology."""
 
     console.log(f"Create enum: `{ontology_id}`")
 
-    def name_to_variable(name: str) -> str:
+    def name_to_variable(name: str) -> Optional[str]:
         """Clean string to python variable name."""
         if name is None:
             return None
-        name = re.sub('\W|^(?=\d)','_', name)
+        name = re.sub(r"\W|^(?=\d)", "_", name)
         return name.upper()
 
     # load ontology
     terms: Dict[str, Dict] = {}
     ontology: Ontology = Ontology(ontology_id=ontology_id)
-    
-    names = set()
-    pronto_term: ProntoTerm
 
-    for term_id in ontology._ontology:    
+    names = set()
+    pronto_term: Union[ProntoTerm, ProntoRelationship]
+
+    for term_id in ontology._ontology:
         pronto_term = ontology._ontology[term_id]
-        # print(pronto_term)
-        
-        var_name = name_to_variable(pronto_term.name)
+
+        var_name: Optional[str] = name_to_variable(pronto_term.name)
         if var_name in names:
             logger.error(f"Duplicate name in ontology: `{var_name}`")
         elif var_name is None:
@@ -241,15 +243,17 @@ def create_ontology_enum(ontology_id: str, dir: Path):
     terms_sorted = {}
     for key in sorted(terms.keys()):
         terms_sorted[key] = terms[key]
-    
-    with open(RESOURCES_DIR / "templates" / "ontology_enum.pytemplate", "r") as f_template:
+
+    with open(
+        RESOURCES_DIR / "templates" / "ontology_enum.pytemplate", "r"
+    ) as f_template:
         template = Template(
             f_template.read(),
             trim_blocks=True,
             lstrip_blocks=True,
         )
 
-        context={
+        context = {
             "ontology_id": ontology_id,
             "terms": terms_sorted,
         }
@@ -267,20 +271,20 @@ def create_ontology_enum(ontology_id: str, dir: Path):
 if __name__ == "__main__":
     # download latest versions
     # update_ontology_files()
-    
+
     # load OWL files
     # ofile: OntologyFile
     # for oid, ofile in ontology_files.items():
-        
+
     #     print("-" * 80)
     #     ontology = Ontology(ontology_id=oid)
     #     console.print(ontology)
 
     # convert to python module
-    create_ontology_enum("SBO", dir=ENUM_DIR)
-    create_ontology_enum("KISAO", dir=ENUM_DIR)
-    create_ontology_enum("ECO", dir=ENUM_DIR)
-    create_ontology_enum("BTO", dir=ENUM_DIR)
+    create_ontology_enum("SBO")
+    create_ontology_enum("KISAO")
+    create_ontology_enum("ECO")
+    create_ontology_enum("BTO")
 
-    for ontology_id in ontology_files:
-        create_ontology_enum(ontology_id, dir=ENUM_DIR)
+    # for ontology_id in ontology_files:
+    #     create_ontology_enum(ontology_id)

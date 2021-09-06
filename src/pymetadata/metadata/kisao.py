@@ -2,6 +2,7 @@
 
 from enum import Enum
 
+
 class KISAO(str, Enum):
     """Enum for KISAO ontology."""
 
@@ -811,7 +812,9 @@ class KISAO(str, Enum):
 
     # quasi-minimal residual variant of biconjugate gradient stabilized method
     KISAO_0000394 = "KISAO_0000394"
-    QUASI_MINIMAL_RESIDUAL_VARIANT_OF_BICONJUGATE_GRADIENT_STABILIZED_METHOD = "KISAO_0000394"
+    QUASI_MINIMAL_RESIDUAL_VARIANT_OF_BICONJUGATE_GRADIENT_STABILIZED_METHOD = (
+        "KISAO_0000394"
+    )
 
     # improved biconjugate gradient method
     KISAO_0000395 = "KISAO_0000395"
@@ -1227,7 +1230,9 @@ class KISAO(str, Enum):
 
     # parsimonious enzyme usage flux balance analysis (minimum sum of absolute fluxes)
     KISAO_0000528 = "KISAO_0000528"
-    PARSIMONIOUS_ENZYME_USAGE_FLUX_BALANCE_ANALYSIS__MINIMUM_SUM_OF_ABSOLUTE_FLUXES_ = "KISAO_0000528"
+    PARSIMONIOUS_ENZYME_USAGE_FLUX_BALANCE_ANALYSIS__MINIMUM_SUM_OF_ABSOLUTE_FLUXES_ = (
+        "KISAO_0000528"
+    )
 
     # parallelism
     KISAO_0000529 = "KISAO_0000529"
@@ -1327,7 +1332,9 @@ class KISAO(str, Enum):
 
     # parsimonius flux balance analysis (minimum number of active fluxes)
     KISAO_0000554 = "KISAO_0000554"
-    PARSIMONIUS_FLUX_BALANCE_ANALYSIS__MINIMUM_NUMBER_OF_ACTIVE_FLUXES_ = "KISAO_0000554"
+    PARSIMONIUS_FLUX_BALANCE_ANALYSIS__MINIMUM_NUMBER_OF_ACTIVE_FLUXES_ = (
+        "KISAO_0000554"
+    )
 
     # absolute quadrature tolerance
     KISAO_0000555 = "KISAO_0000555"
@@ -1563,7 +1570,9 @@ class KISAO(str, Enum):
 
     # stochastic simulation algorithm with normally-distributed next reaction times
     KISAO_0000613 = "KISAO_0000613"
-    STOCHASTIC_SIMULATION_ALGORITHM_WITH_NORMALLY_DISTRIBUTED_NEXT_REACTION_TIMES = "KISAO_0000613"
+    STOCHASTIC_SIMULATION_ALGORITHM_WITH_NORMALLY_DISTRIBUTED_NEXT_REACTION_TIMES = (
+        "KISAO_0000613"
+    )
 
     # implementation
     KISAO_0000614 = "KISAO_0000614"
@@ -1571,11 +1580,15 @@ class KISAO(str, Enum):
 
     # fully-implicit regular grid finite volume method with a variable time step
     KISAO_0000615 = "KISAO_0000615"
-    FULLY_IMPLICIT_REGULAR_GRID_FINITE_VOLUME_METHOD_WITH_A_VARIABLE_TIME_STEP = "KISAO_0000615"
+    FULLY_IMPLICIT_REGULAR_GRID_FINITE_VOLUME_METHOD_WITH_A_VARIABLE_TIME_STEP = (
+        "KISAO_0000615"
+    )
 
     # semi-implicit regular grid finite volume method with a fixed time step
     KISAO_0000616 = "KISAO_0000616"
-    SEMI_IMPLICIT_REGULAR_GRID_FINITE_VOLUME_METHOD_WITH_A_FIXED_TIME_STEP = "KISAO_0000616"
+    SEMI_IMPLICIT_REGULAR_GRID_FINITE_VOLUME_METHOD_WITH_A_FIXED_TIME_STEP = (
+        "KISAO_0000616"
+    )
 
     # IDA-CVODE hybrid method
     KISAO_0000617 = "KISAO_0000617"
@@ -1992,7 +2005,6 @@ class KISAO(str, Enum):
     # temperature
     KISAO_0000839 = "KISAO_0000839"
     TEMPERATURE = "KISAO_0000839"
-
 
 
 __all__ = [

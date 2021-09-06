@@ -37491,6 +37491,50 @@
     "deprecated": false,
     "deprecationDate": null
   },
+  "identifiers.namespace": {
+    "id": 2844,
+    "prefix": "identifiers.namespace",
+    "name": "Identifiers.org namespace",
+    "pattern": "^[a-z_\\.]+$",
+    "namespaceEmbeddedInLui": false,
+    "description": "Identifiers.org is an established resolving system that enables the referencing of data for the scientific community, with a current focus on the Life Sciences domain.",
+    "mirId": "MIR:00000859",
+    "resources": [
+      {
+        "id": 2845,
+        "providerCode": "ebi",
+        "name": "European Bioinformatics Institute",
+        "urlPattern": "https://registry.identifiers.org/registry/{$id}",
+        "mirId": "MIR:00000858",
+        "description": "At EMBL-EBI, we make the world\u2019s public biological data freely available to the scientific community via a range of services and tools, perform basic research and provide professional training in bioinformatics. \nWe are part of the European Molecular Biology Laboratory (EMBL), an international, innovative and interdisciplinary research organisation funded by 26 member states and two associate member states.",
+        "official": true,
+        "sampleId": "pubmed",
+        "resourceHomeUrl": "https://www.ebi.ac.uk",
+        "institution": {
+          "id": 2,
+          "name": "European Bioinformatics Institute",
+          "homeUrl": "https://www.ebi.ac.uk",
+          "description": "At EMBL-EBI, we make the world\u2019s public biological data freely available to the scientific community via a range of services and tools, perform basic research and provide professional training in bioinformatics. \nWe are part of the European Molecular Biology Laboratory (EMBL), an international, innovative and interdisciplinary research organisation funded by 26 member states and two associate member states.",
+          "rorId": "https://ror.org/02catss52",
+          "location": {
+            "countryCode": "GB",
+            "countryName": "United Kingdom"
+          }
+        },
+        "location": {
+          "countryCode": "GB",
+          "countryName": "United Kingdom"
+        },
+        "deprecated": false,
+        "deprecationDate": null
+      }
+    ],
+    "created": "2021-09-05T17:52:59.264+0000",
+    "modified": "2021-09-05T17:52:59.264+0000",
+    "sampleId": "pubmed",
+    "deprecated": false,
+    "deprecationDate": null
+  },
   "dg.4dfc": {
     "id": 2821,
     "prefix": "dg.4dfc",
@@ -37532,6 +37576,182 @@
     "created": "2021-08-09T15:20:17.184+0000",
     "modified": "2021-08-09T15:20:17.184+0000",
     "sampleId": "81944ba1-81d0-436e-8552-33d77a27834b",
+    "deprecated": false,
+    "deprecationDate": null
+  },
+  "re3data": {
+    "id": 2848,
+    "prefix": "re3data",
+    "name": "re3data",
+    "pattern": "^r3d\\d{9,9}$",
+    "namespaceEmbeddedInLui": false,
+    "description": "Re3data is a global registry of research data repositories that covers research data repositories from different academic disciplines.",
+    "mirId": "MIR:00000861",
+    "resources": [
+      {
+        "id": 2849,
+        "providerCode": "datacite",
+        "name": "DataCite",
+        "urlPattern": "https://www.re3data.org/repository/{$id}",
+        "mirId": "MIR:00000860",
+        "description": "DataCite is a leading global non-profit organisation that provides persistent identifiers (DOIs) for research data and other research outputs.",
+        "official": true,
+        "sampleId": "r3d100010772",
+        "resourceHomeUrl": "https://datacite.org",
+        "institution": {
+          "id": 2847,
+          "name": "DataCite",
+          "homeUrl": "https://datacite.org",
+          "description": "DataCite is a leading global non-profit organisation that provides persistent identifiers (DOIs) for research data and other research outputs.",
+          "rorId": null,
+          "location": {
+            "countryCode": "DE",
+            "countryName": "Germany"
+          }
+        },
+        "location": {
+          "countryCode": "DE",
+          "countryName": "Germany"
+        },
+        "deprecated": false,
+        "deprecationDate": null
+      }
+    ],
+    "created": "2021-09-05T17:53:47.458+0000",
+    "modified": "2021-09-05T17:53:47.458+0000",
+    "sampleId": "r3d100010772",
+    "deprecated": false,
+    "deprecationDate": null
+  },
+  "pypi": {
+    "id": 2852,
+    "prefix": "pypi",
+    "name": "PyPI",
+    "pattern": "^[a-zA-Z_][a-zA-Z0-9\\-_]+$",
+    "namespaceEmbeddedInLui": false,
+    "description": "The Python Package Index (PyPI) is a repository for Python packages.",
+    "mirId": "MIR:00000863",
+    "resources": [
+      {
+        "id": 2853,
+        "providerCode": "psf",
+        "name": "Python Software Foundation",
+        "urlPattern": "https://pypi.org/project/{$id}/",
+        "mirId": "MIR:00000862",
+        "description": "The Python Software Foundation (PSF) is a 501(c)(3) non-profit corporation that holds the intellectual property rights behind the Python programming language.",
+        "official": true,
+        "sampleId": "numpy",
+        "resourceHomeUrl": "https://www.python.org/psf/",
+        "institution": {
+          "id": 2851,
+          "name": "Python Software Foundation",
+          "homeUrl": "https://www.python.org/psf/",
+          "description": "The Python Software Foundation (PSF) is a 501(c)(3) non-profit corporation that holds the intellectual property rights behind the Python programming language.",
+          "rorId": null,
+          "location": {
+            "countryCode": "US",
+            "countryName": "United States"
+          }
+        },
+        "location": {
+          "countryCode": "US",
+          "countryName": "United States"
+        },
+        "deprecated": false,
+        "deprecationDate": null
+      }
+    ],
+    "created": "2021-09-05T17:54:24.640+0000",
+    "modified": "2021-09-05T17:54:24.640+0000",
+    "sampleId": "numpy",
+    "deprecated": false,
+    "deprecationDate": null
+  },
+  "iedb": {
+    "id": 2857,
+    "prefix": "iedb",
+    "name": "Immune Epitope Database (IEDB)",
+    "pattern": "^[0-9]+$",
+    "namespaceEmbeddedInLui": false,
+    "description": "The Immune Epitope Database (IEDB) is a freely available resource funded by NIAID. It catalogs experimental data on antibody and T cell epitopes studied in humans, non-human primates, and other animal species in the context of infectious disease, allergy, autoimmunity and transplantation. The IEDB also hosts tools to assist in the prediction and analysis of epitopes.",
+    "mirId": "MIR:00000865",
+    "resources": [
+      {
+        "id": 2858,
+        "providerCode": "lji",
+        "name": "La Jolla Institute for Immunology",
+        "urlPattern": "https://www.iedb.org/reference/{$id}",
+        "mirId": "MIR:00000864",
+        "description": "La Jolla Institute for Immunology is a non-profit\nresearch organization located in La Jolla, California. The Institute\nresearches immunology and immune system diseases. The institute was\nfounded in 1988. La Jolla Institute for Immunology is a collaborative\nresearch organization that has forged many partnerships within the\nresearch community in San Diego, across the United States, and abroad.",
+        "official": true,
+        "sampleId": "1038233",
+        "resourceHomeUrl": "https://www.lji.org/",
+        "institution": {
+          "id": 2856,
+          "name": "La Jolla Institute for Immunology",
+          "homeUrl": "https://www.lji.org/",
+          "description": "La Jolla Institute for Immunology is a non-profit\nresearch organization located in La Jolla, California. The Institute\nresearches immunology and immune system diseases. The institute was\nfounded in 1988. La Jolla Institute for Immunology is a collaborative\nresearch organization that has forged many partnerships within the\nresearch community in San Diego, across the United States, and abroad.",
+          "rorId": null,
+          "location": {
+            "countryCode": "US",
+            "countryName": "United States"
+          }
+        },
+        "location": {
+          "countryCode": "US",
+          "countryName": "United States"
+        },
+        "deprecated": false,
+        "deprecationDate": null
+      }
+    ],
+    "created": "2021-09-05T17:58:19.858+0000",
+    "modified": "2021-09-05T17:58:19.858+0000",
+    "sampleId": "1038233",
+    "deprecated": false,
+    "deprecationDate": null
+  },
+  "lgai.cede": {
+    "id": 2862,
+    "prefix": "lgai.cede",
+    "name": "LG Chemical Entity Detection Dataset (LGCEDe)",
+    "pattern": "^LGCEDe-S-\\d{9}$",
+    "namespaceEmbeddedInLui": false,
+    "description": "LG Chemical Entity Detection Dataset (LGCEDe) is only available open-dataset with molecular instance level annotations (i.e. atom-bond level position annotations within an image) for molecular structure images. This dataset was designed to encourage research on detection-based pipelines for Optical Chemical Structure Recognition (OCSR).",
+    "mirId": "MIR:00000867",
+    "resources": [
+      {
+        "id": 2863,
+        "providerCode": "lgai.cede",
+        "name": "LG AI Research",
+        "urlPattern": "https://s3.us-east-2.amazonaws.com/lg.cede/{$id}",
+        "mirId": "MIR:00000866",
+        "description": "LG AI Research is a subsidiary of the Korean Corporation LG. Mainly focuses on research related to Artificial Intelligence, Big data and data-driven applications to real-world problems.",
+        "official": true,
+        "sampleId": "LGCEDe-S-000002244",
+        "resourceHomeUrl": "https://www.lgresearch.ai",
+        "institution": {
+          "id": 2861,
+          "name": "LG AI Research",
+          "homeUrl": "https://www.lgresearch.ai",
+          "description": "LG AI Research is a subsidiary of the Korean Corporation LG. Mainly focuses on research related to Artificial Intelligence, Big data and data-driven applications to real-world problems.",
+          "rorId": null,
+          "location": {
+            "countryCode": "KR",
+            "countryName": "Korea, Republic of"
+          }
+        },
+        "location": {
+          "countryCode": "KR",
+          "countryName": "Korea, Republic of"
+        },
+        "deprecated": false,
+        "deprecationDate": null
+      }
+    ],
+    "created": "2021-09-05T18:01:14.906+0000",
+    "modified": "2021-09-05T18:01:14.906+0000",
+    "sampleId": "LGCEDe-S-000002244",
     "deprecated": false,
     "deprecationDate": null
   },

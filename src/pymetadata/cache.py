@@ -31,7 +31,9 @@ def read_json_cache(cache_path: Path) -> Optional[Dict]:
     return None
 
 
-def write_json_cache(data: Dict, cache_path: Path, json_encoder: Optional[Type[JSONEncoder]] = None) -> None:
+def write_json_cache(
+    data: Dict, cache_path: Path, json_encoder: Optional[Type[JSONEncoder]] = None
+) -> None:
     """Write JSON cache file.
 
     :param data: data to serialize

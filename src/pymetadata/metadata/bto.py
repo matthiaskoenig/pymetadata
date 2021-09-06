@@ -2,6 +2,7 @@
 
 from enum import Enum
 
+
 class BTO(str, Enum):
     """Enum for BTO ontology."""
 
@@ -11187,7 +11188,9 @@ class BTO(str, Enum):
 
     # culture condition:N-3-oxododecanoyl-L-homoserine lactone/ammonium chloride-grown cell
     BTO_0002797 = "BTO_0002797"
-    CULTURE_CONDITION_N_3_OXODODECANOYL_L_HOMOSERINE_LACTONE_AMMONIUM_CHLORIDE_GROWN_CELL = "BTO_0002797"
+    CULTURE_CONDITION_N_3_OXODODECANOYL_L_HOMOSERINE_LACTONE_AMMONIUM_CHLORIDE_GROWN_CELL = (
+        "BTO_0002797"
+    )
 
     # culture condition:N-decanoyl-L-homoserine lactone-grown cell
     BTO_0002798 = "BTO_0002798"
@@ -22075,7 +22078,9 @@ class BTO(str, Enum):
 
     # culture condition:anaerobic and sulfate-thiosulfate-lactate-grown cell
     BTO_0005523 = "BTO_0005523"
-    CULTURE_CONDITION_ANAEROBIC_AND_SULFATE_THIOSULFATE_LACTATE_GROWN_CELL = "BTO_0005523"
+    CULTURE_CONDITION_ANAEROBIC_AND_SULFATE_THIOSULFATE_LACTATE_GROWN_CELL = (
+        "BTO_0005523"
+    )
 
     # plant lip
     BTO_0005524 = "BTO_0005524"
@@ -26084,7 +26089,6 @@ class BTO(str, Enum):
     # related to
     related_to = "related_to"
     RELATED_TO = "related_to"
-
 
 
 __all__ = [

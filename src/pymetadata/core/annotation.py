@@ -6,7 +6,7 @@ import logging
 import re
 import urllib
 from pprint import pprint
-from typing import Dict, List, Optional, Tuple, Union
+from typing import Any, Dict, List, Optional, Tuple, Union
 
 import requests
 
@@ -130,10 +130,9 @@ class RDFAnnotation:
 
         self.validate()
 
-    def clean(self):
+    def clean(self) -> None:
         """Clean collection and term information."""
         if self.collection:
-            # FIXME: resolve SBO information
             if self.collection == "biomodels.sbo":
                 self.collection = "sbo"
             if self.collection == "obo.go":
@@ -159,11 +158,11 @@ class RDFAnnotation:
         else:
             return self.term
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         """Get representation string."""
         return f"RDFAnnotation({self.qualifier}|{self.collection}|{self.term})"
 
-    def to_dict(self):
+    def to_dict(self) -> Dict:
         """Convert to dict."""
         return {
             "qualifier": self.qualifier.value,  # FIXME use enums!
@@ -281,11 +280,11 @@ class RDFAnnotationData(RDFAnnotation):
         # query OLS information
         self.query_ols()
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         """Get representation string."""
         return f"RDFAnnotationData({self.collection}|{self.term}|{self.label}|{self.description}|{self.synonyms}|{self.xrefs})"
 
-    def to_dict(self):
+    def to_dict(self) -> Dict[str, Any]:
         """Convert to dict."""
 
         return {
@@ -303,7 +302,7 @@ class RDFAnnotationData(RDFAnnotation):
             "warnings": self.warnings,
         }
 
-    def query_ols(self):
+    def query_ols(self) -> Dict:
         """Query ontology lookup service."""
         try:
             d = OLS_QUERY.query_ols(ontology=self.collection, term=self.term)

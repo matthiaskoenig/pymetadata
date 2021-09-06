@@ -97,7 +97,7 @@ class Omex:
 
     def __repr__(self) -> str:
         """Get representation string."""
-        return f"Omex({self.path}, working_dir={self.working_dir})"
+        return f"Omex({self.omex_path}, working_dir={self.working_dir})"
 
     def __str__(self) -> str:
         """Get contents of archive string."""
