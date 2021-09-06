@@ -22,3 +22,6 @@ __pycache__
 .Rhistory
 *.tsv#
 *.xlsx#
+
+# OWL ontologies
+*.owl.gz
