@@ -10,7 +10,7 @@ import logging
 import urllib
 from dataclasses import dataclass, field
 from pathlib import Path
-from typing import Dict, List
+from typing import Dict, List, Optional
 
 import requests
 
@@ -51,6 +51,8 @@ class UnichemSource:
 class UnichemQuery:
     """Query unichem."""
 
+    sources = None
+
     @classmethod
     def _get_all_src_information(
         cls, cache_path: Path = CACHE_PATH, cache: bool = CACHE_USE
@@ -79,7 +81,7 @@ class UnichemQuery:
         return data
 
     @staticmethod
-    def _get_src_information(src_id: int) -> Dict:
+    def _get_src_information(src_id: int) -> Optional[UnichemSource]:
         """Get unichem source information for given source id."""
         url = f"https://www.ebi.ac.uk/unichem/rest/sources/{src_id}"
         response = requests.get(url)
@@ -88,8 +90,6 @@ class UnichemQuery:
             return None
         else:
             return UnichemSource(**d[0])
-
-    sources = None
 
     @classmethod
     def query_xrefs(
@@ -117,24 +117,25 @@ class UnichemQuery:
             url = f"https://www.ebi.ac.uk/unichem/rest/inchikey/{inchikey}"
             response = requests.get(url)
             data = response.json()
-            if "error" in data:
-                if inchikey not in [
-                    "YAJCHEVQCOHZDC-QMMNLEPNSA-N",  # insulin not a small molecule
-                ]:
-                    logger.error(f"inchikey could not be queried: {url}, {data}")
-                return []
+            if data is not None:
+                if "error" in data:
+                    if inchikey not in [
+                        "YAJCHEVQCOHZDC-QMMNLEPNSA-N",  # insulin not a small molecule
+                    ]:
+                        logger.error(f"inchikey could not be queried: {url}, {data}")
+                    return []
 
-            # add source information to all entries
-            for d in data:
-                try:
-                    d["source"] = cls.sources[d["src_id"]]
-                except KeyError:
-                    logger.error(
-                        f"inchikey/{inchikey}: Key <{d['src_id']}> missing from {cls.sources.keys()}"
-                    )
+                # add source information to all entries
+                for d in data:
+                    try:
+                        d["source"] = cls.sources[d["src_id"]]
+                    except KeyError:
+                        logger.error(
+                            f"inchikey/{inchikey}: Key <{d['src_id']}> missing from {cls.sources.keys()}"
+                        )
 
             write_json_cache(
-                data=data, cache_path=xref_path, json_encoder=DataclassJSONEncoder
+                data=data, cache_path=xref_path, json_encoder=DataclassJSONEncoder  # type: ignore
             )
 
         # process data

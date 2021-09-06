@@ -45,11 +45,11 @@ class Entry:
     def __init__(
         self,
         location: str,
-        format: str = None,
-        format_key: str = None,
+        format: Optional[str] = None,
+        format_key: Optional[str] = None,
         master: bool = False,
-        description: str = None,
-        creators: Iterator[Creator] = None,
+        description: Optional[str] = None,
+        creators: Optional[Iterator[Creator]] = None,
     ):
         """Create entry from information.
 
@@ -72,8 +72,8 @@ class Entry:
         self.format: str = format
         self.location: str = location
         self.master: bool = master
-        self.description: str = description
-        self.creators: Iterator[Creator] = creators
+        self.description: Optional[str] = description
+        self.creators: Optional[Iterator[Creator]] = creators
 
     def __str__(self) -> str:
         """Get string of Entry."""
@@ -118,7 +118,7 @@ class Omex:
         cls,
         omex_path: Path,
         directory: Path,
-        creators=None,
+        creators: Optional[Iterator[Creator]] = None,
     ) -> "Omex":
         """Create a COMBINE archive from a given folder.
 
@@ -198,9 +198,9 @@ class Omex:
         :return:
         """
         omex = Omex(omex_path=omex_path, working_dir=working_dir)
-        return omex._from_entries(entries, add_entries=False)
+        return omex._from_entries(entries, add_entries=False)  # type: ignore
 
-    def _from_entries(self, entries: Iterable[Entry], add_entries: bool):
+    def _from_entries(self, entries: Iterable[Entry], add_entries: bool) -> None:
         """Create archive from given entries.
 
         :param entries: entries which should be in the archive.
@@ -291,7 +291,7 @@ class Omex:
             raise ValueError(f"Method is not supported '{method}'")
 
     def locations_by_format(
-        self, format_key: str = None, method="omex"
+        self, format_key: str = None, method: str = "omex"
     ) -> List[Tuple[str, bool]]:
         """Get locations to files with given format in the archive.
 
@@ -329,7 +329,7 @@ class Omex:
             tmp_dir = tempfile.mkdtemp()
 
             try:
-                self.extract(output_dir=tmp_dir, method="zip")
+                self.extract(output_dir=Path(tmp_dir), method="zip")
 
                 # iterate over all locations & guess format
                 for root, _dirs, files in os.walk(tmp_dir):
@@ -351,7 +351,7 @@ class Omex:
 
         return locations
 
-    def list_contents(self, method="omex") -> List["Content"]:
+    def list_contents(self, method: str = "omex") -> List["Content"]:
         """Return list of contents of the combine archive.
 
         :param omexPath:

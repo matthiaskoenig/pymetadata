@@ -9,7 +9,7 @@ import os
 import time
 from dataclasses import dataclass, field
 from pathlib import Path
-from typing import Dict, List
+from typing import Dict, List, Optional
 
 import requests
 
@@ -24,16 +24,16 @@ logger = logging.getLogger(__name__)
 class Resource:
     """Resource."""
 
-    id: int
+    id: Optional[int]
     providerCode: str
     name: str
     urlPattern: str
-    mirId: str = field(repr=False)
+    mirId: Optional[str] = field(repr=False)
     description: str = field(repr=False)
     official: bool = field(repr=False)
 
-    sampleId: str = field(repr=False)
-    resourceHomeUrl: str = field(repr=False)
+    sampleId: Optional[str] = field(repr=False)
+    resourceHomeUrl: Optional[str] = field(repr=False)
     institution: dict = field(repr=False)
     location: dict = field(repr=False)
     deprecated: bool = field(repr=False)
@@ -44,21 +44,21 @@ class Resource:
 class Namespace:
     """Namespace."""
 
-    id: int
-    prefix: str
+    id: Optional[str]
+    prefix: Optional[str]
     name: str
     pattern: str
     namespaceEmbeddedInLui: bool
     description: str = field(repr=False)
-    mirId: str = field(repr=False, default=None)
-    resources: List = field(repr=False, default=None)
-    created: str = field(repr=False, default=None)
-    modified: str = field(repr=False, default=None)
-    sampleId: str = field(repr=False, default=None)
-    deprecated: bool = field(repr=False, default=None)
-    deprecationDate: str = field(repr=False, default=None)
+    mirId: Optional[str] = field(repr=False, default=None)
+    resources: Optional[List] = field(repr=False, default=None)
+    created: Optional[str] = field(repr=False, default=None)
+    modified: Optional[str] = field(repr=False, default=None)
+    sampleId: Optional[str] = field(repr=False, default=None)
+    deprecated: bool = field(repr=False, default=False)
+    deprecationDate: Optional[str] = field(repr=False, default=None)
 
-    def __post_init__(self):
+    def __post_init__(self) -> None:
         """Set resources."""
         if self.resources is not None:
             self.resources = [Resource(**d) for d in self.resources]
@@ -68,7 +68,7 @@ class Namespace:
 
 def ols_namespaces() -> Dict[str, Namespace]:
     """Define Ontologies available from OLS but not in identifiers.org."""
-    ols_info = {
+    ols_info: Dict = {
         "deprecated": False,
         "deprecationDate": None,
         "institution": {
@@ -210,6 +210,10 @@ def ols_namespaces() -> Dict[str, Namespace]:
     ]
 
     for ns in namespaces:
+        if not ns.resources:
+            ns.resources = []
+        if not ns.prefix:
+            continue
         ns.resources.append(
             Resource(
                 id=None,
@@ -224,10 +228,10 @@ def ols_namespaces() -> Dict[str, Namespace]:
             )
         )
 
-    return {ns.prefix: ns for ns in namespaces}
+    return {ns.prefix: ns for ns in namespaces}  # type: ignore
 
 
-def misc_namespaces() -> List[Namespace]:
+def misc_namespaces() -> Dict[str, Namespace]:
     """Define misc namespaces."""
     namespaces = [
         Namespace(
@@ -248,7 +252,7 @@ def misc_namespaces() -> List[Namespace]:
         ),
     ]
 
-    return {ns.id: ns for ns in namespaces}
+    return {ns.id: ns for ns in namespaces}  # type: ignore
 
 
 class Registry:
@@ -334,7 +338,7 @@ class Registry:
                 json_encoder=DataclassJSONEncoder,
             )
 
-        return ns_dict
+        return ns_dict  # type: ignore
 
     @staticmethod
     def load_registry(registry_path: Path) -> Dict[str, Namespace]:
@@ -343,6 +347,8 @@ class Registry:
             Registry.update_registry(registry_path=registry_path)
 
         d = read_json_cache(cache_path=registry_path)
+        if not d:
+            raise ValueError("Registry could not be loaded from cache.")
 
         return {k: Namespace(**v) for k, v in d.items()}
 

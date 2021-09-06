@@ -12,7 +12,7 @@ logger = logging.getLogger(__name__)
 class DataclassJSONEncoder(JSONEncoder):
     """JSON serialization of dataclasses."""
 
-    def default(self, o: Any) -> Dict:
+    def default(self, o: Any) -> Any:
         """Serialize to JSON."""
         return o.__dict__
 
@@ -26,7 +26,7 @@ def read_json_cache(cache_path: Path) -> Optional[Dict]:
     if cache_path.exists():
         with open(cache_path) as fp:
             logger.debug(f"Read cache: {cache_path}")
-            return json.load(fp)
+            return json.load(fp)  # type: ignore
 
     return None
 

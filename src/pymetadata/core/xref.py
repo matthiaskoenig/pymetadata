@@ -41,7 +41,7 @@ class CrossReference:
     accession: str
     url: str
 
-    def __post_init__(self):
+    def __post_init__(self) -> None:
         """Validate."""
         self.validate()
 
@@ -49,7 +49,7 @@ class CrossReference:
         """Convert to dict."""
         return self.__dict__
 
-    def validate(self, warnings=True) -> bool:
+    def validate(self, warnings: bool = True) -> bool:
         """Validate the cross reference.
 
         :return:

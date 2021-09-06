@@ -150,6 +150,9 @@ class RDFAnnotation:
 
         This is the correct usage.
         """
+        if not self.term:
+            return None
+
         if self.collection:
             if self.term.startswith(f"{self.collection.upper()}:"):
                 return f"{IDENTIFIERS_ORG_PREFIX}/{self.term}"
@@ -210,8 +213,9 @@ class RDFAnnotation:
 
     def validate(self) -> None:
         """Validate annotation."""
-        self.check_qualifier(self.qualifier)
-        if self.collection:
+        if self.qualifier:
+            self.check_qualifier(self.qualifier)
+        if self.collection and self.term:
             self.check_term(collection=self.collection, term=self.term)
 
 
@@ -227,7 +231,7 @@ class RDFAnnotationData(RDFAnnotation):
         self.resource = annotation.resource
         self.qualifier = annotation.qualifier
         self.collection = annotation.collection
-        self.term = annotation.term
+        self.term: Optional[str] = annotation.term
         self.url: Optional[str] = None
         self.description: Optional[str] = None
         self.label: Optional[str] = None
@@ -239,19 +243,29 @@ class RDFAnnotationData(RDFAnnotation):
         if self.collection:
 
             # register MIRIAM xrefs
-            namespace = REGISTRY.ns_dict.get(self.collection)
-            namespace_embedded = namespace.namespaceEmbeddedInLui
-            # print("-" * 80)
-            # print(namespace.prefix, "embedded=", namespace_embedded)
+            namespace = REGISTRY.ns_dict.get(self.collection, None)
+            if not namespace:
+                raise ValueError(
+                    f"Namespace does not exist in dict for: `{self.collection}`"
+                )
 
-            for ns_resource in namespace.resources:  # Resource
+            namespace_embedded = namespace.namespaceEmbeddedInLui
+
+            if not namespace.resources:
+                namespace.resources = []
+
+            for ns_resource in namespace.resources:
 
                 # create url
                 url = ns_resource.urlPattern
+
+                if not self.term:
+                    continue
+
                 term = self.term
 
                 # remove prefix
-                if namespace_embedded:
+                if namespace_embedded and namespace.prefix:
                     term = term[len(namespace.prefix) + 1 :]
 
                 # urlencode term
@@ -260,10 +274,11 @@ class RDFAnnotationData(RDFAnnotation):
                 # create url
                 url = url.replace("{$Id}", term)
                 url = url.replace("{$id}", term)
-                url = url.replace(
-                    f"{namespace.prefix.upper}:",
-                    urllib.parse.quote(f"{namespace.prefix.upper}:"),
-                )
+                if namespace.prefix:
+                    url = url.replace(
+                        f"{namespace.prefix.upper}:",
+                        urllib.parse.quote(f"{namespace.prefix.upper}:"),
+                    )
 
                 if not self.url:
                     # set url to first resource url
@@ -273,7 +288,7 @@ class RDFAnnotationData(RDFAnnotation):
                 _xref = CrossReference(
                     name=ns_resource.name, accession=self.term, url=url
                 )
-                valid = _xref.validate() and is_url(self.url)
+                valid = _xref.validate() and is_url(self.url)  # type: ignore
                 if valid:
                     self.xrefs.append(_xref)
 

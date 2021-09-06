@@ -9,7 +9,7 @@ from concurrent.futures import ThreadPoolExecutor
 from dataclasses import dataclass
 from enum import Enum
 from pathlib import Path
-from typing import Dict, List, Optional, Union
+from typing import Any, Dict, List, Optional, Union
 
 import pronto
 import requests
@@ -190,7 +190,7 @@ class Ontology:
             warnings.simplefilter("ignore", pronto.utils.warnings.NotImplementedWarning)
             self.__class__._ontology = pronto.Ontology(ontology_file.filename)
 
-    def get_pronto_ontology(self) -> ProntoOntology:
+    def get_pronto_ontology(self) -> Optional[ProntoOntology]:
         """Get a proto object for the ontology.
 
         :return: `pronto.Ontology`: pronto object for the ontology
@@ -218,17 +218,25 @@ def create_ontology_enum(ontology_id: str) -> None:
     names = set()
     pronto_term: Union[ProntoTerm, ProntoRelationship]
 
+    if not ontology._ontology:
+        raise ValueError(f"No Pronto Ontology for `{ontology_id}`")
+
     for term_id in ontology._ontology:
         pronto_term = ontology._ontology[term_id]
 
-        var_name: Optional[str] = name_to_variable(pronto_term.name)
+        pronto_name: Union[str, None, Any] = pronto_term.name
+        if not isinstance(pronto_name, str):
+            logger.warning(f"Pronto name is none: `{pronto_term}`")
+            continue
+
+        var_name: Optional[str] = name_to_variable(pronto_name)
         if var_name in names:
             logger.error(f"Duplicate name in ontology: `{var_name}`")
-        elif var_name is None:
-            logger.error(f"Name is none: `{pronto_term}`")
+            continue
         else:
             names.add(var_name)
             term_id = pronto_term.id
+            # fix the ids
             if ontology_id == "KISAO":
                 term_id = term_id.replace("http://www.biomodels.net/kisao/KISAO#", "")
             if ":" in term_id:

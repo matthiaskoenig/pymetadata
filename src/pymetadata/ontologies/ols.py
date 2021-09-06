@@ -3,7 +3,7 @@ import logging
 import urllib.parse
 from dataclasses import dataclass, field
 from pathlib import Path
-from typing import Dict, List
+from typing import Any, Dict, List, Optional
 
 import requests
 
@@ -21,9 +21,9 @@ class OLSOntology:
     """OLSOntology."""
 
     name: str
-    iri_pattern: str = field(default=None)
+    iri_pattern: Optional[str] = field(default=None)
 
-    def __post_init__(self):
+    def __post_init__(self) -> None:
         """Fix IRI patterns."""
         if self.iri_pattern is None:
             self.iri_pattern = (
@@ -83,9 +83,9 @@ class OLSQuery:
         if not self.cache_path.exists():
             self.cache_path.mkdir(parents=True)
 
-    def get_iri(self, ontology: str, term: str):
+    def get_iri(self, ontology: str, term: str) -> str:
         """Get IRI information."""
-        ols_ontology = self.ontologies.get(ontology, None)  # type: OLSOntology
+        ols_ontology: Optional[OLSOntology] = self.ontologies.get(ontology, None)
         # remove prefix if existing
         if term.startswith(ontology.upper()):
             term = term.replace(f"{ontology.upper()}:", "")
@@ -96,21 +96,26 @@ class OLSQuery:
             )
             iri = f"http://purl.obolibrary.org/obo/{ontology.upper()}_{term}"
         else:
+            if not ols_ontology.iri_pattern:
+                raise ValueError(f"No iri pattern for `{ols_ontology}")
             iri = ols_ontology.iri_pattern.replace("{$Id}", term)
 
         return iri
 
-    def query_ols(self, ontology: str, term: str) -> Dict:
+    def query_ols(self, ontology: Optional[str], term: Optional[str]) -> Dict:
         """Query the ontology lookup service."""
         if not ontology:
             return {"errors": [], "warnings": [f"No collection: '{ontology}'"]}
+        if not term:
+            return {"errors": [], "warnings": [f"No term: '{ontology}'"]}
 
         namespace = registry.ns_dict.get(ontology)
         ols_pattern = None
-        for ns_resource in namespace.resources:
-            if ns_resource.providerCode == "ols":
-                ols_pattern = ns_resource.urlPattern
-                break
+        if namespace and namespace.resources:
+            for ns_resource in namespace.resources:
+                if ns_resource.providerCode == "ols":
+                    ols_pattern = ns_resource.urlPattern
+                    break
 
         if not ols_pattern:
             return {
@@ -135,7 +140,7 @@ class OLSQuery:
         if self.cache:
             data = read_json_cache(cache_path=cache_path)
         else:
-            data = None
+            data = {}
 
         if not data:
             url = self.url_term_query.format(ontology, urliri)
@@ -150,7 +155,7 @@ class OLSQuery:
             else:
                 # print(response.text)
                 data = response.json()
-                if "error" in data:
+                if not data or "error" in data:
                     error_msg = (
                         f"Error in OLS query <{ontology}|{term}> at {url}: {data}"
                     )
@@ -163,11 +168,11 @@ class OLSQuery:
                 else:
                     data["errors"] = []
                     data["warnings"] = []
-                    write_json_cache(data=data, cache_path=cache_path)
+                    write_json_cache(data=data, cache_path=cache_path)  # type: ignore
 
         return data
 
-    def process_response(self, term: Dict):
+    def process_response(self, term: Dict) -> Dict[str, Any]:
         """Process the response dictionary."""
         data = {
             "errors": term["errors"],

@@ -37796,7 +37796,7 @@
     "created": null,
     "modified": null,
     "sampleId": null,
-    "deprecated": null,
+    "deprecated": false,
     "deprecationDate": null
   },
   "cmo": {
@@ -37840,7 +37840,7 @@
     "created": null,
     "modified": null,
     "sampleId": null,
-    "deprecated": null,
+    "deprecated": false,
     "deprecationDate": null
   },
   "chmo": {
@@ -37884,7 +37884,7 @@
     "created": null,
     "modified": null,
     "sampleId": null,
-    "deprecated": null,
+    "deprecated": false,
     "deprecationDate": null
   },
   "vto": {
@@ -37928,7 +37928,7 @@
     "created": null,
     "modified": null,
     "sampleId": null,
-    "deprecated": null,
+    "deprecated": false,
     "deprecationDate": null
   },
   "opmi": {
@@ -37972,7 +37972,7 @@
     "created": null,
     "modified": null,
     "sampleId": null,
-    "deprecated": null,
+    "deprecated": false,
     "deprecationDate": null
   },
   "mondo": {
@@ -38016,7 +38016,7 @@
     "created": null,
     "modified": null,
     "sampleId": null,
-    "deprecated": null,
+    "deprecated": false,
     "deprecationDate": null
   },
   "stato": {
@@ -38060,7 +38060,7 @@
     "created": null,
     "modified": null,
     "sampleId": null,
-    "deprecated": null,
+    "deprecated": false,
     "deprecationDate": null
   },
   "atol": {
@@ -38104,7 +38104,7 @@
     "created": null,
     "modified": null,
     "sampleId": null,
-    "deprecated": null,
+    "deprecated": false,
     "deprecationDate": null
   },
   "nbo": {
@@ -38148,7 +38148,7 @@
     "created": null,
     "modified": null,
     "sampleId": null,
-    "deprecated": null,
+    "deprecated": false,
     "deprecationDate": null
   },
   "scdo": {
@@ -38192,7 +38192,7 @@
     "created": null,
     "modified": null,
     "sampleId": null,
-    "deprecated": null,
+    "deprecated": false,
     "deprecationDate": null
   },
   "fix": {
@@ -38236,7 +38236,7 @@
     "created": null,
     "modified": null,
     "sampleId": null,
-    "deprecated": null,
+    "deprecated": false,
     "deprecationDate": null
   },
   "oba": {
@@ -38280,7 +38280,7 @@
     "created": null,
     "modified": null,
     "sampleId": null,
-    "deprecated": null,
+    "deprecated": false,
     "deprecationDate": null
   },
   "mmo": {
@@ -38324,7 +38324,7 @@
     "created": null,
     "modified": null,
     "sampleId": null,
-    "deprecated": null,
+    "deprecated": false,
     "deprecationDate": null
   },
   "brenda.ligand": {
@@ -38339,7 +38339,7 @@
     "created": null,
     "modified": null,
     "sampleId": null,
-    "deprecated": null,
+    "deprecated": false,
     "deprecationDate": null
   },
   "metabolights.compound": {
@@ -38354,7 +38354,7 @@
     "created": null,
     "modified": null,
     "sampleId": null,
-    "deprecated": null,
+    "deprecated": false,
     "deprecationDate": null
   }
 }
