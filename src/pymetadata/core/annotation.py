@@ -43,8 +43,6 @@ class RDFAnnotation:
 
     def __init__(self, qualifier: Union[BQB, BQM], resource: str):
 
-        print(qualifier, resource)
-
         self.qualifier: Union[BQB, BQM] = qualifier
         self.collection: Optional[str] = None
         self.term: Optional[str] = None
