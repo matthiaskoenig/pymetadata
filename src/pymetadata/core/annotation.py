@@ -344,6 +344,11 @@ class RDFAnnotationData(RDFAnnotation):
 
 if __name__ == "__main__":
     for annotation in [
+        # FIXME: support this
+        RDFAnnotation(
+            qualifier=BQB.IS_VERSION_OF,
+            resource="NCIT:C75913",
+        ),
         RDFAnnotation(
             qualifier=BQB.IS_VERSION_OF,
             resource="taxonomy/562",
