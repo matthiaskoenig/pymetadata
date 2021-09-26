@@ -105,7 +105,7 @@ class OLSQuery:
     def query_ols(self, ontology: Optional[str], term: Optional[str]) -> Dict:
         """Query the ontology lookup service."""
         if not ontology:
-            return {"errors": [], "warnings": [f"No collection: '{ontology}'"]}
+            return {"errors": [], "warnings": [f"No collection."]}
         if not term:
             return {"errors": [], "warnings": [f"No term: '{ontology}'"]}
 
