@@ -1,12 +1,12 @@
 """Caching of information."""
 import json
-import logging
 from json.encoder import JSONEncoder
 from pathlib import Path
 from typing import Any, Dict, Optional, Type
 
+from pymetadata import log
 
-logger = logging.getLogger(__name__)
+logger = log.get_logger(__name__)
 
 
 class DataclassJSONEncoder(JSONEncoder):

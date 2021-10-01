@@ -19,11 +19,9 @@ from pronto.relationship import Relationship as ProntoRelationship
 from pronto.term import Term as ProntoTerm
 
 from pymetadata import ENUM_DIR, RESOURCES_DIR
-from pymetadata.log import *
+from pymetadata import log
 
-
-logger = logging.getLogger(__name__)
-console = Console()
+logger = log.get_logger(__name__)
 
 
 class OntologyFormat(str, Enum):
@@ -147,7 +145,7 @@ def update_ontology_file(ofile: OntologyFile) -> None:
 
     oid = ofile.id
 
-    console.log(f"Update ontology: `{oid}`")
+    logger.info(f"Update ontology: `{oid}`")
 
     with tempfile.TemporaryDirectory() as tmp_dir:
         # download in tmp location
@@ -202,7 +200,7 @@ class Ontology:
 def create_ontology_enum(ontology_id: str) -> None:
     """Create enum of the ontology."""
 
-    console.log(f"Create enum: `{ontology_id}`")
+    logger.info(f"Create enum: `{ontology_id}`")
 
     def name_to_variable(name: str) -> Optional[str]:
         """Clean string to python variable name."""

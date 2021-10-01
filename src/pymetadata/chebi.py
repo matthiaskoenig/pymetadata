@@ -1,5 +1,4 @@
 """Module for working with chebi."""
-import logging
 from pathlib import Path
 from pprint import pprint
 from typing import Dict

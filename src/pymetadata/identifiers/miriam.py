@@ -1,10 +1,9 @@
 """Module for working with MIRIAM qualifiers."""
 
-import logging
 from enum import Enum
+from pymetadata import log
 
-
-logger = logging.getLogger(__name__)
+logger = log.get_logger(__name__)
 
 __all__ = [
     "BQM",

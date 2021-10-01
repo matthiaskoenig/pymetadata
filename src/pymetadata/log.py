@@ -1,15 +1,28 @@
-"""Logging helpers."""
+"""Module for logging.
+
+Using rich for output formating.
+"""
 import logging
 
-from rich import inspect, syntax
-from rich.console import Console
 from rich.logging import RichHandler
-from rich.markdown import Markdown
+
+from pymetadata.console import console
 
 
-FORMAT = "%(message)s"
-logging.basicConfig(
-    level="NOTSET", format=FORMAT, datefmt="[%X]", handlers=[RichHandler()]
-)
+def get_logger(name: str, level: int = logging.INFO) -> logging.Logger:
+    """Get new custom logger for name."""
+    formatter = logging.Formatter(
+        fmt="%(message)s",
+        datefmt="[%X]",
+    )
 
-console = Console()
+    # handler = logging.StreamHandler()
+    handler = RichHandler(
+        markup=False, rich_tracebacks=True, show_time=False, console=console
+    )
+    handler.setFormatter(formatter)
+
+    logger = logging.getLogger(name)
+    logger.setLevel(level)
+    logger.addHandler(handler)
+    return logger

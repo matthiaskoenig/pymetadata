@@ -2,7 +2,6 @@
 
 Core data structure to store annotations.
 """
-import logging
 import re
 import urllib
 from pprint import pprint
@@ -14,7 +13,7 @@ from pymetadata.core.xref import CrossReference, is_url
 from pymetadata.identifiers.miriam import BQB, BQM
 from pymetadata.identifiers.registry import REGISTRY
 from pymetadata.ontologies.ols import ONTOLOGIES, OLSQuery
-
+from pymetadata import log
 
 OLS_QUERY = OLSQuery(ontologies=ONTOLOGIES)
 
@@ -23,7 +22,7 @@ IDENTIFIERS_ORG_PATTERN1 = re.compile(r"^https?://identifiers.org/(.+?)/(.+)")
 IDENTIFIERS_ORG_PATTERN2 = re.compile(r"^https?://identifiers.org/(.+)")
 MIRIAM_URN_PATTERN = re.compile(r"^urn:miriam:(.+)")
 
-logger = logging.getLogger(__name__)
+logger = log.get_logger(__name__)
 
 
 class RDFAnnotation:

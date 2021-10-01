@@ -37755,6 +37755,182 @@
     "deprecated": false,
     "deprecationDate": null
   },
+  "dg.4503": {
+    "id": 2881,
+    "prefix": "dg.4503",
+    "name": "BioData Catalyst",
+    "pattern": "[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}\\-[0-9a-fA-F]{12}",
+    "namespaceEmbeddedInLui": false,
+    "description": "Full implementation of the DRS 1.1 standard with support for persistent identifiers. Open source DRS server that follows the Gen3 implementation. Gen3 is a GA4GH compliant open source platform for developing framework services and data commons. Data commons accelerate and democratize the process of scientific discovery, especially over large or complex datasets. Gen3 is maintained by the Center for Translational Data Science at the University of Chicago. https://gen3.org",
+    "mirId": "MIR:00000869",
+    "resources": [
+      {
+        "id": 2882,
+        "providerCode": "dg.4503",
+        "name": "BioData Catalyst",
+        "urlPattern": "https://gen3.biodatacatalyst.nhlbi.nih.gov/ga4gh/drs/v1/objects/{$id}",
+        "mirId": "MIR:00000868",
+        "description": "Full implementation of the DRS 1.1 standard with support for persistent identifiers. Open source DRS server that follows the Gen3 implementation. Gen3 is a GA4GH compliant open source platform for developing framework services and data commons. Data commons accelerate and democratize the process of scientific discovery, especially over large or complex datasets. Gen3 is maintained by the Center for Translational Data Science at the University of Chicago. https://gen3.org",
+        "official": true,
+        "sampleId": "0000ffeb-36e0-4a29-b21d-84423bda979d",
+        "resourceHomeUrl": "https://gen3.biodatacatalyst.nhlbi.nih.gov",
+        "institution": {
+          "id": 2820,
+          "name": "Open Commons Consortium",
+          "homeUrl": "https://www.occ-data.org/",
+          "description": "The Open Commons Consortium is a 501 non-profit venture which provides cloud computing and data commons resources to support \"scientific, environmental, medical and health care research.\"",
+          "rorId": null,
+          "location": {
+            "countryCode": "US",
+            "countryName": "United States"
+          }
+        },
+        "location": {
+          "countryCode": "US",
+          "countryName": "United States"
+        },
+        "deprecated": false,
+        "deprecationDate": null
+      }
+    ],
+    "created": "2021-09-29T19:10:32.057+0000",
+    "modified": "2021-09-29T19:10:32.057+0000",
+    "sampleId": "0000ffeb-36e0-4a29-b21d-84423bda979d",
+    "deprecated": false,
+    "deprecationDate": null
+  },
+  "dg.anv0": {
+    "id": 2884,
+    "prefix": "dg.anv0",
+    "name": "Anvil",
+    "pattern": "[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}",
+    "namespaceEmbeddedInLui": false,
+    "description": "DRS server that follows the Gen3 implementation. Gen3 is a GA4GH compliant open source platform for developing framework services and data commons. Data commons accelerate and democratize the process of scientific discovery, especially over large or complex datasets. Gen3 is maintained by the Center for Translational Data Science at the University of Chicago. https://gen3.org",
+    "mirId": "MIR:00000871",
+    "resources": [
+      {
+        "id": 2885,
+        "providerCode": "dg.anv0",
+        "name": "Anvil",
+        "urlPattern": "https://gen3.theanvil.io/ga4gh/drs/v1/objects/{$id}",
+        "mirId": "MIR:00000870",
+        "description": "DRS server that follows the Gen3 implementation. Gen3 is a GA4GH compliant open source platform for developing framework services and data commons. Data commons accelerate and democratize the process of scientific discovery, especially over large or complex datasets. Gen3 is maintained by the Center for Translational Data Science at the University of Chicago. https://gen3.org",
+        "official": true,
+        "sampleId": "00077f1c-c45a-47ba-8e6c-1bf6b6b43fce",
+        "resourceHomeUrl": "https://gen3.theanvil.io",
+        "institution": {
+          "id": 2820,
+          "name": "Open Commons Consortium",
+          "homeUrl": "https://www.occ-data.org/",
+          "description": "The Open Commons Consortium is a 501 non-profit venture which provides cloud computing and data commons resources to support \"scientific, environmental, medical and health care research.\"",
+          "rorId": null,
+          "location": {
+            "countryCode": "US",
+            "countryName": "United States"
+          }
+        },
+        "location": {
+          "countryCode": "US",
+          "countryName": "United States"
+        },
+        "deprecated": false,
+        "deprecationDate": null
+      }
+    ],
+    "created": "2021-09-29T19:11:14.294+0000",
+    "modified": "2021-09-29T19:11:14.294+0000",
+    "sampleId": "00077f1c-c45a-47ba-8e6c-1bf6b6b43fce",
+    "deprecated": false,
+    "deprecationDate": null
+  },
+  "dg.6vts": {
+    "id": 2892,
+    "prefix": "dg.6vts",
+    "name": "JCOIN",
+    "pattern": "[0-9a-fA-F]{8}\\-[0-9a-fA-F]{4}\\-[0-9a-fA-F]{4}\\-[0-9a-fA-F]{4}\\-[0-9a-fA-F]{12}",
+    "namespaceEmbeddedInLui": false,
+    "description": "Full implementation of the DRS 1.1 standard with support for persistent identifiers. Open source DRS server that follows the Gen3 implementation. Gen3 is a GA4GH compliant open source platform for developing framework services and data commons. Data commons accelerate and democratize the process of scientific discovery, especially over large or complex datasets. Gen3 is maintained by the Center for Translational Data Science at the University of Chicago. https://gen3.org",
+    "mirId": "MIR:00000876",
+    "resources": [
+      {
+        "id": 2893,
+        "providerCode": "dg.6vts",
+        "name": "JCOIN",
+        "urlPattern": "https://jcoin.datacommons.io/ga4gh/drs/v1/objects/{$id}",
+        "mirId": "MIR:00000875",
+        "description": "Full implementation of the DRS 1.1 standard with support for persistent identifiers. Open source DRS server that follows the Gen3 implementation. Gen3 is a GA4GH compliant open source platform for developing framework services and data commons. Data commons accelerate and democratize the process of scientific discovery, especially over large or complex datasets. Gen3 is maintained by the Center for Translational Data Science at the University of Chicago. https://gen3.org",
+        "official": true,
+        "sampleId": "2afacf00-9a1d-4d80-8c32-69d3923d3913",
+        "resourceHomeUrl": "https://jcoin.datacommons.io",
+        "institution": {
+          "id": 2820,
+          "name": "Open Commons Consortium",
+          "homeUrl": "https://www.occ-data.org/",
+          "description": "The Open Commons Consortium is a 501 non-profit venture which provides cloud computing and data commons resources to support \"scientific, environmental, medical and health care research.\"",
+          "rorId": null,
+          "location": {
+            "countryCode": "US",
+            "countryName": "United States"
+          }
+        },
+        "location": {
+          "countryCode": "US",
+          "countryName": "United States"
+        },
+        "deprecated": false,
+        "deprecationDate": null
+      }
+    ],
+    "created": "2021-09-29T19:13:19.448+0000",
+    "modified": "2021-09-29T19:13:19.448+0000",
+    "sampleId": "2afacf00-9a1d-4d80-8c32-69d3923d3913",
+    "deprecated": false,
+    "deprecationDate": null
+  },
+  "uniref": {
+    "id": 2896,
+    "prefix": "uniref",
+    "name": "UniRef",
+    "pattern": "^UniRef(100|90|50)_([OPQ][0-9][A-Z0-9]{3}[0-9]|[A-NR-Z][0-9]([A-Z][A-Z0-9]{2}[0-9]){1,2}|UPI[A-F0-9]{10})$",
+    "namespaceEmbeddedInLui": false,
+    "description": "The UniProt Reference Clusters (UniRef) provide clustered sets of sequences from the UniProt Knowledgebase (including isoforms) and selected UniParc records in order to obtain complete coverage of the sequence space at several resolutions while hiding redundant sequences (but not their descriptions) from view.",
+    "mirId": "MIR:00000878",
+    "resources": [
+      {
+        "id": 2897,
+        "providerCode": "uniref",
+        "name": "UniProt Consortium",
+        "urlPattern": "https://www.uniprot.org/uniref/{$id}",
+        "mirId": "MIR:00000877",
+        "description": "UniProt is a collaboration between the European Bioinformatics Institute (EMBL-EBI), the SIB Swiss Institute of Bioinformatics and the Protein Information Resource (PIR)",
+        "official": true,
+        "sampleId": "UniRef90_P00750",
+        "resourceHomeUrl": "https://www.uniprot.org/",
+        "institution": {
+          "id": 24,
+          "name": "UniProt Consortium",
+          "homeUrl": "CURATOR_REVIEW",
+          "description": "CURATOR_REVIEW",
+          "rorId": null,
+          "location": {
+            "countryCode": "GB",
+            "countryName": "United Kingdom"
+          }
+        },
+        "location": {
+          "countryCode": "US",
+          "countryName": "United States"
+        },
+        "deprecated": false,
+        "deprecationDate": null
+      }
+    ],
+    "created": "2021-09-29T19:13:56.614+0000",
+    "modified": "2021-09-29T19:13:56.614+0000",
+    "sampleId": "UniRef90_P00750",
+    "deprecated": false,
+    "deprecationDate": null
+  },
   "omim": {
     "id": null,
     "prefix": "omim",

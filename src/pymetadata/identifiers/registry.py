@@ -4,7 +4,6 @@ Helper tools to work with identifiers registry.
 https://identifiers.org/
 https://docs.identifiers.org/articles/api.html
 """
-import logging
 import os
 import time
 from dataclasses import dataclass, field
@@ -14,10 +13,11 @@ from typing import Dict, List, Optional
 import requests
 
 from pymetadata import RESOURCES_DIR
+from pymetadata import log
 from pymetadata.cache import DataclassJSONEncoder, read_json_cache, write_json_cache
 
 
-logger = logging.getLogger(__name__)
+logger = log.get_logger(__name__)
 
 
 @dataclass
@@ -154,9 +154,11 @@ def ols_namespaces() -> Dict[str, Namespace]:
             pattern=r"^STATO:\d+$",
             name="STATO",
             prefix="stato",
-            description="STATO is the statistical methods ontology. It contains concepts and properties related to "
-            "statistical methods, probability distributions and other concepts related to statistical "
-            "analysis, including relationships to study designs and plots.",
+            description="STATO is the statistical methods ontology. It contains "
+                        "concepts and properties related to statistical methods, "
+                        "probability distributions and other concepts related to "
+                        "statistical analysis, including relationships to study "
+                        "designs and plots.",
             namespaceEmbeddedInLui=True,
         ),
         Namespace(
@@ -196,7 +198,8 @@ def ols_namespaces() -> Dict[str, Namespace]:
             pattern=r"^OBA:\d+$",
             name="Ontology of Biological Attributes",
             prefix="oba",
-            description="PubChem is an open chemistry database at the National Institutes of Health (NIH).",
+            description="PubChem is an open chemistry database at the National "
+                        "Institutes of Health (NIH).",
             namespaceEmbeddedInLui=True,
         ),
         Namespace(

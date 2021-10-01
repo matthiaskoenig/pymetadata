@@ -1,12 +1,13 @@
 """Module for crossreferences (xref)."""
-import logging
 import re
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 from typing import Dict
 from urllib.parse import urlparse
 
+from pymetadata import log
 
-logger = logging.getLogger(__name__)
+
+logger = log.get_logger(__name__)
 
 url_regex = re.compile(
     r"^(?:http|ftp)s?://"  # http:// or https://
@@ -57,7 +58,8 @@ class CrossReference:
         if not is_url(self.url):
             if warnings:
                 logger.warning(
-                    f"{self.__class__.__name__} <{self.name}|{self.accession}> has invalid url: '{self.url}'"
+                    f"{self.__class__.__name__} <{self.name}|{self.accession}> "
+                    f"has invalid url: '{self.url}'"
                 )
             return False
         return True
