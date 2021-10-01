@@ -6,11 +6,11 @@ from typing import Dict
 import numpy as np
 from libchebipy import ChebiEntity, ChebiException
 
-from pymetadata import CACHE_PATH, CACHE_USE
+from pymetadata import CACHE_PATH, CACHE_USE, log
 from pymetadata.cache import DataclassJSONEncoder, read_json_cache, write_json_cache
 
 
-logger = logging.getLogger(__name__)
+logger = log.getLogger(__name__)
 
 
 class ChebiQuery:

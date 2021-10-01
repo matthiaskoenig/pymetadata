@@ -1,5 +1,4 @@
 """Lookup of ontology information from the ontology lookup service (OLS)."""
-import logging
 import urllib.parse
 from dataclasses import dataclass, field
 from pathlib import Path
@@ -7,13 +6,13 @@ from typing import Any, Dict, List, Optional
 
 import requests
 
-from pymetadata import CACHE_PATH, CACHE_USE
+from pymetadata import CACHE_PATH, CACHE_USE, log
 from pymetadata.cache import read_json_cache, write_json_cache
 from pymetadata.identifiers.registry import Registry
 
 
 registry = Registry()
-logger = logging.getLogger(__name__)
+logger = log.get_logger(__name__)
 
 
 @dataclass

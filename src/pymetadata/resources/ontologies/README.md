@@ -1,4 +1,4 @@
 # Ontologies
 
-Ontologies have been downloaded from bioportal as OBO/OWL files
-See `bioportal.py` for more information.
+Ontologies have been downloaded from bioportal and other resources as OWL files.
+See `ontologies/ontology.py` for more information.

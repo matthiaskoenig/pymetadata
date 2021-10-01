@@ -6,7 +6,6 @@ Additional substance information based on inchikeys
 https://www.ebi.ac.uk/unichem/info/webservices#GetSrcCpdIdsFromKey
 https://www.ebi.ac.uk/unichem/rest/inchikey/AAOVKJBEBIDNHE-UHFFFAOYSA-N
 """
-import logging
 import urllib
 from dataclasses import dataclass, field
 from pathlib import Path
@@ -14,12 +13,12 @@ from typing import Dict, List, Optional
 
 import requests
 
-from pymetadata import CACHE_PATH, CACHE_USE
+from pymetadata import CACHE_PATH, CACHE_USE, log
 from pymetadata.cache import DataclassJSONEncoder, read_json_cache, write_json_cache
 from pymetadata.core.xref import CrossReference
 
 
-logger = logging.getLogger(__name__)
+logger = log.get_logger(__name__)
 
 
 @dataclass

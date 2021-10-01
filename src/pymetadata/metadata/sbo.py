@@ -3000,6 +3000,14 @@ class SBO(str, Enum):
     SBO_0000691 = "SBO_0000691"
     HYBRID_STOCHASTIC_CONTINUOUS_DISCRETE_NON_SPATIAL_FRAMEWORK = "SBO_0000691"
 
+    # resource balance framework
+    SBO_0000692 = "SBO_0000692"
+    RESOURCE_BALANCE_FRAMEWORK = "SBO_0000692"
+
+    # constraint-based framework
+    SBO_0000693 = "SBO_0000693"
+    CONSTRAINT_BASED_FRAMEWORK = "SBO_0000693"
+
 
 __all__ = [
     "SBO",

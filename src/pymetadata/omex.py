@@ -10,7 +10,6 @@ When working with COMBINE archives these wrapper functions should be used.
 """
 # FIXME: handle the adding of metadata
 
-import logging
 import os
 import pprint
 import shutil
@@ -23,8 +22,10 @@ from typing import Any, Iterable, Iterator, List, Optional, Tuple
 
 import libcombine
 
+from pymetadata import log
 
-logger = logging.getLogger(__name__)
+
+logger = log.get_logger(__name__)
 
 
 class Creator:

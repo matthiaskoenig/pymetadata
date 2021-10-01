@@ -266,9 +266,9 @@ class ECO(str, Enum):
     ECO_0000024 = "ECO_0000024"
     PROTEIN_BINDING_EVIDENCE = "ECO_0000024"
 
-    # hybrid interaction evidence
+    # bait-prey hybrid interaction evidence
     ECO_0000025 = "ECO_0000025"
-    HYBRID_INTERACTION_EVIDENCE = "ECO_0000025"
+    BAIT_PREY_HYBRID_INTERACTION_EVIDENCE = "ECO_0000025"
 
     # nucleic acid hybridization evidence
     ECO_0000026 = "ECO_0000026"
@@ -444,9 +444,9 @@ class ECO(str, Enum):
     ECO_0000073 = "ECO_0000073"
     EXPERIMENTAL_GENOMIC_EVIDENCE = "ECO_0000073"
 
-    # split-ubiquitin assay evidence
+    # split-ubiquitin functional complementation evidence
     ECO_0000074 = "ECO_0000074"
-    SPLIT_UBIQUITIN_ASSAY_EVIDENCE = "ECO_0000074"
+    SPLIT_UBIQUITIN_FUNCTIONAL_COMPLEMENTATION_EVIDENCE = "ECO_0000074"
 
     # gene expression similarity evidence
     ECO_0000075 = "ECO_0000075"
@@ -2754,9 +2754,9 @@ class ECO(str, Enum):
     ECO_0001600 = "ECO_0001600"
     MULTILOCUS_SEQUENCE_TYPING_EVIDENCE_USED_IN_MANUAL_ASSERTION = "ECO_0001600"
 
-    # protein-binding microarray evidence
+    # protein-oligonucleotide microarray binding evidence
     ECO_0001601 = "ECO_0001601"
-    PROTEIN_BINDING_MICROARRAY_EVIDENCE = "ECO_0001601"
+    PROTEIN_OLIGONUCLEOTIDE_MICROARRAY_BINDING_EVIDENCE = "ECO_0001601"
 
     # cell staining evidence
     ECO_0001603 = "ECO_0001603"
@@ -4164,9 +4164,9 @@ class ECO(str, Enum):
     ECO_0006076 = "ECO_0006076"
     PROTEIN_BINDING_EVIDENCE_USED_IN_MANUAL_ASSERTION = "ECO_0006076"
 
-    # hybrid interaction evidence used in manual assertion
+    # bait-prey hybrid interaction evidence used in manual assertion
     ECO_0006077 = "ECO_0006077"
-    HYBRID_INTERACTION_EVIDENCE_USED_IN_MANUAL_ASSERTION = "ECO_0006077"
+    BAIT_PREY_HYBRID_INTERACTION_EVIDENCE_USED_IN_MANUAL_ASSERTION = "ECO_0006077"
 
     # immunological assay evidence used in manual assertion
     ECO_0006078 = "ECO_0006078"
@@ -4176,9 +4176,11 @@ class ECO(str, Enum):
     ECO_0006079 = "ECO_0006079"
     YEAST_ONE_HYBRID_EVIDENCE_USED_IN_MANUAL_ASSERTION = "ECO_0006079"
 
-    # split-ubiquitin assay evidence used in manual assertion
+    # split-ubiquitin functional complementation evidence used in manual assertion
     ECO_0006080 = "ECO_0006080"
-    SPLIT_UBIQUITIN_ASSAY_EVIDENCE_USED_IN_MANUAL_ASSERTION = "ECO_0006080"
+    SPLIT_UBIQUITIN_FUNCTIONAL_COMPLEMENTATION_EVIDENCE_USED_IN_MANUAL_ASSERTION = (
+        "ECO_0006080"
+    )
 
     # far-Western blotting evidence used in manual assertion
     ECO_0006081 = "ECO_0006081"
@@ -4218,9 +4220,11 @@ class ECO(str, Enum):
     ECO_0006089 = "ECO_0006089"
     BACTERIAL_ONE_HYBRID_EVIDENCE_USED_IN_MANUAL_ASSERTION = "ECO_0006089"
 
-    # protein-binding microarray evidence used in manual assertion
+    # protein-oligonucleotide microarray binding evidence used in manual assertion
     ECO_0006090 = "ECO_0006090"
-    PROTEIN_BINDING_MICROARRAY_EVIDENCE_USED_IN_MANUAL_ASSERTION = "ECO_0006090"
+    PROTEIN_OLIGONUCLEOTIDE_MICROARRAY_BINDING_EVIDENCE_USED_IN_MANUAL_ASSERTION = (
+        "ECO_0006090"
+    )
 
     # functional complementation evidence used in manual assertion
     ECO_0006091 = "ECO_0006091"
@@ -4396,17 +4400,19 @@ class ECO(str, Enum):
         "ECO_0006165"
     )
 
-    # magnetic resonance imaging evidence
+    # nuclear magnetic resonance imaging evidence
     ECO_0006166 = "ECO_0006166"
-    MAGNETIC_RESONANCE_IMAGING_EVIDENCE = "ECO_0006166"
+    NUCLEAR_MAGNETIC_RESONANCE_IMAGING_EVIDENCE = "ECO_0006166"
 
-    # magnetic resonance imaging evidence used in automatic assertion
+    # nuclear magnetic resonance imaging evidence used in automatic assertion
     ECO_0006167 = "ECO_0006167"
-    MAGNETIC_RESONANCE_IMAGING_EVIDENCE_USED_IN_AUTOMATIC_ASSERTION = "ECO_0006167"
+    NUCLEAR_MAGNETIC_RESONANCE_IMAGING_EVIDENCE_USED_IN_AUTOMATIC_ASSERTION = (
+        "ECO_0006167"
+    )
 
-    # magnetic resonance imaging evidence used in manual assertion
+    # nuclear magnetic resonance imaging evidence used in manual assertion
     ECO_0006168 = "ECO_0006168"
-    MAGNETIC_RESONANCE_IMAGING_EVIDENCE_USED_IN_MANUAL_ASSERTION = "ECO_0006168"
+    NUCLEAR_MAGNETIC_RESONANCE_IMAGING_EVIDENCE_USED_IN_MANUAL_ASSERTION = "ECO_0006168"
 
     # quantitative western immunoblotting evidence
     ECO_0006169 = "ECO_0006169"
@@ -4492,15 +4498,15 @@ class ECO(str, Enum):
         "ECO_0006186"
     )
 
-    # X-ray crystollagraphy-based structural model with missing residue coordinates
+    # X-ray crystallography-based structural model with missing residue coordinates
     ECO_0006187 = "ECO_0006187"
-    X_RAY_CRYSTOLLAGRAPHY_BASED_STRUCTURAL_MODEL_WITH_MISSING_RESIDUE_COORDINATES = (
+    X_RAY_CRYSTALLOGRAPHY_BASED_STRUCTURAL_MODEL_WITH_MISSING_RESIDUE_COORDINATES = (
         "ECO_0006187"
     )
 
-    # X-ray crystollagraphy-based structural model with high relative B-factor values
+    # X-ray crystallography-based structural model with high relative B-factor values
     ECO_0006188 = "ECO_0006188"
-    X_RAY_CRYSTOLLAGRAPHY_BASED_STRUCTURAL_MODEL_WITH_HIGH_RELATIVE_B_FACTOR_VALUES = (
+    X_RAY_CRYSTALLOGRAPHY_BASED_STRUCTURAL_MODEL_WITH_HIGH_RELATIVE_B_FACTOR_VALUES = (
         "ECO_0006188"
     )
 
@@ -4648,27 +4654,27 @@ class ECO(str, Enum):
         "ECO_0006219"
     )
 
-    # X-ray crystollagraphy-based structural model with missing residue coordinates used in manual assertion
+    # X-ray crystallography-based structural model with missing residue coordinates used in manual assertion
     ECO_0006220 = "ECO_0006220"
-    X_RAY_CRYSTOLLAGRAPHY_BASED_STRUCTURAL_MODEL_WITH_MISSING_RESIDUE_COORDINATES_USED_IN_MANUAL_ASSERTION = (
+    X_RAY_CRYSTALLOGRAPHY_BASED_STRUCTURAL_MODEL_WITH_MISSING_RESIDUE_COORDINATES_USED_IN_MANUAL_ASSERTION = (
         "ECO_0006220"
     )
 
-    # X-ray crystollagraphy-based structural model with missing residue coordinates used in automatic assertion
+    # X-ray crystallography-based structural model with missing residue coordinates used in automatic assertion
     ECO_0006221 = "ECO_0006221"
-    X_RAY_CRYSTOLLAGRAPHY_BASED_STRUCTURAL_MODEL_WITH_MISSING_RESIDUE_COORDINATES_USED_IN_AUTOMATIC_ASSERTION = (
+    X_RAY_CRYSTALLOGRAPHY_BASED_STRUCTURAL_MODEL_WITH_MISSING_RESIDUE_COORDINATES_USED_IN_AUTOMATIC_ASSERTION = (
         "ECO_0006221"
     )
 
-    # X-ray crystollagraphy-based structural model with high relative B-factor values used in manual assertion
+    # X-ray crystallography-based structural model with high relative B-factor values used in manual assertion
     ECO_0006222 = "ECO_0006222"
-    X_RAY_CRYSTOLLAGRAPHY_BASED_STRUCTURAL_MODEL_WITH_HIGH_RELATIVE_B_FACTOR_VALUES_USED_IN_MANUAL_ASSERTION = (
+    X_RAY_CRYSTALLOGRAPHY_BASED_STRUCTURAL_MODEL_WITH_HIGH_RELATIVE_B_FACTOR_VALUES_USED_IN_MANUAL_ASSERTION = (
         "ECO_0006222"
     )
 
-    # X-ray crystollagraphy-based structural model with high relative B-factor values used in automatic assertion
+    # X-ray crystallography-based structural model with high relative B-factor values used in automatic assertion
     ECO_0006223 = "ECO_0006223"
-    X_RAY_CRYSTOLLAGRAPHY_BASED_STRUCTURAL_MODEL_WITH_HIGH_RELATIVE_B_FACTOR_VALUES_USED_IN_AUTOMATIC_ASSERTION = (
+    X_RAY_CRYSTALLOGRAPHY_BASED_STRUCTURAL_MODEL_WITH_HIGH_RELATIVE_B_FACTOR_VALUES_USED_IN_AUTOMATIC_ASSERTION = (
         "ECO_0006223"
     )
 
@@ -4791,6 +4797,380 @@ class ECO(str, Enum):
     # colony boundary assay evidence used in automatic assertion
     ECO_0006246 = "ECO_0006246"
     COLONY_BOUNDARY_ASSAY_EVIDENCE_USED_IN_AUTOMATIC_ASSERTION = "ECO_0006246"
+
+    # analytical ultracentrifugation evidence
+    ECO_0006247 = "ECO_0006247"
+    ANALYTICAL_ULTRACENTRIFUGATION_EVIDENCE = "ECO_0006247"
+
+    # fluorescence polarization evidence
+    ECO_0006248 = "ECO_0006248"
+    FLUORESCENCE_POLARIZATION_EVIDENCE = "ECO_0006248"
+
+    # obsolete bait-prey protein pull-down evidence
+    ECO_0006249 = "ECO_0006249"
+    OBSOLETE_BAIT_PREY_PROTEIN_PULL_DOWN_EVIDENCE = "ECO_0006249"
+
+    # rotary shadowing electron microscopy evidence
+    ECO_0006250 = "ECO_0006250"
+    ROTARY_SHADOWING_ELECTRON_MICROSCOPY_EVIDENCE = "ECO_0006250"
+
+    # electrospray ionization fourier transform ion cyclotron resonance mass spectrometry evidence
+    ECO_0006251 = "ECO_0006251"
+    ELECTROSPRAY_IONIZATION_FOURIER_TRANSFORM_ION_CYCLOTRON_RESONANCE_MASS_SPECTROMETRY_EVIDENCE = (
+        "ECO_0006251"
+    )
+
+    # magnetic resonance evidence
+    ECO_0006252 = "ECO_0006252"
+    MAGNETIC_RESONANCE_EVIDENCE = "ECO_0006252"
+
+    # electron paramagnetic resonance evidence
+    ECO_0006253 = "ECO_0006253"
+    ELECTRON_PARAMAGNETIC_RESONANCE_EVIDENCE = "ECO_0006253"
+
+    # site-directed spin-labelling electron paramagnetic resonance evidence
+    ECO_0006254 = "ECO_0006254"
+    SITE_DIRECTED_SPIN_LABELLING_ELECTRON_PARAMAGNETIC_RESONANCE_EVIDENCE = (
+        "ECO_0006254"
+    )
+
+    # deglycosylation assay evidence
+    ECO_0006255 = "ECO_0006255"
+    DEGLYCOSYLATION_ASSAY_EVIDENCE = "ECO_0006255"
+
+    # protein fragment functional complementation evidence
+    ECO_0006256 = "ECO_0006256"
+    PROTEIN_FRAGMENT_FUNCTIONAL_COMPLEMENTATION_EVIDENCE = "ECO_0006256"
+
+    # beta galactosidase functional complementation evidence
+    ECO_0006257 = "ECO_0006257"
+    BETA_GALACTOSIDASE_FUNCTIONAL_COMPLEMENTATION_EVIDENCE = "ECO_0006257"
+
+    # GAL4-VP16 functional complementation evidence
+    ECO_0006258 = "ECO_0006258"
+    GAL4_VP16_FUNCTIONAL_COMPLEMENTATION_EVIDENCE = "ECO_0006258"
+
+    # Raman spectroscopy evidence
+    ECO_0006259 = "ECO_0006259"
+    RAMAN_SPECTROSCOPY_EVIDENCE = "ECO_0006259"
+
+    # protein thermal shift assay evidence
+    ECO_0006260 = "ECO_0006260"
+    PROTEIN_THERMAL_SHIFT_ASSAY_EVIDENCE = "ECO_0006260"
+
+    # microscale thermophoresis evidence
+    ECO_0006261 = "ECO_0006261"
+    MICROSCALE_THERMOPHORESIS_EVIDENCE = "ECO_0006261"
+
+    # native protein gel electrophoresis evidence
+    ECO_0006262 = "ECO_0006262"
+    NATIVE_PROTEIN_GEL_ELECTROPHORESIS_EVIDENCE = "ECO_0006262"
+
+    # turbidity measurement evidence
+    ECO_0006263 = "ECO_0006263"
+    TURBIDITY_MEASUREMENT_EVIDENCE = "ECO_0006263"
+
+    # competitive binding evidence
+    ECO_0006264 = "ECO_0006264"
+    COMPETITIVE_BINDING_EVIDENCE = "ECO_0006264"
+
+    # protein unfolding evidence
+    ECO_0006265 = "ECO_0006265"
+    PROTEIN_UNFOLDING_EVIDENCE = "ECO_0006265"
+
+    # urea-induced protein unfolding evidence
+    ECO_0006266 = "ECO_0006266"
+    UREA_INDUCED_PROTEIN_UNFOLDING_EVIDENCE = "ECO_0006266"
+
+    # pH-induced protein unfolding evidence
+    ECO_0006267 = "ECO_0006267"
+    PH_INDUCED_PROTEIN_UNFOLDING_EVIDENCE = "ECO_0006267"
+
+    # temperature-induced protein unfolding evidence
+    ECO_0006268 = "ECO_0006268"
+    TEMPERATURE_INDUCED_PROTEIN_UNFOLDING_EVIDENCE = "ECO_0006268"
+
+    # cell aggregation evidence
+    ECO_0006269 = "ECO_0006269"
+    CELL_AGGREGATION_EVIDENCE = "ECO_0006269"
+
+    # RNA-protein binding evidence
+    ECO_0006270 = "ECO_0006270"
+    RNA_PROTEIN_BINDING_EVIDENCE = "ECO_0006270"
+
+    # fluorescence microscopy evidence
+    ECO_0006271 = "ECO_0006271"
+    FLUORESCENCE_MICROSCOPY_EVIDENCE = "ECO_0006271"
+
+    # viscosity measurement evidence
+    ECO_0006272 = "ECO_0006272"
+    VISCOSITY_MEASUREMENT_EVIDENCE = "ECO_0006272"
+
+    # dynamic fluorescence quenching evidence
+    ECO_0006273 = "ECO_0006273"
+    DYNAMIC_FLUORESCENCE_QUENCHING_EVIDENCE = "ECO_0006273"
+
+    # static fluorescence quenching evidence
+    ECO_0006274 = "ECO_0006274"
+    STATIC_FLUORESCENCE_QUENCHING_EVIDENCE = "ECO_0006274"
+
+    # analytical ultracentrifugation evidence used in manual assertion
+    ECO_0006275 = "ECO_0006275"
+    ANALYTICAL_ULTRACENTRIFUGATION_EVIDENCE_USED_IN_MANUAL_ASSERTION = "ECO_0006275"
+
+    # analytical ultracentrifugation evidence used in automatic assertion
+    ECO_0006276 = "ECO_0006276"
+    ANALYTICAL_ULTRACENTRIFUGATION_EVIDENCE_USED_IN_AUTOMATIC_ASSERTION = "ECO_0006276"
+
+    # fluorescence polarization evidence used in manual assertion
+    ECO_0006277 = "ECO_0006277"
+    FLUORESCENCE_POLARIZATION_EVIDENCE_USED_IN_MANUAL_ASSERTION = "ECO_0006277"
+
+    # fluorescence polarization evidence used in automatic assertion
+    ECO_0006278 = "ECO_0006278"
+    FLUORESCENCE_POLARIZATION_EVIDENCE_USED_IN_AUTOMATIC_ASSERTION = "ECO_0006278"
+
+    # obsolete bait-prey protein pull-down evidence used in manual assertion
+    ECO_0006279 = "ECO_0006279"
+    OBSOLETE_BAIT_PREY_PROTEIN_PULL_DOWN_EVIDENCE_USED_IN_MANUAL_ASSERTION = (
+        "ECO_0006279"
+    )
+
+    # obsolete bait-prey protein pull-down evidence used in automatic assertion
+    ECO_0006280 = "ECO_0006280"
+    OBSOLETE_BAIT_PREY_PROTEIN_PULL_DOWN_EVIDENCE_USED_IN_AUTOMATIC_ASSERTION = (
+        "ECO_0006280"
+    )
+
+    # rotary shadowing electron microscopy evidence used in manual assertion
+    ECO_0006281 = "ECO_0006281"
+    ROTARY_SHADOWING_ELECTRON_MICROSCOPY_EVIDENCE_USED_IN_MANUAL_ASSERTION = (
+        "ECO_0006281"
+    )
+
+    # rotary shadowing electron microscopy evidence used in automatic assertion
+    ECO_0006282 = "ECO_0006282"
+    ROTARY_SHADOWING_ELECTRON_MICROSCOPY_EVIDENCE_USED_IN_AUTOMATIC_ASSERTION = (
+        "ECO_0006282"
+    )
+
+    # electrospray ionization fourier transform ion cyclotron resonance mass spectrometry evidence used in manual assertion
+    ECO_0006283 = "ECO_0006283"
+    ELECTROSPRAY_IONIZATION_FOURIER_TRANSFORM_ION_CYCLOTRON_RESONANCE_MASS_SPECTROMETRY_EVIDENCE_USED_IN_MANUAL_ASSERTION = (
+        "ECO_0006283"
+    )
+
+    # electrospray ionization fourier transform ion cyclotron resonance mass spectrometry evidence used in automatic assertion
+    ECO_0006284 = "ECO_0006284"
+    ELECTROSPRAY_IONIZATION_FOURIER_TRANSFORM_ION_CYCLOTRON_RESONANCE_MASS_SPECTROMETRY_EVIDENCE_USED_IN_AUTOMATIC_ASSERTION = (
+        "ECO_0006284"
+    )
+
+    # magnetic resonance evidence used in manual assertion
+    ECO_0006285 = "ECO_0006285"
+    MAGNETIC_RESONANCE_EVIDENCE_USED_IN_MANUAL_ASSERTION = "ECO_0006285"
+
+    # magnetic resonance evidence used in automatic assertion
+    ECO_0006286 = "ECO_0006286"
+    MAGNETIC_RESONANCE_EVIDENCE_USED_IN_AUTOMATIC_ASSERTION = "ECO_0006286"
+
+    # electron paramagnetic resonance evidence used in manual assertion
+    ECO_0006287 = "ECO_0006287"
+    ELECTRON_PARAMAGNETIC_RESONANCE_EVIDENCE_USED_IN_MANUAL_ASSERTION = "ECO_0006287"
+
+    # electron paramagnetic resonance evidence used in automatic assertion
+    ECO_0006288 = "ECO_0006288"
+    ELECTRON_PARAMAGNETIC_RESONANCE_EVIDENCE_USED_IN_AUTOMATIC_ASSERTION = "ECO_0006288"
+
+    # site-directed spin-labelling electron paramagnetic resonance evidence used in manual assertion
+    ECO_0006289 = "ECO_0006289"
+    SITE_DIRECTED_SPIN_LABELLING_ELECTRON_PARAMAGNETIC_RESONANCE_EVIDENCE_USED_IN_MANUAL_ASSERTION = (
+        "ECO_0006289"
+    )
+
+    # site-directed spin-labelling electron paramagnetic resonance evidence used in automatic assertion
+    ECO_0006290 = "ECO_0006290"
+    SITE_DIRECTED_SPIN_LABELLING_ELECTRON_PARAMAGNETIC_RESONANCE_EVIDENCE_USED_IN_AUTOMATIC_ASSERTION = (
+        "ECO_0006290"
+    )
+
+    # deglycosylation assay evidence used in manual assertion
+    ECO_0006291 = "ECO_0006291"
+    DEGLYCOSYLATION_ASSAY_EVIDENCE_USED_IN_MANUAL_ASSERTION = "ECO_0006291"
+
+    # deglycosylation assay evidence used in automatic assertion
+    ECO_0006292 = "ECO_0006292"
+    DEGLYCOSYLATION_ASSAY_EVIDENCE_USED_IN_AUTOMATIC_ASSERTION = "ECO_0006292"
+
+    # protein fragment functional complementation evidence used in manual assertion
+    ECO_0006293 = "ECO_0006293"
+    PROTEIN_FRAGMENT_FUNCTIONAL_COMPLEMENTATION_EVIDENCE_USED_IN_MANUAL_ASSERTION = (
+        "ECO_0006293"
+    )
+
+    # protein fragment functional complementation evidence used in automatic assertion
+    ECO_0006294 = "ECO_0006294"
+    PROTEIN_FRAGMENT_FUNCTIONAL_COMPLEMENTATION_EVIDENCE_USED_IN_AUTOMATIC_ASSERTION = (
+        "ECO_0006294"
+    )
+
+    # beta galactosidase functional complementation evidence used in manual assertion
+    ECO_0006295 = "ECO_0006295"
+    BETA_GALACTOSIDASE_FUNCTIONAL_COMPLEMENTATION_EVIDENCE_USED_IN_MANUAL_ASSERTION = (
+        "ECO_0006295"
+    )
+
+    # beta galactosidase functional complementation evidence used in automatic assertion
+    ECO_0006296 = "ECO_0006296"
+    BETA_GALACTOSIDASE_FUNCTIONAL_COMPLEMENTATION_EVIDENCE_USED_IN_AUTOMATIC_ASSERTION = (
+        "ECO_0006296"
+    )
+
+    # GAL4-VP16 functional complementation evidence used in manual assertion
+    ECO_0006297 = "ECO_0006297"
+    GAL4_VP16_FUNCTIONAL_COMPLEMENTATION_EVIDENCE_USED_IN_MANUAL_ASSERTION = (
+        "ECO_0006297"
+    )
+
+    # GAL4-VP16 functional complementation evidence used in automatic assertion
+    ECO_0006298 = "ECO_0006298"
+    GAL4_VP16_FUNCTIONAL_COMPLEMENTATION_EVIDENCE_USED_IN_AUTOMATIC_ASSERTION = (
+        "ECO_0006298"
+    )
+
+    # Raman spectroscopy evidence used in manual assertion
+    ECO_0006299 = "ECO_0006299"
+    RAMAN_SPECTROSCOPY_EVIDENCE_USED_IN_MANUAL_ASSERTION = "ECO_0006299"
+
+    # Raman spectroscopy evidence used in automatic assertion
+    ECO_0006300 = "ECO_0006300"
+    RAMAN_SPECTROSCOPY_EVIDENCE_USED_IN_AUTOMATIC_ASSERTION = "ECO_0006300"
+
+    # protein thermal shift assay evidence used in manual assertion
+    ECO_0006301 = "ECO_0006301"
+    PROTEIN_THERMAL_SHIFT_ASSAY_EVIDENCE_USED_IN_MANUAL_ASSERTION = "ECO_0006301"
+
+    # protein thermal shift assay evidence used in automatic assertion
+    ECO_0006302 = "ECO_0006302"
+    PROTEIN_THERMAL_SHIFT_ASSAY_EVIDENCE_USED_IN_AUTOMATIC_ASSERTION = "ECO_0006302"
+
+    # microscale thermophoresis evidence used in manual assertion
+    ECO_0006303 = "ECO_0006303"
+    MICROSCALE_THERMOPHORESIS_EVIDENCE_USED_IN_MANUAL_ASSERTION = "ECO_0006303"
+
+    # microscale thermophoresis evidence used in automatic assertion
+    ECO_0006304 = "ECO_0006304"
+    MICROSCALE_THERMOPHORESIS_EVIDENCE_USED_IN_AUTOMATIC_ASSERTION = "ECO_0006304"
+
+    # native protein gel electrophoresis evidence used in manual assertion
+    ECO_0006305 = "ECO_0006305"
+    NATIVE_PROTEIN_GEL_ELECTROPHORESIS_EVIDENCE_USED_IN_MANUAL_ASSERTION = "ECO_0006305"
+
+    # native protein gel electrophoresis evidence used in automatic assertion
+    ECO_0006306 = "ECO_0006306"
+    NATIVE_PROTEIN_GEL_ELECTROPHORESIS_EVIDENCE_USED_IN_AUTOMATIC_ASSERTION = (
+        "ECO_0006306"
+    )
+
+    # turbidity measurement evidence used in manual assertion
+    ECO_0006307 = "ECO_0006307"
+    TURBIDITY_MEASUREMENT_EVIDENCE_USED_IN_MANUAL_ASSERTION = "ECO_0006307"
+
+    # turbidity measurement evidence used in automatic assertion
+    ECO_0006308 = "ECO_0006308"
+    TURBIDITY_MEASUREMENT_EVIDENCE_USED_IN_AUTOMATIC_ASSERTION = "ECO_0006308"
+
+    # competitive binding evidence used in manual assertion
+    ECO_0006309 = "ECO_0006309"
+    COMPETITIVE_BINDING_EVIDENCE_USED_IN_MANUAL_ASSERTION = "ECO_0006309"
+
+    # competitive binding evidence used in automatic assertion
+    ECO_0006310 = "ECO_0006310"
+    COMPETITIVE_BINDING_EVIDENCE_USED_IN_AUTOMATIC_ASSERTION = "ECO_0006310"
+
+    # protein unfolding evidence used in manual assertion
+    ECO_0006311 = "ECO_0006311"
+    PROTEIN_UNFOLDING_EVIDENCE_USED_IN_MANUAL_ASSERTION = "ECO_0006311"
+
+    # protein unfolding evidence used in automatic assertion
+    ECO_0006312 = "ECO_0006312"
+    PROTEIN_UNFOLDING_EVIDENCE_USED_IN_AUTOMATIC_ASSERTION = "ECO_0006312"
+
+    # urea-induced protein unfolding evidence used in manual assertion
+    ECO_0006313 = "ECO_0006313"
+    UREA_INDUCED_PROTEIN_UNFOLDING_EVIDENCE_USED_IN_MANUAL_ASSERTION = "ECO_0006313"
+
+    # urea-induced protein unfolding evidence used in automatic assertion
+    ECO_0006314 = "ECO_0006314"
+    UREA_INDUCED_PROTEIN_UNFOLDING_EVIDENCE_USED_IN_AUTOMATIC_ASSERTION = "ECO_0006314"
+
+    # pH-induced protein unfolding evidence used in manual assertion
+    ECO_0006315 = "ECO_0006315"
+    PH_INDUCED_PROTEIN_UNFOLDING_EVIDENCE_USED_IN_MANUAL_ASSERTION = "ECO_0006315"
+
+    # pH-induced protein unfolding evidence used in automatic assertion
+    ECO_0006316 = "ECO_0006316"
+    PH_INDUCED_PROTEIN_UNFOLDING_EVIDENCE_USED_IN_AUTOMATIC_ASSERTION = "ECO_0006316"
+
+    # temperature-induced protein unfolding evidence used in manual assertion
+    ECO_0006317 = "ECO_0006317"
+    TEMPERATURE_INDUCED_PROTEIN_UNFOLDING_EVIDENCE_USED_IN_MANUAL_ASSERTION = (
+        "ECO_0006317"
+    )
+
+    # temperature-induced protein unfolding evidence used in automatic assertion
+    ECO_0006318 = "ECO_0006318"
+    TEMPERATURE_INDUCED_PROTEIN_UNFOLDING_EVIDENCE_USED_IN_AUTOMATIC_ASSERTION = (
+        "ECO_0006318"
+    )
+
+    # cell aggregation evidence used in manual assertion
+    ECO_0006319 = "ECO_0006319"
+    CELL_AGGREGATION_EVIDENCE_USED_IN_MANUAL_ASSERTION = "ECO_0006319"
+
+    # cell aggregation evidence used in automatic assertion
+    ECO_0006320 = "ECO_0006320"
+    CELL_AGGREGATION_EVIDENCE_USED_IN_AUTOMATIC_ASSERTION = "ECO_0006320"
+
+    # RNA-protein binding evidence used in manual assertion
+    ECO_0006321 = "ECO_0006321"
+    RNA_PROTEIN_BINDING_EVIDENCE_USED_IN_MANUAL_ASSERTION = "ECO_0006321"
+
+    # RNA-protein binding evidence used in automatic assertion
+    ECO_0006322 = "ECO_0006322"
+    RNA_PROTEIN_BINDING_EVIDENCE_USED_IN_AUTOMATIC_ASSERTION = "ECO_0006322"
+
+    # fluorescence microscopy evidence used in manual assertion
+    ECO_0006323 = "ECO_0006323"
+    FLUORESCENCE_MICROSCOPY_EVIDENCE_USED_IN_MANUAL_ASSERTION = "ECO_0006323"
+
+    # fluorescence microscopy evidence used in automatic assertion
+    ECO_0006324 = "ECO_0006324"
+    FLUORESCENCE_MICROSCOPY_EVIDENCE_USED_IN_AUTOMATIC_ASSERTION = "ECO_0006324"
+
+    # viscosity measurement evidence used in manual assertion
+    ECO_0006325 = "ECO_0006325"
+    VISCOSITY_MEASUREMENT_EVIDENCE_USED_IN_MANUAL_ASSERTION = "ECO_0006325"
+
+    # viscosity measurement evidence used in automatic assertion
+    ECO_0006326 = "ECO_0006326"
+    VISCOSITY_MEASUREMENT_EVIDENCE_USED_IN_AUTOMATIC_ASSERTION = "ECO_0006326"
+
+    # dynamic fluorescence quenching evidence used in manual assertion
+    ECO_0006327 = "ECO_0006327"
+    DYNAMIC_FLUORESCENCE_QUENCHING_EVIDENCE_USED_IN_MANUAL_ASSERTION = "ECO_0006327"
+
+    # dynamic fluorescence quenching evidence used in automatic assertion
+    ECO_0006328 = "ECO_0006328"
+    DYNAMIC_FLUORESCENCE_QUENCHING_EVIDENCE_USED_IN_AUTOMATIC_ASSERTION = "ECO_0006328"
+
+    # static fluorescence quenching evidence used in manual assertion
+    ECO_0006329 = "ECO_0006329"
+    STATIC_FLUORESCENCE_QUENCHING_EVIDENCE_USED_IN_MANUAL_ASSERTION = "ECO_0006329"
+
+    # static fluorescence quenching evidence used in automatic assertion
+    ECO_0006330 = "ECO_0006330"
+    STATIC_FLUORESCENCE_QUENCHING_EVIDENCE_USED_IN_AUTOMATIC_ASSERTION = "ECO_0006330"
 
     # high throughput mutant phenotypic evidence
     ECO_0007000 = "ECO_0007000"
@@ -6654,9 +7034,9 @@ class ECO(str, Enum):
     ECO_0007431 = "ECO_0007431"
     MAMMALIAN_2_HYBRID_ASSAY_EVIDENCE_USED_IN_AUTOMATIC_ASSERTION = "ECO_0007431"
 
-    # hybrid interaction evidence used in automatic assertion
+    # bait-prey hybrid interaction evidence used in automatic assertion
     ECO_0007432 = "ECO_0007432"
-    HYBRID_INTERACTION_EVIDENCE_USED_IN_AUTOMATIC_ASSERTION = "ECO_0007432"
+    BAIT_PREY_HYBRID_INTERACTION_EVIDENCE_USED_IN_AUTOMATIC_ASSERTION = "ECO_0007432"
 
     # mass spectrometry evidence used in automatic assertion
     ECO_0007433 = "ECO_0007433"
@@ -7306,9 +7686,11 @@ class ECO(str, Enum):
     ECO_0007568 = "ECO_0007568"
     YEAST_ONE_HYBRID_EVIDENCE_USED_IN_AUTOMATIC_ASSERTION = "ECO_0007568"
 
-    # split-ubiquitin assay evidence used in automatic assertion
+    # split-ubiquitin functional complementation evidence used in automatic assertion
     ECO_0007569 = "ECO_0007569"
-    SPLIT_UBIQUITIN_ASSAY_EVIDENCE_USED_IN_AUTOMATIC_ASSERTION = "ECO_0007569"
+    SPLIT_UBIQUITIN_FUNCTIONAL_COMPLEMENTATION_EVIDENCE_USED_IN_AUTOMATIC_ASSERTION = (
+        "ECO_0007569"
+    )
 
     # far-Western blotting evidence used in automatic assertion
     ECO_0007570 = "ECO_0007570"
@@ -7338,9 +7720,11 @@ class ECO(str, Enum):
     ECO_0007576 = "ECO_0007576"
     BACTERIAL_ONE_HYBRID_EVIDENCE_USED_IN_AUTOMATIC_ASSERTION = "ECO_0007576"
 
-    # protein-binding microarray evidence used in automatic assertion
+    # protein-oligonucleotide microarray binding evidence used in automatic assertion
     ECO_0007577 = "ECO_0007577"
-    PROTEIN_BINDING_MICROARRAY_EVIDENCE_USED_IN_AUTOMATIC_ASSERTION = "ECO_0007577"
+    PROTEIN_OLIGONUCLEOTIDE_MICROARRAY_BINDING_EVIDENCE_USED_IN_AUTOMATIC_ASSERTION = (
+        "ECO_0007577"
+    )
 
     # functional complementation evidence used in automatic assertion
     ECO_0007578 = "ECO_0007578"

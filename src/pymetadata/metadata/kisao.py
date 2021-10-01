@@ -1782,7 +1782,7 @@ class KISAO(str, Enum):
     KISAO_0000664 = "KISAO_0000664"
     SECOND_ORDER_BACKWARD_IMPLICIT_PRODUCT_EULER_SCHEME = "KISAO_0000664"
 
-    # Maximum number of iterations for root finding
+    # maximum number of iterations for root finding
     KISAO_0000665 = "KISAO_0000665"
     MAXIMUM_NUMBER_OF_ITERATIONS_FOR_ROOT_FINDING = "KISAO_0000665"
 
@@ -1790,7 +1790,7 @@ class KISAO(str, Enum):
     KISAO_0000666 = "KISAO_0000666"
     JACOBIAN_EPSILON = "KISAO_0000666"
 
-    # Memory size
+    # memory size
     KISAO_0000667 = "KISAO_0000667"
     MEMORY_SIZE = "KISAO_0000667"
 
@@ -1802,7 +1802,7 @@ class KISAO(str, Enum):
     KISAO_0000669 = "KISAO_0000669"
     RESOURCE_BALANCE_ANALYSIS = "KISAO_0000669"
 
-    # Use multiple steps
+    # use multiple steps
     KISAO_0000670 = "KISAO_0000670"
     USE_MULTIPLE_STEPS = "KISAO_0000670"
 
@@ -1857,6 +1857,10 @@ class KISAO(str, Enum):
     # relative tolerance for approximation
     KISAO_0000683 = "KISAO_0000683"
     RELATIVE_TOLERANCE_FOR_APPROXIMATION = "KISAO_0000683"
+
+    # number of steps per output
+    KISAO_0000684 = "KISAO_0000684"
+    NUMBER_OF_STEPS_PER_OUTPUT = "KISAO_0000684"
 
     # systems property
     KISAO_0000800 = "KISAO_0000800"

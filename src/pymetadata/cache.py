@@ -6,6 +6,7 @@ from typing import Any, Dict, Optional, Type
 
 from pymetadata import log
 
+
 logger = log.get_logger(__name__)
 
 

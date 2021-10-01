@@ -9,11 +9,12 @@ from typing import Any, Dict, List, Optional, Tuple, Union
 
 import requests
 
+from pymetadata import log
 from pymetadata.core.xref import CrossReference, is_url
 from pymetadata.identifiers.miriam import BQB, BQM
 from pymetadata.identifiers.registry import REGISTRY
 from pymetadata.ontologies.ols import ONTOLOGIES, OLSQuery
-from pymetadata import log
+
 
 OLS_QUERY = OLSQuery(ontologies=ONTOLOGIES)
 

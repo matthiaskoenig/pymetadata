@@ -1,4 +1,9 @@
-"""Ontology support."""
+"""Ontology support.
+
+This file allows to download the ontologies for local use.
+Special ontologies are provided as enums.
+
+"""
 import gzip
 import importlib
 import re
@@ -18,8 +23,8 @@ from pronto.ontology import Ontology as ProntoOntology
 from pronto.relationship import Relationship as ProntoRelationship
 from pronto.term import Term as ProntoTerm
 
-from pymetadata import ENUM_DIR, RESOURCES_DIR
-from pymetadata import log
+from pymetadata import ENUM_DIR, RESOURCES_DIR, log
+
 
 logger = log.get_logger(__name__)
 
@@ -276,7 +281,7 @@ def create_ontology_enum(ontology_id: str) -> None:
 
 if __name__ == "__main__":
     # download latest versions
-    # update_ontology_files()
+    update_ontology_files()
 
     # load OWL files
     # ofile: OntologyFile
@@ -290,7 +295,7 @@ if __name__ == "__main__":
     create_ontology_enum("SBO")
     create_ontology_enum("KISAO")
     create_ontology_enum("ECO")
-    create_ontology_enum("BTO")
+    # create_ontology_enum("BTO")
 
     # for ontology_id in ontology_files:
     #     create_ontology_enum(ontology_id)
