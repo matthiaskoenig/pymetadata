@@ -25,8 +25,8 @@ pymetadata: python utilities for metadata
    :target: https://codecov.io/gh/matthiaskoenig/pymetadata
    :alt: Codecov
 
-.. image:: https://zenodo.org/badge/5308801.svg
-   :target: https://zenodo.org/badge/latestdoi/5308801
+.. image:: https://zenodo.org/badge/DOI/10.5281/zenodo.5308801.svg
+   :target: https://doi.org/10.5281/zenodo.5308801
    :alt: Zenodo DOI
 
 .. image:: https://img.shields.io/badge/code%20style-black-000000.svg
@@ -50,8 +50,8 @@ If you have any questions or issues please `open an issue <https://github.com/ma
 How to cite
 ===========
 
-.. image:: https://zenodo.org/badge/5308801.svg
-   :target: https://zenodo.org/badge/latestdoi/5308801
+.. image:: https://zenodo.org/badge/DOI/10.5281/zenodo.5308801.svg
+   :target: https://doi.org/10.5281/zenodo.5308801
    :alt: Zenodo DOI
 
 Contributing
