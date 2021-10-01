@@ -2,4 +2,6 @@ include LICENSE
 include README.rst
 include src/pymetadata/py.typed
 
-recursive-include src/pymetadata/resources/ *
+recursive-include src/pymetadata/resources/templates *
+include src/pymetadata/resources/templates/chebi_webservice_wsdl.xml
+include src/pymetadata/resources/templates/identifiers_registry.json

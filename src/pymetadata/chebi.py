@@ -3,24 +3,30 @@ from pathlib import Path
 from pprint import pprint
 from typing import Dict
 
-import numpy as np
-from libchebipy import ChebiEntity, ChebiException
+from zeep import Client
 
-from pymetadata import CACHE_PATH, CACHE_USE, log
+from pymetadata import CACHE_PATH, CACHE_USE, RESOURCES_DIR, log
 from pymetadata.cache import DataclassJSONEncoder, read_json_cache, write_json_cache
 
 
-logger = log.getLogger(__name__)
+logger = log.get_logger(__name__)
+
+# client = Client('https://www.ebi.ac.uk/webservices/chebi/2.0/webservice?wsdl')
+client = Client(str(RESOURCES_DIR / "chebi_webservice_wsdl.xml"))
 
 
 class ChebiQuery:
-    """Class to query information from ChEBI."""
+    """Class to query information from ChEBI.
+
+    An overview over available methods:
+        python -mzeep https://www.ebi.ac.uk/webservices/chebi/2.0/webservice?wsdl
+    """
 
     @staticmethod
     def query(
         chebi: str, cache: bool = CACHE_USE, cache_path: Path = CACHE_PATH
     ) -> Dict:
-        """Query additional chebi information."""
+        """Query additional ChEBI information."""
 
         if not chebi:
             return dict()
@@ -36,29 +42,29 @@ class ChebiQuery:
         # fetch and cache data
         if data is None:
             try:
-                chebi_entity = ChebiEntity(chebi)
-                logger.warning(f"Query: {chebi}")
-            except ChebiException:
+                result = client.service.getCompleteEntity(chebi)
+                # print(result)
+            except Exception:
                 logger.error(f"CHEBI information could not be retrieved for: {chebi}")
                 return dict()
-            formula = chebi_entity.get_formula()
-            charge = chebi_entity.get_charge()
-            if np.isnan(charge):
-                charge = None
-            mass = chebi_entity.get_mass()
-            if np.isnan(mass):
-                mass = None
 
-            inchikey = chebi_entity.get_inchi_key()
+            # parse formula
+            formula = None
+            formulae = result["Formulae"]
+            if formulae:
+                formula = formulae[0]["data"]
 
             data = {
                 "chebi": chebi,
+                "name": result["chebiAsciiName"],
+                "definition": result["definition"],
                 "formula": formula,
-                "charge": charge,
-                "mass": mass,
-                "inchikey": inchikey,
+                "charge": result["charge"],
+                "mass": result["mass"],
+                "inchikey": result["inchiKey"],
             }
 
+            logger.info(f"Write chebi: {chebi_path}")
             write_json_cache(
                 data=data, cache_path=chebi_path, json_encoder=DataclassJSONEncoder
             )
