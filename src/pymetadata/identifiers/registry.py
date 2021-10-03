@@ -310,7 +310,7 @@ class Registry:
         registry_path: Path = None,
     ) -> Dict[str, Namespace]:
         """Update registry from identifiers.org webservice."""
-        logger.warning(f"Update registry: {Registry.URL}")
+        logger.warning(f"Update registry: '{Registry.URL}' -> '{registry_path}'")
         response = requests.get(Registry.URL)
         namespaces = response.json()["payload"]["namespaces"]
 
