@@ -247,7 +247,7 @@ def create_ontology_enum(ontology_id: str) -> None:
             terms[term_id] = {
                 "id": term_id,
                 "var_name": var_name,
-                "name": pronto_term.name.replace('"', "'"),
+                "name": pronto_name.replace('"', "'"),
                 "definition": pronto_term.definition,
             }
     terms_sorted = {}
@@ -275,7 +275,7 @@ def create_ontology_enum(ontology_id: str) -> None:
             f_py.write(module_str)
 
 
-def try_ontology_import(ontology_id: str):
+def try_ontology_import(ontology_id: str) -> None:
     """Try import of created module."""
     # try to import
     importlib.import_module(f"pymetadata.metadata.{ontology_id.lower()}")

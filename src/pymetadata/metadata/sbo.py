@@ -3714,7 +3714,7 @@ class SBO(str, Enum):
 
     @classmethod
     def validate(cls, sbo: "SBOType") -> "SBO":
-        """Validates and normalizes sbo id against pattern."""
+        """Validate and normalize sbo."""
         term: "SBO"
         if isinstance(sbo, str):
             if not sbo.startswith("SBO"):

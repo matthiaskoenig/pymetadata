@@ -33,7 +33,7 @@ class {{ontology_id}}(str, Enum):
 
     @classmethod
     def validate(cls, {{ontology_id.lower()}}: '{{ontology_id}}Type') -> '{{ontology_id}}':
-        """Validates and normalizes {{ontology_id.lower()}} id against pattern."""
+        """Validate and normalize {{ontology_id.lower()}}."""
         term: '{{ontology_id}}'
         if isinstance({{ontology_id.lower()}}, str):
             if not {{ontology_id.lower()}}.startswith("{{ontology_id}}"):

@@ -2525,7 +2525,7 @@ class KISAO(str, Enum):
 
     @classmethod
     def validate(cls, kisao: "KISAOType") -> "KISAO":
-        """Validates and normalizes kisao id against pattern."""
+        """Validate and normalize kisao."""
         term: "KISAO"
         if isinstance(kisao, str):
             if not kisao.startswith("KISAO"):

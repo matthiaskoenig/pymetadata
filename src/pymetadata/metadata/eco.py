@@ -15448,7 +15448,7 @@ class ECO(str, Enum):
 
     @classmethod
     def validate(cls, eco: "ECOType") -> "ECO":
-        """Validates and normalizes eco id against pattern."""
+        """Validate and normalize eco."""
         term: "ECO"
         if isinstance(eco, str):
             if not eco.startswith("ECO"):
