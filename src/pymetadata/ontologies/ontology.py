@@ -2,7 +2,6 @@
 
 This file allows to download the ontologies for local use.
 Special ontologies are provided as enums.
-
 """
 import gzip
 import importlib
@@ -248,7 +247,7 @@ def create_ontology_enum(ontology_id: str) -> None:
             terms[term_id] = {
                 "id": term_id,
                 "var_name": var_name,
-                "name": pronto_term.name,
+                "name": pronto_term.name.replace('"', "'"),
                 "definition": pronto_term.definition,
             }
     terms_sorted = {}
@@ -275,13 +274,16 @@ def create_ontology_enum(ontology_id: str) -> None:
         with open(path_module, "w") as f_py:
             f_py.write(module_str)
 
+
+def try_ontology_import(ontology_id: str):
+    """Try import of created module."""
     # try to import
-    importlib.import_module("pymetadata.metadata.sbo")
+    importlib.import_module(f"pymetadata.metadata.{ontology_id.lower()}")
 
 
 if __name__ == "__main__":
     # download latest versions
-    update_ontology_files()
+    # update_ontology_files()
 
     # load OWL files
     # ofile: OntologyFile
@@ -295,7 +297,10 @@ if __name__ == "__main__":
     create_ontology_enum("SBO")
     create_ontology_enum("KISAO")
     create_ontology_enum("ECO")
-    # create_ontology_enum("BTO")
+
+    try_ontology_import("SBO")
+    try_ontology_import("KISAO")
+    try_ontology_import("ECO")
 
     # for ontology_id in ontology_files:
     #     create_ontology_enum(ontology_id)
