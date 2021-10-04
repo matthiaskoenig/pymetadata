@@ -201,7 +201,7 @@ class Ontology:
         return self._ontology
 
 
-def create_ontology_enum(ontology_id: str) -> None:
+def create_ontology_enum(ontology_id: str, pattern: str) -> None:
     """Create enum of the ontology."""
 
     logger.info(f"Create enum: `{ontology_id}`")
@@ -266,6 +266,7 @@ def create_ontology_enum(ontology_id: str) -> None:
         context = {
             "ontology_id": ontology_id,
             "terms": terms_sorted,
+            "pattern": pattern,
         }
         module_str = template.render(**context)
         # print(module_str)
@@ -294,9 +295,9 @@ if __name__ == "__main__":
     #     console.print(ontology)
 
     # convert to python module
-    create_ontology_enum("SBO")
-    create_ontology_enum("KISAO")
-    create_ontology_enum("ECO")
+    create_ontology_enum("SBO", r"^SBO_\d{7}$")
+    create_ontology_enum("KISAO", r"^KISAO_\d{7}$")
+    create_ontology_enum("ECO", r"^ECO_\d{7}$")
 
     try_ontology_import("SBO")
     try_ontology_import("KISAO")

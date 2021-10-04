@@ -14,6 +14,9 @@ _terms = {
     {% endfor %}
 }
 
+pattern = {{pattern}}
+
+
 class {{ontology_id}}(str, Enum):
     """Enum for {{ontology_id}} ontology."""
 
@@ -40,6 +43,7 @@ class {{ontology_id}}(str, Enum):
                 raise ValueError({{ontology_id.lower()}} + " is not a {{ontology_id}} id.")
             if {{ontology_id.lower()}}.startswith("{{ontology_id}}:"):
                 {{ontology_id.lower()}} = {{ontology_id.lower()}}.replace(":", "_")
+
             term = getattr(cls, {{ontology_id.lower()}})
 
         elif isinstance({{ontology_id.lower()}}, '{{ontology_id}}'):
