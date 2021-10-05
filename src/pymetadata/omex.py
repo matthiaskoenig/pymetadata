@@ -9,6 +9,7 @@ When working with COMBINE archives these wrapper functions should be used.
 
 """
 # FIXME: handle the adding of metadata
+# FIXME: print tree
 
 import os
 import pprint
@@ -18,26 +19,15 @@ import warnings
 import zipfile
 from dataclasses import dataclass, field
 from pathlib import Path
-from typing import Any, Iterable, Iterator, List, Optional, Tuple
+from typing import Iterable, Iterator, List, Optional, Sequence, Tuple
 
 import libcombine
 
 from pymetadata import log
+from pymetadata.core.creator import Creator
 
 
 logger = log.get_logger(__name__)
-
-
-class Creator:
-    """Helper class to store the creator information."""
-
-    def __init__(
-        self, given_name: str, family_name: str, organization: str, email: str
-    ):
-        self.given_name = given_name
-        self.family_name = family_name
-        self.organization = organization
-        self.email = email
 
 
 class Entry:
@@ -50,7 +40,7 @@ class Entry:
         format_key: Optional[str] = None,
         master: bool = False,
         description: Optional[str] = None,
-        creators: Optional[Iterator[Creator]] = None,
+        creators: Optional[Sequence[Creator]] = None,
     ):
         """Create entry from information.
 
@@ -74,7 +64,7 @@ class Entry:
         self.location: str = location
         self.master: bool = master
         self.description: Optional[str] = description
-        self.creators: Optional[Iterator[Creator]] = creators
+        self.creators: Optional[Sequence[Creator]] = creators
 
     def __str__(self) -> str:
         """Get string of Entry."""
@@ -88,7 +78,15 @@ class Omex:
     """Combine archive class."""
 
     def __init__(self, omex_path: Path, working_dir: Path):
-        """Create combine archive."""
+        """Create COMBINE archive.
+
+        :param omex_path: path to COMBINE archive file
+        :param working_dir: working directory for archive
+        """
+        if isinstance(working_dir, str):
+            logger.warning(f"'working_dir' should be 'Path': '{working_dir}'")
+            working_dir = Path(working_dir)
+
         if not working_dir.exists():
             logger.warning(f"Creating working directory: {working_dir}")
             working_dir.mkdir(parents=True, exist_ok=True)
@@ -98,7 +96,7 @@ class Omex:
 
     def __repr__(self) -> str:
         """Get representation string."""
-        return f"Omex({self.omex_path}, working_dir={self.working_dir})"
+        return f"Omex<{self.omex_path}, working_dir={self.working_dir}>"
 
     def __str__(self) -> str:
         """Get contents of archive string."""
@@ -119,7 +117,7 @@ class Omex:
         cls,
         omex_path: Path,
         directory: Path,
-        creators: Optional[Iterator[Creator]] = None,
+        creators: Optional[Sequence[Creator]] = None,
     ) -> "Omex":
         """Create a COMBINE archive from a given folder.
 
@@ -248,11 +246,12 @@ class Omex:
 
                 if entry.creators:
                     for c in entry.creators:
-                        creator = libcombine.VCard()
-                        creator.setFamilyName(c.family_name)
-                        creator.setGivenName(c.given_name)
+                        creator: libcombine.VCard = libcombine.VCard()
+                        creator.setFamilyName(c.familyName)
+                        creator.setGivenName(c.givenName)
                         creator.setEmail(c.email)
                         creator.setOrganization(c.organization)
+
                         omex_description.addCreator(creator)
 
                 archive.addMetadata(location, omex_description)
