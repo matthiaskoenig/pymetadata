@@ -52,59 +52,113 @@ import shutil
 import tempfile
 import warnings
 import zipfile
+import xmltodict
+import json
 from pathlib import Path
 from typing import Iterable, Iterator, List, Optional, Sequence, Tuple, Dict
+from pydantic import BaseModel
 
 import libcombine
 
 from pymetadata import log
+from pymetadata.console import console
 
 logger = log.get_logger(__name__)
 
 
-class ManifestEntry:
+# libcombine.KnownFormats.lookupFormat(formatKey=format_key)
+
+class MetadataEntry(BaseModel):
+    location: str
+
+
+class ManifestEntry(BaseModel):
     """Entry of an OMEX file listed in the `manfiest.xml`.
 
     This corresponds to a single file in the archive which is tracked in the
     manifest.xml.
-
-    TODO: support metadata which is writen in the archive.
+        location: location of the entry
+        format: full format string
+        master: master attribute
     """
+    location: str
+    format: str
+    master: bool = False
 
-    def __init__(
-        self,
-        location: str,
-        format: Optional[str] = None,
-        format_key: Optional[str] = None,
-        master: bool = False,
-    ):
-        """Create entry from information.
 
-        If format and formatKey are provided the format is used.
+class ManifestEntry(BaseModel):
+    """Entry of an OMEX file listed in the `manfiest.xml`.
 
-        :param location: location of the entry
-        :param format: full format string
-        :param format_key: short formatKey string
-        :param master: master attribute
-        """
-        if (format_key is None) and (format is None):
-            raise ValueError(
-                "Either 'formatKey' or 'format' must be specified for Entry."
-            )
-        if format is None:
-            format = libcombine.KnownFormats.lookupFormat(formatKey=format_key)
+    This corresponds to a single file in the archive which is tracked in the
+    manifest.xml.
+        location: location of the entry
+        format: full format string
+        master: master attribute
+    """
+    location: str
+    format: str
+    master: bool = False
 
-        self.format: str = format
-        self.location: str = location
-        self.master: bool = master
 
-    def __str__(self) -> str:
-        """Get string of Entry."""
-        if self.master:
-            return f"<*master* Entry {self.location} | {self.format}>"
-        else:
-            return f"<Entry {self.location} | {self.format}>"
+class Manifest(BaseModel):
+    """COMBINE archive manifest.
 
+    A manifest is a list of ManifestEntries.
+    """
+    entries: List[ManifestEntry] = [
+        ManifestEntry(
+            location=".",
+            format='http://identifiers.org/combine.specifications/omex'
+        ),
+        ManifestEntry(
+            location="./manifest.xml",
+            format='http://identifiers.org/combine.specifications/omex-manifest'
+        ),
+    ]
+
+    @classmethod
+    def from_manifest(cls, manifest_path: Path):
+        with open(manifest_path, "r") as f_manifest:
+            xml = f_manifest.read()
+            d = xmltodict.parse(xml)
+
+            # attributes have @ prefix
+            entries = []
+            for e in d['omexManifest']['content']:
+                entries.append(
+                    {k.replace('@', ''): v for (k, v) in e.items()}
+                )
+
+            return Manifest(**{'entries': entries})
+
+    def __len__(self) -> int:
+        """Get number of entries."""
+        return len(self.entries)
+
+    def to_manifest_xml(self) -> str:
+        """Create xml of manifest."""
+        def content_line(e: ManifestEntry):
+            if e.master:
+                master_token = ' master="true"'
+            else:
+                master_token = ''
+            return f'  <content location="{e.location}" format="{e.location}"{master_token} />'
+
+
+        lines = [
+            '<?xml version="1.0" encoding="UTF-8"?>',
+            '<omexManifest xmlns="http://identifiers.org/combine.specifications/omex-manifest">',
+        ] + [content_line(e) for e in self.entries] + [
+            '</omexManifest>'
+        ]
+        return "\n".join(lines)
+
+    def to_manifest(self, manifest_path: Path) -> None:
+        """Write manifest.xml."""
+        with open(manifest_path, "w") as f_manifest:
+            xml = self.to_manifest_xml()
+            console.print(xml)
+            f_manifest.write(xml)
 
 class Omex:
     """Combine archive class."""
@@ -134,7 +188,7 @@ class Omex:
         return pprint.pformat(self.list_contents())
 
 
-    def write(self, omex_path: Optional[Path] = None):
+    def to_omex(self, omex_path: Optional[Path] = None):
         """Write omex to path.
 
         :param omex_path:
@@ -147,7 +201,7 @@ class Omex:
         raise NotImplementedError
 
     @staticmethod
-    def from_omex(omex_path: Optional[Path] = None):
+    def from_omex(omex_path: Path):
         """Read omex from given path.
 
         :param omex_path:
@@ -155,35 +209,41 @@ class Omex:
         """
         omex = Omex()
 
-        # TODO: extract archive to tmp file
-        zip_ref = zipfile.ZipFile(self.omex_path, "r")
-        zip_ref.extractall(output_dir)
-        zip_ref.close()
+        # extract archive to tmp file
+        with tempfile.TemporaryDirectory as tmp_dir:
+            zip_ref = zipfile.ZipFile(omex_path, "r")
+            zip_ref.extractall(tmp_dir)
+            zip_ref.close()
 
-        # TODO: add all entries
+        # TODO: add all entries with manifest information
 
         # TODO: validate that entries correspond to manifest
 
         # TODO: read metadata
 
-
         raise NotImplementedError
 
-    def to_omex(self):
-        raise NotImplementedError
+    def entries_from_manifest(self, manifest_path: ManifestEntry):
+        """Read entries from given manifest."""
+
+
+        o = xmltodict.parse('<e> <a>text</a> <a>text</a> </e>')
+        json.dumps(o)  # '{"e": {"a": ["text", "text"]}}'
 
 
 
 
-    def _create_manifest_xml():
+
+    def manifest_xml(self):
         """Creates the manifest xml from the entries."""
         raise NotImplementedError
 
+    def manifest_dict(self):
+        """Creates manifest dict."""
+        raise NotImplementedError
 
-    def to_directory(self, output_dir: Path = None) -> None:
-        """Extract combine archive to directory.
-
-        Use this for debugging.
+    def to_directory(self, output_dir: Path) -> None:
+        """Extract combine archive to output directory.
 
         :param output_dir: output directory
         :return:
@@ -202,23 +262,6 @@ class Omex:
         # TODO: write the manifest file
 
         # TODO: write metadata
-
-
-
-        if method == "zip":
-
-
-        elif method == "omex":
-            archive: libcombine.CombineArchive = self._omex_init()
-            for i in range(archive.getNumEntries()):
-                entry = archive.getEntry(i)
-                location = entry.getLocation()
-                filename = os.path.join(output_dir, location)
-                archive.extractEntry(location, filename)
-
-            archive.cleanUp()
-        else:
-            raise ValueError(f"Method is not supported '{method}'")
 
         raise NotImplementedError
 
@@ -302,8 +345,7 @@ class Omex:
 
         raise NotImplementedError
 
-    def remove_location(self, str: location):
-
+    def remove_location(self, location: str):
         raise NotImplementedError
 
 
