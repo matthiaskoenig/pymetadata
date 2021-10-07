@@ -1,4 +1,6 @@
-"""Example for reading and writing omex archives."""
+"""
+Example for reading and writing omex archives.
+"""
 from pathlib import Path
 
 from pymetadata import RESOURCES_DIR
