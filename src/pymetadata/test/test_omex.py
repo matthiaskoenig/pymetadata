@@ -58,4 +58,21 @@ def test_manifest_to_file(manifest_path, tmp_path: Path) -> None:
     assert len(manifest) == len(manifest2)
 
 
+def test_adding_removing_entry_manifest() -> None:
+    """Testing adding and removing entries from manifest."""
+    manifest = Manifest()
+    assert "." in manifest
+    assert "./manifest.xml" in manifest
+    assert manifest
+    assert len(manifest) == 2
+    manifest.add_entry(
+        ManifestEntry(location="./models/model.xml", format="sbml", master=False)
+    )
+    assert "./models/model.xml" in manifest
+    assert len(manifest) == 3
+
+    entry = manifest.remove_entry_for_location(location="./models/model.xml")
+    assert entry
+    assert entry.location == "./models/model.xml"
+    assert len(manifest) == 2
 
