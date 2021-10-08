@@ -56,7 +56,7 @@ import xmltodict
 import json
 from pathlib import Path
 from typing import Iterable, Iterator, List, Optional, Sequence, Tuple, Dict
-from pydantic import BaseModel
+from pydantic import BaseModel, PrivateAttr
 
 import libcombine
 
@@ -101,11 +101,19 @@ class Manifest(BaseModel):
             format='http://identifiers.org/combine.specifications/omex-manifest'
         ),
     ]
-    _entries_dict = {e.location: e for e in entries}
+    _entries_dict = PrivateAttr()
+
+    def __init__(self, **data):
+        super().__init__(**data)
+        self._entries_dict = {e.location: e for e in self.entries}
 
     def __contains__(self, location) -> bool:
         """Check if location is in manifest."""
         return location in self._entries_dict
+
+    def __getitem__(self, location) -> ManifestEntry:
+        """Get entry by location."""
+        return self._entries_dict[location]
 
     def __len__(self) -> int:
         """Get number of entries."""
@@ -125,8 +133,6 @@ class Manifest(BaseModel):
                 )
 
             return Manifest(**{'entries': entries})
-
-
 
     def to_manifest_xml(self) -> str:
         """Create xml of manifest."""
@@ -157,6 +163,12 @@ class Manifest(BaseModel):
 
         Does not check for duplication.
         """
+        if not entry.location.startswith("./"):
+            raise ValueError(
+                f"Locations must be relative paths in COMBINE archive, but location is "
+                f"'{entry.location}'."
+            )
+
         self.entries.append(entry)
         self._entries_dict[entry.location] = entry
 
@@ -186,37 +198,148 @@ class Omex:
         :param working_dir: working directory for archive, if left empty a temporary
                             directory is used.
         """
-        self.manifest = Manifest()
-        self._tmp_dir = tempfile.mkdtemp()
+        self.manifest: Manifest = Manifest()
+        self._tmp_dir: Path = Path(tempfile.mkdtemp())
 
     def __exit__(self, exc_type, exc_value, traceback):
         shutil.rmtree(self._tmp_dir)
 
     def __str__(self) -> str:
         """Get contents of archive string."""
-        return str(self.manifest)
+        return str(self.manifest.dict())
 
     @staticmethod
     def from_omex(omex_path: Path):
         """Read omex from given path.
 
         :param omex_path:
-        :return:
+        :return: Omex object
         """
-        omex = Omex()
+        if isinstance(omex_path, str):
+            logger.warning(f"'omex_path' should be 'Path': '{omex_path}'")
+            omex_path = Path(omex_path)
 
-        # extract archive to tmp file
-        with tempfile.TemporaryDirectory as tmp_dir:
+        if not omex_path.exists:
+            raise ValueError(
+                f"'omex_path' does not exist: '{omex_path}'."
+            )
+        if not omex_path.is_file():
+            raise ValueError(
+                f"'omex_path' is not a file: '{omex_path}'."
+            )
+
+        # extract archive to tmp directory
+        with tempfile.TemporaryDirectory() as tmp_dir:
             zip_ref = zipfile.ZipFile(omex_path, "r")
             zip_ref.extractall(tmp_dir)
             zip_ref.close()
 
-        # TODO: add all entries with manifest information
+            return Omex.from_directory(Path(tmp_dir))
 
-        # TODO: validate that entries correspond to manifest
+    @classmethod
+    def from_directory(cls, directory: Path) -> "Omex":
+        """Create a COMBINE archive from a given directory.
 
-        # TODO: read metadata
+        The file types are inferred,
+        in case of existing manifest or metadata information this should be reused.
 
+        For all SED-ML files in the directory the master attribute is set to True.
+        """
+        if isinstance(directory, str):
+            logger.warning(f"'directory' should be 'Path': '{directory}'")
+            directory = Path(directory)
+
+        if not directory.exists:
+            msg = f"'directory' does not exist: '{directory}'."
+            logger.error(msg)
+            raise ValueError(msg)
+
+        if not directory.is_dir():
+            msg = f"'directory' is not a directory: '{directory}'."
+            logger.error(msg)
+            raise ValueError(msg)
+
+        manifest_path: Path = directory / "manifest.xml"
+        manifest: Optional[Manifest] = None
+        if manifest_path.exists():
+            manifest = Manifest.from_manifest(manifest_path)
+        else:
+            logger.warning(f"No 'manifest.xml' in directory: '{directory}'.")
+
+        # new archive
+        omex = Omex()
+
+        # iterate over all locations and add entry
+        for root, _dirs, files in os.walk(str(directory)):
+            for file in files:
+                file_path = os.path.join(root, file)
+                location = f"./{os.path.relpath(file_path, directory)}"
+                if location == "./manifest.xml":
+                    # manifest is created from the internal manifest entries
+                    continue
+
+                logger.debug(f"'{file_path}' -> '{location}'")
+                entry: ManifestEntry
+                if manifest and location in manifest:
+                    # use entry from existing manifest
+                    entry = manifest[location]
+                else:
+                    if manifest and location not in manifest:
+                        logger.warning(f"Location missing from existing manifest.xml: '{location}'")
+
+                    format = libcombine.KnownFormats.guessFormat(file_path)
+                    master = False
+                    if libcombine.KnownFormats.isFormat(formatKey="sed-ml", format=format):
+                        master = True
+                    entry = ManifestEntry(
+                        location=location,
+                        format=format,
+                        master=master,
+                    )
+
+                omex.add_entry(
+                    entry_path=Path(file_path),
+                    entry=entry
+                )
+
+        return omex
+
+    def add_entry(self, entry_path: Path, entry: ManifestEntry) -> None:
+        """Add a path to the combine archive.
+
+        The corresponding ManifestEntry information is required.
+        """
+        if isinstance(entry_path, str):
+            logger.warning(f"'entry_path' should be 'Path': '{entry_path}'")
+            entry_path = Path(entry_path)
+
+        if not entry_path.exists:
+            msg = f"'entry_path' does not exist: '{entry_path}'."
+            logger.error(msg)
+            raise ValueError(msg)
+
+        if not entry_path.is_file():
+            raise ValueError(
+                f"'entry_path' is not a file: '{entry_path}'."
+            )
+
+        if entry.location in self.manifest:
+            logger.warning(
+                f"Location already exists and is overwritten: '{entry.location}'."
+            )
+            self.manifest.remove_entry_for_location(entry.location)
+
+        # copy path
+        destination = self._tmp_dir / entry.location
+        if not destination.parent.exists():
+            destination.parent.mkdir(parents=True)
+        shutil.copy2(src=str(entry_path), dst=str(destination))
+
+        # add entry
+        self.manifest.add_entry(entry)
+
+    def remove_entry(self, entry: ManifestEntry):
+        # removes the entry and corresponding path from
         raise NotImplementedError
 
     def to_omex(self, omex_path: Optional[Path] = None):
@@ -232,7 +355,6 @@ class Omex:
         # TODO: write manifest in tmp_dir
 
         raise NotImplementedError
-
 
     def to_directory(self, output_dir: Path) -> None:
         """Extract combine archive to output directory.
@@ -254,102 +376,7 @@ class Omex:
 
         # the path cannot exist before !
 
-    @classmethod
-    def from_directory(cls, directory: Path) -> "Omex":
-        """Create a COMBINE archive from a given directory.
 
-        The file types are inferred,
-        in case of existing manifest or metadata information this should be reused.
-
-        For all SED-ML files in the directory the master attribute is set to True.
-
-        :param directory: Directory to compress
-        :param omex_path: Output path for omex directory
-        :param creators: List of creators
-        :return:
-        """
-
-        manifest_path: Path = directory / "manifest.xml"
-
-        if manifest_path.exists():
-            manifest = Manifest.from_manifest(manifest_path)
-        else:
-            logger.warning("No 'manifest.xml' in '{}'")
-
-
-
-
-        # add the base entry
-        entries = [
-            Entry(
-                location=".",
-                format="https://identifiers.org/combine.specifications/omex",
-                master=False,
-            )
-        ]
-
-        # iterate over all locations & guess format
-        for root, _dirs, files in os.walk(str(directory)):
-            for file in files:
-                file_path = os.path.join(root, file)
-                location = os.path.relpath(file_path, directory)
-                # guess the format
-                format = libcombine.KnownFormats.guessFormat(file_path)
-                master = False
-                if libcombine.KnownFormats.isFormat(formatKey="sed-ml", format=format):
-                    master = True
-
-                entries.append(
-                    Entry(
-                        location=location,
-                        format=format,
-                        master=master,
-                    )
-                )
-
-        # create additional metadata if available
-
-        # write all the entries
-        print("-" * 80)
-        print(omex_path)
-        print("-" * 80)
-        omex = cls.from_entries(
-            omex_path=omex_path, entries=entries, working_dir=directory
-        )
-        print("-" * 80)
-
-        return omex
-
-    def add_entry(self, entry_path: Path, entry: ManifestEntry) -> None:
-        """Add a path to the combine archive.
-
-        The corresponding ManifestEntry information is required.
-        """
-
-        if isinstance(entry_path, str):
-            logger.warning(f"'entry_path' should be 'Path': '{entry_path}'")
-            entry_path = Path(entry_path)
-
-        if not entry_path.exists:
-            msg = f"'entry_path' does not exist: '{entry_path}'."
-            logger.error(msg)
-            raise ValueError(msg)
-
-        if not entry_path.is_file():
-            msg = f"'entry_path' is not a file: '{entry_path}'."
-            logger.error(msg)
-            raise ValueError(msg)
-
-        # copy path
-        destination = self._tmp_dir / {entry.location}
-        shutil.copy2(src=str(entry_path), dst=str(destination))
-
-        # add entry
-        self.manifest.add_entry(entry)
-
-    def remove_entry(self, entry: ManifestEntry):
-        # removes the entry and corresponding path from
-        raise NotImplementedError
 
 
 

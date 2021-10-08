@@ -1,7 +1,7 @@
 from pathlib import Path
 
 import pytest
-from pymetadata.omex import ManifestEntry, Manifest
+from pymetadata.omex import ManifestEntry, Manifest, Omex
 from pymetadata import RESOURCES_DIR
 
 
@@ -76,3 +76,12 @@ def test_adding_removing_entry_manifest() -> None:
     assert entry.location == "./models/model.xml"
     assert len(manifest) == 2
 
+
+@pytest.mark.parametrize("omex_path", [
+    RESOURCES_DIR / "testdata" / "omex" / "CompModels.omex",
+    RESOURCES_DIR / "testdata" / "omex" / "CombineArchiveShowCase.omex",
+])
+def test_read_omex(omex_path):
+    omex = Omex.from_omex(omex_path)
+    assert omex
+    assert omex.manifest
