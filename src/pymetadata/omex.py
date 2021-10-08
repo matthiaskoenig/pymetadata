@@ -1,48 +1,14 @@
 """
-COMBINE Archive helper functions and classes based on libCOMBINE.
+COMBINE Archive support.
 
-Here common operations with COMBINE archives are implemented, like
-extracting archives, creating archives from entries or directories,
-adding metadata, listing content of archives.
+This module provides an abstraction around the COMBINE archive. Common operations
+such as archive creation, archive extraction, creating archives from entries or directories,
+working with the `manifest.xml` are implemented.
 
 When working with COMBINE archives these wrapper functions should be used.
+The current version has no support for metadata manipulation.
 
-TODO: core
-- [ ] correct handling files
-- [ ] correct handling manifest.xml
-- [ ] print tree
-- [ ] Enum for (common) data types
-- [ ] Operate with temporary working dir
-- Printing/plotting of manifest (Tree views with types)
-- Support for metadata
-- Validation of content against manifest; fix manifest options
-- Examples
-
-TODO: metadata
-- [ ] handle metadata
-
-            if entry.description or entry.creators:
-                omex_description: libcombine.OmexDescription = (
-                    libcombine.OmexDescription()
-                )
-                omex_description.setAbout(location)
-                omex_description.setCreated(time_now)
-
-                if entry.description:
-                    omex_description.setDescription(entry.description)
-
-                if entry.creators:
-                    for c in entry.creators:
-                        creator: libcombine.VCard = libcombine.VCard()
-                        creator.setFamilyName(c.familyName)
-                        creator.setGivenName(c.givenName)
-                        creator.setEmail(c.email)
-                        creator.setOrganization(c.organization)
-
-                        omex_description.addCreator(creator)
-
-                archive.addMetadata(location, omex_description)
-
+TODO: metadata (creates, modifications, ...)
 """
 
 import os
