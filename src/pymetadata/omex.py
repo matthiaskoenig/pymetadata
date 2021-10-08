@@ -45,31 +45,22 @@ TODO: metadata
 
 """
 
-
 import os
-import pprint
 import shutil
 import tempfile
-import warnings
 import zipfile
-import xmltodict
-import json
 from pathlib import Path
-from typing import Iterable, Iterator, List, Optional, Sequence, Tuple, Dict
-from pydantic import BaseModel, PrivateAttr
+from typing import Dict, List, Optional
 
 import libcombine
+import xmltodict
+from pydantic import BaseModel, PrivateAttr
 
 from pymetadata import log
 from pymetadata.console import console
 
+
 logger = log.get_logger(__name__)
-
-
-# libcombine.KnownFormats.lookupFormat(formatKey=format_key)
-
-class MetadataEntry(BaseModel):
-    location: str
 
 
 class ManifestEntry(BaseModel):
@@ -81,6 +72,7 @@ class ManifestEntry(BaseModel):
         format: full format string
         master: master attribute
     """
+
     location: str
     format: str
     master: bool = False
@@ -91,27 +83,27 @@ class Manifest(BaseModel):
 
     A manifest is a list of ManifestEntries.
     """
+
     entries: List[ManifestEntry] = [
         ManifestEntry(
-            location=".",
-            format='http://identifiers.org/combine.specifications/omex'
+            location=".", format="http://identifiers.org/combine.specifications/omex"
         ),
         ManifestEntry(
             location="./manifest.xml",
-            format='http://identifiers.org/combine.specifications/omex-manifest'
+            format="http://identifiers.org/combine.specifications/omex-manifest",
         ),
     ]
-    _entries_dict = PrivateAttr()
+    _entries_dict: Dict[str, ManifestEntry] = PrivateAttr()
 
-    def __init__(self, **data):
+    def __init__(self, **data) -> None:  # type: ignore
         super().__init__(**data)
         self._entries_dict = {e.location: e for e in self.entries}
 
-    def __contains__(self, location) -> bool:
+    def __contains__(self, location: str) -> bool:
         """Check if location is in manifest."""
         return location in self._entries_dict
 
-    def __getitem__(self, location) -> ManifestEntry:
+    def __getitem__(self, location: str) -> ManifestEntry:
         """Get entry by location."""
         return self._entries_dict[location]
 
@@ -120,42 +112,43 @@ class Manifest(BaseModel):
         return len(self.entries)
 
     @classmethod
-    def from_manifest(cls, manifest_path: Path):
+    def from_manifest(cls, manifest_path: Path) -> "Manifest":
+        """Create manifest from existing manifest.xml file."""
         with open(manifest_path, "r") as f_manifest:
             xml = f_manifest.read()
             d = xmltodict.parse(xml)
 
             # attributes have @ prefix
             entries = []
-            for e in d['omexManifest']['content']:
-                entries.append(
-                    {k.replace('@', ''): v for (k, v) in e.items()}
-                )
+            for e in d["omexManifest"]["content"]:
+                entries.append({k.replace("@", ""): v for (k, v) in e.items()})
 
-            return Manifest(**{'entries': entries})
+            return Manifest(**{"entries": entries})
 
     def to_manifest_xml(self) -> str:
         """Create xml of manifest."""
-        def content_line(e: ManifestEntry):
+
+        def content_line(e: ManifestEntry) -> str:
             if e.master:
                 master_token = ' master="true"'
             else:
-                master_token = ''
+                master_token = ""
             return f'  <content location="{e.location}" format="{e.format}"{master_token} />'
 
-        lines = [
-            '<?xml version="1.0" encoding="UTF-8"?>',
-            '<omexManifest xmlns="http://identifiers.org/combine.specifications/omex-manifest">',
-        ] + [content_line(e) for e in self.entries] + [
-            '</omexManifest>'
-        ]
+        lines = (
+            [
+                '<?xml version="1.0" encoding="UTF-8"?>',
+                '<omexManifest xmlns="http://identifiers.org/combine.specifications/omex-manifest">',
+            ]
+            + [content_line(e) for e in self.entries]
+            + ["</omexManifest>"]
+        )
         return "\n".join(lines)
 
     def to_manifest(self, manifest_path: Path) -> None:
         """Write manifest.xml."""
         with open(manifest_path, "w") as f_manifest:
             xml = self.to_manifest_xml()
-            console.print(xml)
             f_manifest.write(xml)
 
     def add_entry(self, entry: ManifestEntry) -> None:
@@ -175,23 +168,23 @@ class Manifest(BaseModel):
     def remove_entry_for_location(self, location: str) -> Optional[ManifestEntry]:
         """Remove entry for given location."""
         if location in [".", "./manifest.xml"]:
-            logger.error(f"Core location cannot be removed from manifest: '{location}'.")
+            logger.error(
+                f"Core location cannot be removed from manifest: '{location}'."
+            )
             return None
-        if not location in self:
+        if location not in self:
             logger.error(f"The location '{location}' does not exist in manifest.")
             return None
         else:
             entry = self._entries_dict.pop(location)
-            self.entries = [
-                e for e in self.entries if e.location != location
-            ]
+            self.entries = [e for e in self.entries if e.location != location]
             return entry
 
 
 class Omex:
     """Combine archive class."""
 
-    def __init__(self):
+    def __init__(self) -> None:
         """Create COMBINE archive.
 
         :param omex_path: path to COMBINE archive file
@@ -201,7 +194,8 @@ class Omex:
         self.manifest: Manifest = Manifest()
         self._tmp_dir: Path = Path(tempfile.mkdtemp())
 
-    def __exit__(self, exc_type, exc_value, traceback):
+    def __exit__(self, exc_type, exc_value, traceback):  # type: ignore
+        """Cleanup on exit."""
         shutil.rmtree(self._tmp_dir)
 
     def __str__(self) -> str:
@@ -209,7 +203,7 @@ class Omex:
         return str(self.manifest.dict())
 
     @staticmethod
-    def from_omex(omex_path: Path):
+    def from_omex(omex_path: Path) -> "Omex":
         """Read omex from given path.
 
         :param omex_path:
@@ -220,13 +214,9 @@ class Omex:
             omex_path = Path(omex_path)
 
         if not omex_path.exists:
-            raise ValueError(
-                f"'omex_path' does not exist: '{omex_path}'."
-            )
+            raise ValueError(f"'omex_path' does not exist: '{omex_path}'.")
         if not omex_path.is_file():
-            raise ValueError(
-                f"'omex_path' is not a file: '{omex_path}'."
-            )
+            raise ValueError(f"'omex_path' is not a file: '{omex_path}'.")
 
         # extract archive to tmp directory
         with tempfile.TemporaryDirectory() as tmp_dir:
@@ -285,11 +275,15 @@ class Omex:
                     entry = manifest[location]
                 else:
                     if manifest and location not in manifest:
-                        logger.warning(f"Location missing from existing manifest.xml: '{location}'")
+                        logger.warning(
+                            f"Location missing from existing manifest.xml: '{location}'"
+                        )
 
                     format = libcombine.KnownFormats.guessFormat(file_path)
                     master = False
-                    if libcombine.KnownFormats.isFormat(formatKey="sed-ml", format=format):
+                    if libcombine.KnownFormats.isFormat(
+                        formatKey="sed-ml", format=format
+                    ):
                         master = True
                     entry = ManifestEntry(
                         location=location,
@@ -297,10 +291,7 @@ class Omex:
                         master=master,
                     )
 
-                omex.add_entry(
-                    entry_path=Path(file_path),
-                    entry=entry
-                )
+                omex.add_entry(entry_path=Path(file_path), entry=entry)
 
         return omex
 
@@ -319,9 +310,7 @@ class Omex:
             raise ValueError(msg)
 
         if not entry_path.is_file():
-            raise ValueError(
-                f"'entry_path' is not a file: '{entry_path}'."
-            )
+            raise ValueError(f"'entry_path' is not a file: '{entry_path}'.")
 
         if entry.location in self.manifest:
             logger.warning(
@@ -344,8 +333,9 @@ class Omex:
         if entry:
             destination = self._tmp_dir / entry.location
             os.remove(destination)
+        return entry
 
-    def to_omex(self, omex_path: Optional[Path] = None):
+    def to_omex(self, omex_path: Path) -> None:
         """Write omex to path.
 
         :param omex_path:
@@ -355,10 +345,21 @@ class Omex:
             logger.warning(f"'omex_path' should be 'Path': '{omex_path}'")
             omex_path = Path(omex_path)
 
+        if omex_path.exists():
+            logger.warning(f"Existing omex is overwritten: '{omex_path}'")
+
         # write tmp dir
+        with tempfile.TemporaryDirectory() as tmp_dir:
+            self.to_directory(output_dir=Path(tmp_dir))
 
-        # compress directory as zip
+            # compress directory as zip
+            with zipfile.ZipFile(omex_path, mode="w") as zf:
+                for e in self.manifest.entries:
+                    if e.location != ".":
+                        f = Path(tmp_dir) / e.location
+                        zf.write(filename=str(f), arcname=e.location)
 
+                # zf.printdir()
 
     def to_directory(self, output_dir: Path) -> None:
         """Extract combine archive to output directory.
@@ -382,14 +383,11 @@ class Omex:
             src = self._tmp_dir / entry.location
             destination = output_dir / entry.location
             destination.parent.mkdir(parents=True, exist_ok=True)
-            logger.info(f"'{src}' -> '{destination}")
+            logger.debug(f"'{src}' -> '{destination}")
             shutil.copy2(src=str(src), dst=str(destination))
 
         # write manifest.xml
-        self.manifest.to_manifest(
-            manifest_path=output_dir / "manifest.xml"
-        )
-
+        self.manifest.to_manifest(manifest_path=output_dir / "manifest.xml")
 
     # def locations_by_format(
     #     self, format_key: str = None, method: str = "omex"
@@ -451,5 +449,3 @@ class Omex:
     #         raise ValueError(f"Method is not supported '{method}'")
     #
     #     return locations
-
-

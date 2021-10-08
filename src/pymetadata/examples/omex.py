@@ -1,11 +1,10 @@
-"""
-Example for reading and writing omex archives.
-"""
+"""Example for reading and writing omex archives."""
 from pathlib import Path
 
 from pymetadata import RESOURCES_DIR
-from pymetadata.omex import Omex
 from pymetadata.console import console
+from pymetadata.omex import Omex
+
 
 # read existing archive
 # omex_example: Path = RESOURCES_DIR / "testdata" / "omex" / "CombineArchiveShowCase.omex"

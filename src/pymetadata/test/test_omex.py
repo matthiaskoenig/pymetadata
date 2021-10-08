@@ -1,19 +1,20 @@
 from pathlib import Path
 
 import pytest
-from pymetadata.omex import ManifestEntry, Manifest, Omex
+
 from pymetadata import RESOURCES_DIR
+from pymetadata.omex import Manifest, ManifestEntry, Omex
 
 
 SHOWCASE_OMEX = RESOURCES_DIR / "testdata" / "omex" / "CombineArchiveShowCase.omex"
 COMPMODELS_OMEX = RESOURCES_DIR / "testdata" / "omex" / "CompModels.omex"
 
 
-def test_entry_from_dict():
+def test_entry_from_dict() -> None:
     entry_data = {
-        'location': "./model/model1.xml",
-        'format': "sbml",
-        'master': "false",
+        "location": "./model/model1.xml",
+        "format": "sbml",
+        "master": "false",
     }
     entry = ManifestEntry(**entry_data)
     assert entry
@@ -21,17 +22,17 @@ def test_entry_from_dict():
     assert entry.master is False
 
 
-def test_manifest_from_dict():
+def test_manifest_from_dict() -> None:
     manifest_data = {
-        'entries': [
+        "entries": [
             {
-                'location': "./model/model1.xml",
-                'format': "sbml",
-                'master': "true",
+                "location": "./model/model1.xml",
+                "format": "sbml",
+                "master": "true",
             },
             {
-                'location': ".",
-                'format': "omex",
+                "location": ".",
+                "format": "omex",
             },
         ]
     }
@@ -39,7 +40,7 @@ def test_manifest_from_dict():
     assert manifest
 
 
-def test_manifest_from_file():
+def test_manifest_from_file() -> None:
     """Test that manifest can be created from file."""
     manifest_path = RESOURCES_DIR / "testdata" / "omex" / "CompModels_manifest.xml"
     manifest = Manifest.from_manifest(manifest_path)
@@ -47,11 +48,14 @@ def test_manifest_from_file():
     assert len(manifest) == 6
 
 
-@pytest.mark.parametrize("manifest_path", [
-    RESOURCES_DIR / "testdata" / "omex" / "CompModels_manifest.xml",
-    RESOURCES_DIR / "testdata" / "omex" / "CombineArchiveShowcase_manifest.xml",
-])
-def test_manifest_to_file(manifest_path, tmp_path: Path) -> None:
+@pytest.mark.parametrize(
+    "manifest_path",
+    [
+        RESOURCES_DIR / "testdata" / "omex" / "CompModels_manifest.xml",
+        RESOURCES_DIR / "testdata" / "omex" / "CombineArchiveShowcase_manifest.xml",
+    ],
+)
+def test_manifest_to_file(manifest_path: Path, tmp_path: Path) -> None:
     """Test that manifest can be writen to manifest.xml."""
     manifest = Manifest.from_manifest(manifest_path)
 
@@ -87,10 +91,13 @@ def test_adding_removing_entry_manifest() -> None:
     assert len(manifest) == 2
 
 
-@pytest.mark.parametrize("omex_path", [
-    COMPMODELS_OMEX,
-    SHOWCASE_OMEX,
-])
+@pytest.mark.parametrize(
+    "omex_path",
+    [
+        COMPMODELS_OMEX,
+        SHOWCASE_OMEX,
+    ],
+)
 def test_read_omex(omex_path: Path) -> None:
     """Test reading of omex files."""
     omex = Omex.from_omex(omex_path)
@@ -106,7 +113,7 @@ def test_remove_entry_omex() -> None:
     assert len(omex.manifest) == omex_len - 1
 
 
-def test_omex_to_directory(tmp_path) -> None:
+def test_omex_to_directory(tmp_path: Path) -> None:
     """Test export to directory."""
     omex = Omex.from_omex(COMPMODELS_OMEX)
     omex.to_directory(tmp_path)
@@ -122,11 +129,12 @@ def test_omex_to_directory(tmp_path) -> None:
         assert e.master == e2.master
 
 
-def test_omex_to_omex(tmp_path) -> None:
+def test_omex_to_omex(tmp_path: Path) -> None:
     """Test export to directory."""
     omex = Omex.from_omex(COMPMODELS_OMEX)
     omex_path = tmp_path / "example.omex"
     omex.to_omex(omex_path)
+
     assert omex_path.exists()
 
     omex2 = Omex.from_omex(omex_path)
