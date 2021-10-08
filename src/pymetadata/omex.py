@@ -326,19 +326,19 @@ class ManifestEntry(BaseModel):
     format: str
     master: bool = False
 
-    def _is_format(self, format_key) -> bool:
+    def _is_format(self, format_key: str) -> bool:
         """Check if entry is of the given format_key."""
-        return libcombine.KnownFormats.isFormat(format_key, self.format)
+        return bool(libcombine.KnownFormats.isFormat(format_key, self.format))
 
     def is_sbml(self) -> bool:
         """Check if entry is SBML."""
         return self._is_format("sbml")
 
-    def is_sedml(self):
+    def is_sedml(self) -> bool:
         """Check if entry is SED-ML."""
         return self._is_format("sedml")
 
-    def is_sbgn(self):
+    def is_sbgn(self) -> bool:
         """Check if entry is SBGN."""
         return self._is_format("sbgn")
 
