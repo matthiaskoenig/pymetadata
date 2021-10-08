@@ -1,9 +1,0 @@
-"<?xml version="1.0" encoding="UTF-8"?>
-<omexManifest xmlns="http://identifiers.org/combine.specifications/omex-manifest">
-  <content location="." format="." />
-  <content location="./manifest.xml" format="./manifest.xml" />
-  <content location="./README.md" format="./README.md" />
-  <content location="./models/omex_comp.xml" format="./models/omex_comp.xml" />
-  <content location="./models/omex_comp_flat.xml" format="./models/omex_comp_flat.xml" />
-  <content location="./models/omex_minimal.xml" format="./models/omex_minimal.xml" />
-</omexManifest>

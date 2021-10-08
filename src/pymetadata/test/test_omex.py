@@ -9,6 +9,13 @@ from pymetadata.omex import Manifest, ManifestEntry, Omex
 SHOWCASE_OMEX = RESOURCES_DIR / "testdata" / "omex" / "CombineArchiveShowCase.omex"
 COMPMODELS_OMEX = RESOURCES_DIR / "testdata" / "omex" / "CompModels.omex"
 
+SHOWCASE_OMEX_MANIFEST = (
+    RESOURCES_DIR / "testdata" / "omex" / "CombineArchiveShowCase_manifest.xml"
+)
+COMPMODELS_OMEX_MANIFEST = (
+    RESOURCES_DIR / "testdata" / "omex" / "CompModels_manifest.xml"
+)
+
 
 def test_entry_from_dict() -> None:
     entry_data = {
@@ -51,8 +58,8 @@ def test_manifest_from_file() -> None:
 @pytest.mark.parametrize(
     "manifest_path",
     [
-        RESOURCES_DIR / "testdata" / "omex" / "CompModels_manifest.xml",
-        RESOURCES_DIR / "testdata" / "omex" / "CombineArchiveShowcase_manifest.xml",
+        COMPMODELS_OMEX_MANIFEST,
+        SHOWCASE_OMEX_MANIFEST,
     ],
 )
 def test_manifest_to_file(manifest_path: Path, tmp_path: Path) -> None:
@@ -144,3 +151,17 @@ def test_omex_to_omex(tmp_path: Path) -> None:
         assert e.location == e2.location
         assert e.format == e2.format
         assert e.master == e2.master
+
+
+@pytest.mark.parametrize(
+    "omex_path, omex_flag",
+    [
+        (COMPMODELS_OMEX, True),
+        (SHOWCASE_OMEX, True),
+        (COMPMODELS_OMEX_MANIFEST, False),
+        (SHOWCASE_OMEX_MANIFEST, False),
+    ],
+)
+def test_is_omex(omex_path: Path, omex_flag: bool) -> None:
+    """Test if path is a COMBINE archive."""
+    assert Omex.is_omex(omex_path) == omex_flag

@@ -244,12 +244,8 @@ class Omex:
         return str(self.manifest.dict())
 
     @staticmethod
-    def from_omex(omex_path: Path) -> "Omex":
-        """Read omex from given path.
-
-        :param omex_path:
-        :return: Omex object
-        """
+    def _check_omex_path(omex_path: Path) -> Path:
+        """Check if omex path exist, is a file and a COMBINE archive."""
         if isinstance(omex_path, str):
             logger.warning(f"'omex_path' should be 'Path': '{omex_path}'")
             omex_path = Path(omex_path)
@@ -259,11 +255,42 @@ class Omex:
         if not omex_path.is_file():
             raise ValueError(f"'omex_path' is not a file: '{omex_path}'.")
 
+        return omex_path
+
+    @staticmethod
+    def is_omex(omex_path: Path) -> bool:
+        """Check if path is an omex archive.
+
+        File must be a zip archive and contain a manifest.xml.
+        """
+        omex_path = Omex._check_omex_path(omex_path)
+
+        if not zipfile.is_zipfile(str(omex_path)):
+            logger.warning(f"Omex path '{omex_path}' is not a zip archive.")
+            return False
+
+        with zipfile.ZipFile(omex_path, mode="r") as zf:
+            try:
+                zf.getinfo("manifest.xml")
+                return True
+            except KeyError:
+                # manifest does not exist in archive
+                logger.warning(f"No 'manifest.xml' in '{omex_path}'.")
+                return False
+
+    @staticmethod
+    def from_omex(omex_path: Path) -> "Omex":
+        """Read omex from given path.
+
+        :param omex_path:
+        :return: Omex object
+        """
+        omex_path = Omex._check_omex_path(omex_path)
+
         # extract archive to tmp directory
         with tempfile.TemporaryDirectory() as tmp_dir:
-            zip_ref = zipfile.ZipFile(omex_path, "r")
-            zip_ref.extractall(tmp_dir)
-            zip_ref.close()
+            with zipfile.ZipFile(omex_path, "r") as zf:
+                zf.extractall(tmp_dir)
 
             return Omex.from_directory(Path(tmp_dir))
 
