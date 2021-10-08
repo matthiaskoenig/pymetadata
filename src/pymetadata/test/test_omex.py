@@ -61,6 +61,12 @@ def test_manifest_to_file(manifest_path, tmp_path: Path) -> None:
     assert manifest2
     assert len(manifest) == len(manifest2)
 
+    for k, e in enumerate(manifest.entries):
+        e2 = manifest2.entries[k]
+        assert e.location == e2.location
+        assert e.format == e2.format
+        assert e.master == e2.master
+
 
 def test_adding_removing_entry_manifest() -> None:
     """Testing adding and removing entries from manifest."""
@@ -93,7 +99,40 @@ def test_read_omex(omex_path: Path) -> None:
 
 
 def test_remove_entry_omex() -> None:
+    """Test removing entry from omex file."""
     omex = Omex.from_omex(COMPMODELS_OMEX)
     omex_len = len(omex.manifest)
     omex.remove_entry_for_location("./README.md")
     assert len(omex.manifest) == omex_len - 1
+
+
+def test_omex_to_directory(tmp_path) -> None:
+    """Test export to directory."""
+    omex = Omex.from_omex(COMPMODELS_OMEX)
+    omex.to_directory(tmp_path)
+    for e in omex.manifest.entries:
+        if e.location != ".":
+            assert (tmp_path / e.location).exists()
+
+    omex2 = Omex.from_directory(tmp_path)
+    for k, e in enumerate(omex.manifest.entries):
+        e2 = omex2.manifest.entries[k]
+        assert e.location == e2.location
+        assert e.format == e2.format
+        assert e.master == e2.master
+
+
+def test_omex_to_omex(tmp_path) -> None:
+    """Test export to directory."""
+    omex = Omex.from_omex(COMPMODELS_OMEX)
+    omex_path = tmp_path / "example.omex"
+    omex.to_omex(omex_path)
+    assert omex_path.exists()
+
+    omex2 = Omex.from_omex(omex_path)
+
+    for k, e in enumerate(omex.manifest.entries):
+        e2 = omex2.manifest.entries[k]
+        assert e.location == e2.location
+        assert e.format == e2.format
+        assert e.master == e2.master

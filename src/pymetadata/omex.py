@@ -141,7 +141,7 @@ class Manifest(BaseModel):
                 master_token = ' master="true"'
             else:
                 master_token = ''
-            return f'  <content location="{e.location}" format="{e.location}"{master_token} />'
+            return f'  <content location="{e.location}" format="{e.format}"{master_token} />'
 
         lines = [
             '<?xml version="1.0" encoding="UTF-8"?>',
@@ -355,9 +355,10 @@ class Omex:
             logger.warning(f"'omex_path' should be 'Path': '{omex_path}'")
             omex_path = Path(omex_path)
 
-        # TODO: write manifest in tmp_dir
+        # write tmp dir
 
-        raise NotImplementedError
+        # compress directory as zip
+
 
     def to_directory(self, output_dir: Path) -> None:
         """Extract combine archive to output directory.
@@ -374,43 +375,20 @@ class Omex:
             logger.warning(f"Creating working directory: {output_dir}")
             output_dir.mkdir(parents=True, exist_ok=True)
 
-        # TODO: copy the tmp_dir
-        raise NotImplementedError
+        # iterate over all locations and copy to destination
+        for entry in self.manifest.entries:
+            if entry.location in [".", "./manifest.xml"]:
+                continue
+            src = self._tmp_dir / entry.location
+            destination = output_dir / entry.location
+            destination.parent.mkdir(parents=True, exist_ok=True)
+            logger.info(f"'{src}' -> '{destination}")
+            shutil.copy2(src=str(src), dst=str(destination))
 
-        # the path cannot exist before !
-
-
-
-
-
-# -----------------------------------------------------------------------------
-
-
-    # def _from_entries(self, entries: Iterable[Entry], add_entries: bool) -> None:
-    #     """Create archive from given entries.
-    #
-    #     :param entries: entries which should be in the archive.
-    #     :param add_entries: boolean flag to add entries or create new archive
-    #     :return:
-    #     """
-    #
-    #     # timestamp
-    #     time_now = libcombine.OmexDescription.getCurrentDateAndTime()
-    #
-    #     for entry in entries:
-    #         print(entry)
-    #         location = entry.location
-    #         path = os.path.join(str(self.working_dir), location)
-    #         if not os.path.exists(path):
-    #             raise IOError(f"File does not exist at given location: {path}")
-    #
-    #         archive.addFile(path, location, entry.format, entry.master)
-    #
-    #     archive.writeToFile(str(self.omex_path))
-    #     archive.cleanUp()
-
-
-
+        # write manifest.xml
+        self.manifest.to_manifest(
+            manifest_path=output_dir / "manifest.xml"
+        )
 
 
     # def locations_by_format(
@@ -473,43 +451,5 @@ class Omex:
     #         raise ValueError(f"Method is not supported '{method}'")
     #
     #     return locations
-
-
-    # def list_contents(self, method: str = "omex") -> List["Content"]:
-    #     """Return list of contents of the combine archive.
-    #
-    #     :param omexPath:
-    #     :param method: method to extract content, only 'omex' supported
-    #     :return: list of contents
-    #     """
-    #     if method not in ["omex"]:
-    #         raise ValueError("Method is not supported: {method}")
-    #
-    #     contents = []
-    #     omex = self._omex_init()
-    #
-    #     for i in range(omex.getNumEntries()):
-    #         entry = omex.getEntry(i)
-    #         location = entry.getLocation()
-    #         format = entry.getFormat()
-    #         master = entry.getMaster()
-    #         info = None
-    #         for formatKey in ["sed-ml", "sbml", "sbgn", "cellml"]:
-    #             if libcombine.KnownFormats_isFormat(formatKey, format):
-    #                 info = omex.extractEntryToString(location)
-    #
-    #         content = Content(
-    #             location=location,
-    #             format=format,
-    #             master=master,
-    #             info=info,
-    #         )
-    #
-    #         contents.append(content)
-    #
-    #     omex.cleanUp()
-    #
-    #     return contents
-
 
 
