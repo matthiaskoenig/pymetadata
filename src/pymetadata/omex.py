@@ -338,9 +338,12 @@ class Omex:
         # add entry
         self.manifest.add_entry(entry)
 
-    def remove_entry(self, entry: ManifestEntry):
-        # removes the entry and corresponding path from
-        raise NotImplementedError
+    def remove_entry_for_location(self, location: str) -> Optional[ManifestEntry]:
+        """Remove entry and corresponding entry_path."""
+        entry = self.manifest.remove_entry_for_location(location)
+        if entry:
+            destination = self._tmp_dir / entry.location
+            os.remove(destination)
 
     def to_omex(self, omex_path: Optional[Path] = None):
         """Write omex to path.

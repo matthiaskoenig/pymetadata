@@ -5,6 +5,10 @@ from pymetadata.omex import ManifestEntry, Manifest, Omex
 from pymetadata import RESOURCES_DIR
 
 
+SHOWCASE_OMEX = RESOURCES_DIR / "testdata" / "omex" / "CombineArchiveShowCase.omex"
+COMPMODELS_OMEX = RESOURCES_DIR / "testdata" / "omex" / "CompModels.omex"
+
+
 def test_entry_from_dict():
     entry_data = {
         'location': "./model/model1.xml",
@@ -78,10 +82,18 @@ def test_adding_removing_entry_manifest() -> None:
 
 
 @pytest.mark.parametrize("omex_path", [
-    RESOURCES_DIR / "testdata" / "omex" / "CompModels.omex",
-    RESOURCES_DIR / "testdata" / "omex" / "CombineArchiveShowCase.omex",
+    COMPMODELS_OMEX,
+    SHOWCASE_OMEX,
 ])
-def test_read_omex(omex_path):
+def test_read_omex(omex_path: Path) -> None:
+    """Test reading of omex files."""
     omex = Omex.from_omex(omex_path)
     assert omex
     assert omex.manifest
+
+
+def test_remove_entry_omex() -> None:
+    omex = Omex.from_omex(COMPMODELS_OMEX)
+    omex_len = len(omex.manifest)
+    omex.remove_entry_for_location("./README.md")
+    assert len(omex.manifest) == omex_len - 1

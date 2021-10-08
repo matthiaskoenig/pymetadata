@@ -13,6 +13,7 @@ omex_example: Path = RESOURCES_DIR / "testdata" / "omex" / "CompModels.omex"
 omex = Omex.from_omex(omex_example)
 console.print(omex.manifest.dict())
 
+
 # omex.to_directory(Path("./testomex"))
 
 
