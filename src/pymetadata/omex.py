@@ -49,6 +49,7 @@ import os
 import shutil
 import tempfile
 import zipfile
+from enum import Enum
 from pathlib import Path
 from typing import Dict, List, Optional
 
@@ -61,6 +62,46 @@ from pymetadata.console import console
 
 
 logger = log.get_logger(__name__)
+
+
+__all__ = ["EntryFormat", "ManifestEntry", "Manifest", "Omex"]
+
+
+class EntryFormat(str, Enum):
+    """Enum for common formats."""
+
+    SBML = "http://identifiers.org/combine.specifications/sbml"
+    SBML_L2V1 = "http://identifiers.org/combine.specifications/sbml.level-2.version-1"
+    SBML_L2V2 = "http://identifiers.org/combine.specifications/sbml.level-2.version-2"
+    SBML_L2V3 = "http://identifiers.org/combine.specifications/sbml.level-2.version-3"
+    SBML_L2V4 = "http://identifiers.org/combine.specifications/sbml.level-2.version-4"
+    SBML_L2V5 = "http://identifiers.org/combine.specifications/sbml.level-2.version-5"
+    SBML_L3V1 = "http://identifiers.org/combine.specifications/sbml.level-3.version-1"
+    SBML_L3V2 = "http://identifiers.org/combine.specifications/sbml.level-3.version-2"
+
+    SEDML = "http://identifiers.org/combine.specifications/sed-ml"
+    SEDML_L1V1 = (
+        "http://identifiers.org/combine.specifications/sed-ml.level-1.version-1"
+    )
+    SEDML_L1V2 = (
+        "http://identifiers.org/combine.specifications/sed-ml.level-1.version-2"
+    )
+    SEDML_L1V3 = (
+        "http://identifiers.org/combine.specifications/sed-ml.level-1.version-3"
+    )
+
+    CELLML = "http://identifiers.org/combine.specifications/cellml"
+    SBGN = "http://identifiers.org/combine.specifications/sbgn"
+    SBGN_PD = "http://identifiers.org/combine.specifications/sbgn.pd"
+
+    OMEX_METADATA = "http://identifiers.org/combine.specifications/omex-metadata"
+
+    MARKDOWN = "http://purl.org/NET/mediatypes/text/x-markdown"
+    PNG = "http://purl.org/NET/mediatypes/image/png"
+    SVG = "http://purl.org/NET/mediatypes/image/svg+xml"
+    PDF = "http://purl.org/NET/mediatypes/application/pdf"
+    XML = "http://purl.org/NET/mediatypes/application/xml"
+    PLAIN = "http://purl.org/NET/mediatypes/text/plain"
 
 
 class ManifestEntry(BaseModel):
