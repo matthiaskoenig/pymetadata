@@ -698,6 +698,8 @@ _terms = {
     "SBO_0000693": "constraint-based framework",
 }
 
+pattern = r"^SBO_\d{7}$"
+
 
 class SBO(str, Enum):
     """Enum for SBO ontology."""
@@ -3721,6 +3723,7 @@ class SBO(str, Enum):
                 raise ValueError(sbo + " is not a SBO id.")
             if sbo.startswith("SBO:"):
                 sbo = sbo.replace(":", "_")
+
             term = getattr(cls, sbo)
 
         elif isinstance(sbo, "SBO"):

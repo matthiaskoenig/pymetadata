@@ -14,7 +14,7 @@ _terms = {
     {% endfor %}
 }
 
-pattern = {{pattern}}
+pattern = r"{{pattern}}"
 
 
 class {{ontology_id}}(str, Enum):

@@ -1992,6 +1992,8 @@ _terms = {
     "ECO_0007850": "inference of sequence features from visual inspection",
 }
 
+pattern = r"^ECO_\d{7}$"
+
 
 class ECO(str, Enum):
     """Enum for ECO ontology."""
@@ -15455,6 +15457,7 @@ class ECO(str, Enum):
                 raise ValueError(eco + " is not a ECO id.")
             if eco.startswith("ECO:"):
                 eco = eco.replace(":", "_")
+
             term = getattr(cls, eco)
 
         elif isinstance(eco, "ECO"):

@@ -492,11 +492,12 @@ _terms = {
     "KISAO_0000821": "intensive property",
     "KISAO_0000822": "extensive property",
     "KISAO_0000824": "aggregation function",
-    "KISAO_0000825": "mean",
-    "KISAO_0000826": "standard deviation",
-    "KISAO_0000827": "standard error",
-    "KISAO_0000828": "maximum",
-    "KISAO_0000829": "minimum",
+    "KISAO_0000825": "mean ignoring NaN",
+    "KISAO_0000826": "standard deviation ignoring NaN",
+    "KISAO_0000827": "standard error ignoring NaN",
+    "KISAO_0000828": "maximum ignoring NaN",
+    "KISAO_0000829": "minimum ignoring NaN",
+    "KISAO_0000830": "maximum",
     "KISAO_0000831": "model and simulation property",
     "KISAO_0000832": "time",
     "KISAO_0000834": "rate of change",
@@ -505,7 +506,29 @@ _terms = {
     "KISAO_0000837": "particle number",
     "KISAO_0000838": "concentration",
     "KISAO_0000839": "temperature",
+    "KISAO_0000840": "minimum",
+    "KISAO_0000841": "mean",
+    "KISAO_0000842": "standard deviation",
+    "KISAO_0000843": "standard error",
+    "KISAO_0000844": "sum ignoring NaN",
+    "KISAO_0000845": "sum",
+    "KISAO_0000846": "product ignoring NaN",
+    "KISAO_0000847": "product",
+    "KISAO_0000848": "cumulative sum ignoring NaN",
+    "KISAO_0000849": "cumulative sum",
+    "KISAO_0000850": "cumulative product ignoring NaN",
+    "KISAO_0000851": "cumulative product",
+    "KISAO_0000852": "count ignoring NaN",
+    "KISAO_0000853": "count",
+    "KISAO_0000854": "length ignoring NaN",
+    "KISAO_0000855": "length",
+    "KISAO_0000856": "median ignoring NaN",
+    "KISAO_0000857": "median",
+    "KISAO_0000858": "variance ignoring NaN",
+    "KISAO_0000859": "variance",
 }
+
+pattern = r"^KISAO_\d{7}$"
 
 
 class KISAO(str, Enum):
@@ -2463,25 +2486,29 @@ class KISAO(str, Enum):
     KISAO_0000824 = "KISAO_0000824"
     AGGREGATION_FUNCTION = "KISAO_0000824"
 
-    # mean
+    # mean ignoring NaN
     KISAO_0000825 = "KISAO_0000825"
-    MEAN = "KISAO_0000825"
+    MEAN_IGNORING_NAN = "KISAO_0000825"
 
-    # standard deviation
+    # standard deviation ignoring NaN
     KISAO_0000826 = "KISAO_0000826"
-    STANDARD_DEVIATION = "KISAO_0000826"
+    STANDARD_DEVIATION_IGNORING_NAN = "KISAO_0000826"
 
-    # standard error
+    # standard error ignoring NaN
     KISAO_0000827 = "KISAO_0000827"
-    STANDARD_ERROR = "KISAO_0000827"
+    STANDARD_ERROR_IGNORING_NAN = "KISAO_0000827"
+
+    # maximum ignoring NaN
+    KISAO_0000828 = "KISAO_0000828"
+    MAXIMUM_IGNORING_NAN = "KISAO_0000828"
+
+    # minimum ignoring NaN
+    KISAO_0000829 = "KISAO_0000829"
+    MINIMUM_IGNORING_NAN = "KISAO_0000829"
 
     # maximum
-    KISAO_0000828 = "KISAO_0000828"
-    MAXIMUM = "KISAO_0000828"
-
-    # minimum
-    KISAO_0000829 = "KISAO_0000829"
-    MINIMUM = "KISAO_0000829"
+    KISAO_0000830 = "KISAO_0000830"
+    MAXIMUM = "KISAO_0000830"
 
     # model and simulation property
     KISAO_0000831 = "KISAO_0000831"
@@ -2515,6 +2542,86 @@ class KISAO(str, Enum):
     KISAO_0000839 = "KISAO_0000839"
     TEMPERATURE = "KISAO_0000839"
 
+    # minimum
+    KISAO_0000840 = "KISAO_0000840"
+    MINIMUM = "KISAO_0000840"
+
+    # mean
+    KISAO_0000841 = "KISAO_0000841"
+    MEAN = "KISAO_0000841"
+
+    # standard deviation
+    KISAO_0000842 = "KISAO_0000842"
+    STANDARD_DEVIATION = "KISAO_0000842"
+
+    # standard error
+    KISAO_0000843 = "KISAO_0000843"
+    STANDARD_ERROR = "KISAO_0000843"
+
+    # sum ignoring NaN
+    KISAO_0000844 = "KISAO_0000844"
+    SUM_IGNORING_NAN = "KISAO_0000844"
+
+    # sum
+    KISAO_0000845 = "KISAO_0000845"
+    SUM = "KISAO_0000845"
+
+    # product ignoring NaN
+    KISAO_0000846 = "KISAO_0000846"
+    PRODUCT_IGNORING_NAN = "KISAO_0000846"
+
+    # product
+    KISAO_0000847 = "KISAO_0000847"
+    PRODUCT = "KISAO_0000847"
+
+    # cumulative sum ignoring NaN
+    KISAO_0000848 = "KISAO_0000848"
+    CUMULATIVE_SUM_IGNORING_NAN = "KISAO_0000848"
+
+    # cumulative sum
+    KISAO_0000849 = "KISAO_0000849"
+    CUMULATIVE_SUM = "KISAO_0000849"
+
+    # cumulative product ignoring NaN
+    KISAO_0000850 = "KISAO_0000850"
+    CUMULATIVE_PRODUCT_IGNORING_NAN = "KISAO_0000850"
+
+    # cumulative product
+    KISAO_0000851 = "KISAO_0000851"
+    CUMULATIVE_PRODUCT = "KISAO_0000851"
+
+    # count ignoring NaN
+    KISAO_0000852 = "KISAO_0000852"
+    COUNT_IGNORING_NAN = "KISAO_0000852"
+
+    # count
+    KISAO_0000853 = "KISAO_0000853"
+    COUNT = "KISAO_0000853"
+
+    # length ignoring NaN
+    KISAO_0000854 = "KISAO_0000854"
+    LENGTH_IGNORING_NAN = "KISAO_0000854"
+
+    # length
+    KISAO_0000855 = "KISAO_0000855"
+    LENGTH = "KISAO_0000855"
+
+    # median ignoring NaN
+    KISAO_0000856 = "KISAO_0000856"
+    MEDIAN_IGNORING_NAN = "KISAO_0000856"
+
+    # median
+    KISAO_0000857 = "KISAO_0000857"
+    MEDIAN = "KISAO_0000857"
+
+    # variance ignoring NaN
+    KISAO_0000858 = "KISAO_0000858"
+    VARIANCE_IGNORING_NAN = "KISAO_0000858"
+
+    # variance
+    KISAO_0000859 = "KISAO_0000859"
+    VARIANCE = "KISAO_0000859"
+
     @staticmethod
     def get_name(kisao: "KISAO") -> Optional[str]:
         """Get name for term.
@@ -2532,6 +2639,7 @@ class KISAO(str, Enum):
                 raise ValueError(kisao + " is not a KISAO id.")
             if kisao.startswith("KISAO:"):
                 kisao = kisao.replace(":", "_")
+
             term = getattr(cls, kisao)
 
         elif isinstance(kisao, "KISAO"):
