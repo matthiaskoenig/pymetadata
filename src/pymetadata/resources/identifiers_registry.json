@@ -37931,6 +37931,50 @@
     "deprecated": false,
     "deprecationDate": null
   },
+  "biosimulations": {
+    "id": 2903,
+    "prefix": "biosimulations",
+    "name": "biosimulations",
+    "pattern": "^[a-zA-Z0-9_-]{3,}$",
+    "namespaceEmbeddedInLui": false,
+    "description": "BioSimulations is an open repository of simulation projects, including simulation experiments, their results, and data visualizations of their results. BioSimulations supports a broad range of model languages, modeling frameworks, simulation algorithms, and simulation software tools.",
+    "mirId": "MIR:00000880",
+    "resources": [
+      {
+        "id": 2904,
+        "providerCode": "icahn",
+        "name": "Icahn School of Medicine at Mount Sinai",
+        "urlPattern": "https://biosimulations.org/projects/{$id}",
+        "mirId": "MIR:00000879",
+        "description": "Organization information obtained from ROR API using ROR ID 'https://ror.org/04a9tmd77' with Wikidata IDs [Q1950740], and ISNI IDs [0000 0001 0670 2351]",
+        "official": true,
+        "sampleId": "Yeast-cell-cycle-Irons-J-Theor-Biol-2009",
+        "resourceHomeUrl": "https://icahn.mssm.edu/",
+        "institution": {
+          "id": 2247,
+          "name": "Icahn School of Medicine at Mount Sinai",
+          "homeUrl": "https://icahn.mssm.edu/",
+          "description": "The Icahn School of Medicine at Mount Sinai is an international leader in medical and scientific training, biomedical research, and patient care. It is the medical school for the Mount Sinai Health System, which includes eight hospital campuses, and has more than 5,000 faculty and nearly 2,000 students, residents and fellows.",
+          "rorId": null,
+          "location": {
+            "countryCode": "US",
+            "countryName": "United States"
+          }
+        },
+        "location": {
+          "countryCode": "US",
+          "countryName": "United States"
+        },
+        "deprecated": false,
+        "deprecationDate": null
+      }
+    ],
+    "created": "2021-10-11T12:50:59.916+0000",
+    "modified": "2021-10-11T12:50:59.916+0000",
+    "sampleId": "Yeast-cell-cycle-Irons-J-Theor-Biol-2009",
+    "deprecated": false,
+    "deprecationDate": null
+  },
   "omim": {
     "id": null,
     "prefix": "omim",
