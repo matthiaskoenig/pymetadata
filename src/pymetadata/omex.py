@@ -542,11 +542,6 @@ class Omex:
 
         For all SED-ML files in the directory the master attribute is set to True.
         """
-        logger.warning(
-            "COMBINE archives should be created by adding the "
-            "manifest entries via 'add_entry'. The 'from_directory' should not be"
-            "used."
-        )
         if isinstance(directory, str):
             logger.warning(f"'directory' should be 'Path': '{directory}'")
             directory = Path(directory)
@@ -591,7 +586,7 @@ class Omex:
                 else:
                     if manifest and location not in manifest:
                         logger.warning(
-                            f"Location missing from existing manifest.xml: '{location}'"
+                            f"Entry with location missing in manifest.xml: '{location}'"
                         )
 
                     format = libcombine.KnownFormats.guessFormat(file_path)
