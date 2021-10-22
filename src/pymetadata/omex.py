@@ -12,6 +12,7 @@ TODO: metadata (creates, modifications, ...)
 """
 
 import os
+import pprint
 import shutil
 import tempfile
 import zipfile
@@ -473,7 +474,7 @@ class Omex:
 
     def __str__(self) -> str:
         """Get contents of archive string."""
-        return str(self.manifest.dict())
+        return pprint.pformat(self.manifest.entries, indent=4, compact=True)
 
     def get_path(self, location: str) -> Path:
         """Get path for given location."""
@@ -530,10 +531,10 @@ class Omex:
             with zipfile.ZipFile(omex_path, "r") as zf:
                 zf.extractall(tmp_dir)
 
-            return Omex._from_directory(Path(tmp_dir))
+            return Omex.from_directory(Path(tmp_dir))
 
     @classmethod
-    def _from_directory(cls, directory: Path) -> "Omex":
+    def from_directory(cls, directory: Path) -> "Omex":
         """Create a COMBINE archive from a given directory.
 
         The file types are inferred,
@@ -565,7 +566,10 @@ class Omex:
         if manifest_path.exists():
             manifest = Manifest.from_manifest(manifest_path)
         else:
-            logger.warning(f"No 'manifest.xml' in directory: '{directory}'.")
+            logger.error(
+                f"No 'manifest.xml' in directory: '{directory}'. Trying "
+                f"to create manifest.xml."
+            )
 
         # new archive
         omex = Omex()
@@ -646,10 +650,24 @@ class Omex:
             os.remove(destination)
         return entry
 
-    def to_omex(self, omex_path: Path) -> None:
+    def to_omex(
+        self,
+        omex_path: Path,
+        compression: int = zipfile.ZIP_BZIP2,
+        compresslevel: int = 9,
+    ) -> None:
         """Write omex to path.
 
+        The `compresslevel` parameter controls the compression level to use when
+        writing files to the archive. When using `ZIP_STORED` or `ZIP_LZMA` it has no
+        effect. When using `ZIP_DEFLATED` integers 0 through 9 are accepted
+        (see zlib for more information). When using ZIP_BZIP2 integers 1 through 9
+        are accepted (see bz2 for more information). The larger the value the better
+        te compression
+
         :param omex_path:
+        :param compression: compression algorithm
+        :param compressionlevel: level of compression
         :return:
         """
         if isinstance(omex_path, str):
@@ -664,13 +682,16 @@ class Omex:
             self.to_directory(output_dir=Path(tmp_dir))
 
             # compress directory as zip
-            with zipfile.ZipFile(omex_path, mode="w") as zf:
+            with zipfile.ZipFile(
+                omex_path,
+                mode="w",
+                compression=compression,
+                compresslevel=compresslevel,
+            ) as zf:
                 for e in self.manifest.entries:
                     if e.location != ".":
                         f = Path(tmp_dir) / e.location
                         zf.write(filename=str(f), arcname=e.location)
-
-                # zf.printdir()
 
     def to_directory(self, output_dir: Path) -> None:
         """Extract combine archive to output directory.

@@ -128,7 +128,7 @@ def test_omex_to_directory(tmp_path: Path) -> None:
         if e.location != ".":
             assert (tmp_path / e.location).exists()
 
-    omex2 = Omex._from_directory(tmp_path)
+    omex2 = Omex.from_directory(tmp_path)
     for k, e in enumerate(omex.manifest.entries):
         e2 = omex2.manifest.entries[k]
         assert e.location == e2.location
