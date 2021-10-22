@@ -3,7 +3,7 @@ from pathlib import Path
 import pytest
 
 from pymetadata import RESOURCES_DIR
-from pymetadata.omex import Manifest, ManifestEntry, Omex
+from pymetadata.omex import FormatKey, Manifest, ManifestEntry, Omex
 
 
 SHOWCASE_OMEX = RESOURCES_DIR / "testdata" / "omex" / "CombineArchiveShowCase.omex"
@@ -128,7 +128,7 @@ def test_omex_to_directory(tmp_path: Path) -> None:
         if e.location != ".":
             assert (tmp_path / e.location).exists()
 
-    omex2 = Omex.from_directory(tmp_path)
+    omex2 = Omex._from_directory(tmp_path)
     for k, e in enumerate(omex.manifest.entries):
         e2 = omex2.manifest.entries[k]
         assert e.location == e2.location
@@ -165,3 +165,21 @@ def test_omex_to_omex(tmp_path: Path) -> None:
 def test_is_omex(omex_path: Path, omex_flag: bool) -> None:
     """Test if path is a COMBINE archive."""
     assert Omex.is_omex(omex_path) == omex_flag
+
+
+def test_entries_by_format() -> None:
+    """Test that entries can be retrieved by format key."""
+    omex = Omex.from_omex(SHOWCASE_OMEX)
+    sbml_entries = omex.entries_by_format(FormatKey.SBML)
+    assert sbml_entries
+    assert len(sbml_entries) == 1
+    assert sbml_entries[0].format.startswith(
+        "http://identifiers.org/combine.specifications/sbml"
+    )
+
+    sedml_entries = omex.entries_by_format(FormatKey.SEDML)
+    assert sedml_entries
+    assert len(sedml_entries) == 2
+    assert sedml_entries[0].format.startswith(
+        "http://identifiers.org/combine.specifications/sed-ml"
+    )

@@ -33,6 +33,14 @@ logger = log.get_logger(__name__)
 __all__ = ["EntryFormat", "ManifestEntry", "Manifest", "Omex"]
 
 
+class FormatKey(str, Enum):
+    """FormatKeys for getting classes of files."""
+
+    SBML = "sbml"
+    SEDML = "sed-ml"
+    SBGN = "sbgn"
+
+
 class EntryFormat(str, Enum):
     """Enum for common formats."""
 
@@ -522,10 +530,10 @@ class Omex:
             with zipfile.ZipFile(omex_path, "r") as zf:
                 zf.extractall(tmp_dir)
 
-            return Omex.from_directory(Path(tmp_dir))
+            return Omex._from_directory(Path(tmp_dir))
 
     @classmethod
-    def from_directory(cls, directory: Path) -> "Omex":
+    def _from_directory(cls, directory: Path) -> "Omex":
         """Create a COMBINE archive from a given directory.
 
         The file types are inferred,
@@ -533,6 +541,11 @@ class Omex:
 
         For all SED-ML files in the directory the master attribute is set to True.
         """
+        logger.warning(
+            "COMBINE archives should be created by adding the "
+            "manifest entries via 'add_entry'. The 'from_directory' should not be"
+            "used."
+        )
         if isinstance(directory, str):
             logger.warning(f"'directory' should be 'Path': '{directory}'")
             directory = Path(directory)
@@ -687,63 +700,15 @@ class Omex:
         # write manifest.xml
         self.manifest.to_manifest(manifest_path=output_dir / "manifest.xml")
 
-    # def locations_by_format(
-    #     self, format_key: str = None, method: str = "omex"
-    # ) -> List[Tuple[str, bool]]:
-    #     """Get locations to files with given format in the archive.
-    #
-    #     Uses the libcombine KnownFormats for formatKey, e.g., 'sed-ml' or 'sbml'.
-    #     Files which have a master=True have higher priority and are listed first.
-    #
-    #     :param omex_path:
-    #     :param format_key:
-    #     :param method:
-    #     :return: List of files with master flags
-    #     """
-    #     if not format_key:
-    #         raise ValueError("Format must be specified.")
-    #
-    #     locations: List[Tuple[str, bool]] = []
-    #
-    #     if method == "omex":
-    #         archive: libcombine.CombineArchive = self._omex_init()
-    #
-    #         for i in range(archive.getNumEntries()):
-    #             entry: libcombine.CaContent = archive.getEntry(i)
-    #             format: str = entry.getFormat()
-    #             master: bool = entry.getMaster()
-    #             if libcombine.KnownFormats.isFormat(format_key, format):
-    #                 loc: str = entry.getLocation()
-    #                 if (master is None) or (master is False):
-    #                     locations.append((loc, False))
-    #                 else:
-    #                     locations.append((loc, True))
-    #         archive.cleanUp()
-    #
-    #     elif method == "zip":
-    #         logger.warning("Master flag cannot be resolved, use method 'omex' instead.")
-    #         # extract to tmpfile and guess format
-    #         tmp_dir = tempfile.mkdtemp()
-    #
-    #         try:
-    #             self.extract(output_dir=Path(tmp_dir), method="zip")
-    #
-    #             # iterate over all locations & guess format
-    #             for root, _dirs, files in os.walk(tmp_dir):
-    #                 for file in files:
-    #                     file_path = os.path.join(root, file)
-    #                     location = os.path.relpath(file_path, tmp_dir)
-    #                     # guess the format
-    #                     format = libcombine.KnownFormats.guessFormat(file_path)
-    #                     if libcombine.KnownFormats.isFormat(
-    #                         formatKey=format_key, format=format
-    #                     ):
-    #                         locations.append((location, False))
-    #
-    #         finally:
-    #             shutil.rmtree(tmp_dir)
-    #
-    #     else:
-    #         raise ValueError(f"Method is not supported '{method}'")
-    #
-    #     return locations
+    def entries_by_format(self, format_key: FormatKey) -> List[ManifestEntry]:
+        """Get entries with given format in the archive."""
+
+        entries: List[ManifestEntry] = []
+        for entry in self.manifest.entries:
+            if libcombine.KnownFormats.isFormat(format_key, entry.format):
+                entries.append(entry)
+
+        return entries
+
+    # @staticmethod
+    # def guess_format() -> str:
