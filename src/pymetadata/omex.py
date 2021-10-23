@@ -2,8 +2,8 @@
 COMBINE Archive support.
 
 This module provides an abstraction around the COMBINE archive. Common operations
-such as archive creation, archive extraction, creating archives from entries or directories,
-working with the `manifest.xml` are implemented.
+such as archive creation, archive extraction, creating archives from entries or
+directories, working with the `manifest.xml` are implemented.
 
 When working with COMBINE archives these wrapper functions should be used.
 The current version has no support for metadata manipulation.
@@ -20,12 +20,10 @@ from enum import Enum
 from pathlib import Path
 from typing import Dict, List, Optional
 
-import libcombine
 import xmltodict
 from pydantic import BaseModel, PrivateAttr
 
 from pymetadata import log
-from pymetadata.console import console
 
 
 logger = log.get_logger(__name__)
@@ -34,291 +32,233 @@ logger = log.get_logger(__name__)
 __all__ = ["EntryFormat", "ManifestEntry", "Manifest", "Omex"]
 
 
-class FormatKey(str, Enum):
-    """FormatKeys for getting classes of files."""
-
-    SBML = "sbml"
-    SEDML = "sed-ml"
-    SBGN = "sbgn"
+IDENTIFIERS_PREFIX = "https://identifiers.org/combine.specifications"
+PURL_PREFIX = "https://purl.org/NET/mediatypes/"
 
 
 class EntryFormat(str, Enum):
     """Enum for common formats."""
 
-    SBML = "http://identifiers.org/combine.specifications/sbml"
-    SBML_L2V1 = "http://identifiers.org/combine.specifications/sbml.level-2.version-1"
-    SBML_L2V2 = "http://identifiers.org/combine.specifications/sbml.level-2.version-2"
-    SBML_L2V3 = "http://identifiers.org/combine.specifications/sbml.level-2.version-3"
-    SBML_L2V4 = "http://identifiers.org/combine.specifications/sbml.level-2.version-4"
-    SBML_L2V5 = "http://identifiers.org/combine.specifications/sbml.level-2.version-5"
-    SBML_L3V1 = "http://identifiers.org/combine.specifications/sbml.level-3.version-1"
-    SBML_L3V2 = "http://identifiers.org/combine.specifications/sbml.level-3.version-2"
+    SBML = IDENTIFIERS_PREFIX + "sbml"
+    SBML_L1V1 = (IDENTIFIERS_PREFIX + "sbml.level-1.version-1",)
+    SBML_L1V2 = (IDENTIFIERS_PREFIX + "sbml.level-1.version-2",)
+    SBML_L2V1 = IDENTIFIERS_PREFIX + "sbml.level-2.version-1"
+    SBML_L2V2 = IDENTIFIERS_PREFIX + "sbml.level-2.version-2"
+    SBML_L2V3 = IDENTIFIERS_PREFIX + "sbml.level-2.version-3"
+    SBML_L2V4 = IDENTIFIERS_PREFIX + "sbml.level-2.version-4"
+    SBML_L2V5 = IDENTIFIERS_PREFIX + "sbml.level-2.version-5"
+    SBML_L3V1 = IDENTIFIERS_PREFIX + "sbml.level-3.version-1"
+    SBML_L3V2 = IDENTIFIERS_PREFIX + "sbml.level-3.version-2"
 
-    SEDML = "http://identifiers.org/combine.specifications/sed-ml"
-    SEDML_L1V1 = (
-        "http://identifiers.org/combine.specifications/sed-ml.level-1.version-1"
-    )
-    SEDML_L1V2 = (
-        "http://identifiers.org/combine.specifications/sed-ml.level-1.version-2"
-    )
-    SEDML_L1V3 = (
-        "http://identifiers.org/combine.specifications/sed-ml.level-1.version-3"
-    )
+    SEDML = IDENTIFIERS_PREFIX + "sed-ml"
+    SEDML_L1V1 = IDENTIFIERS_PREFIX + "sed-ml.level-1.version-1"
+    SEDML_L1V2 = IDENTIFIERS_PREFIX + "sed-ml.level-1.version-2"
+    SEDML_L1V3 = IDENTIFIERS_PREFIX + "sed-ml.level-1.version-3"
+    SEDML_L1V4 = IDENTIFIERS_PREFIX + "sed-ml.level-1.version-4"
 
-    CELLML = "http://identifiers.org/combine.specifications/cellml"
-    SBGN = "http://identifiers.org/combine.specifications/sbgn"
-    SBGN_PD = "http://identifiers.org/combine.specifications/sbgn.pd"
+    CELLML = IDENTIFIERS_PREFIX + "cellml"
+    SBGN = IDENTIFIERS_PREFIX + "sbgn"
+    SBGN_PD = IDENTIFIERS_PREFIX + "sbgn.pd"
 
-    OMEX_METADATA = "http://identifiers.org/combine.specifications/omex-metadata"
+    OMEX_METADATA = IDENTIFIERS_PREFIX + "omex-metadata"
 
-    MARKDOWN = "http://purl.org/NET/mediatypes/text/x-markdown"
-    PNG = "http://purl.org/NET/mediatypes/image/png"
-    SVG = "http://purl.org/NET/mediatypes/image/svg+xml"
-    PDF = "http://purl.org/NET/mediatypes/application/pdf"
-    XML = "http://purl.org/NET/mediatypes/application/xml"
-    PLAIN = "http://purl.org/NET/mediatypes/text/plain"
+    MARKDOWN = PURL_PREFIX + "text/x-markdown"
+    PLAIN = PURL_PREFIX + "text/plain"
 
-
-# FIXME: info from https://github.com/sbmlteam/libCombine/blob/master/src/combine/knownformats.cpp
-# "sbml",{
-#       "http://identifiers.org/combine.specifications/sbml",
-#       "http://identifiers.org/combine.specifications/sbml.level-1.version-1",
-#       "http://identifiers.org/combine.specifications/sbml.level-1.version-2",
-#       "http://identifiers.org/combine.specifications/sbml.level-2.version-1",
-#       "http://identifiers.org/combine.specifications/sbml.level-2.version-2",
-#       "http://identifiers.org/combine.specifications/sbml.level-2.version-3",
-#       "http://identifiers.org/combine.specifications/sbml.level-2.version-4",
-#       "http://identifiers.org/combine.specifications/sbml.level-2.version-5",
-#       "http://identifiers.org/combine.specifications/sbml.level-3.version-1",
-#       "http://identifiers.org/combine.specifications/sbml.level-3.version-2",
-#       "http://identifiers.org/combine.specifications/sbml.level-1.version.1",
-#       "http://identifiers.org/combine.specifications/sbml.level-1.version.2",
-#       "http://identifiers.org/combine.specifications/sbml.level-2.version.1",
-#       "http://identifiers.org/combine.specifications/sbml.level-2.version.2",
-#       "http://identifiers.org/combine.specifications/sbml.level-2.version.3",
-#       "http://identifiers.org/combine.specifications/sbml.level-2.version.4",
-#       "http://identifiers.org/combine.specifications/sbml.level-2.version.5",
-#       "http://identifiers.org/combine.specifications/sbml.level-3.version.1",
-#       "http://identifiers.org/combine.specifications/sbml.level-3.version.2",
-#     } },
-#     { "sedml",
-#     {
-#       "http://identifiers.org/combine.specifications/sed-ml",
-#       "http://identifiers.org/combine.specifications/sedml",
-#       "http://identifiers.org/combine.specifications/sed-ml.level-1.version-1",
-#       "http://identifiers.org/combine.specifications/sed-ml.level-1.version-2",
-#       "http://identifiers.org/combine.specifications/sed-ml.level-1.version-3"
-#     } },
-#     { "cellml",{ "http://identifiers.org/combine.specifications/cellml" } },
-#     { "sed-ml",
-#     {
-#       "http://identifiers.org/combine.specifications/sed-ml",
-#       "http://identifiers.org/combine.specifications/sedml",
-#       "http://identifiers.org/combine.specifications/sed-ml.level-1.version-1",
-#       "http://identifiers.org/combine.specifications/sed-ml.level-1.version-2",
-#       "http://identifiers.org/combine.specifications/sed-ml.level-1.version-3"
-#     } },
-#     { "sbgn",{ "http://identifiers.org/combine.specifications/sbgn" } },
-#     { "omex",{ "http://identifiers.org/combine.specifications/omex-metadata" } },
-#     { "manifest",{
-#       "http://identifiers.org/combine.specifications/omex",
-#       "http://identifiers.org/combine.specifications/omex-manifest",
-#       "http://identifiers.org/combine.specifications/omex.version-1",
-#     } },
-#     { "copasi",{ "application/x-copasi" } },
-#     { "sedx",{ "application/x-sed-ml-archive" } },
-#     { "png",{ "image/png" } },
-#     { "csv",{ "text/csv" } },
-#     { "323",{ "text/h323" } },
-#     { "acx",{ "application/internet-property-stream" } },
-#     { "ai",{ "application/postscript" } },
-#     { "aif",{ "audio/x-aiff" } },
-#     { "aifc",{ "audio/x-aiff" } },
-#     { "aiff",{ "audio/x-aiff" } },
-#     { "asf",{ "video/x-ms-asf" } },
-#     { "asr",{ "video/x-ms-asf" } },
-#     { "asx",{ "video/x-ms-asf" } },
-#     { "au",{ "audio/basic" } },
-#     { "avi",{ "video/x-msvideo" } },
-#     { "axs",{ "application/olescript" } },
-#     { "bas",{ "text/plain" } },
-#     { "bcpio",{ "application/x-bcpio" } },
-#     { "bin",{ "application/octet-stream" } },
-#     { "bmp",{ "image/bmp" } },
-#     { "c",{ "text/plain" } },
-#     { "cat",{ "application/vnd.ms-pkiseccat" } },
-#     { "cdf",{ "application/x-cdf" } },
-#     { "cer",{ "application/x-x509-ca-cert" } },
-#     { "class",{ "application/octet-stream" } },
-#     { "clp",{ "application/x-msclip" } },
-#     { "cmx",{ "image/x-cmx" } },
-#     { "cod",{ "image/cis-cod" } },
-#     { "cpio",{ "application/x-cpio" } },
-#     { "crd",{ "application/x-mscardfile" } },
-#     { "crl",{ "application/pkix-crl" } },
-#     { "crt",{ "application/x-x509-ca-cert" } },
-#     { "csh",{ "application/x-csh" } },
-#     { "css",{ "text/css" } },
-#     { "dcr",{ "application/x-director" } },
-#     { "der",{ "application/x-x509-ca-cert" } },
-#     { "dir",{ "application/x-director" } },
-#     { "dll",{ "application/x-msdownload" } },
-#     { "dms",{ "application/octet-stream" } },
-#     { "doc",{ "application/msword" } },
-#     { "dot",{ "application/msword" } },
-#     { "dvi",{ "application/x-dvi" } },
-#     { "dxr",{ "application/x-director" } },
-#     { "eps",{ "application/postscript" } },
-#     { "etx",{ "text/x-setext" } },
-#     { "evy",{ "application/envoy" } },
-#     { "exe",{ "application/octet-stream" } },
-#     { "fif",{ "application/fractals" } },
-#     { "flr",{ "x-world/x-vrml" } },
-#     { "gif",{ "image/gif" } },
-#     { "gtar",{ "application/x-gtar" } },
-#     { "gz",{ "application/x-gzip" } },
-#     { "h",{ "text/plain" } },
-#     { "hdf",{ "application/x-hdf" } },
-#     { "hlp",{ "application/winhlp" } },
-#     { "hqx",{ "application/mac-binhex40" } },
-#     { "hta",{ "application/hta" } },
-#     { "htc",{ "text/x-component" } },
-#     { "htm",{ "text/html" } },
-#     { "html",{ "text/html" } },
-#     { "htt",{ "text/webviewhtml" } },
-#     { "ico",{ "image/x-icon" } },
-#     { "ief",{ "image/ief" } },
-#     { "iii",{ "application/x-iphone" } },
-#     { "ins",{ "application/x-internet-signup" } },
-#     { "isp",{ "application/x-internet-signup" } },
-#     { "jfif",{ "image/pipeg" } },
-#     { "jpe",{ "image/jpeg" } },
-#     { "jpeg",{ "image/jpeg" } },
-#     { "jpg",{ "image/jpeg" } },
-#     { "js",{ "application/x-javascript" } },
-#     { "latex",{ "application/x-latex" } },
-#     { "lha",{ "application/octet-stream" } },
-#     { "lsf",{ "video/x-la-asf" } },
-#     { "lsx",{ "video/x-la-asf" } },
-#     { "lzh",{ "application/octet-stream" } },
-#     { "m",{ "application/x-matlab" } },
-#     { "mat",{ "application/x-matlab-data" } },
-#     { "m13",{ "application/x-msmediaview" } },
-#     { "m14",{ "application/x-msmediaview" } },
-#     { "m3u",{ "audio/x-mpegurl" } },
-#     { "man",{ "application/x-troff-man" } },
-#     { "mdb",{ "application/x-msaccess" } },
-#     { "me",{ "application/x-troff-me" } },
-#     { "mht",{ "message/rfc822" } },
-#     { "mhtml",{ "message/rfc822" } },
-#     { "mid",{ "audio/mid" } },
-#     { "mny",{ "application/x-msmoney" } },
-#     { "mov",{ "video/quicktime" } },
-#     { "movie",{ "video/x-sgi-movie" } },
-#     { "mp2",{ "video/mpeg" } },
-#     { "mp3",{ "audio/mpeg" } },
-#     { "mpa",{ "video/mpeg" } },
-#     { "mpe",{ "video/mpeg" } },
-#     { "mpeg",{ "video/mpeg" } },
-#     { "mpg",{ "video/mpeg" } },
-#     { "mpp",{ "application/vnd.ms-project" } },
-#     { "mpv2",{ "video/mpeg" } },
-#     { "ms",{ "application/x-troff-ms" } },
-#     { "mvb",{ "application/x-msmediaview" } },
-#     { "nws",{ "message/rfc822" } },
-#     { "oda",{ "application/oda" } },
-#     { "p10",{ "application/pkcs10" } },
-#     { "p12",{ "application/x-pkcs12" } },
-#     { "p7b",{ "application/x-pkcs7-certificates" } },
-#     { "p7c",{ "application/x-pkcs7-mime" } },
-#     { "p7m",{ "application/x-pkcs7-mime" } },
-#     { "p7r",{ "application/x-pkcs7-certreqresp" } },
-#     { "p7s",{ "application/x-pkcs7-signature" } },
-#     { "pbm",{ "image/x-portable-bitmap" } },
-#     { "pdf",{ "application/pdf" } },
-#     { "pfx",{ "application/x-pkcs12" } },
-#     { "pgm",{ "image/x-portable-graymap" } },
-#     { "pko",{ "application/ynd.ms-pkipko" } },
-#     { "pma",{ "application/x-perfmon" } },
-#     { "pmc",{ "application/x-perfmon" } },
-#     { "pml",{ "application/x-perfmon" } },
-#     { "pmr",{ "application/x-perfmon" } },
-#     { "pmw",{ "application/x-perfmon" } },
-#     { "pnm",{ "image/x-portable-anymap" } },
-#     { "pot,",{ "application/vnd.ms-powerpoint" } },
-#     { "ppm",{ "image/x-portable-pixmap" } },
-#     { "pps",{ "application/vnd.ms-powerpoint" } },
-#     { "ppt",{ "application/vnd.ms-powerpoint" } },
-#     { "prf",{ "application/pics-rules" } },
-#     { "ps",{ "application/postscript" } },
-#     { "pub",{ "application/x-mspublisher" } },
-#     { "qt",{ "video/quicktime" } },
-#     { "ra",{ "audio/x-pn-realaudio" } },
-#     { "ram",{ "audio/x-pn-realaudio" } },
-#     { "ras",{ "image/x-cmu-raster" } },
-#     { "rgb",{ "image/x-rgb" } },
-#     { "rmi",{ "audio/mid" } },
-#     { "roff",{ "application/x-troff" } },
-#     { "rtf",{ "application/rtf" } },
-#     { "rtx",{ "text/richtext" } },
-#     { "scd",{ "application/x-msschedule" } },
-#     { "sct",{ "text/scriptlet" } },
-#     { "setpay",{ "application/set-payment-initiation" } },
-#     { "setreg",{ "application/set-registration-initiation" } },
-#     { "sh",{ "application/x-sh" } },
-#     { "shar",{ "application/x-shar" } },
-#     { "sit",{ "application/x-stuffit" } },
-#     { "snd",{ "audio/basic" } },
-#     { "spc",{ "application/x-pkcs7-certificates" } },
-#     { "spl",{ "application/futuresplash" } },
-#     { "src",{ "application/x-wais-source" } },
-#     { "sst",{ "application/vnd.ms-pkicertstore" } },
-#     { "stl",{ "application/vnd.ms-pkistl" } },
-#     { "stm",{ "text/html" } },
-#     { "svg",{ "image/svg+xml" } },
-#     { "sv4cpio",{ "application/x-sv4cpio" } },
-#     { "sv4crc",{ "application/x-sv4crc" } },
-#     { "swf",{ "application/x-shockwave-flash" } },
-#     { "t",{ "application/x-troff" } },
-#     { "tar",{ "application/x-tar" } },
-#     { "tcl",{ "application/x-tcl" } },
-#     { "tex",{ "application/x-tex" } },
-#     { "texi",{ "application/x-texinfo" } },
-#     { "texinfo",{ "application/x-texinfo" } },
-#     { "tgz",{ "application/x-compressed" } },
-#     { "tif",{ "image/tiff" } },
-#     { "tiff",{ "image/tiff" } },
-#     { "tr",{ "application/x-troff" } },
-#     { "trm",{ "application/x-msterminal" } },
-#     { "tsv",{ "text/tab-separated-values" } },
-#     { "txt",{ "text/plain" } },
-#     { "uls",{ "text/iuls" } },
-#     { "ustar",{ "application/x-ustar" } },
-#     { "vcf",{ "text/x-vcard" } },
-#     { "vrml",{ "x-world/x-vrml" } },
-#     { "wav",{ "audio/x-wav" } },
-#     { "wcm",{ "application/vnd.ms-works" } },
-#     { "wdb",{ "application/vnd.ms-works" } },
-#     { "wks",{ "application/vnd.ms-works" } },
-#     { "wmf",{ "application/x-msmetafile" } },
-#     { "wps",{ "application/vnd.ms-works" } },
-#     { "wri",{ "application/x-mswrite" } },
-#     { "wrl",{ "x-world/x-vrml" } },
-#     { "wrz",{ "x-world/x-vrml" } },
-#     { "xaf",{ "x-world/x-vrml" } },
-#     { "xbm",{ "image/x-xbitmap" } },
-#     { "xla",{ "application/vnd.ms-excel" } },
-#     { "xlc",{ "application/vnd.ms-excel" } },
-#     { "xlm",{ "application/vnd.ms-excel" } },
-#     { "xls",{ "application/vnd.ms-excel" } },
-#     { "xlt",{ "application/vnd.ms-excel" } },
-#     { "xlw",{ "application/vnd.ms-excel" } },
-#     { "xof",{ "x-world/x-vrml" } },
-#     { "xpm",{ "image/x-xpixmap" } },
-#     { "xwd",{ "image/x-xwindowdump" } },
-#     { "xml",{ "application/xml" } },
-#     { "z",{ "application/x-compress" } },
-#     { "zip",{ "application/zip" } },
+    COPASI = "application/x-copasi"
+    SEDX = "application/x-sed-ml-archive"
+    PNG = "image/png"
+    CSV = "text/csv"
+    H323 = "text/h323"
+    ACX = "application/internet-property-stream"
+    AI = "application/postscript"
+    AIF = "audio/x-aiff"
+    AIFC = "audio/x-aiff"
+    AIFF = "audio/x-aiff"
+    ASF = "video/x-ms-asf"
+    ASR = "video/x-ms-asf"
+    ASX = "video/x-ms-asf"
+    AU = "audio/basic"
+    AVI = "video/x-msvideo"
+    AXS = "application/olescript"
+    BAS = "text/plain"
+    BCPIO = "application/x-bcpio"
+    BIN = "application/octet-stream"
+    BMP = "image/bmp"
+    C = "text/plain"
+    CAT = "application/vnd.ms-pkiseccat"
+    CDF = "application/x-cdf"
+    CER = "application/x-x509-ca-cert"
+    CLP = "application/x-msclip"
+    CMX = "image/x-cmx"
+    COD = "image/cis-cod"
+    CPIO = "application/x-cpio"
+    CRD = "application/x-mscardfile"
+    CRL = "application/pkix-crl"
+    CRT = "application/x-x509-ca-cert"
+    CSH = "application/x-csh"
+    CSS = "text/css"
+    DCR = "application/x-director"
+    DER = "application/x-x509-ca-cert"
+    DIR = "application/x-director"
+    DLL = "application/x-msdownload"
+    DMS = "application/octet-stream"
+    DOC = "application/msword"
+    DOT = "application/msword"
+    DVI = "application/x-dvi"
+    DXR = "application/x-director"
+    EPS = "application/postscript"
+    ETX = "text/x-setext"
+    EVY = "application/envoy"
+    EXE = "application/octet-stream"
+    FIF = "application/fractals"
+    FLR = "x-world/x-vrml"
+    GIF = "image/gif"
+    GTAR = "application/x-gtar"
+    GZ = "application/x-gzip"
+    H = "text/plain"
+    HDF = "application/x-hdf"
+    H5 = "application/x-hdf"
+    HLP = "application/winhlp"
+    HQT = "application/mac-binhex40"
+    HTA = "application/hta"
+    HTC = "text/x-component"
+    HTM = "text/html"
+    HTML = "text/html"
+    HTT = "text/webviewhtml"
+    ICO = "image/x-icon"
+    IEF = "image/ief"
+    III = "application/x-iphone"
+    INS = "application/x-internet-signup"
+    ISP = "application/x-internet-signup"
+    JFIF = "image/pipeg"
+    JPE = "image/jpeg"
+    JPEG = "image/jpeg"
+    JPG = "image/jpeg"
+    JS = "application/x-javascript"
+    LATEX = "application/x-latex"
+    LHA = "application/octet-stream"
+    LSF = "video/x-la-asf"
+    LSX = "video/x-la-asf"
+    LZH = "application/octet-stream"
+    M = "application/x-matlab"
+    MAT = "application/x-matlab-data"
+    M13 = "application/x-msmediaview"
+    M14 = "application/x-msmediaview"
+    M3U = "audio/x-mpegurl"
+    MAN = "application/x-troff-man"
+    MDB = "application/x-msaccess"
+    ME = "application/x-troff-me"
+    MHT = "message/rfc822"
+    MHTML = "message/rfc822"
+    MID = "audio/mid"
+    MNY = "application/x-msmoney"
+    MOV = "video/quicktime"
+    MOVIE = "video/x-sgi-movie"
+    MP2 = "video/mpeg"
+    MP3 = "audio/mpeg"
+    MP4 = "video/mpeg"
+    MPE = "video/mpeg"
+    MPEG = "video/mpeg"
+    MPG = "video/mpeg"
+    MPP = "application/vnd.ms-project"
+    MPV2 = "video/mpeg"
+    MS = "application/x-troff-ms"
+    MVB = "application/x-msmediaview"
+    NWS = "message/rfc822"
+    ODA = "application/oda"
+    P10 = "application/pkcs10"
+    P12 = "application/x-pkcs12"
+    P7B = "application/x-pkcs7-certificates"
+    P7C = "application/x-pkcs7-mime"
+    P7M = "application/x-pkcs7-mime"
+    P7R = "application/x-pkcs7-certreqresp"
+    P7S = "application/x-pkcs7-signature"
+    PBM = "image/x-portable-bitmap"
+    PDF = "application/pdf"
+    PFX = "application/x-pkcs12"
+    PGM = "image/x-portable-graymap"
+    PKO = "application/ynd.ms-pkipko"
+    PMA = "application/x-perfmon"
+    PMC = "application/x-perfmon"
+    PML = "application/x-perfmon"
+    PMR = "application/x-perfmon"
+    PMW = "application/x-perfmon"
+    PNW = "image/x-portable-anymap"
+    POT = "application/vnd.ms-powerpoint"
+    PPM = "image/x-portable-pixmap"
+    PPS = "application/vnd.ms-powerpoint"
+    PPT = "application/vnd.ms-powerpoint"
+    PRF = "application/pics-rules"
+    PS = "application/postscript"
+    PUB = "application/x-mspublisher"
+    QT = "video/quicktime"
+    RA = "audio/x-pn-realaudio"
+    RAM = "audio/x-pn-realaudio"
+    RAS = "image/x-cmu-raster"
+    RGB = "image/x-rgb"
+    RMI = "audio/mid"
+    ROFF = "application/x-troff"
+    RTF = "application/rtf"
+    RTX = "text/richtext"
+    SCD = "application/x-msschedule"
+    SCT = "text/scriptlet"
+    SETPAY = "application/set-payment-initiation"
+    SETREG = "application/set-registration-initiation"
+    SH = "application/x-sh"
+    SHAR = "application/x-shar"
+    SIT = "application/x-stuffit"
+    SND = "audio/basic"
+    SPC = "application/x-pkcs7-certificates"
+    SPL = "application/futuresplash"
+    SRC = "application/x-wais-source"
+    SST = "application/vnd.ms-pkicertstore"
+    STL = "application/vnd.ms-pkistl"
+    STM = "text/html"
+    SVG = "image/svg+xml"
+    SV4CPIO = "application/x-sv4cpio"
+    SV4CRC = "application/x-sv4crc"
+    SWF = "application/x-shockwave-flash"
+    T = "application/x-troff"
+    TAR = "application/x-tar"
+    TCL = "application/x-tcl"
+    TEX = "application/x-tex"
+    TEXI = "application/x-texinfo"
+    TEXINFO = "application/x-texinfo"
+    TGZ = "application/x-compressed"
+    TIF = "image/tiff"
+    TIFF = "image/tiff"
+    TR = "application/x-troff"
+    TRM = "application/x-msterminal"
+    TSV = "text/tab-separated-values"
+    TXT = "text/plain"
+    ULS = "text/iuls"
+    USTAR = "application/x-ustar"
+    VCF = "text/x-vcard"
+    VRML = "x-world/x-vrml"
+    WAV = "audio/x-wav"
+    WCM = "application/vnd.ms-works"
+    WDB = "application/vnd.ms-works"
+    WKS = "application/vnd.ms-works"
+    WMF = "application/x-msmetafile"
+    WPS = "application/vnd.ms-works"
+    WRI = "application/x-mswrite"
+    WRL = "x-world/x-vrml"
+    WRZ = "x-world/x-vrml"
+    XAF = "x-world/x-vrml"
+    XBM = "image/x-xbitmap"
+    XLA = "application/vnd.ms-excel"
+    XLC = "application/vnd.ms-excel"
+    XLM = "application/vnd.ms-excel"
+    XLS = "application/vnd.ms-excel"
+    XLT = "application/vnd.ms-excel"
+    XLW = "application/vnd.ms-excel"
+    XOF = "x-world/x-vrml"
+    XPM = "image/x-xpixmap"
+    XWD = "image/x-xwindowdump"
+    XML = "application/xml"
+    Z = "application/x-compress"
+    ZIP = "application/zip"
 
 
 class ManifestEntry(BaseModel):
@@ -335,21 +275,34 @@ class ManifestEntry(BaseModel):
     format: str
     master: bool = False
 
-    def _is_format(self, format_key: str) -> bool:
+    @staticmethod
+    def is_format(format_key: str, format: str) -> bool:
         """Check if entry is of the given format_key."""
-        return bool(libcombine.KnownFormats.isFormat(format_key, self.format))
+        print(format_key, format)
+        if format_key == "sbml":
+            return "identifiers.org/combine.specifications/sbml" in format
+        if format_key == "sedml":
+            return "identifiers.org/combine.specifications/sed" in format
+        if format_key == "sbgn":
+            return "identifiers.org/combine.specifications/sbgn" in format
+
+        if hasattr(EntryFormat, format_key):
+            format_reference = str(getattr(EntryFormat, format_key.upper()))
+            return format_reference == format
+
+        return False
 
     def is_sbml(self) -> bool:
         """Check if entry is SBML."""
-        return self._is_format("sbml")
+        return ManifestEntry.is_format("sbml", self.format)
 
     def is_sedml(self) -> bool:
         """Check if entry is SED-ML."""
-        return self._is_format("sedml")
+        return ManifestEntry.is_format("sedml", self.format)
 
     def is_sbgn(self) -> bool:
         """Check if entry is SBGN."""
-        return self._is_format("sbgn")
+        return ManifestEntry.is_format("sbgn", self.format)
 
 
 class Manifest(BaseModel):
@@ -459,12 +412,7 @@ class Omex:
     """Combine archive class."""
 
     def __init__(self) -> None:
-        """Create COMBINE archive.
-
-        :param omex_path: path to COMBINE archive file
-        :param working_dir: working directory for archive, if left empty a temporary
-                            directory is used.
-        """
+        """Create COMBINE Archive Version 1."""
         self.manifest: Manifest = Manifest()
         self._tmp_dir: Path = Path(tempfile.mkdtemp())
 
@@ -589,10 +537,10 @@ class Omex:
                             f"Entry with location missing in manifest.xml: '{location}'"
                         )
 
-                    format = libcombine.KnownFormats.guessFormat(file_path)
+                    format = Omex.guess_format(Path(file_path))
                     master = False
-                    if libcombine.KnownFormats.isFormat(
-                        formatKey="sed-ml", format=format
+                    if format and ManifestEntry.is_format(
+                        format_key="sedml", format=format
                     ):
                         master = True
                     entry = ManifestEntry(
@@ -662,7 +610,7 @@ class Omex:
 
         :param omex_path:
         :param compression: compression algorithm
-        :param compressionlevel: level of compression
+        :param compresslevel: level of compression
         :return:
         """
         if isinstance(omex_path, str):
@@ -716,15 +664,41 @@ class Omex:
         # write manifest.xml
         self.manifest.to_manifest(manifest_path=output_dir / "manifest.xml")
 
-    def entries_by_format(self, format_key: FormatKey) -> List[ManifestEntry]:
+    def entries_by_format(self, format_key: str) -> List[ManifestEntry]:
         """Get entries with given format in the archive."""
 
         entries: List[ManifestEntry] = []
         for entry in self.manifest.entries:
-            if libcombine.KnownFormats.isFormat(format_key, entry.format):
+            if ManifestEntry.is_format(format_key, entry.format):
                 entries.append(entry)
 
         return entries
 
-    # @staticmethod
-    # def guess_format() -> str:
+    @staticmethod
+    def lookup_format(format_key: str) -> str:
+        """Lookup format by format_key."""
+        if hasattr(EntryFormat, format_key.upper()):
+            return str(getattr(EntryFormat, format_key.upper()))
+        return ""
+
+    @staticmethod
+    def guess_format(path: Path) -> str:
+        """Guess format string for given file.
+
+        If string cannot be resolved '' is returned.
+        """
+
+        extension = path.suffix[1:] if path.suffix else ""
+        if extension == "xml":
+            with open(path, "r") as f_in:
+                text = f_in.read(256)
+                if "<sbml" in text:
+                    return Omex.lookup_format("sbml")
+                if "<sedML" in text:
+                    return Omex.lookup_format("sedml")
+                if "<cell" in text:
+                    return Omex.lookup_format("cellml")
+                if "<COPASI" in text:
+                    return Omex.lookup_format("copasi")
+
+        return Omex.lookup_format(extension)
