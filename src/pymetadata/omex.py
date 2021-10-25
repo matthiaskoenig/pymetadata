@@ -573,6 +573,9 @@ class Omex:
         """Add a path to the combine archive.
 
         The corresponding ManifestEntry information is required.
+        The entry is copied when getting added, i.e., changes to the location
+        after adding an entry will not have any effect on the content in the
+        archive!
         """
         if isinstance(entry_path, str):
             logger.warning(f"'entry_path' should be 'Path': '{entry_path}'")
