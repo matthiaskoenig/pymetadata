@@ -8,6 +8,7 @@ from pymetadata.omex import Manifest, ManifestEntry, Omex
 
 SHOWCASE_OMEX = RESOURCES_DIR / "testdata" / "omex" / "CombineArchiveShowCase.omex"
 COMPMODELS_OMEX = RESOURCES_DIR / "testdata" / "omex" / "CompModels.omex"
+BIOMODELS_OMEX = RESOURCES_DIR / "testdata" / "omex" / "BIOMD0000000001.omex"
 
 SHOWCASE_OMEX_MANIFEST = (
     RESOURCES_DIR / "testdata" / "omex" / "CombineArchiveShowCase_manifest.xml"
@@ -103,6 +104,7 @@ def test_adding_removing_entry_manifest() -> None:
     [
         COMPMODELS_OMEX,
         SHOWCASE_OMEX,
+        BIOMODELS_OMEX,
     ],
 )
 def test_read_omex(omex_path: Path) -> None:
@@ -158,6 +160,7 @@ def test_omex_to_omex(tmp_path: Path) -> None:
     [
         (COMPMODELS_OMEX, True),
         (SHOWCASE_OMEX, True),
+        (BIOMODELS_OMEX, True),
         (COMPMODELS_OMEX_MANIFEST, False),
         (SHOWCASE_OMEX_MANIFEST, False),
     ],
