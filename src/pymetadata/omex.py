@@ -8,7 +8,7 @@ directories, working with the `manifest.xml` are implemented.
 When working with COMBINE archives these wrapper functions should be used.
 The current version has no support for metadata manipulation.
 
-TODO: metadata (creates, modifications, ...)
+Encrypted archives can be opened, but no support for encrypting archives yet.
 """
 
 import os
@@ -33,12 +33,16 @@ logger = log.get_logger(__name__)
 __all__ = ["EntryFormat", "ManifestEntry", "Manifest", "Omex"]
 
 
-IDENTIFIERS_PREFIX = "https://identifiers.org/combine.specifications"
+IDENTIFIERS_PREFIX = "https://identifiers.org/combine.specifications/"
 PURL_PREFIX = "https://purl.org/NET/mediatypes/"
 
 
 class EntryFormat(str, Enum):
     """Enum for common formats."""
+
+    OMEX = IDENTIFIERS_PREFIX + "omex"
+    OMEX_MANIFEST = IDENTIFIERS_PREFIX + "omex-manifest"
+    OMEX_METADATA = IDENTIFIERS_PREFIX + "omex-metadata"
 
     SBML = IDENTIFIERS_PREFIX + "sbml"
     SBML_L1V1 = (IDENTIFIERS_PREFIX + "sbml.level-1.version-1",)
@@ -61,8 +65,6 @@ class EntryFormat(str, Enum):
     CELLML = IDENTIFIERS_PREFIX + "cellml"
     SBGN = IDENTIFIERS_PREFIX + "sbgn"
     SBGN_PD = IDENTIFIERS_PREFIX + "sbgn.pd"
-
-    OMEX_METADATA = IDENTIFIERS_PREFIX + "omex-metadata"
 
     MARKDOWN = PURL_PREFIX + "text/x-markdown"
     PLAIN = PURL_PREFIX + "text/plain"
@@ -323,12 +325,10 @@ class Manifest(BaseModel):
 
     _entries_dict: Dict[str, ManifestEntry] = PrivateAttr()
     entries: List[ManifestEntry] = [
-        ManifestEntry(
-            location=".", format="http://identifiers.org/combine.specifications/omex"
-        ),
+        ManifestEntry(location=".", format=EntryFormat.OMEX),
         ManifestEntry(
             location="./manifest.xml",
-            format="http://identifiers.org/combine.specifications/omex-manifest",
+            format=EntryFormat.OMEX_MANIFEST,
         ),
     ]
 
@@ -482,10 +482,11 @@ class Omex:
                 return False
 
     @staticmethod
-    def from_omex(omex_path: Path) -> "Omex":
+    def from_omex(omex_path: Path, password: str = None) -> "Omex":
         """Read omex from given path.
 
-        :param omex_path:
+        :param omex_path: path to omex archive
+        :param password: password for encryption
         :return: Omex object
         """
         omex_path = Omex._check_omex_path(omex_path)
@@ -493,7 +494,15 @@ class Omex:
         # extract archive to tmp directory
         with tempfile.TemporaryDirectory() as tmp_dir:
             with zipfile.ZipFile(omex_path, "r") as zf:
-                zf.extractall(tmp_dir)
+                # Figure out algorithm:
+                for info in zf.infolist():
+                    if info.compress_type not in {
+                        zipfile.ZIP_DEFLATED,
+                        zipfile.ZIP_STORED,
+                    }:
+                        logger.warning(f"Unsupported compression for: '{info}'")
+                # extract all files
+                zf.extractall(tmp_dir, pwd=password)
 
             return Omex.from_directory(Path(tmp_dir))
 
@@ -615,10 +624,13 @@ class Omex:
     def to_omex(
         self,
         omex_path: Path,
-        compression: int = zipfile.ZIP_BZIP2,
+        password: Optional[str] = None,
+        compression: int = zipfile.ZIP_DEFLATED,
         compresslevel: int = 9,
     ) -> None:
         """Write omex to path.
+
+        By definition OMEX files should be zip deflated.
 
         The `compresslevel` parameter controls the compression level to use when
         writing files to the archive. When using `ZIP_STORED` or `ZIP_LZMA` it has no
