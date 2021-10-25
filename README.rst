@@ -2,8 +2,8 @@
    :align: left
    :alt: pymetadata logo
 
-pymetadata: python utilities for metadata
-=========================================
+pymetadata: python utilities for metadata and COMBINE archives
+==============================================================
 
 .. image:: https://github.com/matthiaskoenig/pymetadata/workflows/CI-CD/badge.svg
    :target: https://github.com/matthiaskoenig/pymetadata/workflows/CI-CD
@@ -43,7 +43,9 @@ metadata in the context of COMBINE standards with source code available from
 
 Features include among others
 
+- COMBINE archive version 1 support (OMEX)
 - annotation classes and helpers
+- SBO and KISAO ontology enums
  
 If you have any questions or issues please `open an issue <https://github.com/matthiaskoenig/pymetadata/issues>`__.
 
