@@ -482,7 +482,7 @@ class Omex:
                 return False
 
     @staticmethod
-    def from_omex(omex_path: Path, password: str = None) -> "Omex":
+    def from_omex(omex_path: Path, password: Optional[bytes] = None) -> "Omex":
         """Read omex from given path.
 
         :param omex_path: path to omex archive
