@@ -2,7 +2,7 @@
 from pathlib import Path
 
 __author__ = "Matthias Koenig"
-__version__ = "0.2.1"
+__version__ = "0.2.2"
 
 
 from depinfo import print_dependencies  # type: ignore
