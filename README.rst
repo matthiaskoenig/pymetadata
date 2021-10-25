@@ -49,6 +49,11 @@ Features include among others
  
 If you have any questions or issues please `open an issue <https://github.com/matthiaskoenig/pymetadata/issues>`__.
 
+Documentation
+=============
+Documentation is still work in progress. For an example usage of the COMBINE archive
+see `src/pymetadata/examples/omex_example.py <src/pymetadata/examples/omex_example.py>`__.
+
 How to cite
 ===========
 
