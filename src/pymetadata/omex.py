@@ -298,12 +298,19 @@ class ManifestEntry(BaseModel):
     @staticmethod
     def is_format(format_key: str, format: str) -> bool:
         """Check if entry is of the given format_key."""
+        # FIXME: use regular expressions
         if format_key == "sbml":
-            return "identifiers.org/combine.specifications/sbml" in format
+            return ("identifiers.org/combine.specifications/sbml" in format) or (
+                "identifiers.org/combine.specifications:sbml" in format
+            )
         if format_key == "sedml":
-            return "identifiers.org/combine.specifications/sed" in format
+            return ("identifiers.org/combine.specifications/sed" in format) or (
+                "identifiers.org/combine.specifications:sed" in format
+            )
         if format_key == "sbgn":
-            return "identifiers.org/combine.specifications/sbgn" in format
+            return ("identifiers.org/combine.specifications/sbgn" in format) or (
+                "identifiers.org/combine.specifications:sbgn" in format
+            )
 
         if hasattr(EntryFormat, format_key):
             format_reference = str(getattr(EntryFormat, format_key.upper()))
