@@ -33,7 +33,7 @@ logger = log.get_logger(__name__)
 __all__ = ["EntryFormat", "ManifestEntry", "Manifest", "Omex"]
 
 
-IDENTIFIERS_PREFIX = "https://identifiers.org/combine.specifications/"
+IDENTIFIERS_PREFIX = "https://identifiers.org/combine.specifications:"
 PURL_PREFIX = "https://purl.org/NET/mediatypes/"
 
 
@@ -65,6 +65,13 @@ class EntryFormat(str, Enum):
     CELLML = IDENTIFIERS_PREFIX + "cellml"
     SBGN = IDENTIFIERS_PREFIX + "sbgn"
     SBGN_PD = IDENTIFIERS_PREFIX + "sbgn.pd"
+
+    FROG_JSON_V1 = IDENTIFIERS_PREFIX + "frog-json-version-1"
+    FROG_METADATA_V1 = IDENTIFIERS_PREFIX + "frog-metadata-version-1"
+    FROG_OBJECTIVE_V1 = IDENTIFIERS_PREFIX + "frog-objective-version-1"
+    FROG_FVA_V1 = IDENTIFIERS_PREFIX + "frog-fva-version-1"
+    FROG_GENEDELETION_V1 = IDENTIFIERS_PREFIX + "frog-genedeletion-version-1"
+    FROG_REACTIONDELETION_V1 = IDENTIFIERS_PREFIX + "frog-reactiondeletion-version-1"
 
     MARKDOWN = PURL_PREFIX + "text/x-markdown"
     PLAIN = PURL_PREFIX + "text/plain"
