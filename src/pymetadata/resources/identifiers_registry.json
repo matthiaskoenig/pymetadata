@@ -1457,34 +1457,6 @@
         "deprecationDate": null
       },
       {
-        "id": 80,
-        "providerCode": "rcsb",
-        "name": "RCSB PDB",
-        "urlPattern": "https://www.rcsb.org/structure/{$id}",
-        "mirId": "MIR:00100029",
-        "description": "RCSB PDB",
-        "official": true,
-        "sampleId": "2gc4",
-        "resourceHomeUrl": "https://www.pdb.org/",
-        "institution": {
-          "id": 79,
-          "name": "Rutgers, The State University of New Jersey",
-          "homeUrl": "CURATOR_REVIEW",
-          "description": "CURATOR_REVIEW",
-          "rorId": null,
-          "location": {
-            "countryCode": "US",
-            "countryName": "United States"
-          }
-        },
-        "location": {
-          "countryCode": "US",
-          "countryName": "United States"
-        },
-        "deprecated": false,
-        "deprecationDate": null
-      },
-      {
         "id": 86,
         "providerCode": "ebi",
         "name": "Protein Databank through PDBsum",
@@ -1513,13 +1485,41 @@
         "deprecationDate": null
       },
       {
+        "id": 80,
+        "providerCode": "rcsb",
+        "name": "RCSB PDB",
+        "urlPattern": "https://www.rcsb.org/structure/{$id}",
+        "mirId": "MIR:00100029",
+        "description": "RCSB PDB",
+        "official": false,
+        "sampleId": "2gc4",
+        "resourceHomeUrl": "https://www.rcsb.org/",
+        "institution": {
+          "id": 79,
+          "name": "Rutgers, The State University of New Jersey",
+          "homeUrl": "CURATOR_REVIEW",
+          "description": "CURATOR_REVIEW",
+          "rorId": null,
+          "location": {
+            "countryCode": "US",
+            "countryName": "United States"
+          }
+        },
+        "location": {
+          "countryCode": "US",
+          "countryName": "United States"
+        },
+        "deprecated": false,
+        "deprecationDate": null
+      },
+      {
         "id": 85,
         "providerCode": "pdbj",
         "name": "Protein Data Bank Japan (PDBj)",
         "urlPattern": "https://pdbj.org/mine/summary/{$id}",
         "mirId": "MIR:00100165",
         "description": "Protein Data Bank Japan (PDBj)",
-        "official": true,
+        "official": false,
         "sampleId": "2gc4",
         "resourceHomeUrl": "http://www.pdbj.org/",
         "institution": {
@@ -1547,7 +1547,7 @@
         "urlPattern": "https://www.ebi.ac.uk/pdbe/entry/pdb/{$id}",
         "mirId": "MIR:00100037",
         "description": "Protein Databank in Europe (PDBe)",
-        "official": true,
+        "official": false,
         "sampleId": "2gc4",
         "resourceHomeUrl": "http://www.pdbe.org/",
         "institution": {
@@ -1564,6 +1564,34 @@
         "location": {
           "countryCode": "GB",
           "countryName": "United Kingdom"
+        },
+        "deprecated": false,
+        "deprecationDate": null
+      },
+      {
+        "id": 3061,
+        "providerCode": "wwpdb",
+        "name": "Worldwide Protein Data Bank",
+        "urlPattern": "https://www.wwpdb.org/pdb?id={$id}",
+        "mirId": "MIR:00001018",
+        "description": "The Worldwide PDB (wwPDB) organization manages the PDB archive and ensures that the PDB is freely and publicly available to the global community.",
+        "official": true,
+        "sampleId": "2g4c",
+        "resourceHomeUrl": "https://www.wwpdb.org/",
+        "institution": {
+          "id": 3060,
+          "name": "Worldwide Protein Data Bank",
+          "homeUrl": "https://www.wwpdb.org/",
+          "description": "The Worldwide PDB (wwPDB) organization manages the PDB archive and ensures that the PDB is freely and publicly available to the global community.",
+          "rorId": null,
+          "location": {
+            "countryCode": "US",
+            "countryName": "United States"
+          }
+        },
+        "location": {
+          "countryCode": "US",
+          "countryName": "United States"
         },
         "deprecated": false,
         "deprecationDate": null
@@ -36435,50 +36463,6 @@
     "deprecated": false,
     "deprecationDate": null
   },
-  "icdc": {
-    "id": 2638,
-    "prefix": "icdc",
-    "name": "Integrated Canine Data Commons",
-    "pattern": "^ICDC[0-9][0-9][0-9][0-9][0-9][0-9]$",
-    "namespaceEmbeddedInLui": false,
-    "description": "The Integrated Canine Data Commons is one of several repositories within the NCI Cancer Research Data Commons (CRDC), a cloud-based data science infrastructure that provides secure access to a large, comprehensive, and expanding collection of cancer research data. The ICDC was established to further research on human cancers by enabling comparative analysis with canine cancer.",
-    "mirId": "MIR:00000812",
-    "resources": [
-      {
-        "id": 2639,
-        "providerCode": "icdc",
-        "name": "Integrated Canine Data Commons",
-        "urlPattern": "https://caninecommons.cancer.gov/#/study/{$id}",
-        "mirId": "MIR:00000811",
-        "description": "Integrated Canine Data Commons at National Cancer Institute (USA)",
-        "official": true,
-        "sampleId": "ICDC000101",
-        "resourceHomeUrl": "https://caninecommons.cancer.gov/#/",
-        "institution": {
-          "id": 2637,
-          "name": "National Cancer Institute",
-          "homeUrl": "https://www.cancer.gov/",
-          "description": "Organization information obtained from ROR API using ROR ID 'https://ror.org/040gcmg81' with Wikidata IDs [Q664846], and ISNI IDs [0000 0004 1936 8075]",
-          "rorId": null,
-          "location": {
-            "countryCode": "US",
-            "countryName": "United States"
-          }
-        },
-        "location": {
-          "countryCode": "US",
-          "countryName": "United States"
-        },
-        "deprecated": false,
-        "deprecationDate": null
-      }
-    ],
-    "created": "2021-05-10T19:40:34.200+0000",
-    "modified": "2021-05-10T19:40:34.200+0000",
-    "sampleId": "ICDC000101",
-    "deprecated": false,
-    "deprecationDate": null
-  },
   "ilx": {
     "id": 2647,
     "prefix": "ilx",
@@ -38088,6 +38072,622 @@
     "created": "2020-03-24T05:11:19.658+0000",
     "modified": "2021-10-18T12:32:14.264+0000",
     "sampleId": "000017",
+    "deprecated": false,
+    "deprecationDate": null
+  },
+  "dg.f82a1a": {
+    "id": 2969,
+    "prefix": "dg.f82a1a",
+    "name": "Kids First",
+    "pattern": "[0-9a-fA-F]{8}\\-[0-9a-fA-F]{4}\\-[0-9a-fA-F]{4}\\-[0-9a-fA-F]{4}\\-[0-9a-fA-F]{12}",
+    "namespaceEmbeddedInLui": false,
+    "description": "Full implementation of the DRS 1.1 standard with support for persistent identifiers. Open source DRS server that follows the Gen3 implementation. Gen3 is a GA4GH compliant open source platform for developing framework services and data commons. Data commons accelerate and democratize the process of scientific discovery, especially over large or complex datasets. Gen3 is maintained by the Center for Translational Data Science at the University of Chicago. https://gen3.org",
+    "mirId": "MIR:00000887",
+    "resources": [
+      {
+        "id": 2970,
+        "providerCode": "dg.f82a1a",
+        "name": "Kids First",
+        "urlPattern": "https://data.kidsfirstdrc.org/ga4gh/drs/v1/objects/{$id}",
+        "mirId": "MIR:00000886",
+        "description": "Full implementation of the DRS 1.1 standard with support for persistent identifiers. Open source DRS server that follows the Gen3 implementation. Gen3 is a GA4GH compliant open source platform for developing framework services and data commons. Data commons accelerate and democratize the process of scientific discovery, especially over large or complex datasets. Gen3 is maintained by the Center for Translational Data Science at the University of Chicago. https://gen3.org",
+        "official": true,
+        "sampleId": "00026f50-858a-446b-8ed9-b0e3ecd7b20e",
+        "resourceHomeUrl": "https://kidsfirstdrc.org",
+        "institution": {
+          "id": 2820,
+          "name": "Open Commons Consortium",
+          "homeUrl": "https://www.occ-data.org/",
+          "description": "The Open Commons Consortium is a 501 non-profit venture which provides cloud computing and data commons resources to support \"scientific, environmental, medical and health care research.\"",
+          "rorId": null,
+          "location": {
+            "countryCode": "US",
+            "countryName": "United States"
+          }
+        },
+        "location": {
+          "countryCode": "US",
+          "countryName": "United States"
+        },
+        "deprecated": false,
+        "deprecationDate": null
+      }
+    ],
+    "created": "2021-11-01T17:49:13.981+0000",
+    "modified": "2021-11-01T17:49:13.981+0000",
+    "sampleId": "00026f50-858a-446b-8ed9-b0e3ecd7b20e",
+    "deprecated": false,
+    "deprecationDate": null
+  },
+  "bbtp": {
+    "id": 2986,
+    "prefix": "bbtp",
+    "name": "Blue Brain Project Topological sampling Knowledge Graph",
+    "pattern": "\\b[0-9a-f]{8}\\b-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-\\b[0-9a-f]{12}\\b",
+    "namespaceEmbeddedInLui": false,
+    "description": "Input data and analysis results for the paper \"Topology of synaptic connectivity constrains neuronal stimulus representation, predicting two complementary coding strategies (https://www.biorxiv.org/content/10.1101/2020.11.02.363929v2 ).",
+    "mirId": "MIR:00000889",
+    "resources": [
+      {
+        "id": 2987,
+        "providerCode": "bbp",
+        "name": "Blue Brain Project, EPFL",
+        "urlPattern": "https://bbp.epfl.ch/nexus/web/studios/public/topological-sampling/studios/data:{$id}",
+        "mirId": "MIR:00000888",
+        "description": "The goal of the Blue Brain Project is to build biologically detailed digital reconstructions and simulations of the mouse brain.",
+        "official": true,
+        "sampleId": "f0ba2f3e-aa6f-4264-8d18-8ee65cf6f61a",
+        "resourceHomeUrl": "https://portal.bluebrain.epfl.ch",
+        "institution": {
+          "id": 2985,
+          "name": "Blue Brain Project, EPFL",
+          "homeUrl": "https://portal.bluebrain.epfl.ch",
+          "description": "The goal of the Blue Brain Project is to build biologically detailed digital reconstructions and simulations of the mouse brain.",
+          "rorId": null,
+          "location": {
+            "countryCode": "CH",
+            "countryName": "Switzerland"
+          }
+        },
+        "location": {
+          "countryCode": "CH",
+          "countryName": "Switzerland"
+        },
+        "deprecated": false,
+        "deprecationDate": null
+      }
+    ],
+    "created": "2022-01-09T18:52:31.186+0000",
+    "modified": "2022-01-09T18:52:31.186+0000",
+    "sampleId": "f0ba2f3e-aa6f-4264-8d18-8ee65cf6f61a",
+    "deprecated": false,
+    "deprecationDate": null
+  },
+  "fcb": {
+    "id": 2991,
+    "prefix": "fcb",
+    "name": "the FAIR Cookbook",
+    "pattern": "^FCB\\d{3}",
+    "namespaceEmbeddedInLui": false,
+    "description": "Created by researchers and data managers professionals, the FAIR Cookbook is an online resource for the Life Sciences with recipes that help you to make and keep data Findable, Accessible, Interoperable, and Reusable (FAIR).\n\n",
+    "mirId": "MIR:00000891",
+    "resources": [
+      {
+        "id": 2992,
+        "providerCode": "fcb",
+        "name": "Permanent Identifiers for the Web",
+        "urlPattern": "https://w3id.org/faircookbook/{$id}",
+        "mirId": "MIR:00000890",
+        "description": "The purpose of this website is to provide a secure, permanent URL re-direction service for Web applications. This service is run by the W3C Permanent Identifier Community Group.\nWeb applications that deal with Linked Data often need to specify and use URLs that are very stable. They utilize services such as this one to ensure that applications using their URLs will always be re-directed to a working website. This website operates like a switchboard, connecting requests for information with the true location of the information on the Web. The switchboard can be reconfigured to point to a new location if the old location stops working.\n\n",
+        "official": true,
+        "sampleId": "FCB005",
+        "resourceHomeUrl": "https://w3id.org",
+        "institution": {
+          "id": 2990,
+          "name": "University of Oxford",
+          "homeUrl": "https://www.ox.ac.uk/",
+          "description": "Organization information obtained from ROR API using ROR ID 'https://ror.org/052gg0110' with Wikidata IDs [Q34433,Q5260389,Q56612600,Q7529574,Q6786826,Q1095537], and ISNI IDs [0000 0004 1936 8948]",
+          "rorId": null,
+          "location": {
+            "countryCode": "GB",
+            "countryName": "United Kingdom"
+          }
+        },
+        "location": {
+          "countryCode": "GB",
+          "countryName": "United Kingdom"
+        },
+        "deprecated": false,
+        "deprecationDate": null
+      }
+    ],
+    "created": "2022-01-09T18:54:14.401+0000",
+    "modified": "2022-01-09T18:54:14.401+0000",
+    "sampleId": "FCB005",
+    "deprecated": false,
+    "deprecationDate": null
+  },
+  "vcell": {
+    "id": 2995,
+    "prefix": "vcell",
+    "name": "VCell Published Models",
+    "pattern": "^\\d{5,}$",
+    "namespaceEmbeddedInLui": false,
+    "description": "Models developed with the Virtual Cell (VCell) software prorgam.",
+    "mirId": "MIR:00000893",
+    "resources": [
+      {
+        "id": 2996,
+        "providerCode": "uchc",
+        "name": "University of Connecticut Health Center",
+        "urlPattern": "https://vcell.org/biomodel-{$id}",
+        "mirId": "MIR:00000892",
+        "description": "Organization information obtained from ROR API using ROR ID 'https://ror.org/02kzs4y22' with Wikidata IDs [Q7895298], and ISNI IDs [0000000419370394]",
+        "official": true,
+        "sampleId": "201022999",
+        "resourceHomeUrl": "https://health.uconn.edu/",
+        "institution": {
+          "id": 2994,
+          "name": "University of Connecticut Health Center",
+          "homeUrl": "https://health.uconn.edu/",
+          "description": "Organization information obtained from ROR API using ROR ID 'https://ror.org/02kzs4y22' with Wikidata IDs [Q7895298], and ISNI IDs [0000000419370394]",
+          "rorId": null,
+          "location": {
+            "countryCode": "US",
+            "countryName": "United States"
+          }
+        },
+        "location": {
+          "countryCode": "US",
+          "countryName": "United States"
+        },
+        "deprecated": false,
+        "deprecationDate": null
+      }
+    ],
+    "created": "2022-01-09T18:57:18.476+0000",
+    "modified": "2022-01-09T18:57:18.476+0000",
+    "sampleId": "201022999",
+    "deprecated": false,
+    "deprecationDate": null
+  },
+  "dg.5b0d": {
+    "id": 2999,
+    "prefix": "dg.5b0d",
+    "name": "BloodPAC",
+    "pattern": "[0-9a-fA-F]{8}\\-[0-9a-fA-F]{4}\\-[0-9a-fA-F]{4}\\-[0-9a-fA-F]{4}\\-[0-9a-fA-F]{12}",
+    "namespaceEmbeddedInLui": false,
+    "description": "The Blood Profiling Atlas in Cancer (BloodPAC) supports the management, analysis and sharing of liquid biopsy data for the oncology research community and aims to accelerate discovery and development of therapies, diagnostic tests, and other technologies for cancer treatment and prevention. The data commons supports cross-project analyses by harmonizing data from different projects through the collaborative development of a data dictionary, providing an API for data queries and download, and providing a cloud-based analysis workspace with rich tools and resources.",
+    "mirId": "MIR:00000895",
+    "resources": [
+      {
+        "id": 3000,
+        "providerCode": "dg.5b0d",
+        "name": "BloodPAC",
+        "urlPattern": "https://data.bloodpac.org/ga4gh/drs/v1/objects/{$id}",
+        "mirId": "MIR:00000894",
+        "description": "The Blood Profiling Atlas in Cancer (BloodPAC) supports the management, analysis and sharing of liquid biopsy data for the oncology research community and aims to accelerate discovery and development of therapies, diagnostic tests, and other technologies for cancer treatment and prevention. The data commons supports cross-project analyses by harmonizing data from different projects through the collaborative development of a data dictionary, providing an API for data queries and download, and providing a cloud-based analysis workspace with rich tools and resources.",
+        "official": true,
+        "sampleId": "00000d53-99bc-4d3e-8ed7-6dc358baccb7",
+        "resourceHomeUrl": "https://data.bloodpac.org/.",
+        "institution": {
+          "id": 2820,
+          "name": "Open Commons Consortium",
+          "homeUrl": "https://www.occ-data.org/",
+          "description": "The Open Commons Consortium is a 501 non-profit venture which provides cloud computing and data commons resources to support \"scientific, environmental, medical and health care research.\"",
+          "rorId": null,
+          "location": {
+            "countryCode": "US",
+            "countryName": "United States"
+          }
+        },
+        "location": {
+          "countryCode": "US",
+          "countryName": "United States"
+        },
+        "deprecated": false,
+        "deprecationDate": null
+      }
+    ],
+    "created": "2022-01-09T18:59:10.775+0000",
+    "modified": "2022-01-09T18:59:10.775+0000",
+    "sampleId": "00000d53-99bc-4d3e-8ed7-6dc358baccb7",
+    "deprecated": false,
+    "deprecationDate": null
+  },
+  "bitbucket": {
+    "id": 3009,
+    "prefix": "bitbucket",
+    "name": "Bitbucket",
+    "pattern": "^[0-9A-Za-z-_\\.]+/[0-9A-Za-z-_\\.]+$",
+    "namespaceEmbeddedInLui": false,
+    "description": "Bitbucket is a Git-based source code repository hosting service owned by Atlassian.",
+    "mirId": "MIR:00000899",
+    "resources": [
+      {
+        "id": 3010,
+        "providerCode": "atlassian",
+        "name": "Atlassian",
+        "urlPattern": "https://bitbucket.org/{$id}",
+        "mirId": "MIR:00000896",
+        "description": "Atlassian Corporation Plc is an Australian software company that develops products for software developers, project managers and other software development teams.",
+        "official": true,
+        "sampleId": "andreadega/systems-biology-compiler",
+        "resourceHomeUrl": "https://www.atlassian.com/",
+        "institution": {
+          "id": 3008,
+          "name": "Atlassian",
+          "homeUrl": "https://www.atlassian.com/",
+          "description": "Atlassian Corporation Plc is an Australian software company that develops products for software developers, project managers and other software development teams.",
+          "rorId": null,
+          "location": {
+            "countryCode": "AU",
+            "countryName": "Australia"
+          }
+        },
+        "location": {
+          "countryCode": "AU",
+          "countryName": "Australia"
+        },
+        "deprecated": false,
+        "deprecationDate": null
+      }
+    ],
+    "created": "2022-01-09T19:35:12.259+0000",
+    "modified": "2022-01-09T19:35:12.259+0000",
+    "sampleId": "andreadega/systems-biology-compiler",
+    "deprecated": false,
+    "deprecationDate": null
+  },
+  "bbkg": {
+    "id": 3020,
+    "prefix": "bbkg",
+    "name": "Blue Brain Project Knowledge Graph",
+    "pattern": "^[-\\w]+(?:\\/[-\\w]+)(?:\\/\\b[0-9a-f]{8}\\b-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-\\b[0-9a-f]{12}\\b)$",
+    "namespaceEmbeddedInLui": false,
+    "description": "Blue Brain Project's published data as knowledge graphs and Web Studios.",
+    "mirId": "MIR:00000903",
+    "resources": [
+      {
+        "id": 3021,
+        "providerCode": "bbkg",
+        "name": "Blue Brain Project, EPFL",
+        "urlPattern": "https://bbp.epfl.ch/nexus/web/studios/public/{$id}",
+        "mirId": "MIR:00000902",
+        "description": "The goal of the Blue Brain Project is to build biologically detailed digital reconstructions and simulations of the mouse brain.",
+        "official": true,
+        "sampleId": "topological-sampling/studios/f0ba2f3e-aa6f-4264-8d18-8ee65cf6f61a",
+        "resourceHomeUrl": "https://portal.bluebrain.epfl.ch",
+        "institution": {
+          "id": 2985,
+          "name": "Blue Brain Project, EPFL",
+          "homeUrl": "https://portal.bluebrain.epfl.ch",
+          "description": "The goal of the Blue Brain Project is to build biologically detailed digital reconstructions and simulations of the mouse brain.",
+          "rorId": null,
+          "location": {
+            "countryCode": "CH",
+            "countryName": "Switzerland"
+          }
+        },
+        "location": {
+          "countryCode": "CH",
+          "countryName": "Switzerland"
+        },
+        "deprecated": false,
+        "deprecationDate": null
+      }
+    ],
+    "created": "2022-01-10T18:54:31.118+0000",
+    "modified": "2022-01-10T18:54:31.118+0000",
+    "sampleId": "topological-sampling/studios/f0ba2f3e-aa6f-4264-8d18-8ee65cf6f61a",
+    "deprecated": false,
+    "deprecationDate": null
+  },
+  "icdc": {
+    "id": 2638,
+    "prefix": "icdc",
+    "name": "Integrated Canine Data Commons",
+    "pattern": "^ICDC\\d{6}$",
+    "namespaceEmbeddedInLui": false,
+    "description": "The Integrated Canine Data Commons is one of several repositories within the NCI Cancer Research Data Commons (CRDC), a cloud-based data science infrastructure that provides secure access to a large, comprehensive, and expanding collection of cancer research data. The ICDC was established to further research on human cancers by enabling comparative analysis with canine cancer.",
+    "mirId": "MIR:00000812",
+    "resources": [
+      {
+        "id": 2639,
+        "providerCode": "icdc",
+        "name": "Integrated Canine Data Commons",
+        "urlPattern": "https://caninecommons.cancer.gov/#/study/{$id}",
+        "mirId": "MIR:00000811",
+        "description": "Integrated Canine Data Commons at National Cancer Institute (USA)",
+        "official": true,
+        "sampleId": "ICDC000009",
+        "resourceHomeUrl": "https://caninecommons.cancer.gov/#/",
+        "institution": {
+          "id": 2637,
+          "name": "National Cancer Institute",
+          "homeUrl": "https://www.cancer.gov/",
+          "description": "Organization information obtained from ROR API using ROR ID 'https://ror.org/040gcmg81' with Wikidata IDs [Q664846], and ISNI IDs [0000 0004 1936 8075]",
+          "rorId": "https://ror.org/040gcmg81",
+          "location": {
+            "countryCode": "US",
+            "countryName": "United States"
+          }
+        },
+        "location": {
+          "countryCode": "US",
+          "countryName": "United States"
+        },
+        "deprecated": false,
+        "deprecationDate": null
+      }
+    ],
+    "created": "2021-05-10T19:40:34.200+0000",
+    "modified": "2022-01-29T10:28:49.918+0000",
+    "sampleId": "ICDC000009",
+    "deprecated": false,
+    "deprecationDate": null
+  },
+  "modeldb.concept": {
+    "id": 3036,
+    "prefix": "modeldb.concept",
+    "name": "ModelDB concept",
+    "pattern": "\\d+",
+    "namespaceEmbeddedInLui": false,
+    "description": "Concept used by ModelDB, an accessible location for storing and efficiently retrieving computational neuroscience models.",
+    "mirId": "MIR:00000905",
+    "resources": [
+      {
+        "id": 3037,
+        "providerCode": "yale",
+        "name": "Yale University",
+        "urlPattern": "https://senselab.med.yale.edu/ModelDB/ModelList?id={$id}",
+        "mirId": "MIR:00000904",
+        "description": "Organization information obtained from ROR API using ROR ID 'https://ror.org/03v76x132' with Wikidata IDs [Q56612637,Q49112], and ISNI IDs [0000000419368710]",
+        "official": true,
+        "sampleId": "3639",
+        "resourceHomeUrl": "https://www.yale.edu",
+        "institution": {
+          "id": 3035,
+          "name": "Yale University",
+          "homeUrl": "https://www.yale.edu",
+          "description": "Organization information obtained from ROR API using ROR ID 'https://ror.org/03v76x132' with Wikidata IDs [Q56612637,Q49112], and ISNI IDs [0000000419368710]",
+          "rorId": null,
+          "location": {
+            "countryCode": "US",
+            "countryName": "United States"
+          }
+        },
+        "location": {
+          "countryCode": "US",
+          "countryName": "United States"
+        },
+        "deprecated": false,
+        "deprecationDate": null
+      }
+    ],
+    "created": "2022-01-29T10:45:35.629+0000",
+    "modified": "2022-01-29T10:45:35.629+0000",
+    "sampleId": "3639",
+    "deprecated": false,
+    "deprecationDate": null
+  },
+  "civic.gid": {
+    "id": 3039,
+    "prefix": "civic.gid",
+    "name": "CIViC Gene",
+    "pattern": "^[0-9]+$",
+    "namespaceEmbeddedInLui": false,
+    "description": "A CIViC Gene Summary is created to provide a high-level overview of clinical relevance of cancer variants for the gene. Gene Summaries in CIViC focus on emphasizing the clinical relevance from a molecular perspective rather than describing the biological function of the gene unless necessary to contextualize its clinical relevance in cancer. Gene Summaries include relevant cancer subtypes, specific treatments for the gene\u2019s associated variants, pathway interactions, functional alterations caused by the variants in the gene, and normal/abnormal functions of the gene with associated roles in oncogenesis",
+    "mirId": "MIR:00000907",
+    "resources": [
+      {
+        "id": 3040,
+        "providerCode": "civicdb",
+        "name": "Clinical Interpretation of Variants in Cancer (CIViC)",
+        "urlPattern": "https://civicdb.org/links/gene/{$id}",
+        "mirId": "MIR:00000906",
+        "description": "CIViC is an open access, open source, community-driven web resource for Clinical Interpretation of Variants in Cancer.",
+        "official": true,
+        "sampleId": "272",
+        "resourceHomeUrl": "https://civicdb.org/",
+        "institution": {
+          "id": 2750,
+          "name": "Washington University in St. Louis",
+          "homeUrl": "https://wustl.edu/",
+          "description": "Organization information obtained from ROR API using ROR ID 'https://ror.org/01yc7t268' with Wikidata IDs [Q777403], and ISNI IDs [0000 0001 2355 7002]",
+          "rorId": null,
+          "location": {
+            "countryCode": "US",
+            "countryName": "United States"
+          }
+        },
+        "location": {
+          "countryCode": "US",
+          "countryName": "United States"
+        },
+        "deprecated": false,
+        "deprecationDate": null
+      }
+    ],
+    "created": "2022-01-29T10:47:57.098+0000",
+    "modified": "2022-01-29T10:47:57.098+0000",
+    "sampleId": "272",
+    "deprecated": false,
+    "deprecationDate": null
+  },
+  "civic.vid": {
+    "id": 3042,
+    "prefix": "civic.vid",
+    "name": "CIViC Variant",
+    "pattern": "^[0-9]+$",
+    "namespaceEmbeddedInLui": false,
+    "description": "CIViC variants are usually genomic alterations, including single nucleotide variants (SNVs), insertion/deletion events (indels), copy number alterations (CNV\u2019s such as amplification or deletion), structural variants (SVs such as translocations and inversions), and other events that differ from the \u201cnormal\u201d genome. In some cases a CIViC variant may represent events of the transcriptome or proteome. For example, \u2018expression\u2019 or \u2018over-expression\u2019 is a valid variant. Regardless of the variant, it must have a Predictive, Prognostic, Predisposing, Diagnostic, Oncogenic, or Functional relevance that is clinical in nature to be entered in CIViC. i.e. There must be some rationale for why curation of this variant could ultimately aid clinical decision making.",
+    "mirId": "MIR:00000909",
+    "resources": [
+      {
+        "id": 3043,
+        "providerCode": "civicdb",
+        "name": "Clinical Interpretation of Variants in Cancer (CIViC)",
+        "urlPattern": "https://civicdb.org/links/variant/{$id}",
+        "mirId": "MIR:00000908",
+        "description": "CIViC is an open access, open source, community-driven web resource for Clinical Interpretation of Variants in Cancer.",
+        "official": true,
+        "sampleId": "12",
+        "resourceHomeUrl": "https://civicdb.org/",
+        "institution": {
+          "id": 2750,
+          "name": "Washington University in St. Louis",
+          "homeUrl": "https://wustl.edu/",
+          "description": "Organization information obtained from ROR API using ROR ID 'https://ror.org/01yc7t268' with Wikidata IDs [Q777403], and ISNI IDs [0000 0001 2355 7002]",
+          "rorId": null,
+          "location": {
+            "countryCode": "US",
+            "countryName": "United States"
+          }
+        },
+        "location": {
+          "countryCode": "US",
+          "countryName": "United States"
+        },
+        "deprecated": false,
+        "deprecationDate": null
+      }
+    ],
+    "created": "2022-01-29T10:48:56.640+0000",
+    "modified": "2022-01-29T10:48:56.640+0000",
+    "sampleId": "12",
+    "deprecated": false,
+    "deprecationDate": null
+  },
+  "gitlab": {
+    "id": 3013,
+    "prefix": "gitlab",
+    "name": "GitLab",
+    "pattern": "^[0-9A-Za-z_][0-9A-Za-z-_()\\. ]*/[0-9A-Za-z_][0-9A-Za-z-_\\. ]*$",
+    "namespaceEmbeddedInLui": false,
+    "description": "GitLab is The DevOps platform that empowers organizations to maximize the overall return on software development by delivering software faster and efficiently, while strengthening security and compliance. With GitLab, every team in your organization can collaboratively plan, build, secure, and deploy software to drive business outcomes faster with complete transparency, consistency and traceability.",
+    "mirId": "MIR:00000901",
+    "resources": [
+      {
+        "id": 3014,
+        "providerCode": "gitlab",
+        "name": "GitLab B.V.",
+        "urlPattern": "https://gitlab.com/{$id}",
+        "mirId": "MIR:00000900",
+        "description": "GitLab is an open core company which develops software for the software development lifecycle with 30 million estimated registered users and more than 1 million active license users, and has an active community of more than 2,500 contributors.",
+        "official": true,
+        "sampleId": "morpheus.lab/morpheus",
+        "resourceHomeUrl": "https://gitlab.com/",
+        "institution": {
+          "id": 3012,
+          "name": "GitLab B.V.",
+          "homeUrl": "https://gitlab.com/",
+          "description": "GitLab is an open core company which develops software for the software development lifecycle with 30 million estimated registered users and more than 1 million active license users, and has an active community of more than 2,500 contributors.",
+          "rorId": null,
+          "location": {
+            "countryCode": "US",
+            "countryName": "United States"
+          }
+        },
+        "location": {
+          "countryCode": "US",
+          "countryName": "United States"
+        },
+        "deprecated": false,
+        "deprecationDate": null
+      }
+    ],
+    "created": "2022-01-09T19:35:24.140+0000",
+    "modified": "2022-01-29T17:48:48.838+0000",
+    "sampleId": "morpheus.lab/morpheus",
+    "deprecated": false,
+    "deprecationDate": null
+  },
+  "rism": {
+    "id": 3047,
+    "prefix": "rism",
+    "name": "RISM Online",
+    "pattern": "^[a-z]+/[0-9]+$",
+    "namespaceEmbeddedInLui": false,
+    "description": "RISM Online is a new service that will publish the bibliographic and authority data from the catalogue of the R\u00e9pertoire International des Sources Musicales project.",
+    "mirId": "MIR:00000911",
+    "resources": [
+      {
+        "id": 3048,
+        "providerCode": "rism",
+        "name": "RISM Digital Center",
+        "urlPattern": "https://rism.online/{$id}",
+        "mirId": "MIR:00000910",
+        "description": "Organization information obtained from ROR API using ROR ID 'https://ror.org/01kk1vy78' with no Wikidata information, and no ISNI information",
+        "official": true,
+        "sampleId": "people/11035",
+        "resourceHomeUrl": "https://rism.digital/",
+        "institution": {
+          "id": 3046,
+          "name": "RISM Digital Center",
+          "homeUrl": "https://rism.digital/",
+          "description": "Organization information obtained from ROR API using ROR ID 'https://ror.org/01kk1vy78' with no Wikidata information, and no ISNI information",
+          "rorId": null,
+          "location": {
+            "countryCode": "CH",
+            "countryName": "Switzerland"
+          }
+        },
+        "location": {
+          "countryCode": "CH",
+          "countryName": "Switzerland"
+        },
+        "deprecated": false,
+        "deprecationDate": null
+      }
+    ],
+    "created": "2022-01-29T10:51:36.384+0000",
+    "modified": "2022-01-31T08:57:14.676+0000",
+    "sampleId": "people/11035",
+    "deprecated": false,
+    "deprecationDate": null
+  },
+  "crop2ml": {
+    "id": 3067,
+    "prefix": "crop2ml",
+    "name": "CropMRepository",
+    "pattern": "^[0-9]{9}$",
+    "namespaceEmbeddedInLui": false,
+    "description": "CropMRespository is a database of soil and crop biophysical process models.",
+    "mirId": "MIR:00001015",
+    "resources": [
+      {
+        "id": 3068,
+        "providerCode": "cropmdb",
+        "name": "Crop2ML model repository",
+        "urlPattern": "http://www.crop2ml.org/cropmdb/{$id}",
+        "mirId": "MIR:00001016",
+        "description": "CropMRespository is a database of soil and crop biophysical process models.",
+        "official": true,
+        "sampleId": "000000001",
+        "resourceHomeUrl": "http://www.crop2ml.org",
+        "institution": {
+          "id": 2292,
+          "name": "National Research Institute for Agriculture, Food and Environment",
+          "homeUrl": "https://www.inrae.fr/",
+          "description": "INRAE is France's new National Research Institute for Agriculture, Food and Environment, created on January 1, 2020, It was formed by the merger of INRA, the National Institute for Agricultural Research, and IRSTEA, the National Research Institute of Science and Technology for the Environment and Agriculture.",
+          "rorId": "https://ror.org/003vg9w96",
+          "location": {
+            "countryCode": "FR",
+            "countryName": "France"
+          }
+        },
+        "location": {
+          "countryCode": "FR",
+          "countryName": "France"
+        },
+        "deprecated": false,
+        "deprecationDate": null
+      }
+    ],
+    "created": "2022-02-01T17:20:51.953+0000",
+    "modified": "2022-02-01T17:20:51.953+0000",
+    "sampleId": "000000001",
     "deprecated": false,
     "deprecationDate": null
   },
