@@ -389,7 +389,7 @@ class Manifest(BaseModel):
             if e.master:
                 master_token = ' master="true"'
             else:
-                master_token = ""
+                master_token = ' master="false"'
             return f'  <content location="{e.location}" format="{e.format}"{master_token} />'
 
         lines = (
