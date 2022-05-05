@@ -15,6 +15,7 @@ def data_directory() -> Path:
 SHOWCASE_OMEX = "CombineArchiveShowCase.omex"
 COMPMODELS_OMEX = "CompModels.omex"
 BIOMODELS_OMEX = "BIOMD0000000001.omex"
+ICGB21FR_OMEX = "iCGB21FR.omex"
 SHOWCASE_OMEX_MANIFEST = "CombineArchiveShowCase_manifest.xml"
 COMPMODELS_OMEX_MANIFEST = "CompModels_manifest.xml"
 
@@ -110,6 +111,7 @@ def test_adding_removing_entry_manifest() -> None:
         COMPMODELS_OMEX,
         SHOWCASE_OMEX,
         BIOMODELS_OMEX,
+        ICGB21FR_OMEX,
     ],
 )
 def test_read_omex(omex_filename: str, data_directory: Path) -> None:

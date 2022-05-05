@@ -739,14 +739,21 @@ class Omex:
         extension = path.suffix[1:] if path.suffix else ""
         if extension == "xml":
             with open(path, "r") as f_in:
-                text = f_in.read(256)
-                if "<sbml" in text:
-                    return Omex.lookup_format("sbml")
-                if "<sedML" in text:
-                    return Omex.lookup_format("sedml")
-                if "<cell" in text:
-                    return Omex.lookup_format("cellml")
-                if "<COPASI" in text:
-                    return Omex.lookup_format("copasi")
+                try:
+                    text = f_in.read(256)
+                    if "<sbml" in text:
+                        return Omex.lookup_format("sbml")
+                    if "<sedML" in text:
+                        return Omex.lookup_format("sedml")
+                    if "<cell" in text:
+                        return Omex.lookup_format("cellml")
+                    if "<COPASI" in text:
+                        return Omex.lookup_format("copasi")
+                except UnicodeDecodeError as err:
+                    # handle incorrect encodings
+                    logger.error(
+                        f"UnicodeDecodeError in '{path}', "
+                        f"incorrect file encoding: '{err}'"
+                    )
 
         return Omex.lookup_format(extension)
