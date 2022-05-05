@@ -1,0 +1,61 @@
+"""{{ontology_id}} ontology."""
+
+from typing import Union, Optional
+from enum import Enum
+
+
+{{ontology_id}}Type = Union[str, '{{ontology_id}}']
+
+_terms = {
+    {% for tid in terms %}
+    {% if tid.startswith(ontology_id) %}
+    "{{tid}}": "{{terms[tid].name}}",
+    {% endif %}
+    {% endfor %}
+}
+
+pattern = r"{{pattern}}"
+
+
+class {{ontology_id}}(str, Enum):
+    """Enum for {{ontology_id}} ontology."""
+
+    {% for t in terms.values() %}
+    # {{t.name}}
+    {{t.id}} = "{{t.id}}"
+    {{t.var_name}} = "{{t.id}}"
+
+    {% endfor %}
+    @staticmethod
+    def get_name({{ontology_id.lower()}}: '{{ontology_id}}') -> Optional[str]:
+        """Get name for term.
+
+        :returns: None if term does not exist in ontology.
+        """
+        return _terms.get({{ontology_id.lower()}}.value, None)
+
+    @classmethod
+    def validate(cls, {{ontology_id.lower()}}: '{{ontology_id}}Type') -> '{{ontology_id}}':
+        """Validate and normalize {{ontology_id.lower()}}."""
+        term: '{{ontology_id}}'
+        if isinstance({{ontology_id.lower()}}, str):
+            if not {{ontology_id.lower()}}.startswith("{{ontology_id}}"):
+                raise ValueError({{ontology_id.lower()}} + " is not a {{ontology_id}} id.")
+            if {{ontology_id.lower()}}.startswith("{{ontology_id}}:"):
+                {{ontology_id.lower()}} = {{ontology_id.lower()}}.replace(":", "_")
+
+            term = getattr(cls, {{ontology_id.lower()}})
+
+        elif isinstance({{ontology_id.lower()}}, '{{ontology_id}}'):
+            term = {{ontology_id.lower()}}
+        else:
+            raise ValueError
+
+        return term
+
+__all__ = [
+    "{{ontology_id}}",
+    "{{ontology_id}}Type",
+]
+
+

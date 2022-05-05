@@ -1,18 +1,6 @@
 name: CI-CD
 
-on:
-  push:
-    branches:
-    - main
-    - develop
-    tags:
-      - '[0-9]+.[0-9]+.[0-9]+'
-      - '[0-9]+.[0-9]+.[0-9]+a[0-9]+'
-  pull_request:
-    branches:
-    - main
-    - develop
-
+on: [push]
 jobs:
   test:
     runs-on: ${{ matrix.os }}
@@ -20,8 +8,9 @@ jobs:
       fail-fast: false
       matrix:
         os: [ubuntu-latest]
+        # os: [ubuntu-latest, macos-latest]
         # os: [ubuntu-latest, macos-latest, windows-latest]
-        python-version: [3.7, 3.8, 3.9]
+        python-version: ["3.8", "3.9", "3.10"]
 
     steps:
     - uses: actions/checkout@v2
@@ -35,7 +24,7 @@ jobs:
         python -m pip install tox tox-gh-actions
     - name: Test with tox
       run:
-        tox -- --cov-report=xml
+        tox --
     - name: Report coverage
       shell: bash
       run: bash <(curl -s https://codecov.io/bash)
@@ -47,7 +36,7 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest]
-        python-version: [3.8]
+        python-version: [3.9]
 
     steps:
     - uses: actions/checkout@v2

@@ -1,3 +1,4 @@
+.vscode
 *.pyc
 *~
 .DS_Store
@@ -21,3 +22,6 @@ __pycache__
 .Rhistory
 *.tsv#
 *.xlsx#
+
+# OWL ontologies
+*.owl.gz

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<omexManifest xmlns="http://identifiers.org/combine.specifications/omex-manifest">
+  <content location="." format="http://identifiers.org/combine.specifications/omex" />
+  <content location="./manifest.xml" format="http://identifiers.org/combine.specifications/omex-manifest" />
+  <content location="./README.md" format="http://purl.org/NET/mediatypes/text/x-markdown"/>
+  <content location="./models/omex_comp.xml" format="http://identifiers.org/combine.specifications/sbml.level-3.version-1" />
+  <content location="./models/omex_comp_flat.xml" format="http://identifiers.org/combine.specifications/sbml.level-3.version-1" />
+  <content location="./models/omex_minimal.xml" format="http://identifiers.org/combine.specifications/sbml.level-3.version-1" />
+</omexManifest>

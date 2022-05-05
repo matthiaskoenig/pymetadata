@@ -1,6 +1,9 @@
+.. image:: https://github.com/matthiaskoenig/pymetadata/raw/develop/docs/images/favicon/pymetadata-100x100-300dpi.png
+   :align: left
+   :alt: pymetadata logo
 
-pymetadata: python utilities for metadata
-=========================================
+pymetadata: python utilities for metadata and COMBINE archives
+==============================================================
 
 .. image:: https://github.com/matthiaskoenig/pymetadata/workflows/CI-CD/badge.svg
    :target: https://github.com/matthiaskoenig/pymetadata/workflows/CI-CD
@@ -22,8 +25,8 @@ pymetadata: python utilities for metadata
    :target: https://codecov.io/gh/matthiaskoenig/pymetadata
    :alt: Codecov
 
-.. image:: https://zenodo.org/badge/55952847.svg
-   :target: https://zenodo.org/badge/latestdoi/55952847
+.. image:: https://zenodo.org/badge/DOI/10.5281/zenodo.5308801.svg
+   :target: https://doi.org/10.5281/zenodo.5308801
    :alt: Zenodo DOI
 
 .. image:: https://img.shields.io/badge/code%20style-black-000000.svg
@@ -40,14 +43,22 @@ metadata in the context of COMBINE standards with source code available from
 
 Features include among others
 
+- COMBINE archive version 1 support (OMEX)
 - annotation classes and helpers
+- SBO and KISAO ontology enums
  
 If you have any questions or issues please `open an issue <https://github.com/matthiaskoenig/pymetadata/issues>`__.
 
+Documentation
+=============
+Documentation is still work in progress. For an example usage of the COMBINE archive
+see `src/pymetadata/examples/omex_example.py <src/pymetadata/examples/omex_example.py>`__.
+
 How to cite
 ===========
-.. image:: https://zenodo.org/badge/55952847.svg
-   :target: https://zenodo.org/badge/latestdoi/55952847
+
+.. image:: https://zenodo.org/badge/DOI/10.5281/zenodo.5308801.svg
+   :target: https://doi.org/10.5281/zenodo.5308801
    :alt: Zenodo DOI
 
 Contributing
@@ -81,7 +92,7 @@ Matthias König is supported by the Federal Ministry of Education and Research (
 within the research network Systems Medicine of the Liver (**LiSyM**, grant number 031L0054) 
 and by the German Research Foundation (DFG) within the Research Unit Programme FOR 5151 
 "`QuaLiPerF <https://qualiperf.de>`__ (Quantifying Liver Perfusion-Function Relationship in Complex Resection - 
-A Systems Medicine Approach)" by grant number 436883643.
+A Systems Medicine Approach)" by grant number 436883643 and by grant number 465194077 (Priority Programme SPP 2311, Subproject SimLivA).
 
 Installation
 ============
@@ -106,4 +117,4 @@ To install for development use::
 
     pip install -e .[development]
 
-© 2021 Matthias König
+© 2021-2022 Matthias König

@@ -1,1 +1,1 @@
-"""Package handling ontologies."""
+"""Ontologies."""
