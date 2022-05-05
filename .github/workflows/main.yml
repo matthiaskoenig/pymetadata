@@ -24,13 +24,13 @@ jobs:
         python -m pip install tox tox-gh-actions
     - name: Test with tox
       run:
-        tox -- --cov-report=xml
+        tox --
     - name: Report coverage
       shell: bash
       run: bash <(curl -s https://codecov.io/bash)
 
   release:
-    needs: tests
+    needs: test
     if: startsWith(github.ref, 'refs/tags')
     runs-on: ${{ matrix.os }}
     strategy:
