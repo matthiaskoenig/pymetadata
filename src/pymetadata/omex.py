@@ -347,6 +347,7 @@ class Manifest(BaseModel):
     ]
 
     def __init__(self, **data) -> None:  # type: ignore
+        """Initialize Manifest."""
         super().__init__(**data)
         for e in self.entries:
             if not e.location.startswith("."):

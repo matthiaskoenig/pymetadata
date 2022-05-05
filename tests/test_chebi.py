@@ -1,3 +1,4 @@
+"""Test ChEBI."""
 from pathlib import Path
 
 import pytest
@@ -9,6 +10,7 @@ from pymetadata.chebi import ChebiQuery
     "chebi", ["CHEBI:2668", "CHEBI:138366", "CHEBI:9637", "CHEBI:155897"]
 )
 def test_chebi(tmp_path: Path, chebi: str) -> None:
+    """Test that chebi information can be accessed."""
     cache_path = tmp_path / "cache"
     keys = ["chebi", "formula", "charge", "mass", "inchikey"]
 

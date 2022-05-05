@@ -42,7 +42,7 @@ class RDFAnnotation:
     """
 
     def __init__(self, qualifier: Union[BQB, BQM], resource: str):
-
+        """Initialize RDFAnnotation."""
         self.qualifier: Union[BQB, BQM] = qualifier
         self.collection: Optional[str] = None
         self.term: Optional[str] = None
@@ -71,7 +71,7 @@ class RDFAnnotation:
                 self.collection, self.term = match1.group(1), match1.group(2)
 
             if not self.collection:
-                # test new short pattern
+                # tests new short pattern
                 match2 = IDENTIFIERS_ORG_PATTERN2.match(resource)
                 if match2:
                     tokens = match2.group(1).split(":")
@@ -225,7 +225,7 @@ class RDFAnnotationData(RDFAnnotation):
     """
 
     def __init__(self, annotation: RDFAnnotation):
-
+        """Initialize RDFAnnotationData."""
         self.resource = annotation.resource
         self.qualifier = annotation.qualifier
         self.collection = annotation.collection

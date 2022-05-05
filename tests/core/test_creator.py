@@ -1,4 +1,4 @@
-import pytest
+"""Test creator."""
 
 from pymetadata.core.creator import Creator
 

@@ -1,3 +1,4 @@
+"""Test ontology."""
 import pytest
 
 from pymetadata.metadata import SBO, SBOType

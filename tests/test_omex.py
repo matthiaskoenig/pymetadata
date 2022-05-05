@@ -1,24 +1,26 @@
+"""Test omex."""
 from pathlib import Path
 
 import pytest
 
-from pymetadata import RESOURCES_DIR
 from pymetadata.omex import Manifest, ManifestEntry, Omex
 
 
-SHOWCASE_OMEX = RESOURCES_DIR / "testdata" / "omex" / "CombineArchiveShowCase.omex"
-COMPMODELS_OMEX = RESOURCES_DIR / "testdata" / "omex" / "CompModels.omex"
-BIOMODELS_OMEX = RESOURCES_DIR / "testdata" / "omex" / "BIOMD0000000001.omex"
+@pytest.fixture(scope="session")
+def data_directory() -> Path:
+    """Path to test data directory."""
+    return Path(__file__).parent / "data"
 
-SHOWCASE_OMEX_MANIFEST = (
-    RESOURCES_DIR / "testdata" / "omex" / "CombineArchiveShowCase_manifest.xml"
-)
-COMPMODELS_OMEX_MANIFEST = (
-    RESOURCES_DIR / "testdata" / "omex" / "CompModels_manifest.xml"
-)
+
+SHOWCASE_OMEX = "CombineArchiveShowCase.omex"
+COMPMODELS_OMEX = "CompModels.omex"
+BIOMODELS_OMEX = "BIOMD0000000001.omex"
+SHOWCASE_OMEX_MANIFEST = "CombineArchiveShowCase_manifest.xml"
+COMPMODELS_OMEX_MANIFEST = "CompModels_manifest.xml"
 
 
 def test_entry_from_dict() -> None:
+    """Test entry creation from dictionary."""
     entry_data = {
         "location": "./model/model1.xml",
         "format": "sbml",
@@ -31,6 +33,7 @@ def test_entry_from_dict() -> None:
 
 
 def test_manifest_from_dict() -> None:
+    """Test manifest conversion to dictionary."""
     manifest_data = {
         "entries": [
             {
@@ -48,24 +51,26 @@ def test_manifest_from_dict() -> None:
     assert manifest
 
 
-def test_manifest_from_file() -> None:
+def test_manifest_from_file(data_directory: Path) -> None:
     """Test that manifest can be created from file."""
-    manifest_path = RESOURCES_DIR / "testdata" / "omex" / "CompModels_manifest.xml"
+    manifest_path = data_directory / "omex" / COMPMODELS_OMEX_MANIFEST
     manifest = Manifest.from_manifest(manifest_path)
     assert manifest
     assert len(manifest) == 6
 
 
 @pytest.mark.parametrize(
-    "manifest_path",
+    "manifest_filename",
     [
         COMPMODELS_OMEX_MANIFEST,
         SHOWCASE_OMEX_MANIFEST,
     ],
 )
-def test_manifest_to_file(manifest_path: Path, tmp_path: Path) -> None:
+def test_manifest_to_file(
+    manifest_filename: str, data_directory: Path, tmp_path: Path
+) -> None:
     """Test that manifest can be writen to manifest.xml."""
-    manifest = Manifest.from_manifest(manifest_path)
+    manifest = Manifest.from_manifest(data_directory / "omex" / manifest_filename)
 
     manifest2_path = tmp_path / "manifest.xml"
     manifest.to_manifest(manifest2_path)
@@ -100,31 +105,31 @@ def test_adding_removing_entry_manifest() -> None:
 
 
 @pytest.mark.parametrize(
-    "omex_path",
+    "omex_filename",
     [
         COMPMODELS_OMEX,
         SHOWCASE_OMEX,
         BIOMODELS_OMEX,
     ],
 )
-def test_read_omex(omex_path: Path) -> None:
+def test_read_omex(omex_filename: str, data_directory: Path) -> None:
     """Test reading of omex files."""
-    omex = Omex.from_omex(omex_path)
+    omex = Omex.from_omex(data_directory / "omex" / omex_filename)
     assert omex
     assert omex.manifest
 
 
-def test_remove_entry_omex() -> None:
+def test_remove_entry_omex(data_directory: Path) -> None:
     """Test removing entry from omex file."""
-    omex = Omex.from_omex(COMPMODELS_OMEX)
+    omex = Omex.from_omex(data_directory / "omex" / COMPMODELS_OMEX)
     omex_len = len(omex.manifest)
     omex.remove_entry_for_location("./README.md")
     assert len(omex.manifest) == omex_len - 1
 
 
-def test_omex_to_directory(tmp_path: Path) -> None:
+def test_omex_to_directory(data_directory: Path, tmp_path: Path) -> None:
     """Test export to directory."""
-    omex = Omex.from_omex(COMPMODELS_OMEX)
+    omex = Omex.from_omex(data_directory / "omex" / COMPMODELS_OMEX)
     omex.to_directory(tmp_path)
     for e in omex.manifest.entries:
         if e.location != ".":
@@ -138,9 +143,9 @@ def test_omex_to_directory(tmp_path: Path) -> None:
         assert e.master == e2.master
 
 
-def test_omex_to_omex(tmp_path: Path) -> None:
+def test_omex_to_omex(data_directory: Path, tmp_path: Path) -> None:
     """Test export to directory."""
-    omex = Omex.from_omex(COMPMODELS_OMEX)
+    omex = Omex.from_omex(data_directory / "omex" / COMPMODELS_OMEX)
     omex_path = tmp_path / "example.omex"
     omex.to_omex(omex_path)
 
@@ -156,7 +161,7 @@ def test_omex_to_omex(tmp_path: Path) -> None:
 
 
 @pytest.mark.parametrize(
-    "omex_path, omex_flag",
+    "omex_filename, omex_flag",
     [
         (COMPMODELS_OMEX, True),
         (SHOWCASE_OMEX, True),
@@ -165,14 +170,14 @@ def test_omex_to_omex(tmp_path: Path) -> None:
         (SHOWCASE_OMEX_MANIFEST, False),
     ],
 )
-def test_is_omex(omex_path: Path, omex_flag: bool) -> None:
+def test_is_omex(omex_filename: str, omex_flag: bool, data_directory: Path) -> None:
     """Test if path is a COMBINE archive."""
-    assert Omex.is_omex(omex_path) == omex_flag
+    assert Omex.is_omex(data_directory / "omex" / omex_filename) == omex_flag
 
 
-def test_entries_by_format() -> None:
+def test_entries_by_format(data_directory: Path) -> None:
     """Test that entries can be retrieved by format key."""
-    omex = Omex.from_omex(SHOWCASE_OMEX)
+    omex = Omex.from_omex(data_directory / "omex" / SHOWCASE_OMEX)
     sbml_entries = omex.entries_by_format("sbml")
     assert sbml_entries
     assert len(sbml_entries) == 1

@@ -38383,31 +38383,31 @@
     "deprecated": false,
     "deprecationDate": null
   },
-  "icdc": {
-    "id": 2638,
-    "prefix": "icdc",
-    "name": "Integrated Canine Data Commons",
-    "pattern": "^ICDC\\d{6}$",
+  "dg.80b6": {
+    "id": 3146,
+    "prefix": "dg.80b6",
+    "name": "GenoMEL Data Commons",
+    "pattern": "[0-9a-fA-F]{8}\\-[0-9a-fA-F]{4}\\-[0-9a-fA-F]{4}\\-[0-9a-fA-F]{4}\\-[0-9a-fA-F]{12}",
     "namespaceEmbeddedInLui": false,
-    "description": "The Integrated Canine Data Commons is one of several repositories within the NCI Cancer Research Data Commons (CRDC), a cloud-based data science infrastructure that provides secure access to a large, comprehensive, and expanding collection of cancer research data. The ICDC was established to further research on human cancers by enabling comparative analysis with canine cancer.",
-    "mirId": "MIR:00000812",
+    "description": "The GenoMEL data commons supports the management, analysis and sharing of next generation sequencing data for the GenoMEL research community and aims to accelerate opportunities for discovery of susceptibility genes for melanoma. The data commons supports cross-project analyses by harmonizing data from different projects through the development of a data dictionary and utilization of common workflows, providing an API for data queries, and providing a cloud-based analysis workspace with rich tools and resources.",
+    "mirId": "MIR:00000919",
     "resources": [
       {
-        "id": 2639,
-        "providerCode": "icdc",
-        "name": "Integrated Canine Data Commons",
-        "urlPattern": "https://caninecommons.cancer.gov/#/study/{$id}",
-        "mirId": "MIR:00000811",
-        "description": "Integrated Canine Data Commons at National Cancer Institute (USA)",
+        "id": 3147,
+        "providerCode": "dg.80b6",
+        "name": "GenoMEL Data Commons",
+        "urlPattern": "https://genomel.bionimbus.org/ga4gh/drs/v1/objects/{$id}",
+        "mirId": "MIR:00000918",
+        "description": "The GenoMEL data commons supports the management, analysis and sharing of next generation sequencing data for the GenoMEL research community and aims to accelerate opportunities for discovery of susceptibility genes for melanoma. The data commons supports cross-project analyses by harmonizing data from different projects through the development of a data dictionary and utilization of common workflows, providing an API for data queries, and providing a cloud-based analysis workspace with rich tools and resources.",
         "official": true,
-        "sampleId": "ICDC000009",
-        "resourceHomeUrl": "https://caninecommons.cancer.gov/#/",
+        "sampleId": "000e5d06-1326-4b6f-8d8a-95c63374c7c1",
+        "resourceHomeUrl": "https://genomel.bionimbus.org/",
         "institution": {
-          "id": 2637,
-          "name": "National Cancer Institute",
-          "homeUrl": "https://www.cancer.gov/",
-          "description": "Organization information obtained from ROR API using ROR ID 'https://ror.org/040gcmg81' with Wikidata IDs [Q664846], and ISNI IDs [0000 0004 1936 8075]",
-          "rorId": "https://ror.org/040gcmg81",
+          "id": 3145,
+          "name": "Open Commons Consortium ",
+          "homeUrl": "https://www.occ-data.org/",
+          "description": "The Open Commons Consortium (OCC) manages and operates cloud computing, data commons, and data ecosystems to advance scientific, medical, health care and environmental research for human and societal impact.",
+          "rorId": null,
           "location": {
             "countryCode": "US",
             "countryName": "United States"
@@ -38421,9 +38421,9 @@
         "deprecationDate": null
       }
     ],
-    "created": "2021-05-10T19:40:34.200+0000",
-    "modified": "2022-01-29T10:28:49.918+0000",
-    "sampleId": "ICDC000009",
+    "created": "2022-02-27T20:31:14.555+0000",
+    "modified": "2022-02-27T20:31:14.555+0000",
+    "sampleId": "000e5d06-1326-4b6f-8d8a-95c63374c7c1",
     "deprecated": false,
     "deprecationDate": null
   },
@@ -38688,6 +38688,930 @@
     "created": "2022-02-01T17:20:51.953+0000",
     "modified": "2022-02-01T17:20:51.953+0000",
     "sampleId": "000000001",
+    "deprecated": false,
+    "deprecationDate": null
+  },
+  "dg.f738": {
+    "id": 3135,
+    "prefix": "dg.f738",
+    "name": "VA Data Commons",
+    "pattern": "[0-9a-fA-F]{8}\\-[0-9a-fA-F]{4}\\-[0-9a-fA-F]{4}\\-[0-9a-fA-F]{4}\\-[0-9a-fA-F]{12}",
+    "namespaceEmbeddedInLui": false,
+    "description": "The VA Data Commons supports the research and analysis of US military Veteran medical and genomic data and aims to accelerate scientific discovery and development of therapies, diagnostic tests, and other technologies for improving the lives of Veterans and beyond.",
+    "mirId": "MIR:00000916",
+    "resources": [
+      {
+        "id": 3136,
+        "providerCode": "dg.F738/",
+        "name": "VA Data Commons",
+        "urlPattern": "https://va.data-commons.org/ga4gh/drs/v1/objects/{$id}",
+        "mirId": "MIR:00001017",
+        "description": "The VA Data Commons supports the research and analysis of US military Veteran medical and genomic data and aims to accelerate scientific discovery and development of therapies, diagnostic tests, and other technologies for improving the lives of Veterans and beyond.",
+        "official": true,
+        "sampleId": "8d8e55d1-1774-4f8d-99d3-dccec73d191a",
+        "resourceHomeUrl": "https://va.data-commons.org/",
+        "institution": {
+          "id": 2820,
+          "name": "Open Commons Consortium",
+          "homeUrl": "https://www.occ-data.org/",
+          "description": "The Open Commons Consortium is a 501 non-profit venture which provides cloud computing and data commons resources to support \"scientific, environmental, medical and health care research.\"",
+          "rorId": null,
+          "location": {
+            "countryCode": "US",
+            "countryName": "United States"
+          }
+        },
+        "location": {
+          "countryCode": "US",
+          "countryName": "United States"
+        },
+        "deprecated": false,
+        "deprecationDate": null
+      }
+    ],
+    "created": "2022-02-27T20:29:04.474+0000",
+    "modified": "2022-02-27T20:29:04.474+0000",
+    "sampleId": "8d8e55d1-1774-4f8d-99d3-dccec73d191a",
+    "deprecated": false,
+    "deprecationDate": null
+  },
+  "dg.nacd": {
+    "id": 3139,
+    "prefix": "dg.nacd",
+    "name": "https://accessclinicaldata.niaid.nih.gov/",
+    "pattern": "[0-9a-fA-F]{8}\\-[0-9a-fA-F]{4}\\-[0-9a-fA-F]{4}\\-[0-9a-fA-F]{4}\\-[0-9a-fA-F]{12}",
+    "namespaceEmbeddedInLui": false,
+    "description": "AccessClinicalData@NIAID is a NIAID cloud-based, secure data platform that enables sharing of and access to reports and data sets from NIAID COVID-19 and other sponsored clinical trials for the basic and clinical research community.",
+    "mirId": "MIR:00000917",
+    "resources": [
+      {
+        "id": 3140,
+        "providerCode": "dg.nacd",
+        "name": "https://accessclinicaldata.niaid.nih.gov/",
+        "urlPattern": "https://accessclinicaldata.niaid.nih.gov/ga4gh/drs/v1/objects/{$id}",
+        "mirId": "MIR:00000999",
+        "description": "AccessClinicalData@NIAID is a NIAID cloud-based, secure data platform that enables sharing of and access to reports and data sets from NIAID COVID-19 and other sponsored clinical trials for the basic and clinical research community",
+        "official": true,
+        "sampleId": "2096a0d6-1846-4b98-9ba3-e4065d82111d",
+        "resourceHomeUrl": "https://accessclinicaldata.niaid.nih.gov/",
+        "institution": {
+          "id": 3164,
+          "name": " Open Commons Consortium",
+          "homeUrl": "https://www.occ-data.org/",
+          "description": "The Open Commons Consortium (OCC) manages and operates cloud computing, data commons, and data ecosystems to advance scientific, medical, health care and environmental research for human and societal impact.",
+          "rorId": null,
+          "location": {
+            "countryCode": "US",
+            "countryName": "United States"
+          }
+        },
+        "location": {
+          "countryCode": "US",
+          "countryName": "United States"
+        },
+        "deprecated": false,
+        "deprecationDate": null
+      }
+    ],
+    "created": "2022-02-27T20:30:23.278+0000",
+    "modified": "2022-02-27T20:30:23.278+0000",
+    "sampleId": "2096a0d6-1846-4b98-9ba3-e4065d82111d",
+    "deprecated": false,
+    "deprecationDate": null
+  },
+  "dg.4825": {
+    "id": 3142,
+    "prefix": "dg.4825",
+    "name": "ACCOuNT Data Commons",
+    "pattern": "[0-9a-fA-F]{8}\\-[0-9a-fA-F]{4}\\-[0-9a-fA-F]{4}\\-[0-9a-fA-F]{4}\\-[0-9a-fA-F]{12}",
+    "namespaceEmbeddedInLui": false,
+    "description": "This website provides a centralized, cloud-based discovery portal for African American pharmacogenomics data and aims to accelerate discovery of novel genetic variants in African Americans related to clinically actionable cardiovascular phenotypes.",
+    "mirId": "MIR:00001019",
+    "resources": [
+      {
+        "id": 3143,
+        "providerCode": "dg.4825",
+        "name": "ACCOuNT Data Commons",
+        "urlPattern": "https://acct.bionimbus.org/ga4gh/drs/v1/objects/{$id}",
+        "mirId": "MIR:00001013",
+        "description": "This website provides a centralized, cloud-based discovery portal for African American pharmacogenomics data and aims to accelerate discovery of novel genetic variants in African Americans related to clinically actionable cardiovascular phenotypes.",
+        "official": true,
+        "sampleId": "003a12b5-1002-4791-bf7f-0d6f71ebd67b",
+        "resourceHomeUrl": "https://acct.bionimbus.org/",
+        "institution": {
+          "id": 2820,
+          "name": "Open Commons Consortium",
+          "homeUrl": "https://www.occ-data.org/",
+          "description": "The Open Commons Consortium is a 501 non-profit venture which provides cloud computing and data commons resources to support \"scientific, environmental, medical and health care research.\"",
+          "rorId": null,
+          "location": {
+            "countryCode": "US",
+            "countryName": "United States"
+          }
+        },
+        "location": {
+          "countryCode": "US",
+          "countryName": "United States"
+        },
+        "deprecated": false,
+        "deprecationDate": null
+      }
+    ],
+    "created": "2022-02-27T20:30:53.595+0000",
+    "modified": "2022-02-27T20:30:53.595+0000",
+    "sampleId": "003a12b5-1002-4791-bf7f-0d6f71ebd67b",
+    "deprecated": false,
+    "deprecationDate": null
+  },
+  "dg.ea80": {
+    "id": 3149,
+    "prefix": "dg.ea80",
+    "name": "NIDDK IBD Genetics Consortium Portal",
+    "pattern": "[0-9a-fA-F]{8}\\-[0-9a-fA-F]{4}\\-[0-9a-fA-F]{4}\\-[0-9a-fA-F]{4}\\-[0-9a-fA-F]{12}",
+    "namespaceEmbeddedInLui": false,
+    "description": "The Inflammatory Bowel Disease Genetics Consortium Data Commons supports the management, analysis, and sharing of genetic data to support the vision and mission of the IBD genetics consortium.",
+    "mirId": "MIR:00001021",
+    "resources": [
+      {
+        "id": 3150,
+        "providerCode": "dg.EA80",
+        "name": "NIDDK IBD Genetics Consortium Portal",
+        "urlPattern": "https://ibdgc.datacommons.io/ga4gh/drs/v1/objects/{$id}",
+        "mirId": "MIR:00000920",
+        "description": "The Inflammatory Bowel Disease Genetics Consortium Data Commons supports the management, analysis, and sharing of genetic data to support the vision and mission of the IBD genetics consortium.",
+        "official": true,
+        "sampleId": "00083977-d4d7-4593-a216-2b9c931b8b03",
+        "resourceHomeUrl": "https://ibdgc.datacommons.io/",
+        "institution": {
+          "id": 2820,
+          "name": "Open Commons Consortium",
+          "homeUrl": "https://www.occ-data.org/",
+          "description": "The Open Commons Consortium is a 501 non-profit venture which provides cloud computing and data commons resources to support \"scientific, environmental, medical and health care research.\"",
+          "rorId": null,
+          "location": {
+            "countryCode": "US",
+            "countryName": "United States"
+          }
+        },
+        "location": {
+          "countryCode": "US",
+          "countryName": "United States"
+        },
+        "deprecated": false,
+        "deprecationDate": null
+      }
+    ],
+    "created": "2022-02-27T20:31:33.330+0000",
+    "modified": "2022-02-27T20:31:33.330+0000",
+    "sampleId": "00083977-d4d7-4593-a216-2b9c931b8b03",
+    "deprecated": false,
+    "deprecationDate": null
+  },
+  "4503": {
+    "id": 3152,
+    "prefix": "4503",
+    "name": "BioData Catalyst",
+    "pattern": "[0-9a-fA-F]{8}\\-[0-9a-fA-F]{4}\\-[0-9a-fA-F]{4}\\-[0-9a-fA-F]{4}\\-[0-9a-fA-F]{12}",
+    "namespaceEmbeddedInLui": false,
+    "description": "NHLBI BioData Catalyst supports the management, analysis and sharing of human disease data for the research community and aims to advance basic understanding of the genetic basis of complex traits and accelerate discovery and development of therapies, diagnostic tests, and other technologies for diseases like cancer. The data commons supports cross-project analyses by harmonizing data from different projects through the collaborative development of a data dictionary, providing an API for data queries and download, and providing a cloud-based analysis workspace with rich tools and resources.",
+    "mirId": "MIR:00001020",
+    "resources": [
+      {
+        "id": 3153,
+        "providerCode": "dg.4503",
+        "name": "BioData Catalyst",
+        "urlPattern": "https://gen3.biodatacatalyst.nhlbi.nih.gov/ga4gh/drs/v1/objects/{$id}",
+        "mirId": "MIR:00000921",
+        "description": "NHLBI BioData Catalyst supports the management, analysis and sharing of human disease data for the research community and aims to advance basic understanding of the genetic basis of complex traits and accelerate discovery and development of therapies, diagnostic tests, and other technologies for diseases like cancer. The data commons supports cross-project analyses by harmonizing data from different projects through the collaborative development of a data dictionary, providing an API for data queries and download, and providing a cloud-based analysis workspace with rich tools and resources.",
+        "official": true,
+        "sampleId": "3dab719c-1fa0-461b-a543-5f0e564a9be4",
+        "resourceHomeUrl": "https://gen3.biodatacatalyst.nhlbi.nih.gov/",
+        "institution": {
+          "id": 3145,
+          "name": "Open Commons Consortium ",
+          "homeUrl": "https://www.occ-data.org/",
+          "description": "The Open Commons Consortium (OCC) manages and operates cloud computing, data commons, and data ecosystems to advance scientific, medical, health care and environmental research for human and societal impact.",
+          "rorId": null,
+          "location": {
+            "countryCode": "US",
+            "countryName": "United States"
+          }
+        },
+        "location": {
+          "countryCode": "US",
+          "countryName": "United States"
+        },
+        "deprecated": false,
+        "deprecationDate": null
+      }
+    ],
+    "created": "2022-02-27T20:31:54.933+0000",
+    "modified": "2022-02-27T20:31:54.933+0000",
+    "sampleId": "3dab719c-1fa0-461b-a543-5f0e564a9be4",
+    "deprecated": false,
+    "deprecationDate": null
+  },
+  "dg.md1r": {
+    "id": 3171,
+    "prefix": "dg.md1r",
+    "name": "MIDRC Data Commons",
+    "pattern": "[0-9a-fA-F]{8}\\-[0-9a-fA-F]{4}\\-[0-9a-fA-F]{4}\\-[0-9a-fA-F]{4}\\-[0-9a-fA-F]{12}",
+    "namespaceEmbeddedInLui": false,
+    "description": "The Medical Imaging & Data Resource Center (MIDRC) Data Commons supports the management, analysis and sharing of medical imaging data for the improvement of patient outcomes.",
+    "mirId": "MIR:00000932",
+    "resources": [
+      {
+        "id": 3172,
+        "providerCode": "dg.MD1R",
+        "name": "MIDRC Data Commons",
+        "urlPattern": "https://data.midrc.org/ga4gh/drs/v1/objects/{$id}",
+        "mirId": "MIR:00000931",
+        "description": "The Medical Imaging & Data Resource Center (MIDRC) Data Commons supports the management, analysis and sharing of medical imaging data for the improvement of patient outcomes.",
+        "official": true,
+        "sampleId": "000007c3-356a-4d59-a6c0-0ee920b60305",
+        "resourceHomeUrl": "https://data.midrc.org/",
+        "institution": {
+          "id": 2820,
+          "name": "Open Commons Consortium",
+          "homeUrl": "https://www.occ-data.org/",
+          "description": "The Open Commons Consortium is a 501 non-profit venture which provides cloud computing and data commons resources to support \"scientific, environmental, medical and health care research.\"",
+          "rorId": null,
+          "location": {
+            "countryCode": "US",
+            "countryName": "United States"
+          }
+        },
+        "location": {
+          "countryCode": "US",
+          "countryName": "United States"
+        },
+        "deprecated": false,
+        "deprecationDate": null
+      }
+    ],
+    "created": "2022-02-27T20:33:39.208+0000",
+    "modified": "2022-02-27T20:33:39.208+0000",
+    "sampleId": "000007c3-356a-4d59-a6c0-0ee920b60305",
+    "deprecated": false,
+    "deprecationDate": null
+  },
+  "pmr.workspace": {
+    "id": 3196,
+    "prefix": "pmr.workspace",
+    "name": "Physiome Model Repository workspace",
+    "pattern": "^[a-zA-Z0-9_\\-]+(/.*?)?$",
+    "namespaceEmbeddedInLui": false,
+    "description": "Workspace (Git repository) for modeling projects managed by the Physiome Model Repository",
+    "mirId": "MIR:00000948",
+    "resources": [
+      {
+        "id": 3197,
+        "providerCode": "abi",
+        "name": "University of Auckland",
+        "urlPattern": "https://models.physiomeproject.org/workspace/{$id}",
+        "mirId": "MIR:00000947",
+        "description": "Organization information obtained from ROR API using ROR ID 'https://ror.org/03b94tp07' with Wikidata IDs [Q492467], and ISNI IDs [0000 0004 0372 3343]",
+        "official": true,
+        "sampleId": "modularmassactionprimer",
+        "resourceHomeUrl": "https://www.auckland.ac.nz/en.html",
+        "institution": {
+          "id": 2795,
+          "name": "University of Auckland",
+          "homeUrl": "https://www.auckland.ac.nz/en.html",
+          "description": "Organization information obtained from ROR API using ROR ID 'https://ror.org/03b94tp07' with Wikidata IDs [Q492467], and ISNI IDs [0000 0004 0372 3343]",
+          "rorId": null,
+          "location": {
+            "countryCode": "NZ",
+            "countryName": "New Zealand"
+          }
+        },
+        "location": {
+          "countryCode": "NZ",
+          "countryName": "New Zealand"
+        },
+        "deprecated": false,
+        "deprecationDate": null
+      }
+    ],
+    "created": "2022-02-27T20:41:50.311+0000",
+    "modified": "2022-02-27T20:41:50.311+0000",
+    "sampleId": "modularmassactionprimer",
+    "deprecated": false,
+    "deprecationDate": null
+  },
+  "dg.373f": {
+    "id": 3155,
+    "prefix": "dg.373f",
+    "name": "The AnVIL",
+    "pattern": "[0-9a-fA-F]{8}\\-[0-9a-fA-F]{4}\\-[0-9a-fA-F]{4}\\-[0-9a-fA-F]{4}\\-[0-9a-fA-F]{12}",
+    "namespaceEmbeddedInLui": false,
+    "description": "The AnVIL supports the management, analysis and sharing of human disease data for the research community and aims to advance basic understanding of the genetic basis of complex traits and accelerate discovery and development of therapies, diagnostic tests, and other technologies for diseases like cancer. The data commons supports cross-project analyses by harmonizing data from different projects through the collaborative development of a data dictionary, providing an API for data queries and download, and providing a cloud-based analysis workspace with rich tools and resources.",
+    "mirId": "MIR:00000922",
+    "resources": [
+      {
+        "id": 3156,
+        "providerCode": "dg.373F",
+        "name": "The AnVIL",
+        "urlPattern": "https://gen3.theanvil.io/ga4gh/drs/v1/objects/{$id}",
+        "mirId": "MIR:00000913",
+        "description": "The AnVIL supports the management, analysis and sharing of human disease data for the research community and aims to advance basic understanding of the genetic basis of complex traits and accelerate discovery and development of therapies, diagnostic tests, and other technologies for diseases like cancer. The data commons supports cross-project analyses by harmonizing data from different projects through the collaborative development of a data dictionary, providing an API for data queries and download, and providing a cloud-based analysis workspace with rich tools and resources.",
+        "official": true,
+        "sampleId": "6f2f1d6c-c5b5-4171-8b5f-9b1ac8c8a8ca",
+        "resourceHomeUrl": "https://gen3.theanvil.io/",
+        "institution": {
+          "id": 2820,
+          "name": "Open Commons Consortium",
+          "homeUrl": "https://www.occ-data.org/",
+          "description": "The Open Commons Consortium is a 501 non-profit venture which provides cloud computing and data commons resources to support \"scientific, environmental, medical and health care research.\"",
+          "rorId": null,
+          "location": {
+            "countryCode": "US",
+            "countryName": "United States"
+          }
+        },
+        "location": {
+          "countryCode": "US",
+          "countryName": "United States"
+        },
+        "deprecated": false,
+        "deprecationDate": null
+      }
+    ],
+    "created": "2022-02-27T20:32:23.416+0000",
+    "modified": "2022-02-27T20:32:23.416+0000",
+    "sampleId": "6f2f1d6c-c5b5-4171-8b5f-9b1ac8c8a8ca",
+    "deprecated": false,
+    "deprecationDate": null
+  },
+  "dg.7c5b": {
+    "id": 3158,
+    "prefix": "dg.7c5b",
+    "name": "Environmental Data Commons",
+    "pattern": "[0-9a-fA-F]{8}\\-[0-9a-fA-F]{4}\\-[0-9a-fA-F]{4}\\-[0-9a-fA-F]{4}\\-[0-9a-fA-F]{12}",
+    "namespaceEmbeddedInLui": false,
+    "description": "This website provides a centralized, cloud-based portal for the open redistribution and analysis of environmental datasets and satellite imagery from OCC stakeholders like NASA and NOAA and aims to support the earth science research community as well as human assisted disaster relief.",
+    "mirId": "MIR:00000925",
+    "resources": [
+      {
+        "id": 3159,
+        "providerCode": "dg.7C5B",
+        "name": "Environmental Data Commons",
+        "urlPattern": "https://portal.occ-data.org/loginga4gh/drs/v1/objects/{$id}",
+        "mirId": "MIR:00000923",
+        "description": "This website provides a centralized, cloud-based portal for the open redistribution and analysis of environmental datasets and satellite imagery from OCC stakeholders like NASA and NOAA and aims to support the earth science research community as well as human assisted disaster relief.",
+        "official": true,
+        "sampleId": "00000014-990c-48f2-b0a8-fbb533860512",
+        "resourceHomeUrl": "https://portal.occ-data.org/",
+        "institution": {
+          "id": 2820,
+          "name": "Open Commons Consortium",
+          "homeUrl": "https://www.occ-data.org/",
+          "description": "The Open Commons Consortium is a 501 non-profit venture which provides cloud computing and data commons resources to support \"scientific, environmental, medical and health care research.\"",
+          "rorId": null,
+          "location": {
+            "countryCode": "US",
+            "countryName": "United States"
+          }
+        },
+        "location": {
+          "countryCode": "US",
+          "countryName": "United States"
+        },
+        "deprecated": false,
+        "deprecationDate": null
+      }
+    ],
+    "created": "2022-02-27T20:32:37.384+0000",
+    "modified": "2022-02-27T20:32:37.384+0000",
+    "sampleId": "00000014-990c-48f2-b0a8-fbb533860512",
+    "deprecated": false,
+    "deprecationDate": null
+  },
+  "f82a1a": {
+    "id": 3161,
+    "prefix": "f82a1a",
+    "name": "Kids First Data Catalog",
+    "pattern": "[0-9a-fA-F]{8}\\-[0-9a-fA-F]{4}\\-[0-9a-fA-F]{4}\\-[0-9a-fA-F]{4}\\-[0-9a-fA-F]{12}",
+    "namespaceEmbeddedInLui": false,
+    "description": "The Kids First Data Catalog supports the Kids First Data Resource Center by providing a digital object services that allow interoperability between data commons, including authentication and authorization for controlled access data.",
+    "mirId": "MIR:00000926",
+    "resources": [
+      {
+        "id": 3162,
+        "providerCode": "dg.F82A1A",
+        "name": "Kids First Data Catalog",
+        "urlPattern": "https://data.kidsfirstdrc.org/ga4gh/drs/v1/objects/{$id}",
+        "mirId": "MIR:00000924",
+        "description": "The Kids First Data Catalog supports the Kids First Data Resource Center by providing a digital object services that allow interoperability between data commons, including authentication and authorization for controlled access data.",
+        "official": true,
+        "sampleId": "0000324e-e2d9-4ccd-b25b-2d16c8a87b28",
+        "resourceHomeUrl": "https://data.kidsfirstdrc.org/",
+        "institution": {
+          "id": 2820,
+          "name": "Open Commons Consortium",
+          "homeUrl": "https://www.occ-data.org/",
+          "description": "The Open Commons Consortium is a 501 non-profit venture which provides cloud computing and data commons resources to support \"scientific, environmental, medical and health care research.\"",
+          "rorId": null,
+          "location": {
+            "countryCode": "US",
+            "countryName": "United States"
+          }
+        },
+        "location": {
+          "countryCode": "US",
+          "countryName": "United States"
+        },
+        "deprecated": false,
+        "deprecationDate": null
+      }
+    ],
+    "created": "2022-02-27T20:32:53.923+0000",
+    "modified": "2022-02-27T20:32:53.923+0000",
+    "sampleId": "0000324e-e2d9-4ccd-b25b-2d16c8a87b28",
+    "deprecated": false,
+    "deprecationDate": null
+  },
+  "dg.712c": {
+    "id": 3165,
+    "prefix": "dg.712c",
+    "name": "NHLBI BioData Catalyst",
+    "pattern": "[0-9a-fA-F]{8}\\-[0-9a-fA-F]{4}\\-[0-9a-fA-F]{4}\\-[0-9a-fA-F]{4}\\-[0-9a-fA-F]{12}",
+    "namespaceEmbeddedInLui": false,
+    "description": "NHLBI BioData Catalyst supports the management, analysis and sharing of human disease data for the research community and aims to advance basic understanding of the genetic basis of complex traits and accelerate discovery and development of therapies, diagnostic tests, and other technologies for diseases like cancer. The data commons supports cross-project analyses by harmonizing data from different projects through the collaborative development of a data dictionary, providing an API for data queries and download, and providing a cloud-based analysis workspace with rich tools and resources.\n",
+    "mirId": "MIR:00000928",
+    "resources": [
+      {
+        "id": 3166,
+        "providerCode": "dg.712C",
+        "name": "NHLBI BioData Catalyst",
+        "urlPattern": "https://staging.gen3.biodatacatalyst.nhlbi.nih.gov/ga4gh/drs/v1/objects/{$id}",
+        "mirId": "MIR:00000927",
+        "description": "NHLBI BioData Catalyst supports the management, analysis and sharing of human disease data for the research community and aims to advance basic understanding of the genetic basis of complex traits and accelerate discovery and development of therapies, diagnostic tests, and other technologies for diseases like cancer. The data commons supports cross-project analyses by harmonizing data from different projects through the collaborative development of a data dictionary, providing an API for data queries and download, and providing a cloud-based analysis workspace with rich tools and resources.\n",
+        "official": true,
+        "sampleId": "0129cb63-1cc7-4151-b119-5e3ba3a8eb07",
+        "resourceHomeUrl": "https://staging.gen3.biodatacatalyst.nhlbi.nih.gov/",
+        "institution": {
+          "id": 3164,
+          "name": " Open Commons Consortium",
+          "homeUrl": "https://www.occ-data.org/",
+          "description": "The Open Commons Consortium (OCC) manages and operates cloud computing, data commons, and data ecosystems to advance scientific, medical, health care and environmental research for human and societal impact.",
+          "rorId": null,
+          "location": {
+            "countryCode": "US",
+            "countryName": "United States"
+          }
+        },
+        "location": {
+          "countryCode": "US",
+          "countryName": "United States"
+        },
+        "deprecated": false,
+        "deprecationDate": null
+      }
+    ],
+    "created": "2022-02-27T20:33:06.143+0000",
+    "modified": "2022-02-27T20:33:06.143+0000",
+    "sampleId": "0129cb63-1cc7-4151-b119-5e3ba3a8eb07",
+    "deprecated": false,
+    "deprecationDate": null
+  },
+  "dg.63d5": {
+    "id": 3168,
+    "prefix": "dg.63d5",
+    "name": "Chicago Pandemic Response Commons",
+    "pattern": "[0-9a-fA-F]{8}\\-[0-9a-fA-F]{4}\\-[0-9a-fA-F]{4}\\-[0-9a-fA-F]{4}\\-[0-9a-fA-F]{12}",
+    "namespaceEmbeddedInLui": false,
+    "description": "Chicago Pandemic Response Commons known as CCC is the first regional data commons launched under the Pandemic Response Commons Consortium. Born out of a consortium of Chicago-area civic and healthcare organizations with support from several technology partners, the PRC represents a persistent data resource for the research community engaging with COVID-19.",
+    "mirId": "MIR:00001026",
+    "resources": [
+      {
+        "id": 3169,
+        "providerCode": "dg.63D5",
+        "name": "Chicago Pandemic Response Commons",
+        "urlPattern": "https://chicagoland.pandemicresponsecommons.org/ga4gh/drs/v1/objects/{$id}",
+        "mirId": "MIR:00000929",
+        "description": "Chicago Pandemic Response Commons known as CCC is the first regional data commons launched under the Pandemic Response Commons Consortium. Born out of a consortium of Chicago-area civic and healthcare organizations with support from several technology partners, the PRC represents a persistent data resource for the research community engaging with COVID-19.",
+        "official": true,
+        "sampleId": "00002b0f-0adf-4015-b2b7-b38f9337044a",
+        "resourceHomeUrl": "https://chicagoland.pandemicresponsecommons.org/",
+        "institution": {
+          "id": 2820,
+          "name": "Open Commons Consortium",
+          "homeUrl": "https://www.occ-data.org/",
+          "description": "The Open Commons Consortium is a 501 non-profit venture which provides cloud computing and data commons resources to support \"scientific, environmental, medical and health care research.\"",
+          "rorId": null,
+          "location": {
+            "countryCode": "US",
+            "countryName": "United States"
+          }
+        },
+        "location": {
+          "countryCode": "US",
+          "countryName": "United States"
+        },
+        "deprecated": false,
+        "deprecationDate": null
+      }
+    ],
+    "created": "2022-02-27T20:33:18.862+0000",
+    "modified": "2022-02-27T20:33:18.862+0000",
+    "sampleId": "00002b0f-0adf-4015-b2b7-b38f9337044a",
+    "deprecated": false,
+    "deprecationDate": null
+  },
+  "6vts": {
+    "id": 3174,
+    "prefix": "6vts",
+    "name": "JCOIN Portal",
+    "pattern": "[0-9a-fA-F]{8}\\-[0-9a-fA-F]{4}\\-[0-9a-fA-F]{4}\\-[0-9a-fA-F]{4}\\-[0-9a-fA-F]{12}",
+    "namespaceEmbeddedInLui": false,
+    "description": "The Helping to End Addiction Long-termSM Initiative, or NIH HEAL InitiativeSM, will support the Justice Community Opioid Innovation Network (JCOIN) to study approaches to increase high-quality care for people with opioid misuse and OUD in justice settings. JCOIN will test strategies to expand effective treatment and care in partnership with local and state justice systems and community-based treatment providers.",
+    "mirId": "MIR:00000934",
+    "resources": [
+      {
+        "id": 3175,
+        "providerCode": "dg.6VTS",
+        "name": "JCOIN Portal",
+        "urlPattern": "https://jcoin.datacommons.io/ga4gh/drs/v1/objects/{$id}",
+        "mirId": "MIR:00000933",
+        "description": "The Helping to End Addiction Long-termSM Initiative, or NIH HEAL InitiativeSM, will support the Justice Community Opioid Innovation Network (JCOIN) to study approaches to increase high-quality care for people with opioid misuse and OUD in justice settings. JCOIN will test strategies to expand effective treatment and care in partnership with local and state justice systems and community-based treatment providers.",
+        "official": true,
+        "sampleId": "005bf193-fa93-44c0-9b2b-9b039f94d692",
+        "resourceHomeUrl": "https://jcoin.datacommons.io/",
+        "institution": {
+          "id": 2820,
+          "name": "Open Commons Consortium",
+          "homeUrl": "https://www.occ-data.org/",
+          "description": "The Open Commons Consortium is a 501 non-profit venture which provides cloud computing and data commons resources to support \"scientific, environmental, medical and health care research.\"",
+          "rorId": null,
+          "location": {
+            "countryCode": "US",
+            "countryName": "United States"
+          }
+        },
+        "location": {
+          "countryCode": "US",
+          "countryName": "United States"
+        },
+        "deprecated": false,
+        "deprecationDate": null
+      }
+    ],
+    "created": "2022-02-27T20:34:03.581+0000",
+    "modified": "2022-02-27T20:34:03.581+0000",
+    "sampleId": "005bf193-fa93-44c0-9b2b-9b039f94d692",
+    "deprecated": false,
+    "deprecationDate": null
+  },
+  "dg.nci35": {
+    "id": 3177,
+    "prefix": "dg.nci35",
+    "name": "NCI Data Commons Framework Services",
+    "pattern": "[0-9a-fA-F]{8}\\-[0-9a-fA-F]{4}\\-[0-9a-fA-F]{4}\\-[0-9a-fA-F]{4}\\-[0-9a-fA-F]{12}",
+    "namespaceEmbeddedInLui": false,
+    "description": "The vision of DCFS is to make it easier to develop, operate, and interoperate data commons, data clouds, knowledge bases, and other resources for managing, analyzing, and sharing research data that can be part of a large data commons ecosystem.",
+    "mirId": "MIR:00000936",
+    "resources": [
+      {
+        "id": 3178,
+        "providerCode": "dg.NCI35",
+        "name": "NCI Data Commons Framework Services",
+        "urlPattern": "https://nci-crdc.datacommons.io/login/ga4gh/drs/v1/objects/{$id}",
+        "mirId": "MIR:00000935",
+        "description": "The vision of DCFS is to make it easier to develop, operate, and interoperate data commons, data clouds, knowledge bases, and other resources for managing, analyzing, and sharing research data that can be part of a large data commons ecosystem.",
+        "official": true,
+        "sampleId": "81944ba1-81d0-436e-8552-33d77a27834b",
+        "resourceHomeUrl": "https://nci-crdc.datacommons.io/login",
+        "institution": {
+          "id": 2820,
+          "name": "Open Commons Consortium",
+          "homeUrl": "https://www.occ-data.org/",
+          "description": "The Open Commons Consortium is a 501 non-profit venture which provides cloud computing and data commons resources to support \"scientific, environmental, medical and health care research.\"",
+          "rorId": null,
+          "location": {
+            "countryCode": "US",
+            "countryName": "United States"
+          }
+        },
+        "location": {
+          "countryCode": "US",
+          "countryName": "United States"
+        },
+        "deprecated": false,
+        "deprecationDate": null
+      }
+    ],
+    "created": "2022-02-27T20:37:35.848+0000",
+    "modified": "2022-02-27T20:37:35.848+0000",
+    "sampleId": "81944ba1-81d0-436e-8552-33d77a27834b",
+    "deprecated": false,
+    "deprecationDate": null
+  },
+  "dg.vp07": {
+    "id": 3180,
+    "prefix": "dg.vp07",
+    "name": "Veterans Precision Oncology Data Commons",
+    "pattern": "[0-9a-fA-F]{8}\\-[0-9a-fA-F]{4}\\-[0-9a-fA-F]{4}\\-[0-9a-fA-F]{4}\\-[0-9a-fA-F]{12}",
+    "namespaceEmbeddedInLui": false,
+    "description": "The Veterans Data Commons supports the management, analysis and sharing of veteran oncologic data for the research community and aims to accelerate discovery and development of therapies, diagnostic tests, and other technologies for precision oncology.",
+    "mirId": "MIR:00000938",
+    "resources": [
+      {
+        "id": 3181,
+        "providerCode": "dg.VP07",
+        "name": "Veterans Precision Oncology Data Commons",
+        "urlPattern": "https://vpodc.data-commons.org/ga4gh/drs/v1/objects/{$id}",
+        "mirId": "MIR:00000937",
+        "description": "The Veterans Data Commons supports the management, analysis and sharing of veteran oncologic data for the research community and aims to accelerate discovery and development of therapies, diagnostic tests, and other technologies for precision oncology.",
+        "official": true,
+        "sampleId": "000bf826-73ba-4685-aa6c-3e0971a2f260",
+        "resourceHomeUrl": "https://vpodc.data-commons.org/",
+        "institution": {
+          "id": 2820,
+          "name": "Open Commons Consortium",
+          "homeUrl": "https://www.occ-data.org/",
+          "description": "The Open Commons Consortium is a 501 non-profit venture which provides cloud computing and data commons resources to support \"scientific, environmental, medical and health care research.\"",
+          "rorId": null,
+          "location": {
+            "countryCode": "US",
+            "countryName": "United States"
+          }
+        },
+        "location": {
+          "countryCode": "US",
+          "countryName": "United States"
+        },
+        "deprecated": false,
+        "deprecationDate": null
+      }
+    ],
+    "created": "2022-02-27T20:37:55.926+0000",
+    "modified": "2022-02-27T20:37:55.926+0000",
+    "sampleId": "000bf826-73ba-4685-aa6c-3e0971a2f260",
+    "deprecated": false,
+    "deprecationDate": null
+  },
+  "dg.c78ne": {
+    "id": 3183,
+    "prefix": "dg.c78ne",
+    "name": "Canine Data Commons",
+    "pattern": "[0-9a-fA-F]{8}\\-[0-9a-fA-F]{4}\\-[0-9a-fA-F]{4}\\-[0-9a-fA-F]{4}\\-[0-9a-fA-F]{12}",
+    "namespaceEmbeddedInLui": false,
+    "description": "This website analyzes and shares genomic architecture of modern dog breeds and runs analysis for canine cancer to create clean, easy to navigate visualizations for data-driven discovery for canine cancer.",
+    "mirId": "MIR:00000940",
+    "resources": [
+      {
+        "id": 3184,
+        "providerCode": "dg.C78ne",
+        "name": "Canine Data Commons",
+        "urlPattern": "https://caninedc.org/ga4gh/drs/v1/objects/{$id}",
+        "mirId": "MIR:00000939",
+        "description": "This website analyzes and shares genomic architecture of modern dog breeds and runs analysis for canine cancer to create clean, easy to navigate visualizations for data-driven discovery for canine cancer.",
+        "official": true,
+        "sampleId": "0002346e-5ee7-45fb-8c92-8333f8e13854",
+        "resourceHomeUrl": "https://caninedc.org/",
+        "institution": {
+          "id": 2820,
+          "name": "Open Commons Consortium",
+          "homeUrl": "https://www.occ-data.org/",
+          "description": "The Open Commons Consortium is a 501 non-profit venture which provides cloud computing and data commons resources to support \"scientific, environmental, medical and health care research.\"",
+          "rorId": null,
+          "location": {
+            "countryCode": "US",
+            "countryName": "United States"
+          }
+        },
+        "location": {
+          "countryCode": "US",
+          "countryName": "United States"
+        },
+        "deprecated": false,
+        "deprecationDate": null
+      }
+    ],
+    "created": "2022-02-27T20:38:48.115+0000",
+    "modified": "2022-02-27T20:38:48.115+0000",
+    "sampleId": "0002346e-5ee7-45fb-8c92-8333f8e13854",
+    "deprecated": false,
+    "deprecationDate": null
+  },
+  "dg.h34l": {
+    "id": 3186,
+    "prefix": "dg.h34l",
+    "name": "The HEAL platform",
+    "pattern": "[0-9a-fA-F]{8}\\-[0-9a-fA-F]{4}\\-[0-9a-fA-F]{4}\\-[0-9a-fA-F]{4}\\-[0-9a-fA-F]{12}",
+    "namespaceEmbeddedInLui": false,
+    "description": "The HEAL Platform is a cloud-based and multifunctional web interface that provides a secure environment for discovery and analysis of NIH HEAL results and data. It is designed to serve users with a variety of objectives, backgrounds, and specialties.\n\nThe HEAL Platform represents a dynamic Data Ecosystem that aggregates and hosts data from multiple resources to make data discovery and access easy for users.\n\nThe platform provides a way to search and query over study metadata and diverse data types, generated by different projects and organizations and stored across multiple secure repositories.\n\nThe HEAL platform also offers a secure and cost-effective cloud-computing environment for data analysis, empowering collaborative research and development of new analytical tools. New workflows and results of analyses can be shared with the HEAL community to enable collaborative, high-impact publications that address the opioid crisis.",
+    "mirId": "MIR:00000942",
+    "resources": [
+      {
+        "id": 3187,
+        "providerCode": "dg.h34L",
+        "name": "The HEAL Platform",
+        "urlPattern": "https://healdata.org/ga4gh/drs/v1/objects/{$id}",
+        "mirId": "MIR:00000941",
+        "description": "The HEAL Platform is a cloud-based and multifunctional web interface that provides a secure environment for discovery and analysis of NIH HEAL results and data. It is designed to serve users with a variety of objectives, backgrounds, and specialties.\n\nThe HEAL Platform represents a dynamic Data Ecosystem that aggregates and hosts data from multiple resources to make data discovery and access easy for users.\n\nThe platform provides a way to search and query over study metadata and diverse data types, generated by different projects and organizations and stored across multiple secure repositories.\n\nThe HEAL platform also offers a secure and cost-effective cloud-computing environment for data analysis, empowering collaborative research and development of new analytical tools. New workflows and results of analyses can be shared with the HEAL community to enable collaborative, high-impact publications that address the opioid crisis.",
+        "official": true,
+        "sampleId": "022911d6-af91-4b02-8f96-9107c77c98b8",
+        "resourceHomeUrl": "https://healdata.org/",
+        "institution": {
+          "id": 2820,
+          "name": "Open Commons Consortium",
+          "homeUrl": "https://www.occ-data.org/",
+          "description": "The Open Commons Consortium is a 501 non-profit venture which provides cloud computing and data commons resources to support \"scientific, environmental, medical and health care research.\"",
+          "rorId": null,
+          "location": {
+            "countryCode": "US",
+            "countryName": "United States"
+          }
+        },
+        "location": {
+          "countryCode": "US",
+          "countryName": "United States"
+        },
+        "deprecated": false,
+        "deprecationDate": null
+      }
+    ],
+    "created": "2022-02-27T20:39:04.388+0000",
+    "modified": "2022-02-27T20:39:04.388+0000",
+    "sampleId": "022911d6-af91-4b02-8f96-9107c77c98b8",
+    "deprecated": false,
+    "deprecationDate": null
+  },
+  "dg.h35l": {
+    "id": 3189,
+    "prefix": "dg.h35l",
+    "name": "HEAL Data Platform",
+    "pattern": "[0-9a-fA-F]{8}\\-[0-9a-fA-F]{4}\\-[0-9a-fA-F]{4}\\-[0-9a-fA-F]{4}\\-[0-9a-fA-F]{12}",
+    "namespaceEmbeddedInLui": false,
+    "description": "This website supports the management, analysis and sharing of data for the research community and aims to accelerate discovery and development of therapies, diagnostic tests, and other technologies.",
+    "mirId": "MIR:00000944",
+    "resources": [
+      {
+        "id": 3190,
+        "providerCode": "dg.h34L",
+        "name": "HEAL Data Platform",
+        "urlPattern": "https://externaldata.healdata.org/ga4gh/drs/v1/objects/{$id}",
+        "mirId": "MIR:00000943",
+        "description": "This website supports the management, analysis and sharing of data for the research community and aims to accelerate discovery and development of therapies, diagnostic tests, and other technologies.",
+        "official": true,
+        "sampleId": "007e4996-c902-49a0-8fe8-b363f1d3fb23",
+        "resourceHomeUrl": "https://externaldata.healdata.org/",
+        "institution": {
+          "id": 2820,
+          "name": "Open Commons Consortium",
+          "homeUrl": "https://www.occ-data.org/",
+          "description": "The Open Commons Consortium is a 501 non-profit venture which provides cloud computing and data commons resources to support \"scientific, environmental, medical and health care research.\"",
+          "rorId": null,
+          "location": {
+            "countryCode": "US",
+            "countryName": "United States"
+          }
+        },
+        "location": {
+          "countryCode": "US",
+          "countryName": "United States"
+        },
+        "deprecated": false,
+        "deprecationDate": null
+      }
+    ],
+    "created": "2022-02-27T20:40:41.328+0000",
+    "modified": "2022-02-27T20:40:41.328+0000",
+    "sampleId": "007e4996-c902-49a0-8fe8-b363f1d3fb23",
+    "deprecated": false,
+    "deprecationDate": null
+  },
+  "dg.um33r90": {
+    "id": 3193,
+    "prefix": "dg.um33r90",
+    "name": "UMCCR AGHA Data Commons",
+    "pattern": "[0-9a-fA-F]{8}\\-[0-9a-fA-F]{4}\\-[0-9a-fA-F]{4}\\-[0-9a-fA-F]{4}\\-[0-9a-fA-F]{12}",
+    "namespaceEmbeddedInLui": false,
+    "description": "The UMCCR AGHA Data Commons supports the management, analysis and sharing of data for the research community.",
+    "mirId": "MIR:00000946",
+    "resources": [
+      {
+        "id": 3194,
+        "providerCode": "dg.UM33R90",
+        "name": "UMCCR AGHA Data Commons",
+        "urlPattern": "https://gen3.agha.umccr.org/ga4gh/drs/v1/objects/{$id}",
+        "mirId": "MIR:00000945",
+        "description": "The UMCCR AGHA Data Commons supports the management, analysis and sharing of data for the research community.",
+        "official": true,
+        "sampleId": "0aa770b4-66b3-4009-9f02-852236b0544f",
+        "resourceHomeUrl": "https://gen3.agha.umccr.org/",
+        "institution": {
+          "id": 3192,
+          "name": " Open Commons Consortium ",
+          "homeUrl": "https://www.occ-data.org/",
+          "description": "The Open Commons Consortium (OCC) manages and operates cloud computing, data commons, and data ecosystems to advance scientific, medical, health care and environmental research for human and societal impact.",
+          "rorId": null,
+          "location": {
+            "countryCode": "US",
+            "countryName": "United States"
+          }
+        },
+        "location": {
+          "countryCode": "US",
+          "countryName": "United States"
+        },
+        "deprecated": false,
+        "deprecationDate": null
+      }
+    ],
+    "created": "2022-02-27T20:40:56.446+0000",
+    "modified": "2022-02-27T20:40:56.446+0000",
+    "sampleId": "0aa770b4-66b3-4009-9f02-852236b0544f",
+    "deprecated": false,
+    "deprecationDate": null
+  },
+  "ps": {
+    "id": 3203,
+    "prefix": "ps",
+    "name": "Pennsieve",
+    "pattern": "N:package:[a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12}",
+    "namespaceEmbeddedInLui": false,
+    "description": "Pennsieve is a publicly accessible Scientific Data Management and publication platform. The platform supports data curation, sharing and publishing complex scientific datasets with a focus on integration between graph-based metadata and file-archival. The platform provides a \"peer\"-reviewed publication mechanism and public datasets are available through its Discover Web Application and APIs. ",
+    "mirId": "MIR:00000951",
+    "resources": [
+      {
+        "id": 3204,
+        "providerCode": "ps",
+        "name": "Pennsieve Discover",
+        "urlPattern": "https://discover.pennsieve.io/package/{$id}",
+        "mirId": "MIR:00000950",
+        "description": "Pennsieve Discover is a public repository for scientific datasets and specializes in FAIR distribution of public datasets that combine large files and graph based metadata records. ",
+        "official": true,
+        "sampleId": "N:package:e3243db3-7986-488e-9a10-c7a0bfdcfe8a",
+        "resourceHomeUrl": "https://discover.pennsieve.io",
+        "institution": {
+          "id": 1674,
+          "name": "University of Pennsylvania",
+          "homeUrl": "CURATOR_REVIEW",
+          "description": "CURATOR_REVIEW",
+          "rorId": null,
+          "location": {
+            "countryCode": "US",
+            "countryName": "United States"
+          }
+        },
+        "location": {
+          "countryCode": "US",
+          "countryName": "United States"
+        },
+        "deprecated": false,
+        "deprecationDate": null
+      }
+    ],
+    "created": "2022-03-15T08:27:12.699+0000",
+    "modified": "2022-03-15T08:27:12.699+0000",
+    "sampleId": "N:package:e3243db3-7986-488e-9a10-c7a0bfdcfe8a",
+    "deprecated": false,
+    "deprecationDate": null
+  },
+  "icdc": {
+    "id": 2638,
+    "prefix": "icdc",
+    "name": "Integrated Canine Data Commons",
+    "pattern": "^\\d{6}$",
+    "namespaceEmbeddedInLui": false,
+    "description": "The Integrated Canine Data Commons is one of several repositories within the NCI Cancer Research Data Commons (CRDC), a cloud-based data science infrastructure that provides secure access to a large, comprehensive, and expanding collection of cancer research data. The ICDC was established to further research on human cancers by enabling comparative analysis with canine cancer.",
+    "mirId": "MIR:00000812",
+    "resources": [
+      {
+        "id": 2639,
+        "providerCode": "icdc",
+        "name": "Integrated Canine Data Commons",
+        "urlPattern": "https://caninecommons.cancer.gov/#/study/{$id}",
+        "mirId": "MIR:00000811",
+        "description": "Integrated Canine Data Commons at National Cancer Institute (USA)",
+        "official": true,
+        "sampleId": "000009",
+        "resourceHomeUrl": "https://caninecommons.cancer.gov/#/",
+        "institution": {
+          "id": 2637,
+          "name": "National Cancer Institute",
+          "homeUrl": "https://www.cancer.gov/",
+          "description": "Organization information obtained from ROR API using ROR ID 'https://ror.org/040gcmg81' with Wikidata IDs [Q664846], and ISNI IDs [0000 0004 1936 8075]",
+          "rorId": "https://ror.org/040gcmg81",
+          "location": {
+            "countryCode": "US",
+            "countryName": "United States"
+          }
+        },
+        "location": {
+          "countryCode": "US",
+          "countryName": "United States"
+        },
+        "deprecated": false,
+        "deprecationDate": null
+      }
+    ],
+    "created": "2021-05-10T19:40:34.200+0000",
+    "modified": "2022-03-31T16:55:06.915+0000",
+    "sampleId": "000009",
     "deprecated": false,
     "deprecationDate": null
   },

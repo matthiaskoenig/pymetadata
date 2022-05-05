@@ -17,7 +17,7 @@ and validating archives.
 To read a COMBINE archive use the `Omex` helper methods which can either read from
 a given directory or
 """
-omex_example: Path = RESOURCES_DIR / "testdata" / "omex" / "CompModels.omex"
+omex_example: Path = RESOURCES_DIR / "data" / "omex" / "CompModels.omex"
 omex = Omex.from_omex(omex_example)
 console.print(omex)
 

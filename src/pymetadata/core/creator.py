@@ -14,6 +14,7 @@ class Creator:
         site: Optional[str] = None,
         orcid: Optional[str] = None,
     ):
+        """Initialize Creator."""
         self.familyName = familyName
         self.givenName = givenName
         self.email = email

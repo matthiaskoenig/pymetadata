@@ -324,7 +324,7 @@ _terms = {
     "ECO_0001013": "blocking monoclonal antibody evidence",
     "ECO_0001014": "blocking peptide evidence",
     "ECO_0001015": "blocking polyclonal antibody evidence",
-    "ECO_0001016": "blood test evidence",
+    "ECO_0001016": "blood tests evidence",
     "ECO_0001017": "Boyden chamber assay evidence",
     "ECO_0001018": "bromodeoxyuridine incorporation assay evidence",
     "ECO_0001019": "caspase assay evidence",
@@ -439,7 +439,7 @@ _terms = {
     "ECO_0001131": "transgenic organism evidence",
     "ECO_0001132": "tryptic phosphopeptide mapping assay evidence",
     "ECO_0001133": "terminal deoxynucleotidyl transferase dUTP nick end labeling assay evidence",
-    "ECO_0001134": "urine test evidence",
+    "ECO_0001134": "urine tests evidence",
     "ECO_0001136": "WST-1 assay evidence",
     "ECO_0001137": "xenotransplantation phenotypic evidence",
     "ECO_0001138": "3D cell culture evidence used in manual assertion",
@@ -457,7 +457,7 @@ _terms = {
     "ECO_0001150": "blocking monoclonal antibody evidence used in manual assertion",
     "ECO_0001151": "blocking peptide evidence used in manual assertion",
     "ECO_0001152": "blocking polyclonal antibody evidence used in manual assertion",
-    "ECO_0001153": "blood test evidence used in manual assertion",
+    "ECO_0001153": "blood tests evidence used in manual assertion",
     "ECO_0001154": "Boyden chamber assay evidence used in manual assertion",
     "ECO_0001155": "bromodeoxyuridine incorporation assay evidence used in manual assertion",
     "ECO_0001156": "caspase assay evidence used in manual assertion",
@@ -565,7 +565,7 @@ _terms = {
     "ECO_0001259": "syngeneic transplantation experiment evidence used in manual assertion",
     "ECO_0001260": "xenotransplantation phenotypic evidence used in manual assertion",
     "ECO_0001261": "WST-1 assay evidence used in manual assertion",
-    "ECO_0001263": "urine test evidence used in manual assertion",
+    "ECO_0001263": "urine tests evidence used in manual assertion",
     "ECO_0001264": "terminal deoxynucleotidyl transferase dUTP nick end labeling assay evidence used in manual assertion",
     "ECO_0001265": "tryptic phosphopeptide mapping assay evidence used in manual assertion",
     "ECO_0001266": "transgenic organism evidence used in manual assertion",
@@ -791,8 +791,8 @@ _terms = {
     "ECO_0005600": "immunofluorescence confocal microscopy evidence",
     "ECO_0005601": "immunofluorescence confocal microscopy evidence used in manual assertion",
     "ECO_0005603": "protein mass spectrometry evidence",
-    "ECO_0005604": "cross-streak test evidence",
-    "ECO_0005605": "disk diffusion test evidence",
+    "ECO_0005604": "cross-streak tests evidence",
+    "ECO_0005605": "disk diffusion tests evidence",
     "ECO_0005606": "cell transfection experiment evidence",
     "ECO_0005607": "tethered cell assay evidence",
     "ECO_0005608": "tumble frequency assay evidence",
@@ -1181,22 +1181,22 @@ _terms = {
     "ECO_0007016": "voltammetry evidence used in manual assertion",
     "ECO_0007017": "photoconversion evidence",
     "ECO_0007018": "photoconversion evidence used in manual assertion",
-    "ECO_0007019": "agglutination test evidence",
-    "ECO_0007020": "agglutination test evidence used in manual assertion",
-    "ECO_0007021": "slide agglutination test evidence",
-    "ECO_0007022": "slide agglutination test evidence used in manual assertion",
-    "ECO_0007023": "direct Coombs test evidence",
-    "ECO_0007024": "direct Coombs test evidence used in manual assertion",
-    "ECO_0007025": "indirect Coombs test evidence",
-    "ECO_0007026": "indirect Coombs test evidence used in manual assertion",
+    "ECO_0007019": "agglutination tests evidence",
+    "ECO_0007020": "agglutination tests evidence used in manual assertion",
+    "ECO_0007021": "slide agglutination tests evidence",
+    "ECO_0007022": "slide agglutination tests evidence used in manual assertion",
+    "ECO_0007023": "direct Coombs tests evidence",
+    "ECO_0007024": "direct Coombs tests evidence used in manual assertion",
+    "ECO_0007025": "indirect Coombs tests evidence",
+    "ECO_0007026": "indirect Coombs tests evidence used in manual assertion",
     "ECO_0007027": "direct hemagglutination assay evidence",
     "ECO_0007028": "direct hemagglutination assay evidence used in manual assertion",
     "ECO_0007029": "viral hemagglutination inhibition assay evidence",
     "ECO_0007030": "viral hemagglutination inhibition assay evidence used in manual assertion",
     "ECO_0007031": "compement fixation assay evidence",
     "ECO_0007032": "compement fixation assay evidence used in manual assertion",
-    "ECO_0007033": "neutralization test assay evidence",
-    "ECO_0007034": "neutralization test assay evidence used in manual assertion",
+    "ECO_0007033": "neutralization tests assay evidence",
+    "ECO_0007034": "neutralization tests assay evidence used in manual assertion",
     "ECO_0007035": "copper transport assay evidence",
     "ECO_0007036": "copper transport assay evidence used in manual assertion",
     "ECO_0007037": "5-cyano-2,3-ditolyl tetrazolium chloride staining evidence",
@@ -1339,7 +1339,7 @@ _terms = {
     "ECO_0007181": "cut-open oocyte voltage clamp recording evidence used in manual assertion",
     "ECO_0007182": "macropatch voltage clamp recording evidence used in manual assertion",
     "ECO_0007184": "protein mass spectrometry evidence used in manual assertion",
-    "ECO_0007185": "cross-streak test evidence used in manual assertion",
+    "ECO_0007185": "cross-streak tests evidence used in manual assertion",
     "ECO_0007186": "tethered cell assay evidence used in manual assertion",
     "ECO_0007187": "tumble frequency assay evidence used in manual assertion",
     "ECO_0007188": "capillary assay evidence used in manual assertion",
@@ -1436,7 +1436,7 @@ _terms = {
     "ECO_0007285": "cut-open oocyte voltage clamp recording evidence used in automatic assertion",
     "ECO_0007286": "macropatch voltage clamp recording evidence used in automatic assertion",
     "ECO_0007288": "protein mass spectrometry evidence used in automatic assertion",
-    "ECO_0007289": "cross-streak test evidence used in automatic assertion",
+    "ECO_0007289": "cross-streak tests evidence used in automatic assertion",
     "ECO_0007290": "tethered cell assay evidence used in automatic assertion",
     "ECO_0007291": "tumble frequency assay evidence used in automatic assertion",
     "ECO_0007292": "capillary assay evidence used in automatic assertion",
@@ -1497,7 +1497,7 @@ _terms = {
     "ECO_0007348": "immunological assay evidence used in automatic assertion",
     "ECO_0007349": "blocking peptide evidence used in automatic assertion",
     "ECO_0007350": "blocking polyclonal antibody evidence used in automatic assertion",
-    "ECO_0007351": "blood test evidence used in automatic assertion",
+    "ECO_0007351": "blood tests evidence used in automatic assertion",
     "ECO_0007352": "Boyden chamber assay evidence used in automatic assertion",
     "ECO_0007353": "bromodeoxyuridine incorporation assay evidence used in automatic assertion",
     "ECO_0007354": "nucleotide analog incorporation assay evidence used in automatic assertion",
@@ -1608,7 +1608,7 @@ _terms = {
     "ECO_0007459": "syngeneic transplantation experiment evidence used in automatic assertion",
     "ECO_0007460": "xenotransplantation phenotypic evidence used in automatic assertion",
     "ECO_0007461": "WST-1 assay evidence used in automatic assertion",
-    "ECO_0007462": "urine test evidence used in automatic assertion",
+    "ECO_0007462": "urine tests evidence used in automatic assertion",
     "ECO_0007463": "terminal deoxynucleotidyl transferase dUTP nick end labeling assay evidence used in automatic assertion",
     "ECO_0007464": "tryptic phosphopeptide mapping assay evidence used in automatic assertion",
     "ECO_0007465": "transgenic organism evidence used in automatic assertion",
@@ -1742,14 +1742,14 @@ _terms = {
     "ECO_0007593": "combinatorial experimental and curator inference evidence used in automatic assertion",
     "ECO_0007594": "voltammetry evidence used in automatic assertion",
     "ECO_0007595": "photoconversion evidence used in automatic assertion",
-    "ECO_0007596": "agglutination test evidence used in automatic assertion",
-    "ECO_0007597": "slide agglutination test evidence used in automatic assertion",
-    "ECO_0007598": "direct Coombs test evidence used in automatic assertion",
-    "ECO_0007599": "indirect Coombs test evidence used in automatic assertion",
+    "ECO_0007596": "agglutination tests evidence used in automatic assertion",
+    "ECO_0007597": "slide agglutination tests evidence used in automatic assertion",
+    "ECO_0007598": "direct Coombs tests evidence used in automatic assertion",
+    "ECO_0007599": "indirect Coombs tests evidence used in automatic assertion",
     "ECO_0007600": "direct hemagglutination assay evidence used in automatic assertion",
     "ECO_0007601": "viral hemagglutination inhibition assay evidence used in automatic assertion",
     "ECO_0007602": "compement fixation assay evidence used in automatic assertion",
-    "ECO_0007603": "neutralization test assay evidence used in automatic assertion",
+    "ECO_0007603": "neutralization tests assay evidence used in automatic assertion",
     "ECO_0007604": "copper transport assay evidence used in automatic assertion",
     "ECO_0007605": "5-cyano-2,3-ditolyl tetrazolium chloride staining evidence used in automatic assertion",
     "ECO_0007606": "plaque assay evidence used in automatic assertion",
@@ -1843,7 +1843,7 @@ _terms = {
     "ECO_0007697": "DNA synthesis cell proliferation assay evidence used in manual assertion",
     "ECO_0007698": "apoptotic assay evidence used in manual assertion",
     "ECO_0007699": "cell growth assay evidence used in manual assertion",
-    "ECO_0007700": "disk diffusion test evidence used in manual assertion",
+    "ECO_0007700": "disk diffusion tests evidence used in manual assertion",
     "ECO_0007701": "chemotaxis assay evidence used in manual assertion",
     "ECO_0007702": "cytotoxicity assay evidence used in manual assertion",
     "ECO_0007703": "cell viability assay evidence used in manual assertion",
@@ -1919,7 +1919,7 @@ _terms = {
     "ECO_0007776": "DNA synthesis cell proliferation assay evidence used in automatic assertion",
     "ECO_0007777": "apoptotic assay evidence used in automatic assertion",
     "ECO_0007778": "cell growth assay evidence used in automatic assertion",
-    "ECO_0007779": "disk diffusion test evidence used in automatic assertion",
+    "ECO_0007779": "disk diffusion tests evidence used in automatic assertion",
     "ECO_0007780": "chemotaxis assay evidence used in automatic assertion",
     "ECO_0007781": "cytotoxicity assay evidence used in automatic assertion",
     "ECO_0007782": "cleavage assay evidence used in automatic assertion",
@@ -3480,7 +3480,7 @@ class ECO(str, Enum):
     ECO_0001015 = "ECO_0001015"
     BLOCKING_POLYCLONAL_ANTIBODY_EVIDENCE = "ECO_0001015"
 
-    # blood test evidence
+    # blood tests evidence
     ECO_0001016 = "ECO_0001016"
     BLOOD_TEST_EVIDENCE = "ECO_0001016"
 
@@ -3942,7 +3942,7 @@ class ECO(str, Enum):
         "ECO_0001133"
     )
 
-    # urine test evidence
+    # urine tests evidence
     ECO_0001134 = "ECO_0001134"
     URINE_TEST_EVIDENCE = "ECO_0001134"
 
@@ -4016,7 +4016,7 @@ class ECO(str, Enum):
     ECO_0001152 = "ECO_0001152"
     BLOCKING_POLYCLONAL_ANTIBODY_EVIDENCE_USED_IN_MANUAL_ASSERTION = "ECO_0001152"
 
-    # blood test evidence used in manual assertion
+    # blood tests evidence used in manual assertion
     ECO_0001153 = "ECO_0001153"
     BLOOD_TEST_EVIDENCE_USED_IN_MANUAL_ASSERTION = "ECO_0001153"
 
@@ -4468,7 +4468,7 @@ class ECO(str, Enum):
     ECO_0001261 = "ECO_0001261"
     WST_1_ASSAY_EVIDENCE_USED_IN_MANUAL_ASSERTION = "ECO_0001261"
 
-    # urine test evidence used in manual assertion
+    # urine tests evidence used in manual assertion
     ECO_0001263 = "ECO_0001263"
     URINE_TEST_EVIDENCE_USED_IN_MANUAL_ASSERTION = "ECO_0001263"
 
@@ -5444,11 +5444,11 @@ class ECO(str, Enum):
     ECO_0005603 = "ECO_0005603"
     PROTEIN_MASS_SPECTROMETRY_EVIDENCE = "ECO_0005603"
 
-    # cross-streak test evidence
+    # cross-streak tests evidence
     ECO_0005604 = "ECO_0005604"
     CROSS_STREAK_TEST_EVIDENCE = "ECO_0005604"
 
-    # disk diffusion test evidence
+    # disk diffusion tests evidence
     ECO_0005605 = "ECO_0005605"
     DISK_DIFFUSION_TEST_EVIDENCE = "ECO_0005605"
 
@@ -7242,35 +7242,35 @@ class ECO(str, Enum):
     ECO_0007018 = "ECO_0007018"
     PHOTOCONVERSION_EVIDENCE_USED_IN_MANUAL_ASSERTION = "ECO_0007018"
 
-    # agglutination test evidence
+    # agglutination tests evidence
     ECO_0007019 = "ECO_0007019"
     AGGLUTINATION_TEST_EVIDENCE = "ECO_0007019"
 
-    # agglutination test evidence used in manual assertion
+    # agglutination tests evidence used in manual assertion
     ECO_0007020 = "ECO_0007020"
     AGGLUTINATION_TEST_EVIDENCE_USED_IN_MANUAL_ASSERTION = "ECO_0007020"
 
-    # slide agglutination test evidence
+    # slide agglutination tests evidence
     ECO_0007021 = "ECO_0007021"
     SLIDE_AGGLUTINATION_TEST_EVIDENCE = "ECO_0007021"
 
-    # slide agglutination test evidence used in manual assertion
+    # slide agglutination tests evidence used in manual assertion
     ECO_0007022 = "ECO_0007022"
     SLIDE_AGGLUTINATION_TEST_EVIDENCE_USED_IN_MANUAL_ASSERTION = "ECO_0007022"
 
-    # direct Coombs test evidence
+    # direct Coombs tests evidence
     ECO_0007023 = "ECO_0007023"
     DIRECT_COOMBS_TEST_EVIDENCE = "ECO_0007023"
 
-    # direct Coombs test evidence used in manual assertion
+    # direct Coombs tests evidence used in manual assertion
     ECO_0007024 = "ECO_0007024"
     DIRECT_COOMBS_TEST_EVIDENCE_USED_IN_MANUAL_ASSERTION = "ECO_0007024"
 
-    # indirect Coombs test evidence
+    # indirect Coombs tests evidence
     ECO_0007025 = "ECO_0007025"
     INDIRECT_COOMBS_TEST_EVIDENCE = "ECO_0007025"
 
-    # indirect Coombs test evidence used in manual assertion
+    # indirect Coombs tests evidence used in manual assertion
     ECO_0007026 = "ECO_0007026"
     INDIRECT_COOMBS_TEST_EVIDENCE_USED_IN_MANUAL_ASSERTION = "ECO_0007026"
 
@@ -7300,11 +7300,11 @@ class ECO(str, Enum):
     ECO_0007032 = "ECO_0007032"
     COMPEMENT_FIXATION_ASSAY_EVIDENCE_USED_IN_MANUAL_ASSERTION = "ECO_0007032"
 
-    # neutralization test assay evidence
+    # neutralization tests assay evidence
     ECO_0007033 = "ECO_0007033"
     NEUTRALIZATION_TEST_ASSAY_EVIDENCE = "ECO_0007033"
 
-    # neutralization test assay evidence used in manual assertion
+    # neutralization tests assay evidence used in manual assertion
     ECO_0007034 = "ECO_0007034"
     NEUTRALIZATION_TEST_ASSAY_EVIDENCE_USED_IN_MANUAL_ASSERTION = "ECO_0007034"
 
@@ -7940,7 +7940,7 @@ class ECO(str, Enum):
     ECO_0007184 = "ECO_0007184"
     PROTEIN_MASS_SPECTROMETRY_EVIDENCE_USED_IN_MANUAL_ASSERTION = "ECO_0007184"
 
-    # cross-streak test evidence used in manual assertion
+    # cross-streak tests evidence used in manual assertion
     ECO_0007185 = "ECO_0007185"
     CROSS_STREAK_TEST_EVIDENCE_USED_IN_MANUAL_ASSERTION = "ECO_0007185"
 
@@ -8404,7 +8404,7 @@ class ECO(str, Enum):
     ECO_0007288 = "ECO_0007288"
     PROTEIN_MASS_SPECTROMETRY_EVIDENCE_USED_IN_AUTOMATIC_ASSERTION = "ECO_0007288"
 
-    # cross-streak test evidence used in automatic assertion
+    # cross-streak tests evidence used in automatic assertion
     ECO_0007289 = "ECO_0007289"
     CROSS_STREAK_TEST_EVIDENCE_USED_IN_AUTOMATIC_ASSERTION = "ECO_0007289"
 
@@ -8682,7 +8682,7 @@ class ECO(str, Enum):
     ECO_0007350 = "ECO_0007350"
     BLOCKING_POLYCLONAL_ANTIBODY_EVIDENCE_USED_IN_AUTOMATIC_ASSERTION = "ECO_0007350"
 
-    # blood test evidence used in automatic assertion
+    # blood tests evidence used in automatic assertion
     ECO_0007351 = "ECO_0007351"
     BLOOD_TEST_EVIDENCE_USED_IN_AUTOMATIC_ASSERTION = "ECO_0007351"
 
@@ -9150,7 +9150,7 @@ class ECO(str, Enum):
     ECO_0007461 = "ECO_0007461"
     WST_1_ASSAY_EVIDENCE_USED_IN_AUTOMATIC_ASSERTION = "ECO_0007461"
 
-    # urine test evidence used in automatic assertion
+    # urine tests evidence used in automatic assertion
     ECO_0007462 = "ECO_0007462"
     URINE_TEST_EVIDENCE_USED_IN_AUTOMATIC_ASSERTION = "ECO_0007462"
 
@@ -9808,19 +9808,19 @@ class ECO(str, Enum):
     ECO_0007595 = "ECO_0007595"
     PHOTOCONVERSION_EVIDENCE_USED_IN_AUTOMATIC_ASSERTION = "ECO_0007595"
 
-    # agglutination test evidence used in automatic assertion
+    # agglutination tests evidence used in automatic assertion
     ECO_0007596 = "ECO_0007596"
     AGGLUTINATION_TEST_EVIDENCE_USED_IN_AUTOMATIC_ASSERTION = "ECO_0007596"
 
-    # slide agglutination test evidence used in automatic assertion
+    # slide agglutination tests evidence used in automatic assertion
     ECO_0007597 = "ECO_0007597"
     SLIDE_AGGLUTINATION_TEST_EVIDENCE_USED_IN_AUTOMATIC_ASSERTION = "ECO_0007597"
 
-    # direct Coombs test evidence used in automatic assertion
+    # direct Coombs tests evidence used in automatic assertion
     ECO_0007598 = "ECO_0007598"
     DIRECT_COOMBS_TEST_EVIDENCE_USED_IN_AUTOMATIC_ASSERTION = "ECO_0007598"
 
-    # indirect Coombs test evidence used in automatic assertion
+    # indirect Coombs tests evidence used in automatic assertion
     ECO_0007599 = "ECO_0007599"
     INDIRECT_COOMBS_TEST_EVIDENCE_USED_IN_AUTOMATIC_ASSERTION = "ECO_0007599"
 
@@ -9838,7 +9838,7 @@ class ECO(str, Enum):
     ECO_0007602 = "ECO_0007602"
     COMPEMENT_FIXATION_ASSAY_EVIDENCE_USED_IN_AUTOMATIC_ASSERTION = "ECO_0007602"
 
-    # neutralization test assay evidence used in automatic assertion
+    # neutralization tests assay evidence used in automatic assertion
     ECO_0007603 = "ECO_0007603"
     NEUTRALIZATION_TEST_ASSAY_EVIDENCE_USED_IN_AUTOMATIC_ASSERTION = "ECO_0007603"
 
@@ -10264,7 +10264,7 @@ class ECO(str, Enum):
     ECO_0007699 = "ECO_0007699"
     CELL_GROWTH_ASSAY_EVIDENCE_USED_IN_MANUAL_ASSERTION = "ECO_0007699"
 
-    # disk diffusion test evidence used in manual assertion
+    # disk diffusion tests evidence used in manual assertion
     ECO_0007700 = "ECO_0007700"
     DISK_DIFFUSION_TEST_EVIDENCE_USED_IN_MANUAL_ASSERTION = "ECO_0007700"
 
@@ -10586,7 +10586,7 @@ class ECO(str, Enum):
     ECO_0007778 = "ECO_0007778"
     CELL_GROWTH_ASSAY_EVIDENCE_USED_IN_AUTOMATIC_ASSERTION = "ECO_0007778"
 
-    # disk diffusion test evidence used in automatic assertion
+    # disk diffusion tests evidence used in automatic assertion
     ECO_0007779 = "ECO_0007779"
     DISK_DIFFUSION_TEST_EVIDENCE_USED_IN_AUTOMATIC_ASSERTION = "ECO_0007779"
 

@@ -1,4 +1,4 @@
-"""spymetadata - Python utilities for metadata."""
+"""pymetadata - Python utilities for metadata."""
 from pathlib import Path
 
 __author__ = "Matthias Koenig"

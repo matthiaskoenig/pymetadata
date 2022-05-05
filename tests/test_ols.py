@@ -1,7 +1,9 @@
+"""Testing OLS."""
 from pymetadata.core.annotation import BQB, RDFAnnotation, RDFAnnotationData
 
 
 def test_ols_query() -> None:
+    """Test OLS query."""
     data = [
         (BQB.IS, "chebi/CHEBI:37924"),
         (BQB.IS, "ncit/C66872"),

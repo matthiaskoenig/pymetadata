@@ -1,3 +1,4 @@
+"""Test annotations."""
 from typing import Union
 
 import pytest
@@ -119,21 +120,24 @@ rdf_annotation_data = [
 def test_rdf_annotation(
     qualifier: Union[BQB, BQM], resource: str, expected: str
 ) -> None:
-    """Test various RDF annotation patterns"""
+    """Test various RDF annotation patterns."""
     a = RDFAnnotation(qualifier=qualifier, resource=resource)
     assert a
     assert str(a) == expected
 
 
 def test_check_term_pass() -> None:
+    """Test that check term passes."""
     assert RDFAnnotation.check_term("chebi", "CHEBI:000012") is True
 
 
 @pytest.mark.xfail(raises=ValueError)
 def test_check_collection_fail() -> None:
+    """Test that check collection fails."""
     assert RDFAnnotation.check_term("234234sdf", "CHEBI:000012") is True
 
 
 @pytest.mark.xfail(raises=ValueError)
 def test_check_term_fail() -> None:
+    """Test that check term fails."""
     assert RDFAnnotation.check_term("chebi", "CHEB:000012") is False

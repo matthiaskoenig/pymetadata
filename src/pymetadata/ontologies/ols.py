@@ -73,6 +73,7 @@ class OLSQuery:
         cache_path: Path = CACHE_PATH,
         cache: bool = CACHE_USE,
     ):
+        """Initialize OLSQuery."""
         self.ontologies = {
             ontology.name: ontology for ontology in ontologies
         }  # type: Dict[str, OLSOntology]
