@@ -272,6 +272,7 @@ class EntryFormat(str, Enum):
     XOF = PURL_PREFIX + "x-world/x-vrml"
     XPM = PURL_PREFIX + "image/x-xpixmap"
     XWD = PURL_PREFIX + "image/x-xwindowdump"
+    YAML = PURL_PREFIX + "text/yaml"
     Z = PURL_PREFIX + "application/x-compress"
     ZIP = PURL_PREFIX + "application/zip"
 
