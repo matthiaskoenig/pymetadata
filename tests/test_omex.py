@@ -105,6 +105,25 @@ def test_adding_removing_entry_manifest() -> None:
     assert len(manifest) == 2
 
 
+def test_adding_removing_entry_manifest_no_dot() -> None:
+    """Testing adding and removing entries from manifest without dots."""
+    manifest = Manifest()
+    assert "." in manifest
+    assert "./manifest.xml" in manifest
+    assert manifest
+    assert len(manifest) == 2
+    manifest.add_entry(
+        ManifestEntry(location="models/model.xml", format="sbml", master=False)
+    )
+    assert "./models/model.xml" in manifest
+    assert len(manifest) == 3
+
+    entry = manifest.remove_entry_for_location(location="models/model.xml")
+    assert entry
+    assert entry.location == "./models/model.xml"
+    assert len(manifest) == 2
+
+
 @pytest.mark.parametrize(
     "omex_filename",
     [
