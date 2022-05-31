@@ -5,14 +5,6 @@ __author__ = "Matthias Koenig"
 __version__ = "0.2.10"
 
 
-from depinfo import print_dependencies  # type: ignore
-
-
-def show_versions() -> None:
-    """Print dependency information."""
-    print_dependencies("pymetadata")
-
-
 program_name: str = "pymetadata"
 RESOURCES_DIR: Path = Path(__file__).parent / "resources"
 ENUM_DIR: Path = Path(__file__).parent / "metadata"
