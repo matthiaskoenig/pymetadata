@@ -35,77 +35,81 @@ class UnichemSource:
     base_id_url (the base url for constructing hyperlinks to this source [append an identifier from this source to the end of this url to create a valid url to a specific page for this cpd], unless aux_for_url=1),
     aux_for_url (A flag to indicate whether the aux_src field should be used to create hyperlinks instead of the src_compound_id [1=yes, 0=no]
     """
-
-    src_id: int
-    src_url: str
+    sourceID: int
+    srcUrl: str
     name: str
-    base_id_url: str = field(repr=False)
-    aux_for_url: int = field(repr=False)
-    base_id_url_available: int = field(repr=False)
+    nameLabel: str = field(repr=False)
+    nameLong: str = field(repr=False)
+    UCICount: int = field(repr=False)
+    baseIdUrl: str = field(repr=False)
     description: str = field(repr=False)
-    name_label: str = field(repr=False)
-    name_long: str = field(repr=False)
+    created: str = field(repr=False)
+    lastUpdated: str = field(repr=False)
+    srcDetails: str = field(repr=False)
+    srcReleaseDate: str = field(repr=False)
+    srcReleaseNumber: int = field(repr=False)
+    updateComments: str = field(repr=False)
+    private: bool = field(repr=False)
 
 
 class UnichemQuery:
     """Query unichem."""
 
-    sources = None
+    # lookup of sources
+    sources: Optional[Dict[int, UnichemSource]] = None
+
+    def __init__(self, cache_path: Path = CACHE_PATH, cache: bool = CACHE_USE):
+        """Initialize UnichemQuery."""
+        self.cache_path: Path = cache_path
+        self.cache: bool = cache
+
+        if self.sources is None:
+            self.sources = self.get_sources(cache_path=self.cache_path, cache=self.cache)
 
     @classmethod
-    def _get_all_src_information(
+    def get_sources(
         cls, cache_path: Path = CACHE_PATH, cache: bool = CACHE_USE
     ) -> Dict[int, UnichemSource]:
+        """Retrieve or query the sources."""
 
+        sources: Dict[int, UnichemSource]
         unichem_sources_path = cache_path / "unichem_sources.json"
 
-        data = read_json_cache(unichem_sources_path) if cache else None
-        if data:
-            # casting
-            data = {k: UnichemSource(**v) for k, v in data.items()}
+        data: Dict
+        if cache:
+            data = read_json_cache(unichem_sources_path)
+            sources = {k: UnichemSource(**v) for k, v in data.items()}
         else:
-            logger.warning("Query: unichem sources")
-            data = {}
-            for src_id in range(50):
-                source = cls._get_src_information(src_id)
-                if source is not None:
-                    data[source.src_id] = source
+            # query data
+            url = f"https://www.ebi.ac.uk/unichem/api/v1/sources/"
+            response = requests.get(url)
+            data = response.json()
+            if data["response"].lower() != "success":
+                raise IOError(f"Could not query UniChem sources: '{data}'")
 
+            sources_list: List[UnichemSource] = [UnichemSource(**v) for v in data["sources"]]
+            sources = {source.sourceID: source for source in sources_list}
+
+            # write cache
             write_json_cache(
-                data=data,
+                data=sources,
                 cache_path=unichem_sources_path,
                 json_encoder=DataclassJSONEncoder,
             )
 
-        return data
+        return sources
 
-    @staticmethod
-    def _get_src_information(src_id: int) -> Optional[UnichemSource]:
-        """Get unichem source information for given source id."""
-        url = f"https://www.ebi.ac.uk/unichem/rest/sources/{src_id}"
-        response = requests.get(url)
-        d = response.json()
-        if "error" in d or len(d) == 0:
-            return None
-        else:
-            return UnichemSource(**d[0])
-
-    @classmethod
-    def query_xrefs(
-        cls, inchikey: str, cache_path: Path = CACHE_PATH, cache: bool = CACHE_USE
-    ) -> List[CrossReference]:
+    def query_xrefs_for_inchikey(self, inchikey: str) -> List[CrossReference]:
         """Get the cross references for a given inchikey."""
-        if cls.sources is None:
-            cls.sources = cls._get_all_src_information(
-                cache_path=cache_path, cache=cache
-            )
 
-        xref_base_path = cache_path / "unichem"
+        # cache files
+        xref_base_path = self.cache_path / "unichem"
         if not xref_base_path.exists():
             xref_base_path.mkdir(parents=True)
         xref_path = xref_base_path / f"{inchikey}.json"
 
-        data = read_json_cache(xref_path) if cache else None
+        # retrieve or query data
+        data = read_json_cache(xref_path) if self.cache else None
         if data:
             for item in data:
                 if "source" in item:
@@ -125,13 +129,22 @@ class UnichemQuery:
                     return []
 
                 # add source information to all entries
+                source_key: Optional[str] = None
                 for d in data:
                     try:
-                        d["source"] = cls.sources[d["src_id"]]
+                        source_key: d["src_id"]
                     except KeyError:
-                        logger.error(
-                            f"inchikey/{inchikey}: Key <{d['src_id']}> missing from {cls.sources.keys()}"
-                        )
+                        logger.error(f"No 'src_id' in data entry: '{d}'")
+                        source_key = None
+
+                    if source_key:
+                        try:
+                            d["source"] = cls.sources[source_key]
+                        except KeyError:
+                            logger.error(
+                                f"inchikey/{inchikey}: Key '{source_key}' missing from "
+                                f"'{cls.sources.keys()}'."
+                            )
 
             write_json_cache(
                 data=data, cache_path=xref_path, json_encoder=DataclassJSONEncoder  # type: ignore
@@ -141,7 +154,12 @@ class UnichemQuery:
         xrefs = []
         if data:
             for item in data:
-                source = item["source"]  # type: UnichemSource
+                try:
+                    source: UnichemSource = item["source"]
+                except KeyError:
+                    logger.error(f"Key 'source' missing from item '{item}'")
+                    continue
+
                 name = source.name
                 accession = item["src_compound_id"]
                 if source.base_id_url_available:
@@ -171,6 +189,10 @@ class UnichemQuery:
 
 if __name__ == "__main__":
 
+    # query sources
+    sources = UnichemQuery.get_sources()
+
+    # query xrefs
     inchikey = "NGBFQHCMQULJNZ-UHFFFAOYSA-N"
-    results = UnichemQuery.query_xrefs(inchikey=inchikey, cache=False)
-    results = UnichemQuery.query_xrefs(inchikey=inchikey, cache=True)
+    results = UnichemQuery(cache=False).query_xrefs_for_inchikey(inchikey=inchikey)
+    # results = UnichemQuery(cache=True).query_xrefs_for_inchikey(inchikey=inchikey)
