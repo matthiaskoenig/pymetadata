@@ -31,22 +31,25 @@ def test_get_source_missing() -> None:
     assert source is None
 
 
-def test_query_xref_for_inchikey_cache(tmp_path: Path) -> None:
-    """Test retrieving xrefs with cache."""
-    inchikey = "NGBFQHCMQULJNZ-UHFFFAOYSA-N"
-    xrefs = UnichemQuery(
-        cache=True,
-        cache_path=tmp_path,
-    ).query_xrefs_for_inchikey(inchikey=inchikey)
-    assert xrefs
-
-
 def test_query_xref_for_inchikey_no_cache(tmp_path: Path) -> None:
     """Test retrieving xrefs without cache."""
     inchikey = "NGBFQHCMQULJNZ-UHFFFAOYSA-N"
-    xrefs = UnichemQuery(
-        cache=False,
-        cache_path=tmp_path
-    ).query_xrefs_for_inchikey(inchikey=inchikey)
+    xrefs = UnichemQuery(cache=False, cache_path=tmp_path).query_xrefs_for_inchikey(
+        inchikey=inchikey
+    )
     assert xrefs
 
+
+def test_query_xref_for_inchikey_cache(tmp_path: Path) -> None:
+    """Test retrieving xrefs with cache."""
+    inchikey = "NGBFQHCMQULJNZ-UHFFFAOYSA-N"
+    xrefs1 = UnichemQuery(cache=False, cache_path=tmp_path).query_xrefs_for_inchikey(
+        inchikey=inchikey
+    )
+    xrefs2 = UnichemQuery(
+        cache=True,
+        cache_path=tmp_path,
+    ).query_xrefs_for_inchikey(inchikey=inchikey)
+    assert xrefs1
+    assert xrefs2
+    assert len(xrefs1) == len(xrefs2)
