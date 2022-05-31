@@ -285,7 +285,7 @@ def try_ontology_import(ontology_id: str) -> None:
 
 if __name__ == "__main__":
     # download latest versions
-    update_ontology_files()
+    # update_ontology_files()
 
     # load OWL files
     # ofile: OntologyFile
@@ -294,6 +294,7 @@ if __name__ == "__main__":
     #     print("-" * 80)
     #     ontology = Ontology(ontology_id=oid)
     #     console.print(ontology)
+    # ontology = Ontology(ontology_id="CHEBI")
 
     # convert to python module
     create_ontology_enum("SBO", r"^SBO_\d{7}$")

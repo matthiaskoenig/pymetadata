@@ -18,7 +18,7 @@ class DataclassJSONEncoder(JSONEncoder):
         return o.__dict__
 
 
-def read_json_cache(cache_path: Path) -> Optional[Dict]:
+def read_json_cache(cache_path: Path) -> Dict:
     """Read JSON cache file.
 
     :param cache_path:
@@ -29,7 +29,7 @@ def read_json_cache(cache_path: Path) -> Optional[Dict]:
             logger.debug(f"Read cache: {cache_path}")
             return json.load(fp)  # type: ignore
 
-    return None
+    raise IOError(f"Cache path does not exist: '{cache_path}'")
 
 
 def write_json_cache(

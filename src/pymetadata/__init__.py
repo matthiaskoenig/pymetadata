@@ -2,15 +2,7 @@
 from pathlib import Path
 
 __author__ = "Matthias Koenig"
-__version__ = "0.2.9"
-
-
-from depinfo import print_dependencies  # type: ignore
-
-
-def show_versions() -> None:
-    """Print dependency information."""
-    print_dependencies("pymetadata")
+__version__ = "0.3.0"
 
 
 program_name: str = "pymetadata"

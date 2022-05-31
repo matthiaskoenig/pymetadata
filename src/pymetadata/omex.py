@@ -272,6 +272,7 @@ class EntryFormat(str, Enum):
     XOF = PURL_PREFIX + "x-world/x-vrml"
     XPM = PURL_PREFIX + "image/x-xpixmap"
     XWD = PURL_PREFIX + "image/x-xwindowdump"
+    YAML = PURL_PREFIX + "text/yaml"
     Z = PURL_PREFIX + "application/x-compress"
     ZIP = PURL_PREFIX + "application/zip"
 
@@ -414,17 +415,14 @@ class Manifest(BaseModel):
 
         Does not check for duplication.
         """
-        if not entry.location.startswith("./"):
-            raise ValueError(
-                f"Locations must be relative paths in COMBINE archive, but location is "
-                f"'{entry.location}'."
-            )
-
+        entry.location = self._check_and_normalize_location(entry.location)
         self.entries.append(entry)
         self._entries_dict[entry.location] = entry
 
     def remove_entry_for_location(self, location: str) -> Optional[ManifestEntry]:
         """Remove entry for given location."""
+        location = self._check_and_normalize_location(location)
+
         if location in [".", "./manifest.xml"]:
             logger.error(
                 f"Core location cannot be removed from manifest: '{location}'."
@@ -437,6 +435,21 @@ class Manifest(BaseModel):
             entry = self._entries_dict.pop(location)
             self.entries = [e for e in self.entries if e.location != location]
             return entry
+
+    @staticmethod
+    def _check_and_normalize_location(location: str) -> str:
+        """Add relative prefix and check location."""
+
+        if location.startswith("/"):
+            raise ValueError(
+                f"Locations must be relative paths in COMBINE archive, but location is "
+                f"'{location}'."
+            )
+
+        # add prefix
+        if not location.startswith("./") and location != ".":
+            location = f"./{location}"
+        return location
 
 
 class Omex:
