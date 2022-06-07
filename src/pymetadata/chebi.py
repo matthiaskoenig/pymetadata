@@ -1,7 +1,7 @@
 """Module for working with chebi."""
 from pathlib import Path
 from pprint import pprint
-from typing import Dict, Any
+from typing import Any, Dict
 
 from zeep import Client
 
