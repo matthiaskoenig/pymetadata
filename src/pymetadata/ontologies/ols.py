@@ -137,14 +137,17 @@ class OLSQuery:
         # term_id = term.split(":")[-1]
         # url = ols_pattern.replace('{$id}', term_id)
         cache_path = self.cache_path / f"{urliri}.json"
+        data: Dict[str, Any] = {}
         if self.cache:
-            data = read_json_cache(cache_path=cache_path)
-        else:
-            data = {}
+            try:
+                data = read_json_cache(cache_path=cache_path)
+            except IOError:
+                # cache does not exist
+                pass
 
         if not data:
             url = self.url_term_query.format(ontology, urliri)
-            logger.warning(f"Query: {url}")
+            logger.info(f"Query: {url}")
             response = requests.get(url)
 
             if response.status_code != 200:

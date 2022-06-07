@@ -109,6 +109,14 @@ def ols_namespaces() -> Dict[str, Namespace]:
         ),
         Namespace(
             id=None,
+            prefix="dron",
+            pattern=r"^DRON:\d+$",
+            name="DRON",
+            description="The drug ontology",
+            namespaceEmbeddedInLui=True,
+        ),
+        Namespace(
+            id=None,
             prefix="cmo",
             pattern=r"^CMO:\d+$",
             name="Chemical methods ontology",
@@ -146,6 +154,14 @@ def ols_namespaces() -> Dict[str, Namespace]:
             name="MONDO",
             prefix="mondo",
             description="MONDO",
+            namespaceEmbeddedInLui=True,
+        ),
+        Namespace(
+            id=None,
+            pattern=r"^SIO:\d+$",
+            name="SIO",
+            prefix="sio",
+            description="Semanticscience Integrated Ontology",
             namespaceEmbeddedInLui=True,
         ),
         Namespace(

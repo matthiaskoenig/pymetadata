@@ -5,7 +5,7 @@ Core data structure to store annotations.
 import re
 import urllib
 from pprint import pprint
-from typing import Any, Dict, List, Optional, Tuple, Union
+from typing import Any, Dict, Final, List, Optional, Tuple, Union
 
 import requests
 
@@ -18,10 +18,10 @@ from pymetadata.ontologies.ols import ONTOLOGIES, OLSQuery
 
 OLS_QUERY = OLSQuery(ontologies=ONTOLOGIES)
 
-IDENTIFIERS_ORG_PREFIX = "https://identifiers.org"
-IDENTIFIERS_ORG_PATTERN1 = re.compile(r"^https?://identifiers.org/(.+?)/(.+)")
-IDENTIFIERS_ORG_PATTERN2 = re.compile(r"^https?://identifiers.org/(.+)")
-MIRIAM_URN_PATTERN = re.compile(r"^urn:miriam:(.+)")
+IDENTIFIERS_ORG_PREFIX: Final = "https://identifiers.org"
+IDENTIFIERS_ORG_PATTERN1: Final = re.compile(r"^https?://identifiers.org/(.+?)/(.+)")
+IDENTIFIERS_ORG_PATTERN2: Final = re.compile(r"^https?://identifiers.org/(.+)")
+MIRIAM_URN_PATTERN: Final = re.compile(r"^urn:miriam:(.+)")
 
 logger = log.get_logger(__name__)
 

@@ -37284,34 +37284,34 @@
     "deprecationDate": null
   },
   "sio": {
-    "id": 2807,
+    "id": null,
     "prefix": "sio",
-    "name": "Semanticscience Integrated Ontology",
-    "pattern": "^SIO_\\d{6,6}$",
-    "namespaceEmbeddedInLui": false,
-    "description": "The semanticscience integrated ontology (SIO) provides a simple, integrated upper level ontology (types, relations) for consistent knowledge representation across physical, processual and informational entities.",
-    "mirId": "MIR:00000851",
+    "name": "SIO",
+    "pattern": "^SIO:\\d+$",
+    "namespaceEmbeddedInLui": true,
+    "description": "Semanticscience Integrated Ontology",
+    "mirId": null,
     "resources": [
       {
-        "id": 2808,
+        "id": null,
         "providerCode": "ols",
-        "name": "European Bioinformatics Institute",
-        "urlPattern": "https://www.ebi.ac.uk/ols/ontologies/sio/terms?short_form={$id}",
-        "mirId": "MIR:00000850",
-        "description": "At EMBL-EBI, we make the world\u2019s public biological data freely available to the scientific community via a range of services and tools, perform basic research and provide professional training in bioinformatics. \nWe are part of the European Molecular Biology Laboratory (EMBL), an international, innovative and interdisciplinary research organisation funded by 26 member states and two associate member states.",
-        "official": true,
-        "sampleId": "SIO_000276",
-        "resourceHomeUrl": "https://www.ebi.ac.uk",
+        "name": "sio through OLS",
+        "urlPattern": "https://www.ebi.ac.uk/ols/ontologies/chebi/terms?obo_id=SIO:{$id}",
+        "mirId": null,
+        "description": "sio through OLS",
+        "official": false,
+        "sampleId": null,
+        "resourceHomeUrl": null,
         "institution": {
-          "id": 2,
-          "name": "European Bioinformatics Institute",
-          "homeUrl": "https://www.ebi.ac.uk",
           "description": "At EMBL-EBI, we make the world\u2019s public biological data freely available to the scientific community via a range of services and tools, perform basic research and provide professional training in bioinformatics. \nWe are part of the European Molecular Biology Laboratory (EMBL), an international, innovative and interdisciplinary research organisation funded by 26 member states and two associate member states.",
-          "rorId": "https://ror.org/02catss52",
+          "homeUrl": "https://www.ebi.ac.uk",
+          "id": 2,
           "location": {
             "countryCode": "GB",
             "countryName": "United Kingdom"
-          }
+          },
+          "name": "European Bioinformatics Institute",
+          "rorId": "https://ror.org/02catss52"
         },
         "location": {
           "countryCode": "GB",
@@ -37321,9 +37321,9 @@
         "deprecationDate": null
       }
     ],
-    "created": "2021-08-08T09:47:01.408+0000",
-    "modified": "2021-08-08T09:47:01.408+0000",
-    "sampleId": "SIO_000276",
+    "created": null,
+    "modified": null,
+    "sampleId": null,
     "deprecated": false,
     "deprecationDate": null
   },
@@ -39631,6 +39631,50 @@
         "urlPattern": "https://www.ebi.ac.uk/ols/ontologies/chebi/terms?obo_id=OMIM:{$id}",
         "mirId": null,
         "description": "omim through OLS",
+        "official": false,
+        "sampleId": null,
+        "resourceHomeUrl": null,
+        "institution": {
+          "description": "At EMBL-EBI, we make the world\u2019s public biological data freely available to the scientific community via a range of services and tools, perform basic research and provide professional training in bioinformatics. \nWe are part of the European Molecular Biology Laboratory (EMBL), an international, innovative and interdisciplinary research organisation funded by 26 member states and two associate member states.",
+          "homeUrl": "https://www.ebi.ac.uk",
+          "id": 2,
+          "location": {
+            "countryCode": "GB",
+            "countryName": "United Kingdom"
+          },
+          "name": "European Bioinformatics Institute",
+          "rorId": "https://ror.org/02catss52"
+        },
+        "location": {
+          "countryCode": "GB",
+          "countryName": "United Kingdom"
+        },
+        "deprecated": false,
+        "deprecationDate": null
+      }
+    ],
+    "created": null,
+    "modified": null,
+    "sampleId": null,
+    "deprecated": false,
+    "deprecationDate": null
+  },
+  "dron": {
+    "id": null,
+    "prefix": "dron",
+    "name": "DRON",
+    "pattern": "^DRON:\\d+$",
+    "namespaceEmbeddedInLui": true,
+    "description": "The drug ontology",
+    "mirId": null,
+    "resources": [
+      {
+        "id": null,
+        "providerCode": "ols",
+        "name": "dron through OLS",
+        "urlPattern": "https://www.ebi.ac.uk/ols/ontologies/chebi/terms?obo_id=DRON:{$id}",
+        "mirId": null,
+        "description": "dron through OLS",
         "official": false,
         "sampleId": null,
         "resourceHomeUrl": null,

@@ -1,7 +1,7 @@
 """Module for working with chebi."""
 from pathlib import Path
 from pprint import pprint
-from typing import Dict
+from typing import Dict, Any
 
 from zeep import Client
 
@@ -37,10 +37,15 @@ class ChebiQuery:
             chebi_base_path.mkdir(parents=True)
 
         chebi_path = chebi_base_path / f"{chebi.replace(':', '%3A')}.json"
-        data = read_json_cache(cache_path=chebi_path) if cache else None
+        data: Dict[str, Any] = {}
+        if cache:
+            try:
+                data = read_json_cache(cache_path=chebi_path)
+            except IOError:
+                pass
 
         # fetch and cache data
-        if data is None:
+        if not data:
             try:
                 result = client.service.getCompleteEntity(chebi)
                 # print(result)

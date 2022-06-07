@@ -135,10 +135,12 @@ class UnichemQuery:
             for item in data:
                 source_id: int = int(item["src_id"])
                 if source_id not in self.sources:
-                    logger.error(
-                        f"No UniChem source for source id '{source_id}', in item "
-                        f"'{item}'"
-                    )
+                    if source_id != 40:
+                        # number 40 is missing from definitions
+                        logger.error(
+                            f"No UniChem source for source id '{source_id}', in item "
+                            f"'{item}'"
+                        )
                     continue
 
                 source: UnichemSource = self.sources[source_id]
