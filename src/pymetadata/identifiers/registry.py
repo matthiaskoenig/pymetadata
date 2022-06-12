@@ -98,7 +98,16 @@ def ols_namespaces() -> Dict[str, Namespace]:
         "providerCode": "ols",
     }
 
+    # Custom namespaces for OLS ontology, for simple support
     namespaces = [
+        Namespace(
+            id=None,
+            prefix="snomed",
+            pattern=r"^\d+$",
+            name="SNOMED",
+            description="SNOMED CT or SNOMED Clinical Terms is a systematically organized computer processable collection of medical terms providing codes, terms, synonyms and definitions used in clinical documentation and reporting.",
+            namespaceEmbeddedInLui=True,
+        ),
         Namespace(
             id=None,
             prefix="omim",
@@ -154,14 +163,6 @@ def ols_namespaces() -> Dict[str, Namespace]:
             name="MONDO",
             prefix="mondo",
             description="MONDO",
-            namespaceEmbeddedInLui=True,
-        ),
-        Namespace(
-            id=None,
-            pattern=r"^SIO:\d+$",
-            name="SIO",
-            prefix="sio",
-            description="Semanticscience Integrated Ontology",
             namespaceEmbeddedInLui=True,
         ),
         Namespace(
