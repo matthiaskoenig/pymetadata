@@ -16,7 +16,7 @@ https://www.ebi.ac.uk/ols/api/search?q=glucose
 Do something similar for
 https://data.bioontology.org/documentation -> Term search
 
--> (term_id, ontology, label, descriptions, synonyms, cross-references);
+-> (term_id, ontology, label, descriptions);
 
 object.id, object.name, object.meta_id
 """
