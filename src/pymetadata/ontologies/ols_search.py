@@ -22,3 +22,68 @@ object.id, object.name, object.meta_id
 """
 
 
+from asyncio.log import logger
+from this import d
+from typing import Optional
+import requests
+
+
+class OLSOntology:
+    """Python class to receive response from OLS"""
+
+    def __init__(self, id, iri, short_form, obo_id, label, description, ontology_name, onotology_prefix): 
+        self.id = id
+        self.iri = iri
+        self.short_form = short_form
+        self.obo_id = obo_id
+        self.label: Optional[str] = label
+        self.description: Optional[str] = description
+        self.ontology_name = ontology_name
+        self.ontology_prefix = onotology_prefix
+
+
+    def process_response(self, response):
+        """Parses response into a list and returns it"""
+        list = []
+
+        for i in response['response']['docs']:
+            if 'label' in i.keys():
+                label = i['label']
+            else:
+                label = ""
+            if 'description' in i.keys():
+                description = i['description']
+            else:
+                description = ""
+            
+            list.append(
+                OLSOntology(
+                    i['id'],
+                    i['iri'],
+                    i['short_form'],
+                    i['obo_id'],
+                    label,
+                    description,
+                    i['ontology_name'],
+                    i['ontology_prefix']
+                    )
+                )
+                
+        return list
+
+    def ols_search(self, term, ontology):
+        """Performs GET Query to OLS API and returns response stored list of OLSOntology objects"""
+        
+        query = "https://www.ebi.ac.uk/ols/api/search?q="+term+"&ontology="+ontology
+        try:
+            response = requests.get(query)
+        except requests.HTTPError as err:
+            logger.error(err)
+            response = {
+                "errors":[err],
+                "warnings": [],
+            }
+        response = response.json()
+        data = self.process_response(response)
+
+        return data
