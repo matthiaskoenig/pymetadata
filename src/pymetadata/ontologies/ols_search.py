@@ -69,20 +69,38 @@ class OLSSearch:
     """Class to search the ontology lookup service (OLS)."""
 
     @classmethod
-    def ols_search(cls, term: str, ontology: str = "") -> List[OLSSearchResult]:
+    def ols_search(cls, searchParam: dict) -> List[OLSSearchResult]:
         """Perform OLS search with given term and ontology.
 
         Raises requests.HTTPError.
         """
-        query = (
-            "https://www.ebi.ac.uk/ols/api/search?q=" + term + "&ontology=" + ontology
-        )
+        queryStr = cls.generateQuery(searchParam)
+        print(queryStr)
         try:
-            response: requests.Response = requests.get(query)
+            response: requests.Response = requests.get(queryStr)
         except requests.HTTPError as err:
             logger.error(err)
             raise err
         return cls.process_response(response)
+
+    @staticmethod
+    def generateQuery(searchParam: dict) -> str:
+        """Generate query"""
+        query: str = searchParam["query"]
+        ontology: str = searchParam.get("ontology", "")
+        obsoletes: str = searchParam.get("obsoletes", "false")
+        exact: str = searchParam.get("exact", "false")
+        queryStr = (
+            "https://www.ebi.ac.uk/ols/api/search?q="
+            + query
+            + "&ontology="
+            + ontology
+            + "&obsoletes="
+            + obsoletes
+            + "&exact="
+            + exact
+        )
+        return queryStr
 
     @staticmethod
     def process_response(response: requests.Response) -> List[OLSSearchResult]:
@@ -109,4 +127,12 @@ class OLSSearch:
 
 
 if __name__ == "__main__":
-    OLSSearch().ols_search(term="liver")
+    searchParam = {
+        "query": "liver",
+        "ontology": "bto",
+        "obsoletes": "false",
+        "exact": "false",
+    }
+    annotation = OLSSearch().ols_search(searchParam)
+    for item in annotation:
+        print(item.key, item.iri, item.short_form, item.obo_id, item.label, item.descriptions, item.ontology_name, item.ontology_prefix)

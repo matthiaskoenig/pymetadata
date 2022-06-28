@@ -14,7 +14,7 @@ coverage.xml
 .benchmark
 src/pymetadata.egg-info/
 src/pymetadata/resources/cache
-
+pymetadata
 
 wheels
 __pycache__
