@@ -9,9 +9,10 @@ various existing web services (Ontology Lookup Service, Bio Ontologies, Annotate
 to fetch the ontology terms. Results will be processed/cached/ranked and returned to
 the frontend as ranked results via the JSON annotation format.
 """
-
+from __future__ import annotations
 from dataclasses import dataclass
 from typing import Dict, List
+
 
 import requests
 
@@ -34,10 +35,25 @@ class SearchResult:
     ontology_name: str
     ontology_prefix: str
 
+    @staticmethod
+    def rank(query: str, results: List[SearchResult]) -> List[float]:
+        """Rank given list of results.
+
+        TODO: rank results based on query; perfect match is 1.0, worst case 0.0.
+        Use label, descriptions. ....
+
+        TODO: do research on scoring functions/libraries
+        """
+        raise NotImplementedError
+
+
 
 @dataclass
 class SearchParameters:
-    """Class for search parameters."""
+    """Class for search parameters.
+
+    TODO:
+    """
 
     query: str
     ontology: str
