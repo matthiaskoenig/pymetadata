@@ -184,7 +184,6 @@ class RDFAnnotation:
             )
             return False
 
-
         p = re.compile(namespace.pattern)
         m = p.match(term)
         if not m:

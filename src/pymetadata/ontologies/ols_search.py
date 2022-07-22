@@ -10,17 +10,22 @@ to fetch the ontology terms. Results will be processed/cached/ranked and returne
 the frontend as ranked results via the JSON annotation format.
 """
 from __future__ import annotations
+
+import re
 from dataclasses import dataclass
 from typing import Dict, List, Optional
 
+import nltk
 import requests
 
 from pymetadata.log import get_logger
-import re
-import nltk
-nltk.download('wordnet')
-nltk.download('omw-1.4')
+
+
+nltk.download("wordnet")
+nltk.download("omw-1.4")
 import numpy as np
+
+
 # FIXME: add dependency
 
 logger = get_logger(__file__)
@@ -67,13 +72,15 @@ class SearchResult:
         """
         scores = []
         for result in search_results:
-            score = cls.match_fraction(query, result.label) * 5 \
-                    + cls.match_fraction(query, " ".join(result.descriptions)) \
-                    + cls.match_fraction(query, result.short_form) * 2 \
-                    + cls.match_fraction(query, result.obo_id) * 2 \
-                    + cls.match_fraction(query, result.iri)
+            score = (
+                cls.match_fraction(query, result.label) * 5
+                + cls.match_fraction(query, " ".join(result.descriptions))
+                + cls.match_fraction(query, result.short_form) * 2
+                + cls.match_fraction(query, result.obo_id) * 2
+                + cls.match_fraction(query, result.iri)
+            )
             # normalization with maximum score
-            score = score/11.0
+            score = score / 11.0
             scores.append(score)
 
         return scores
@@ -98,7 +105,7 @@ class SearchResult:
             for word in text_items:
                 if q in word:
                     count += 1
-            scores.append(count/n_text)
+            scores.append(count / n_text)
 
         score = np.sum(np.array(scores))
         print("---")
@@ -109,7 +116,6 @@ class SearchResult:
 
         return score
 
-
     @staticmethod
     def word_list(text: str) -> List[str]:
         """Create clean word list from text."""
@@ -119,22 +125,23 @@ class SearchResult:
         # https://www.nltk.org/
         # FIXME: add nltk dependency
         from nltk.stem import WordNetLemmatizer
+
         stemmer = WordNetLemmatizer()
 
         # Remove all the special characters
-        text = re.sub(r'\W', ' ', str(text))
+        text = re.sub(r"\W", " ", str(text))
 
         # remove all single characters
-        text = re.sub(r'\s+[a-zA-Z]\s+', ' ', text)
+        text = re.sub(r"\s+[a-zA-Z]\s+", " ", text)
 
         # Remove single characters from the start
-        text = re.sub(r'\^[a-zA-Z]\s+', ' ', text)
+        text = re.sub(r"\^[a-zA-Z]\s+", " ", text)
 
         # Substituting multiple spaces with single space
-        text = re.sub(r'\s+', ' ', text, flags=re.I)
+        text = re.sub(r"\s+", " ", text, flags=re.I)
 
         # Removing prefixed 'b'
-        text = re.sub(r'^b\s+', '', text)
+        text = re.sub(r"^b\s+", "", text)
 
         # Converting to Lowercase
         text = text.lower()
@@ -143,8 +150,6 @@ class SearchResult:
         text = text.split()
 
         return [stemmer.lemmatize(word) for word in text]
-
-
 
 
 @dataclass
