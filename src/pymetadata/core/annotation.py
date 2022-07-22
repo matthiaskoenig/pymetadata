@@ -179,14 +179,16 @@ class RDFAnnotation:
         """
         namespace = REGISTRY.ns_dict.get(collection, None)
         if not namespace:
-            raise ValueError(
+            logger.error(
                 f"MIRIAM collection `{collection}` does not exist for term `{term}`"
             )
+            return False
+
 
         p = re.compile(namespace.pattern)
         m = p.match(term)
         if not m:
-            raise ValueError(
+            logger.error(
                 f"Term `{term}` did not match pattern "
                 f"`{namespace.pattern}` for collection `{collection}`."
             )
