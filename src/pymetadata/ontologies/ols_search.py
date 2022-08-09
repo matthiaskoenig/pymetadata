@@ -86,7 +86,7 @@ class SearchResult:
         return scores
 
     @staticmethod
-    def match_fraction(query, text) -> float:
+    def match_fraction(query: str, text: str) -> float:
         """Maximal contribution of query string to text."""
         if not query:
             return 0.0
@@ -114,7 +114,7 @@ class SearchResult:
         print(scores)
         print(score)
 
-        return score
+        return float(score)
 
     @staticmethod
     def word_list(text: str) -> List[str]:
@@ -147,9 +147,9 @@ class SearchResult:
         text = text.lower()
 
         # Lemmatization
-        text = text.split()
+        tokens = text.split()
 
-        return [stemmer.lemmatize(word) for word in text]
+        return [stemmer.lemmatize(word) for word in tokens]
 
 
 @dataclass
