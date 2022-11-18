@@ -16708,12 +16708,12 @@
         "id": 963,
         "providerCode": "CURATOR_REVIEW",
         "name": "PomBase at University of Cambridge",
-        "urlPattern": "http://www.pombase.org/spombe/result/{$id}",
+        "urlPattern": "https://www.pombase.org/gene/{$id}",
         "mirId": "MIR:00100430",
         "description": "PomBase at University of Cambridge",
         "official": false,
         "sampleId": "SPCC13B11.01",
-        "resourceHomeUrl": "http://www.pombase.org/",
+        "resourceHomeUrl": "https://www.pombase.org/",
         "institution": {
           "id": 962,
           "name": "Cambridge Systems Biology Centre, Department of Biochemistry, University of Cambridge",
@@ -34692,7 +34692,7 @@
         "id": 569,
         "providerCode": "CURATOR_REVIEW",
         "name": "Xenbase at University of Calgary",
-        "urlPattern": "https://www.xenbase.org/common/xsearch.do?exactSearch=true&searchIn=7&searchValue={$id}",
+        "urlPattern": "https://www.xenbase.org/entry/{$id}",
         "mirId": "MIR:00100232",
         "description": "Xenbase at University of Calgary",
         "official": false,
@@ -39612,6 +39612,226 @@
     "created": "2019-06-11T14:16:03.054+0000",
     "modified": "2022-05-18T15:48:21.884+0000",
     "sampleId": "AB0",
+    "deprecated": false,
+    "deprecationDate": null
+  },
+  "civic.sid": {
+    "id": 3252,
+    "prefix": "civic.sid",
+    "name": "CIViC Source",
+    "pattern": "^[0-9]+$",
+    "namespaceEmbeddedInLui": false,
+    "description": "In CIViC, each Evidence Item must be associated with a Source Type and Source ID, which link the Evidence Item to the original source of information supporting clinical claims. Currently, CIViC accepts publications indexed on PubMed OR abstracts published through the American Society of Clinical Oncology (ASCO). Each such source entered into CIViC is assigned a unique identifier and expert curators can curate guidance that assists future curators in the interpretation of information from this source.",
+    "mirId": "MIR:00000953",
+    "resources": [
+      {
+        "id": 3253,
+        "providerCode": "civicdb",
+        "name": "Clinical Interpretation of Variants in Cancer (CIViC)",
+        "urlPattern": "https://civicdb.org/links/sources/{$id}",
+        "mirId": "MIR:00000952",
+        "description": "CIViC is an open access, open source, community-driven web resource for Clinical Interpretation of Variants in Cancer.",
+        "official": true,
+        "sampleId": "62",
+        "resourceHomeUrl": "https://civicdb.org/",
+        "institution": {
+          "id": 2750,
+          "name": "Washington University in St. Louis",
+          "homeUrl": "https://wustl.edu/",
+          "description": "Organization information obtained from ROR API using ROR ID 'https://ror.org/01yc7t268' with Wikidata IDs [Q777403], and ISNI IDs [0000 0001 2355 7002]",
+          "rorId": null,
+          "location": {
+            "countryCode": "US",
+            "countryName": "United States"
+          }
+        },
+        "location": {
+          "countryCode": "US",
+          "countryName": "United States"
+        },
+        "deprecated": false,
+        "deprecationDate": null
+      }
+    ],
+    "created": "2022-08-08T18:32:17.171+0000",
+    "modified": "2022-08-08T18:32:17.171+0000",
+    "sampleId": "62",
+    "deprecated": false,
+    "deprecationDate": null
+  },
+  "civic.tid": {
+    "id": 3255,
+    "prefix": "civic.tid",
+    "name": "CIViC Therapy",
+    "pattern": "^[0-9]+$",
+    "namespaceEmbeddedInLui": false,
+    "description": "Therapies (often drugs) in CIViC are associated with Predictive Evidence Types, which describe sensitivity, resistance or adverse response to therapies when a given variant is present. The Therapy field may also be used to describe more general treatment types and regimes, such as FOLFOX or Radiation, as long as the literature derived Evidence Item makes a scientific association between the Therapy (treatment type) and the presence of the variant.",
+    "mirId": "MIR:00000955",
+    "resources": [
+      {
+        "id": 3256,
+        "providerCode": "civicdb",
+        "name": "Clinical Interpretation of Variants in Cancer (CIViC)",
+        "urlPattern": "https://civicdb.org/links/drugs/{$id}",
+        "mirId": "MIR:00000954",
+        "description": "CIViC is an open access, open source, community-driven web resource for Clinical Interpretation of Variants in Cancer.",
+        "official": true,
+        "sampleId": "14",
+        "resourceHomeUrl": "https://civicdb.org/",
+        "institution": {
+          "id": 2750,
+          "name": "Washington University in St. Louis",
+          "homeUrl": "https://wustl.edu/",
+          "description": "Organization information obtained from ROR API using ROR ID 'https://ror.org/01yc7t268' with Wikidata IDs [Q777403], and ISNI IDs [0000 0001 2355 7002]",
+          "rorId": null,
+          "location": {
+            "countryCode": "US",
+            "countryName": "United States"
+          }
+        },
+        "location": {
+          "countryCode": "US",
+          "countryName": "United States"
+        },
+        "deprecated": false,
+        "deprecationDate": null
+      }
+    ],
+    "created": "2022-08-08T18:33:25.710+0000",
+    "modified": "2022-08-08T18:33:25.710+0000",
+    "sampleId": "14",
+    "deprecated": false,
+    "deprecationDate": null
+  },
+  "civic.did": {
+    "id": 3258,
+    "prefix": "civic.did",
+    "name": "CIViC Disease",
+    "pattern": "^[0-9]+$",
+    "namespaceEmbeddedInLui": false,
+    "description": "Within the CIViC database, the disease should be the cancer or cancer subtype that is a result of the described variant. The disease selected should be as specific as possible should reflect the disease type used in the source that supports the evidence statement.",
+    "mirId": "MIR:00000957",
+    "resources": [
+      {
+        "id": 3259,
+        "providerCode": "civicdb",
+        "name": "Clinical Interpretation of Variants in Cancer (CIViC)",
+        "urlPattern": "https://civicdb.org/links/diseases/{$id}",
+        "mirId": "MIR:00000956",
+        "description": "CIViC is an open access, open source, community-driven web resource for Clinical Interpretation of Variants in Cancer.https://civicdb.org/\n",
+        "official": true,
+        "sampleId": "46",
+        "resourceHomeUrl": "https://civicdb.org/",
+        "institution": {
+          "id": 2750,
+          "name": "Washington University in St. Louis",
+          "homeUrl": "https://wustl.edu/",
+          "description": "Organization information obtained from ROR API using ROR ID 'https://ror.org/01yc7t268' with Wikidata IDs [Q777403], and ISNI IDs [0000 0001 2355 7002]",
+          "rorId": null,
+          "location": {
+            "countryCode": "US",
+            "countryName": "United States"
+          }
+        },
+        "location": {
+          "countryCode": "US",
+          "countryName": "United States"
+        },
+        "deprecated": false,
+        "deprecationDate": null
+      }
+    ],
+    "created": "2022-08-08T18:34:15.882+0000",
+    "modified": "2022-08-08T18:34:15.882+0000",
+    "sampleId": "46",
+    "deprecated": false,
+    "deprecationDate": null
+  },
+  "metatlas": {
+    "id": 3263,
+    "prefix": "metatlas",
+    "name": "Metabolic Atlas",
+    "pattern": "^MA[MR]\\d{5}[a-z]?$",
+    "namespaceEmbeddedInLui": false,
+    "description": "Metabolic Atlas facilitates metabolic modelling by presenting open source genome-scale metabolic models for easy browsing and analysis.",
+    "mirId": "MIR:00000959",
+    "resources": [
+      {
+        "id": 3264,
+        "providerCode": "metatlas",
+        "name": "Metabolic Atlas",
+        "urlPattern": "https://metabolicatlas.org/identifier/MetabolicAtlas/{$id}",
+        "mirId": "MIR:00000958",
+        "description": "Metabolic Atlas is a web platform integrating open-source genome scale metabolic models (GEMs) for easy browsing and analysis. The goal is to collect curated GEMs, and to bring these models closer to FAIR principles. The website provides visualisations and comparisons of the GEMs, and links to resources, algorithms, other databases, and more general software applications.",
+        "official": true,
+        "sampleId": "MAR01234",
+        "resourceHomeUrl": "https://metabolicatlas.org",
+        "institution": {
+          "id": 3262,
+          "name": "National Bioinformatics Infrastructure Sweden",
+          "homeUrl": "https://nbis.se",
+          "description": "NBIS (National Bioinformatics Infrastructure Sweden) is a distributed national research infrastructure supported by the Swedish Research Council (Vetenskapsr\u00e5det), Science for Life Laboratory, all major Swedish universities and the Knut and Alice Wallenberg Foundation, providing state-of-the-art bioinformatics to the Swedish life science researchers community. NBIS is also the Swedish contact point to the European infrastructure for biological information ELIXIR.\n\nPresent NBIS staff has expertise in protein bioinformatics, mass spectrometry (MS), next generation sequencing (NGS), large-scale data handling and integration, metagenomics, systems biology, biostatistics and RNAseq.\n\nNBIS is predominantly offering bioinformatics support in various projects, depending on the user needs. In the projects, the NBIS persons are working close to the research group, and they spend part of their time to teach the users in order to propagate the bioinformatics knowledge. Furthermore, NBIS provides infrastructure and tools for bioinformatics analyses in order to facilitate these analyses for the users.\n\nNBIS forms the bioinformatics platform at the Science for Life Laboratory.",
+          "rorId": null,
+          "location": {
+            "countryCode": "SE",
+            "countryName": "Sweden"
+          }
+        },
+        "location": {
+          "countryCode": "SE",
+          "countryName": "Sweden"
+        },
+        "deprecated": false,
+        "deprecationDate": null
+      }
+    ],
+    "created": "2022-08-08T18:36:40.981+0000",
+    "modified": "2022-08-08T18:36:40.981+0000",
+    "sampleId": "MAR01234",
+    "deprecated": false,
+    "deprecationDate": null
+  },
+  "ror": {
+    "id": 3271,
+    "prefix": "ror",
+    "name": "ROR",
+    "pattern": "^0[a-hj-km-np-tv-z|0-9]{6}[0-9]{2}$",
+    "namespaceEmbeddedInLui": false,
+    "description": "ROR (Research Organization Registry) is a global, community-led registry\nof open persistent identifiers for research organizations. ROR is jointly\noperated by California Digital Library, Crossref, and Datacite.",
+    "mirId": "MIR:00000961",
+    "resources": [
+      {
+        "id": 3272,
+        "providerCode": "ror",
+        "name": "ROR",
+        "urlPattern": "https://ror.org/{$id}",
+        "mirId": "MIR:00001056",
+        "description": "ROR (Research Organization Registry) is a global, community-led registry of open persistent identifiers for research organizations. ",
+        "official": true,
+        "sampleId": "03yrm5c26",
+        "resourceHomeUrl": "https://ror.org",
+        "institution": {
+          "id": 3270,
+          "name": "California Digital Library",
+          "homeUrl": "https://www.cdlib.org/",
+          "description": "Organization information obtained from ROR API using ROR ID 'https://ror.org/03yrm5c26' with Wikidata IDs [Q5020447], and ISNI IDs [0000 0001 1957 5136]",
+          "rorId": null,
+          "location": {
+            "countryCode": "US",
+            "countryName": "United States"
+          }
+        },
+        "location": {
+          "countryCode": "US",
+          "countryName": "United States"
+        },
+        "deprecated": false,
+        "deprecationDate": null
+      }
+    ],
+    "created": "2022-08-15T19:28:35.707+0000",
+    "modified": "2022-08-18T13:14:34.725+0000",
+    "sampleId": "03yrm5c26",
     "deprecated": false,
     "deprecationDate": null
   },

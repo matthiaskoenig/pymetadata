@@ -324,7 +324,7 @@ class Registry:
     @staticmethod
     def update_registry(
         custom_namespaces: Dict[str, Namespace] = CUSTOM_NAMESPACES,
-        registry_path: Path = None,
+        registry_path: Optional[Path] = None,
     ) -> Dict[str, Namespace]:
         """Update registry from identifiers.org webservice."""
         logger.warning(f"Update registry: '{Registry.URL}' -> '{registry_path}'")

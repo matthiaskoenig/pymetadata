@@ -481,7 +481,7 @@ class Omex:
             logger.warning(f"'omex_path' should be 'Path': '{omex_path}'")
             omex_path = Path(omex_path)
 
-        if not omex_path.exists:
+        if not omex_path.exists():
             raise ValueError(f"'omex_path' does not exist: '{omex_path}'.")
         if not omex_path.is_file():
             raise ValueError(f"'omex_path' is not a file: '{omex_path}'.")
@@ -547,7 +547,7 @@ class Omex:
             logger.warning(f"'directory' should be 'Path': '{directory}'")
             directory = Path(directory)
 
-        if not directory.exists:
+        if not directory.exists():
             msg = f"'directory' does not exist: '{directory}'."
             logger.error(msg)
             raise ValueError(msg)
@@ -618,7 +618,7 @@ class Omex:
             logger.warning(f"'entry_path' should be 'Path': '{entry_path}'")
             entry_path = Path(entry_path)
 
-        if not entry_path.exists:
+        if not entry_path.exists():
             msg = f"'entry_path' does not exist: '{entry_path}'."
             logger.error(msg)
             raise ValueError(msg)
