@@ -1925,34 +1925,6 @@
     "mirId": "MIR:00000024",
     "resources": [
       {
-        "id": 107,
-        "providerCode": "ols",
-        "name": "SBO through OLS",
-        "urlPattern": "https://www.ebi.ac.uk/ols/ontologies/sbo/terms?obo_id=SBO:{$id}",
-        "mirId": "MIR:00100176",
-        "description": "SBO through OLS",
-        "official": false,
-        "sampleId": "0000262",
-        "resourceHomeUrl": "https://www.ebi.ac.uk/ols/ontologies/sbo",
-        "institution": {
-          "id": 2,
-          "name": "European Bioinformatics Institute",
-          "homeUrl": "https://www.ebi.ac.uk",
-          "description": "At EMBL-EBI, we make the world\u2019s public biological data freely available to the scientific community via a range of services and tools, perform basic research and provide professional training in bioinformatics. \nWe are part of the European Molecular Biology Laboratory (EMBL), an international, innovative and interdisciplinary research organisation funded by 26 member states and two associate member states.",
-          "rorId": "https://ror.org/02catss52",
-          "location": {
-            "countryCode": "GB",
-            "countryName": "United Kingdom"
-          }
-        },
-        "location": {
-          "countryCode": "GB",
-          "countryName": "United Kingdom"
-        },
-        "deprecated": false,
-        "deprecationDate": null
-      },
-      {
         "id": 108,
         "providerCode": "bptl",
         "name": "SBO through BioPortal",
@@ -1984,12 +1956,40 @@
         "id": 106,
         "providerCode": "biomodels.sbo",
         "name": "SBO",
-        "urlPattern": "https://www.ebi.ac.uk/sbo/main/SBO:{$id}",
+        "urlPattern": "https://registry.identifiers.org/deprecation/resources/MIR:00100034/{$id}",
         "mirId": "MIR:00100034",
         "description": "SBO",
-        "official": true,
+        "official": false,
         "sampleId": "0000262",
         "resourceHomeUrl": "https://www.ebi.ac.uk/sbo/",
+        "institution": {
+          "id": 2,
+          "name": "European Bioinformatics Institute",
+          "homeUrl": "https://www.ebi.ac.uk",
+          "description": "At EMBL-EBI, we make the world\u2019s public biological data freely available to the scientific community via a range of services and tools, perform basic research and provide professional training in bioinformatics. \nWe are part of the European Molecular Biology Laboratory (EMBL), an international, innovative and interdisciplinary research organisation funded by 26 member states and two associate member states.",
+          "rorId": "https://ror.org/02catss52",
+          "location": {
+            "countryCode": "GB",
+            "countryName": "United Kingdom"
+          }
+        },
+        "location": {
+          "countryCode": "GB",
+          "countryName": "United Kingdom"
+        },
+        "deprecated": true,
+        "deprecationDate": "2022-11-10T10:15:12.911+0000"
+      },
+      {
+        "id": 107,
+        "providerCode": "ols",
+        "name": "SBO through OLS",
+        "urlPattern": "https://www.ebi.ac.uk/ols/ontologies/sbo/terms?obo_id=SBO:{$id}",
+        "mirId": "MIR:00100176",
+        "description": "SBO through OLS",
+        "official": true,
+        "sampleId": "0000262",
+        "resourceHomeUrl": "https://www.ebi.ac.uk/ols/ontologies/sbo",
         "institution": {
           "id": 2,
           "name": "European Bioinformatics Institute",
@@ -32887,7 +32887,7 @@
         "urlPattern": "https://ocid.ontochem.com/prefname?ocid={$id}",
         "mirId": "MIR:00000885",
         "description": "We offer high performance and highly customizable text analysis and data mining  products that can be tailored to meet the specific needs of every client.  ",
-        "official": false,
+        "official": true,
         "sampleId": "190000021540",
         "resourceHomeUrl": "https://ontochem.com/",
         "institution": {
@@ -32915,7 +32915,7 @@
         "urlPattern": "https://registry.identifiers.org/deprecation/resources/MIR:00000706/{$id}",
         "mirId": "MIR:00000706",
         "description": "SciWalker is an open access ontology based search tool for annotated data and extracted knowledge from scientific databases, patents and scientific documents.",
-        "official": true,
+        "official": false,
         "sampleId": "190000021540",
         "resourceHomeUrl": "https://www.sciwalker.com",
         "institution": {
@@ -36799,50 +36799,6 @@
     "deprecated": false,
     "deprecationDate": null
   },
-  "glyconavi": {
-    "id": 2714,
-    "prefix": "glyconavi",
-    "name": "GlycoNAVI",
-    "pattern": "^GN_[A-Za-z0-9]+$",
-    "namespaceEmbeddedInLui": false,
-    "description": "GlycoNAVI is a website for carbohydrate research. It consists of the \"GlycoNAVI Database\" that provides information such as existence ratios and names of glycans, 3D structures of glycans and complex glycoconjugates, and the \"GlycoNAVI tools\" such as editing of 2D structures of glycans, glycan structure viewers, and conversion tools.",
-    "mirId": "MIR:00000830",
-    "resources": [
-      {
-        "id": 2715,
-        "providerCode": "glyconavi",
-        "name": "The Noguchi Institute",
-        "urlPattern": "https://glyconavi.org/hub/?id={$id}",
-        "mirId": "MIR:00000822",
-        "description": "The Noguchi Institute is a research institute licensed as a public interest incorporated foundation. It conducts research and education related to glycans.",
-        "official": true,
-        "sampleId": "GN_G03681DA",
-        "resourceHomeUrl": "https://www.noguchi.or.jp/",
-        "institution": {
-          "id": 2713,
-          "name": "The Noguchi Institute",
-          "homeUrl": "https://www.noguchi.or.jp/",
-          "description": "The Noguchi Institute is a research institute licensed as a public interest incorporated foundation. It conducts research and education related to glycans.",
-          "rorId": null,
-          "location": {
-            "countryCode": "JP",
-            "countryName": "Japan"
-          }
-        },
-        "location": {
-          "countryCode": "JP",
-          "countryName": "Japan"
-        },
-        "deprecated": false,
-        "deprecationDate": null
-      }
-    ],
-    "created": "2021-06-28T19:11:39.342+0000",
-    "modified": "2021-06-28T19:11:39.342+0000",
-    "sampleId": "GN_G03681DA",
-    "deprecated": false,
-    "deprecationDate": null
-  },
   "corrdb": {
     "id": 2720,
     "prefix": "corrdb",
@@ -36884,6 +36840,50 @@
     "created": "2021-07-06T14:35:18.469+0000",
     "modified": "2021-07-06T14:35:18.469+0000",
     "sampleId": "37232",
+    "deprecated": false,
+    "deprecationDate": null
+  },
+  "glyconavi": {
+    "id": 2714,
+    "prefix": "glyconavi",
+    "name": "GlycoNAVI",
+    "pattern": "^GN_[A-Za-z]*[_]*[A-Za-z0-9-:_]+$",
+    "namespaceEmbeddedInLui": false,
+    "description": "GlycoNAVI is a website for carbohydrate research. It consists of the \"GlycoNAVI Database\" that provides information such as existence ratios and names of glycans, 3D structures of glycans and complex glycoconjugates, and the \"GlycoNAVI tools\" such as editing of 2D structures of glycans, glycan structure viewers, and conversion tools.",
+    "mirId": "MIR:00000830",
+    "resources": [
+      {
+        "id": 2715,
+        "providerCode": "glyconavi",
+        "name": "The Noguchi Institute",
+        "urlPattern": "https://glyconavi.org/hub/?id={$id}",
+        "mirId": "MIR:00000822",
+        "description": "The Noguchi Institute is a research institute licensed as a public interest incorporated foundation. It conducts research and education related to glycans.",
+        "official": true,
+        "sampleId": "GN_G03681DA",
+        "resourceHomeUrl": "https://www.noguchi.or.jp/",
+        "institution": {
+          "id": 2713,
+          "name": "The Noguchi Institute",
+          "homeUrl": "https://www.noguchi.or.jp/",
+          "description": "The Noguchi Institute is a research institute licensed as a public interest incorporated foundation. It conducts research and education related to glycans.",
+          "rorId": null,
+          "location": {
+            "countryCode": "JP",
+            "countryName": "Japan"
+          }
+        },
+        "location": {
+          "countryCode": "JP",
+          "countryName": "Japan"
+        },
+        "deprecated": false,
+        "deprecationDate": null
+      }
+    ],
+    "created": "2021-06-28T19:11:39.342+0000",
+    "modified": "2022-11-08T15:20:10.791+0000",
+    "sampleId": "GN_GlyTouCan_G03681DA",
     "deprecated": false,
     "deprecationDate": null
   },
@@ -37482,7 +37482,7 @@
           "id": 2820,
           "name": "Open Commons Consortium",
           "homeUrl": "https://www.occ-data.org/",
-          "description": "The Open Commons Consortium is a 501 non-profit venture which provides cloud computing and data commons resources to support \"scientific, environmental, medical and health care research.\"",
+          "description": "The Open Commons Consortium (OCC) manages and operates cloud computing, data commons, and data ecosystems to advance scientific, medical, health care and environmental research for human and societal impact.",
           "rorId": null,
           "location": {
             "countryCode": "US",
@@ -37702,7 +37702,7 @@
           "id": 2820,
           "name": "Open Commons Consortium",
           "homeUrl": "https://www.occ-data.org/",
-          "description": "The Open Commons Consortium is a 501 non-profit venture which provides cloud computing and data commons resources to support \"scientific, environmental, medical and health care research.\"",
+          "description": "The Open Commons Consortium (OCC) manages and operates cloud computing, data commons, and data ecosystems to advance scientific, medical, health care and environmental research for human and societal impact.",
           "rorId": null,
           "location": {
             "countryCode": "US",
@@ -37746,7 +37746,7 @@
           "id": 2820,
           "name": "Open Commons Consortium",
           "homeUrl": "https://www.occ-data.org/",
-          "description": "The Open Commons Consortium is a 501 non-profit venture which provides cloud computing and data commons resources to support \"scientific, environmental, medical and health care research.\"",
+          "description": "The Open Commons Consortium (OCC) manages and operates cloud computing, data commons, and data ecosystems to advance scientific, medical, health care and environmental research for human and societal impact.",
           "rorId": null,
           "location": {
             "countryCode": "US",
@@ -37790,7 +37790,7 @@
           "id": 2820,
           "name": "Open Commons Consortium",
           "homeUrl": "https://www.occ-data.org/",
-          "description": "The Open Commons Consortium is a 501 non-profit venture which provides cloud computing and data commons resources to support \"scientific, environmental, medical and health care research.\"",
+          "description": "The Open Commons Consortium (OCC) manages and operates cloud computing, data commons, and data ecosystems to advance scientific, medical, health care and environmental research for human and societal impact.",
           "rorId": null,
           "location": {
             "countryCode": "US",
@@ -38054,7 +38054,7 @@
           "id": 2820,
           "name": "Open Commons Consortium",
           "homeUrl": "https://www.occ-data.org/",
-          "description": "The Open Commons Consortium is a 501 non-profit venture which provides cloud computing and data commons resources to support \"scientific, environmental, medical and health care research.\"",
+          "description": "The Open Commons Consortium (OCC) manages and operates cloud computing, data commons, and data ecosystems to advance scientific, medical, health care and environmental research for human and societal impact.",
           "rorId": null,
           "location": {
             "countryCode": "US",
@@ -38230,7 +38230,7 @@
           "id": 2820,
           "name": "Open Commons Consortium",
           "homeUrl": "https://www.occ-data.org/",
-          "description": "The Open Commons Consortium is a 501 non-profit venture which provides cloud computing and data commons resources to support \"scientific, environmental, medical and health care research.\"",
+          "description": "The Open Commons Consortium (OCC) manages and operates cloud computing, data commons, and data ecosystems to advance scientific, medical, health care and environmental research for human and societal impact.",
           "rorId": null,
           "location": {
             "countryCode": "US",
@@ -38670,7 +38670,7 @@
           "id": 2820,
           "name": "Open Commons Consortium",
           "homeUrl": "https://www.occ-data.org/",
-          "description": "The Open Commons Consortium is a 501 non-profit venture which provides cloud computing and data commons resources to support \"scientific, environmental, medical and health care research.\"",
+          "description": "The Open Commons Consortium (OCC) manages and operates cloud computing, data commons, and data ecosystems to advance scientific, medical, health care and environmental research for human and societal impact.",
           "rorId": null,
           "location": {
             "countryCode": "US",
@@ -38758,7 +38758,7 @@
           "id": 2820,
           "name": "Open Commons Consortium",
           "homeUrl": "https://www.occ-data.org/",
-          "description": "The Open Commons Consortium is a 501 non-profit venture which provides cloud computing and data commons resources to support \"scientific, environmental, medical and health care research.\"",
+          "description": "The Open Commons Consortium (OCC) manages and operates cloud computing, data commons, and data ecosystems to advance scientific, medical, health care and environmental research for human and societal impact.",
           "rorId": null,
           "location": {
             "countryCode": "US",
@@ -38802,7 +38802,7 @@
           "id": 2820,
           "name": "Open Commons Consortium",
           "homeUrl": "https://www.occ-data.org/",
-          "description": "The Open Commons Consortium is a 501 non-profit venture which provides cloud computing and data commons resources to support \"scientific, environmental, medical and health care research.\"",
+          "description": "The Open Commons Consortium (OCC) manages and operates cloud computing, data commons, and data ecosystems to advance scientific, medical, health care and environmental research for human and societal impact.",
           "rorId": null,
           "location": {
             "countryCode": "US",
@@ -38890,7 +38890,7 @@
           "id": 2820,
           "name": "Open Commons Consortium",
           "homeUrl": "https://www.occ-data.org/",
-          "description": "The Open Commons Consortium is a 501 non-profit venture which provides cloud computing and data commons resources to support \"scientific, environmental, medical and health care research.\"",
+          "description": "The Open Commons Consortium (OCC) manages and operates cloud computing, data commons, and data ecosystems to advance scientific, medical, health care and environmental research for human and societal impact.",
           "rorId": null,
           "location": {
             "countryCode": "US",
@@ -38978,7 +38978,7 @@
           "id": 2820,
           "name": "Open Commons Consortium",
           "homeUrl": "https://www.occ-data.org/",
-          "description": "The Open Commons Consortium is a 501 non-profit venture which provides cloud computing and data commons resources to support \"scientific, environmental, medical and health care research.\"",
+          "description": "The Open Commons Consortium (OCC) manages and operates cloud computing, data commons, and data ecosystems to advance scientific, medical, health care and environmental research for human and societal impact.",
           "rorId": null,
           "location": {
             "countryCode": "US",
@@ -39022,7 +39022,7 @@
           "id": 2820,
           "name": "Open Commons Consortium",
           "homeUrl": "https://www.occ-data.org/",
-          "description": "The Open Commons Consortium is a 501 non-profit venture which provides cloud computing and data commons resources to support \"scientific, environmental, medical and health care research.\"",
+          "description": "The Open Commons Consortium (OCC) manages and operates cloud computing, data commons, and data ecosystems to advance scientific, medical, health care and environmental research for human and societal impact.",
           "rorId": null,
           "location": {
             "countryCode": "US",
@@ -39066,7 +39066,7 @@
           "id": 2820,
           "name": "Open Commons Consortium",
           "homeUrl": "https://www.occ-data.org/",
-          "description": "The Open Commons Consortium is a 501 non-profit venture which provides cloud computing and data commons resources to support \"scientific, environmental, medical and health care research.\"",
+          "description": "The Open Commons Consortium (OCC) manages and operates cloud computing, data commons, and data ecosystems to advance scientific, medical, health care and environmental research for human and societal impact.",
           "rorId": null,
           "location": {
             "countryCode": "US",
@@ -39154,7 +39154,7 @@
           "id": 2820,
           "name": "Open Commons Consortium",
           "homeUrl": "https://www.occ-data.org/",
-          "description": "The Open Commons Consortium is a 501 non-profit venture which provides cloud computing and data commons resources to support \"scientific, environmental, medical and health care research.\"",
+          "description": "The Open Commons Consortium (OCC) manages and operates cloud computing, data commons, and data ecosystems to advance scientific, medical, health care and environmental research for human and societal impact.",
           "rorId": null,
           "location": {
             "countryCode": "US",
@@ -39198,7 +39198,7 @@
           "id": 2820,
           "name": "Open Commons Consortium",
           "homeUrl": "https://www.occ-data.org/",
-          "description": "The Open Commons Consortium is a 501 non-profit venture which provides cloud computing and data commons resources to support \"scientific, environmental, medical and health care research.\"",
+          "description": "The Open Commons Consortium (OCC) manages and operates cloud computing, data commons, and data ecosystems to advance scientific, medical, health care and environmental research for human and societal impact.",
           "rorId": null,
           "location": {
             "countryCode": "US",
@@ -39242,7 +39242,7 @@
           "id": 2820,
           "name": "Open Commons Consortium",
           "homeUrl": "https://www.occ-data.org/",
-          "description": "The Open Commons Consortium is a 501 non-profit venture which provides cloud computing and data commons resources to support \"scientific, environmental, medical and health care research.\"",
+          "description": "The Open Commons Consortium (OCC) manages and operates cloud computing, data commons, and data ecosystems to advance scientific, medical, health care and environmental research for human and societal impact.",
           "rorId": null,
           "location": {
             "countryCode": "US",
@@ -39286,7 +39286,7 @@
           "id": 2820,
           "name": "Open Commons Consortium",
           "homeUrl": "https://www.occ-data.org/",
-          "description": "The Open Commons Consortium is a 501 non-profit venture which provides cloud computing and data commons resources to support \"scientific, environmental, medical and health care research.\"",
+          "description": "The Open Commons Consortium (OCC) manages and operates cloud computing, data commons, and data ecosystems to advance scientific, medical, health care and environmental research for human and societal impact.",
           "rorId": null,
           "location": {
             "countryCode": "US",
@@ -39330,7 +39330,7 @@
           "id": 2820,
           "name": "Open Commons Consortium",
           "homeUrl": "https://www.occ-data.org/",
-          "description": "The Open Commons Consortium is a 501 non-profit venture which provides cloud computing and data commons resources to support \"scientific, environmental, medical and health care research.\"",
+          "description": "The Open Commons Consortium (OCC) manages and operates cloud computing, data commons, and data ecosystems to advance scientific, medical, health care and environmental research for human and societal impact.",
           "rorId": null,
           "location": {
             "countryCode": "US",
@@ -39374,7 +39374,7 @@
           "id": 2820,
           "name": "Open Commons Consortium",
           "homeUrl": "https://www.occ-data.org/",
-          "description": "The Open Commons Consortium is a 501 non-profit venture which provides cloud computing and data commons resources to support \"scientific, environmental, medical and health care research.\"",
+          "description": "The Open Commons Consortium (OCC) manages and operates cloud computing, data commons, and data ecosystems to advance scientific, medical, health care and environmental research for human and societal impact.",
           "rorId": null,
           "location": {
             "countryCode": "US",
@@ -39418,7 +39418,7 @@
           "id": 2820,
           "name": "Open Commons Consortium",
           "homeUrl": "https://www.occ-data.org/",
-          "description": "The Open Commons Consortium is a 501 non-profit venture which provides cloud computing and data commons resources to support \"scientific, environmental, medical and health care research.\"",
+          "description": "The Open Commons Consortium (OCC) manages and operates cloud computing, data commons, and data ecosystems to advance scientific, medical, health care and environmental research for human and societal impact.",
           "rorId": null,
           "location": {
             "countryCode": "US",
@@ -39832,6 +39832,210 @@
     "created": "2022-08-15T19:28:35.707+0000",
     "modified": "2022-08-18T13:14:34.725+0000",
     "sampleId": "03yrm5c26",
+    "deprecated": false,
+    "deprecationDate": null
+  },
+  "clb": {
+    "id": 3292,
+    "prefix": "clb",
+    "name": "ChecklistBank",
+    "pattern": "^[0-9]+(LR)?$",
+    "namespaceEmbeddedInLui": false,
+    "description": "ChecklistBank is an index and repository for taxonomic and nomenclatural datasets",
+    "mirId": "MIR:00000964",
+    "resources": [
+      {
+        "id": 3293,
+        "providerCode": "clb",
+        "name": "ChecklistBank",
+        "urlPattern": "https://www.checklistbank.org/dataset/{$id}",
+        "mirId": "MIR:00000963",
+        "description": "ChecklistBank at GBIF. Codeveloped with the Catalogue of Life",
+        "official": true,
+        "sampleId": "1010",
+        "resourceHomeUrl": "https://www.checklistbank.org",
+        "institution": {
+          "id": 3291,
+          "name": "Global Biodiversity Information Facility",
+          "homeUrl": "https://www.gbif.org/",
+          "description": "Organization information obtained from ROR API using ROR ID 'https://ror.org/05fjyn938' with Wikidata IDs [Q1531570], and no ISNI information",
+          "rorId": null,
+          "location": {
+            "countryCode": "DK",
+            "countryName": "Denmark"
+          }
+        },
+        "location": {
+          "countryCode": "DK",
+          "countryName": "Denmark"
+        },
+        "deprecated": false,
+        "deprecationDate": null
+      }
+    ],
+    "created": "2022-11-03T14:17:05.019+0000",
+    "modified": "2022-11-03T14:17:05.019+0000",
+    "sampleId": "1010",
+    "deprecated": false,
+    "deprecationDate": null
+  },
+  "drugcentral": {
+    "id": 3298,
+    "prefix": "drugcentral",
+    "name": "DrugCentral",
+    "pattern": "^[0-9]+$",
+    "namespaceEmbeddedInLui": false,
+    "description": "DrugCentral (http://drugcentral.org) is an open-access online drug compendium. DrugCentral integrates structure, bioactivity, regulatory, pharmacologic actions and indications for active pharmaceutical ingredients approved by FDA and other regulatory agencies. Monitoring of regulatory agencies for new drugs approvals ensures the resource is up-to-date. DrugCentral integrates content for active ingredients with pharmaceutical formulations, indexing drugs and drug label annotations, complementing similar resources available online. Its complementarity with other online resources is facilitated by cross referencing to external resources. At the molecular level, DrugCentral bridges drug-target interactions with pharmacological action and indications. The integration with FDA drug labels enables text mining applications for drug adverse events and clinical trial information. Chemical structure overlap between DrugCentral and five online drug resources, and the overlap between DrugCentral FDA-approved drugs and their presence in four different chemical collections, are discussed. DrugCentral can be accessed via the web application or downloaded in relational database format.",
+    "mirId": "MIR:00000966",
+    "resources": [
+      {
+        "id": 3299,
+        "providerCode": "drugcentral",
+        "name": "University of New Mexico",
+        "urlPattern": "https://drugcentral.org/drugcard/{$id}",
+        "mirId": "MIR:00000965",
+        "description": "Organization information obtained from ROR API using ROR ID 'https://ror.org/05fs6jp91' with Wikidata IDs [Q1190812], and ISNI IDs [0000 0001 2188 8502]",
+        "official": true,
+        "sampleId": "257",
+        "resourceHomeUrl": "http://www.unm.edu/",
+        "institution": {
+          "id": 3297,
+          "name": "University of New Mexico",
+          "homeUrl": "http://www.unm.edu/",
+          "description": "Organization information obtained from ROR API using ROR ID 'https://ror.org/05fs6jp91' with Wikidata IDs [Q1190812], and ISNI IDs [0000 0001 2188 8502]",
+          "rorId": null,
+          "location": {
+            "countryCode": "US",
+            "countryName": "United States"
+          }
+        },
+        "location": {
+          "countryCode": "US",
+          "countryName": "United States"
+        },
+        "deprecated": false,
+        "deprecationDate": null
+      }
+    ],
+    "created": "2022-11-04T09:54:32.976+0000",
+    "modified": "2022-11-04T09:54:32.976+0000",
+    "sampleId": "257",
+    "deprecated": false,
+    "deprecationDate": null
+  },
+  "skm": {
+    "id": 3307,
+    "prefix": "skm",
+    "name": "Stress Knowledge Map",
+    "pattern": "^rx[0-9]{5}$",
+    "namespaceEmbeddedInLui": false,
+    "description": "Stress Knowledge Map (SKM, available at https://skm.nib.si) is a knowledge graph resulting from the integration of dispersed published information on plant molecular responses to biotic and abiotic stressors. ",
+    "mirId": "MIR:00000968",
+    "resources": [
+      {
+        "id": 3308,
+        "providerCode": "skm",
+        "name": "National Institute of Biology",
+        "urlPattern": "https://skm.nib.si/api/pss/reactions?reaction_id={$id}&return_field=summary",
+        "mirId": "MIR:00000967",
+        "description": "Organization information obtained from ROR API using ROR ID 'https://ror.org/03s5t0r17' with no Wikidata information, and ISNI IDs [0000 0004 0637 0790]",
+        "official": true,
+        "sampleId": "rx00408",
+        "resourceHomeUrl": "http://www.nib.si/eng/",
+        "institution": {
+          "id": 3306,
+          "name": "National Institute of Biology",
+          "homeUrl": "http://www.nib.si/eng/",
+          "description": "Organization information obtained from ROR API using ROR ID 'https://ror.org/03s5t0r17' with no Wikidata information, and ISNI IDs [0000 0004 0637 0790]",
+          "rorId": null,
+          "location": {
+            "countryCode": "SI",
+            "countryName": "Slovenia"
+          }
+        },
+        "location": {
+          "countryCode": "SI",
+          "countryName": "Slovenia"
+        },
+        "deprecated": false,
+        "deprecationDate": null
+      }
+    ],
+    "created": "2022-11-04T12:17:30.200+0000",
+    "modified": "2022-11-04T12:17:30.200+0000",
+    "sampleId": "rx00408",
+    "deprecated": false,
+    "deprecationDate": null
+  },
+  "col": {
+    "id": 3311,
+    "prefix": "col",
+    "name": "Catalogue of Life",
+    "pattern": "^[23456789BCDFGHJKLMNPQRSTVWXYZ]{1,6}$",
+    "namespaceEmbeddedInLui": false,
+    "description": "Identifier of a taxon or synonym in the Catalogue of Life",
+    "mirId": "MIR:00000969",
+    "resources": [
+      {
+        "id": 3312,
+        "providerCode": "clb",
+        "name": "ChecklistBank",
+        "urlPattern": "https://www.checklistbank.org/dataset/3LR/taxon/{$id}",
+        "mirId": "MIR:00000970",
+        "description": "ChecklistBank, an index and repository for taxonomic data, hosted at GBIF\n",
+        "official": true,
+        "sampleId": "4QHKG",
+        "resourceHomeUrl": "https://www.checklistbank.org",
+        "institution": {
+          "id": 3291,
+          "name": "Global Biodiversity Information Facility",
+          "homeUrl": "https://www.gbif.org/",
+          "description": "Organization information obtained from ROR API using ROR ID 'https://ror.org/05fjyn938' with Wikidata IDs [Q1531570], and no ISNI information",
+          "rorId": null,
+          "location": {
+            "countryCode": "DK",
+            "countryName": "Denmark"
+          }
+        },
+        "location": {
+          "countryCode": "DK",
+          "countryName": "Denmark"
+        },
+        "deprecated": false,
+        "deprecationDate": null
+      },
+      {
+        "id": 3328,
+        "providerCode": "col",
+        "name": "Catalogue of Life (COL)",
+        "urlPattern": "https://www.catalogueoflife.org/data/taxon/{$id}",
+        "mirId": "MIR:00000971",
+        "description": "The Catalogue of Life website providing a view onto the latest release of the COL Checklist.",
+        "official": false,
+        "sampleId": "4QHKG",
+        "resourceHomeUrl": "https://www.catalogueoflife.org",
+        "institution": {
+          "id": 3291,
+          "name": "Global Biodiversity Information Facility",
+          "homeUrl": "https://www.gbif.org/",
+          "description": "Organization information obtained from ROR API using ROR ID 'https://ror.org/05fjyn938' with Wikidata IDs [Q1531570], and no ISNI information",
+          "rorId": null,
+          "location": {
+            "countryCode": "DK",
+            "countryName": "Denmark"
+          }
+        },
+        "location": {
+          "countryCode": "DK",
+          "countryName": "Denmark"
+        },
+        "deprecated": false,
+        "deprecationDate": null
+      }
+    ],
+    "created": "2022-11-04T13:50:22.141+0000",
+    "modified": "2022-11-04T13:50:22.141+0000",
+    "sampleId": "4QHKG",
     "deprecated": false,
     "deprecationDate": null
   },
