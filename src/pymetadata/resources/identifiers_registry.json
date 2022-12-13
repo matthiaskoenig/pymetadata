@@ -17478,7 +17478,7 @@
       },
       {
         "id": 1008,
-        "providerCode": "CURATOR_REVIEW",
+        "providerCode": "ddbj",
         "name": "BioSample at DNA Data Bank of Japan",
         "urlPattern": "http://trace.ddbj.nig.ac.jp/BSSearch/biosample?acc={$id}",
         "mirId": "MIR:00100707",
@@ -37987,50 +37987,6 @@
     "deprecated": false,
     "deprecationDate": null
   },
-  "dandi": {
-    "id": 2168,
-    "prefix": "dandi",
-    "name": "DANDI: Distributed Archives for Neurophysiology Data Integration",
-    "pattern": "^\\d{6}(\\/\\d+\\.\\d+\\.\\d+)?$",
-    "namespaceEmbeddedInLui": false,
-    "description": "DANDI works with BICCN and other BRAIN Initiative awardees to curate data using community data standards such as NWB and BIDS, and to make data and software for cellular neurophysiology FAIR (Findable, Accessible, Interoperable, and Reusable).\nDANDI references electrical and optical cellular neurophysiology recordings and associated MRI and/or optical imaging data.\nThese data will help scientists uncover and understand cellular level mechanisms of brain function. Scientists will study the formation of neural networks, how cells and networks enable functions such as learning and memory, and how these functions are disrupted in neurological disorders.",
-    "mirId": "MIR:00000786",
-    "resources": [
-      {
-        "id": 2169,
-        "providerCode": "dandi",
-        "name": "DANDI: Distributed Archives for Neurophysiology Data Integration",
-        "urlPattern": "https://dandiarchive.org/dandiset/{$id}",
-        "mirId": "MIR:00000750",
-        "description": "DANDI is a Web platform for scientists to share, collaborate, and process data from cellular neurophysiology experiments. DANDI works with BICCN and other BRAIN Initiative awardees to curate data using community data standards such as NWB and BIDS, and to make data and software for cellular neurophysiology FAIR (Findable, Accessible, Interoperable, and Reusable). DANDI will store electrical and optical cellular neurophysiology recordings and associated MRI and/or optical imaging data. DANDI will provide: 1) A cloud platform for neurophysiology data storage for the purposes of collaboration and dissemination of data; 2) Easy to use tools for neurophysiology data submission, visualization, and access in the archive; and 3) Standardized applications for data ingestion, visualization and processing, which facilitate adoption of NWB and other standards. These data will help scientists uncover and understand cellular level mechanisms of brain function. Scientists will study the formation of neural networks, how cells and networks enable functions such as learning and memory, and how these functions are disrupted in neurological disorders.",
-        "official": true,
-        "sampleId": "000017",
-        "resourceHomeUrl": "https://dandiarchive.org/",
-        "institution": {
-          "id": 2167,
-          "name": "Massachusetts Institute of Technology",
-          "homeUrl": "http://web.mit.edu/",
-          "description": "Founded to accelerate the nation\u2019s industrial revolution, MIT is profoundly American. With ingenuity and drive, our graduates have invented fundamental technologies, launched new industries, and created millions of American jobs. At the same time, and without the slightest sense of contradiction, MIT is profoundly global(opens in new window). Our community gains tremendous strength as a magnet for talent from around the world. Through teaching, research, and innovation, MIT\u2019s exceptional community pursues its mission of service to the nation and the world.",
-          "rorId": null,
-          "location": {
-            "countryCode": "US",
-            "countryName": "United States"
-          }
-        },
-        "location": {
-          "countryCode": "US",
-          "countryName": "United States"
-        },
-        "deprecated": false,
-        "deprecationDate": null
-      }
-    ],
-    "created": "2020-03-24T05:11:19.658+0000",
-    "modified": "2021-10-18T12:32:14.264+0000",
-    "sampleId": "000017",
-    "deprecated": false,
-    "deprecationDate": null
-  },
   "dg.f82a1a": {
     "id": 2969,
     "prefix": "dg.f82a1a",
@@ -39791,6 +39747,50 @@
     "deprecated": false,
     "deprecationDate": null
   },
+  "dandi": {
+    "id": 2168,
+    "prefix": "dandi",
+    "name": "DANDI: Distributed Archives for Neurophysiology Data Integration",
+    "pattern": "^\\d{6}(\\/\\d+\\.\\d+\\.\\d+)?$",
+    "namespaceEmbeddedInLui": false,
+    "description": "DANDI works with BICCN and other BRAIN Initiative awardees to curate data using community data standards such as NWB and BIDS, and to make data and software for cellular neurophysiology FAIR (Findable, Accessible, Interoperable, and Reusable).\nDANDI references electrical and optical cellular neurophysiology recordings and associated MRI and/or optical imaging data.\nThese data will help scientists uncover and understand cellular level mechanisms of brain function. Scientists will study the formation of neural networks, how cells and networks enable functions such as learning and memory, and how these functions are disrupted in neurological disorders.",
+    "mirId": "MIR:00000786",
+    "resources": [
+      {
+        "id": 2169,
+        "providerCode": "dandi",
+        "name": "DANDI: Distributed Archives for Neurophysiology Data Integration",
+        "urlPattern": "https://dandiarchive.org/dandiset/{$id}",
+        "mirId": "MIR:00000750",
+        "description": "DANDI is a Web platform for scientists to share, collaborate, and process data from cellular neurophysiology experiments. DANDI works with BICCN and other BRAIN Initiative awardees to curate data using community data standards such as NWB and BIDS, and to make data and software for cellular neurophysiology FAIR (Findable, Accessible, Interoperable, and Reusable). DANDI will store electrical and optical cellular neurophysiology recordings and associated MRI and/or optical imaging data. DANDI will provide: 1) A cloud platform for neurophysiology data storage for the purposes of collaboration and dissemination of data; 2) Easy to use tools for neurophysiology data submission, visualization, and access in the archive; and 3) Standardized applications for data ingestion, visualization and processing, which facilitate adoption of NWB and other standards. These data will help scientists uncover and understand cellular level mechanisms of brain function. Scientists will study the formation of neural networks, how cells and networks enable functions such as learning and memory, and how these functions are disrupted in neurological disorders.",
+        "official": true,
+        "sampleId": "000017",
+        "resourceHomeUrl": "https://dandiarchive.org/",
+        "institution": {
+          "id": 2167,
+          "name": "Massachusetts Institute of Technology",
+          "homeUrl": "http://web.mit.edu/",
+          "description": "Founded to accelerate the nation\u2019s industrial revolution, MIT is profoundly American. With ingenuity and drive, our graduates have invented fundamental technologies, launched new industries, and created millions of American jobs. At the same time, and without the slightest sense of contradiction, MIT is profoundly global(opens in new window). Our community gains tremendous strength as a magnet for talent from around the world. Through teaching, research, and innovation, MIT\u2019s exceptional community pursues its mission of service to the nation and the world.",
+          "rorId": null,
+          "location": {
+            "countryCode": "US",
+            "countryName": "United States"
+          }
+        },
+        "location": {
+          "countryCode": "US",
+          "countryName": "United States"
+        },
+        "deprecated": false,
+        "deprecationDate": null
+      }
+    ],
+    "created": "2020-03-24T05:11:19.658+0000",
+    "modified": "2021-10-18T12:32:14.264+0000",
+    "sampleId": "000017",
+    "deprecated": false,
+    "deprecationDate": null
+  },
   "ror": {
     "id": 3271,
     "prefix": "ror",
@@ -40036,6 +40036,50 @@
     "created": "2022-11-04T13:50:22.141+0000",
     "modified": "2022-11-04T13:50:22.141+0000",
     "sampleId": "4QHKG",
+    "deprecated": false,
+    "deprecationDate": null
+  },
+  "sciflection": {
+    "id": 3355,
+    "prefix": "sciflection",
+    "name": "Sciflection",
+    "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$",
+    "namespaceEmbeddedInLui": false,
+    "description": "Sciflection is a public repository for experiments and associated spectra, usually uploaded from Electronic Lab Notebooks, shared under FAIR conditions",
+    "mirId": "MIR:00000973",
+    "resources": [
+      {
+        "id": 3356,
+        "providerCode": "sciformation",
+        "name": "Sciformation Consulting GmbH",
+        "urlPattern": "https://sciflection.com/{$id}",
+        "mirId": "MIR:00000972",
+        "description": "Sciformation develops scientific software and integrated lab management solutions, comprising of chemical & hazardous material inventory, electronic lab notebook, analytical data management, literature, device databases and ordering systems. The high level of integration helps to gather comprehensive data describing the experiments, i.e. which batches or machinery was employed.",
+        "official": true,
+        "sampleId": "5ede4273-b26c-4ea4-adb7-3ce294ab3397",
+        "resourceHomeUrl": "https://sciformation.com/sciflection.html",
+        "institution": {
+          "id": 3354,
+          "name": "Sciformation Consulting GmbH",
+          "homeUrl": "http://sciformation.com",
+          "description": "Sciformation develops scientific software and integrated lab management solutions, comprising of chemical & hazardous material inventory, electronic lab notebook, analytical data management, literature, device databases and ordering systems. The high level of integration helps to gather comprehensive data describing the experiments, i.e. which batches or machinery was employed.",
+          "rorId": null,
+          "location": {
+            "countryCode": "DE",
+            "countryName": "Germany"
+          }
+        },
+        "location": {
+          "countryCode": "DE",
+          "countryName": "Germany"
+        },
+        "deprecated": false,
+        "deprecationDate": null
+      }
+    ],
+    "created": "2022-11-29T12:03:56.649+0000",
+    "modified": "2022-11-29T12:03:56.649+0000",
+    "sampleId": "5ede4273-b26c-4ea4-adb7-3ce294ab3397",
     "deprecated": false,
     "deprecationDate": null
   },

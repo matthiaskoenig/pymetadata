@@ -18,7 +18,7 @@ from pymetadata.ontologies.ols import ONTOLOGIES, OLSQuery
 
 OLS_QUERY = OLSQuery(ontologies=ONTOLOGIES)
 
-IDENTIFIERS_ORG_PREFIX: Final = "https://identifiers.org"
+IDENTIFIERS_ORG_PREFIX: Final = "http://identifiers.org"
 IDENTIFIERS_ORG_PATTERN1: Final = re.compile(r"^https?://identifiers.org/(.+?)/(.+)")
 IDENTIFIERS_ORG_PATTERN2: Final = re.compile(r"^https?://identifiers.org/(.+)")
 MIRIAM_URN_PATTERN: Final = re.compile(r"^urn:miriam:(.+)")
@@ -40,6 +40,11 @@ class RDFAnnotation:
         - `http(s)://arbitrary.url`, an arbitrary URL
         - urn:miriam:uniprot:P03023
     """
+
+    replaced_collections: Dict[str, str] = {
+        "obo.go": "go",
+        "biomodels.sbo": "sbo",
+    }
 
     def __init__(self, qualifier: Union[BQB, BQM], resource: str):
         """Initialize RDFAnnotation."""
@@ -99,8 +104,9 @@ class RDFAnnotation:
                 tokens = match3.group(1).split(":")
                 self.collection = tokens[0]
                 self.term = ":".join(tokens[1:]).replace("%3A", ":")
+
                 logger.warning(
-                    f"Deprecated urn pattern `{resource}`, update to "
+                    f"Deprecated urn pattern `{resource}` updated: "
                     f"{self.resource_normalized}"
                 )
 
@@ -124,17 +130,11 @@ class RDFAnnotation:
                 self.collection = None
                 self.term = resource
 
-        self.clean()
+        # clean legacy collections
+        if self.collection in self.replaced_collections:
+            self.collection = self.replaced_collections[self.collection]
 
         self.validate()
-
-    def clean(self) -> None:
-        """Clean collection and term information."""
-        if self.collection:
-            if self.collection == "biomodels.sbo":
-                self.collection = "sbo"
-            if self.collection == "obo.go":
-                self.collection = "go"
 
     @staticmethod
     def from_tuple(t: Tuple[Union[BQB, BQM], str]) -> "RDFAnnotation":
@@ -151,7 +151,7 @@ class RDFAnnotation:
         if not self.term:
             return None
 
-        if self.collection:
+        if self.collection is not None:
             if self.term.startswith(f"{self.collection.upper()}:"):
                 return f"{IDENTIFIERS_ORG_PREFIX}/{self.term}"
             else:
@@ -377,13 +377,13 @@ if __name__ == "__main__":
         ),
         RDFAnnotation(
             qualifier=BQB.IS_VERSION_OF,
-            resource="https://identifiers.org/go/GO:0005829",
+            resource="http://identifiers.org/go/GO:0005829",
         ),
         RDFAnnotation(
             qualifier=BQB.IS_VERSION_OF, resource="http://identifiers.org/go/GO:0005829"
         ),
         RDFAnnotation(
-            qualifier=BQB.IS_VERSION_OF, resource="https://identifiers.org/GO:0005829"
+            qualifier=BQB.IS_VERSION_OF, resource="http://identifiers.org/GO:0005829"
         ),
         RDFAnnotation(
             qualifier=BQB.IS_VERSION_OF, resource="http://identifiers.org/GO:0005829"
