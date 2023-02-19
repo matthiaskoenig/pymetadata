@@ -99,134 +99,6 @@
     "deprecated": false,
     "deprecationDate": null
   },
-  "ensembl": {
-    "id": 7,
-    "prefix": "ensembl",
-    "name": "Ensembl",
-    "pattern": "^((ENS[FPTG]\\\\d{11}(\\\\.\\\\d+)?)|(FB\\\\w{2}\\\\d{7})|(Y[A-Z]{2}\\\\d{3}[a-zA-Z](\\\\-[A-Z])?)|([A-Z_a-z0-9]+(\\\\.)?(t)?(\\\\d+)?([a-z])?))$",
-    "namespaceEmbeddedInLui": false,
-    "description": "Ensembl is a joint project between EMBL - EBI and the Sanger Institute  to develop a software system which produces and maintains automatic annotation on selected eukaryotic genomes. This collections also references outgroup organisms.",
-    "mirId": "MIR:00000003",
-    "resources": [
-      {
-        "id": 9,
-        "providerCode": "ebi",
-        "name": "Ensembl at Sanger/EMBL-EBI",
-        "urlPattern": "https://www.ensembl.org/id/{$id}",
-        "mirId": "MIR:00100011",
-        "description": "Ensembl at Sanger/EMBL-EBI",
-        "official": true,
-        "sampleId": "ENSG00000139618",
-        "resourceHomeUrl": "https://www.ensembl.org/",
-        "institution": {
-          "id": 8,
-          "name": "Sanger Institute and European Bioinformatics Institute, Hinxton, Cambridge",
-          "homeUrl": "CURATOR_REVIEW",
-          "description": "CURATOR_REVIEW",
-          "rorId": null,
-          "location": {
-            "countryCode": "GB",
-            "countryName": "United Kingdom"
-          }
-        },
-        "location": {
-          "countryCode": "GB",
-          "countryName": "United Kingdom"
-        },
-        "deprecated": false,
-        "deprecationDate": null
-      },
-      {
-        "id": 10,
-        "providerCode": "CURATOR_REVIEW",
-        "name": "Ensembl US West mirror",
-        "urlPattern": "http://uswest.ensembl.org/id/{$id}",
-        "mirId": "MIR:00100561",
-        "description": "Ensembl US West mirror",
-        "official": false,
-        "sampleId": "ENSG00000139618",
-        "resourceHomeUrl": "http://uswest.ensembl.org/",
-        "institution": {
-          "id": 8,
-          "name": "Sanger Institute and European Bioinformatics Institute, Hinxton, Cambridge",
-          "homeUrl": "CURATOR_REVIEW",
-          "description": "CURATOR_REVIEW",
-          "rorId": null,
-          "location": {
-            "countryCode": "GB",
-            "countryName": "United Kingdom"
-          }
-        },
-        "location": {
-          "countryCode": "US",
-          "countryName": "United States"
-        },
-        "deprecated": false,
-        "deprecationDate": null
-      },
-      {
-        "id": 11,
-        "providerCode": "CURATOR_REVIEW",
-        "name": "Ensembl US East mirror",
-        "urlPattern": "http://useast.ensembl.org/id/{$id}",
-        "mirId": "MIR:00100562",
-        "description": "Ensembl US East mirror",
-        "official": false,
-        "sampleId": "ENSG00000139618",
-        "resourceHomeUrl": "http://useast.ensembl.org/",
-        "institution": {
-          "id": 8,
-          "name": "Sanger Institute and European Bioinformatics Institute, Hinxton, Cambridge",
-          "homeUrl": "CURATOR_REVIEW",
-          "description": "CURATOR_REVIEW",
-          "rorId": null,
-          "location": {
-            "countryCode": "GB",
-            "countryName": "United Kingdom"
-          }
-        },
-        "location": {
-          "countryCode": "US",
-          "countryName": "United States"
-        },
-        "deprecated": false,
-        "deprecationDate": null
-      },
-      {
-        "id": 12,
-        "providerCode": "CURATOR_REVIEW",
-        "name": "Ensembl Asia mirror",
-        "urlPattern": "http://asia.ensembl.org/id/{$id}",
-        "mirId": "MIR:00100563",
-        "description": "Ensembl Asia mirror",
-        "official": false,
-        "sampleId": "ENSG00000139618",
-        "resourceHomeUrl": "http://asia.ensembl.org/",
-        "institution": {
-          "id": 8,
-          "name": "Sanger Institute and European Bioinformatics Institute, Hinxton, Cambridge",
-          "homeUrl": "CURATOR_REVIEW",
-          "description": "CURATOR_REVIEW",
-          "rorId": null,
-          "location": {
-            "countryCode": "GB",
-            "countryName": "United Kingdom"
-          }
-        },
-        "location": {
-          "countryCode": "SG",
-          "countryName": "Singapore"
-        },
-        "deprecated": false,
-        "deprecationDate": null
-      }
-    ],
-    "created": "2019-06-11T14:15:27.869+0000",
-    "modified": "2019-06-11T14:15:27.869+0000",
-    "sampleId": "ENSG00000139618",
-    "deprecated": false,
-    "deprecationDate": null
-  },
   "ec-code": {
     "id": 13,
     "prefix": "ec-code",
@@ -424,7 +296,7 @@
         "id": 25,
         "providerCode": "CURATOR_REVIEW",
         "name": "Universal Protein Resource using Persistent URL system",
-        "urlPattern": "http://purl.uniprot.org/uniprot/{$id}",
+        "urlPattern": "https://purl.uniprot.org/uniprot/{$id}",
         "mirId": "MIR:00100164",
         "description": "Universal Protein Resource using Persistent URL system",
         "official": true,
@@ -1347,78 +1219,6 @@
     "deprecated": false,
     "deprecationDate": null
   },
-  "doi": {
-    "id": 75,
-    "prefix": "doi",
-    "name": "DOI",
-    "pattern": "^(doi\\:)?\\d{2}\\.\\d{4}.*$",
-    "namespaceEmbeddedInLui": false,
-    "description": "The Digital Object Identifier System is for identifying content objects in the digital environment.",
-    "mirId": "MIR:00000019",
-    "resources": [
-      {
-        "id": 77,
-        "providerCode": "CURATOR_REVIEW",
-        "name": "Digital Object Identifier",
-        "urlPattern": "https://doi.org/{$id}",
-        "mirId": "MIR:00100010",
-        "description": "Digital Object Identifier",
-        "official": true,
-        "sampleId": "10.1038/nbt1156",
-        "resourceHomeUrl": "https://www.doi.org/",
-        "institution": {
-          "id": 76,
-          "name": "International DOI Foundation",
-          "homeUrl": "CURATOR_REVIEW",
-          "description": "CURATOR_REVIEW",
-          "rorId": null,
-          "location": {
-            "countryCode": "GB",
-            "countryName": "United Kingdom"
-          }
-        },
-        "location": {
-          "countryCode": "GB",
-          "countryName": "United Kingdom"
-        },
-        "deprecated": false,
-        "deprecationDate": null
-      },
-      {
-        "id": 2462,
-        "providerCode": "scholia",
-        "name": "Scholia",
-        "urlPattern": "https://scholia.toolforge.org/doi/{$id}",
-        "mirId": "MIR:00000793",
-        "description": "Scholia is a service that creates visual scholarly profiles for topic, people, organizations, species, chemicals, etc using bibliographic and other information in Wikidata.",
-        "official": false,
-        "sampleId": "10.1186/S13321-016-0161-3",
-        "resourceHomeUrl": "https://scholia.toolforge.org/",
-        "institution": {
-          "id": 283,
-          "name": "Maastricht University",
-          "homeUrl": "https://www.maastrichtuniversity.nl",
-          "description": "Maastricht University (UM) is the most international university in the Netherlands and, with 18,000 students and 4,400 employees, is still growing. The university stands out for its innovative education model, international character and multidisciplinary approach to research and education.\nThanks to its high-quality research and study programmes as well as a strong focus on social engagement, UM has quickly built up a solid reputation. Today it is considered one of the best young universities in the world.",
-          "rorId": "https://ror.org/02jz4aj89",
-          "location": {
-            "countryCode": "NL",
-            "countryName": "Netherlands"
-          }
-        },
-        "location": {
-          "countryCode": "NL",
-          "countryName": "Netherlands"
-        },
-        "deprecated": false,
-        "deprecationDate": null
-      }
-    ],
-    "created": "2019-06-11T14:15:34.841+0000",
-    "modified": "2019-06-11T14:15:34.841+0000",
-    "sampleId": "10.1038/nbt1156",
-    "deprecated": false,
-    "deprecationDate": null
-  },
   "pdb": {
     "id": 78,
     "prefix": "pdb",
@@ -2200,6 +2000,206 @@
     "created": "2019-06-11T14:15:38.790+0000",
     "modified": "2019-06-11T14:15:38.790+0000",
     "sampleId": "WBGene00000001",
+    "deprecated": false,
+    "deprecationDate": null
+  },
+  "doi": {
+    "id": 75,
+    "prefix": "doi",
+    "name": "DOI",
+    "pattern": "^(doi\\:)?10\\.\\d+/.*$",
+    "namespaceEmbeddedInLui": false,
+    "description": "The Digital Object Identifier System is for identifying content objects in the digital environment.",
+    "mirId": "MIR:00000019",
+    "resources": [
+      {
+        "id": 77,
+        "providerCode": "CURATOR_REVIEW",
+        "name": "Digital Object Identifier",
+        "urlPattern": "https://doi.org/{$id}",
+        "mirId": "MIR:00100010",
+        "description": "Digital Object Identifier",
+        "official": true,
+        "sampleId": "10.1038/nbt1156",
+        "resourceHomeUrl": "https://www.doi.org/",
+        "institution": {
+          "id": 76,
+          "name": "International DOI Foundation",
+          "homeUrl": "CURATOR_REVIEW",
+          "description": "CURATOR_REVIEW",
+          "rorId": null,
+          "location": {
+            "countryCode": "GB",
+            "countryName": "United Kingdom"
+          }
+        },
+        "location": {
+          "countryCode": "GB",
+          "countryName": "United Kingdom"
+        },
+        "deprecated": false,
+        "deprecationDate": null
+      },
+      {
+        "id": 2462,
+        "providerCode": "scholia",
+        "name": "Scholia",
+        "urlPattern": "https://scholia.toolforge.org/doi/{$id}",
+        "mirId": "MIR:00000793",
+        "description": "Scholia is a service that creates visual scholarly profiles for topic, people, organizations, species, chemicals, etc using bibliographic and other information in Wikidata.",
+        "official": false,
+        "sampleId": "10.1186/S13321-016-0161-3",
+        "resourceHomeUrl": "https://scholia.toolforge.org/",
+        "institution": {
+          "id": 283,
+          "name": "Maastricht University",
+          "homeUrl": "https://www.maastrichtuniversity.nl",
+          "description": "Maastricht University (UM) is the most international university in the Netherlands and, with 18,000 students and 4,400 employees, is still growing. The university stands out for its innovative education model, international character and multidisciplinary approach to research and education.\nThanks to its high-quality research and study programmes as well as a strong focus on social engagement, UM has quickly built up a solid reputation. Today it is considered one of the best young universities in the world.",
+          "rorId": "https://ror.org/02jz4aj89",
+          "location": {
+            "countryCode": "NL",
+            "countryName": "Netherlands"
+          }
+        },
+        "location": {
+          "countryCode": "NL",
+          "countryName": "Netherlands"
+        },
+        "deprecated": false,
+        "deprecationDate": null
+      }
+    ],
+    "created": "2019-06-11T14:15:34.841+0000",
+    "modified": "2023-01-05T18:09:18.209+0000",
+    "sampleId": "10.1038/nbt1156",
+    "deprecated": false,
+    "deprecationDate": null
+  },
+  "ensembl": {
+    "id": 7,
+    "prefix": "ensembl",
+    "name": "Ensembl",
+    "pattern": "^((ENS[FPTG]\\d{11}(\\.\\d+)?)|(FB\\w{2}\\d{7})|(Y[A-Z]{2}\\d{3}[a-zA-Z](\\-[A-Z])?)|([A-Z_a-z0-9]+(\\.)?(t)?(\\d+)?([a-z])?))$",
+    "namespaceEmbeddedInLui": false,
+    "description": "Ensembl is a joint project between EMBL - EBI and the Sanger Institute  to develop a software system which produces and maintains automatic annotation on selected eukaryotic genomes. This collections also references outgroup organisms.",
+    "mirId": "MIR:00000003",
+    "resources": [
+      {
+        "id": 9,
+        "providerCode": "ebi",
+        "name": "Ensembl at Sanger/EMBL-EBI",
+        "urlPattern": "https://www.ensembl.org/id/{$id}",
+        "mirId": "MIR:00100011",
+        "description": "Ensembl at Sanger/EMBL-EBI",
+        "official": true,
+        "sampleId": "ENSG00000139618",
+        "resourceHomeUrl": "https://www.ensembl.org/",
+        "institution": {
+          "id": 8,
+          "name": "Sanger Institute and European Bioinformatics Institute, Hinxton, Cambridge",
+          "homeUrl": "CURATOR_REVIEW",
+          "description": "CURATOR_REVIEW",
+          "rorId": null,
+          "location": {
+            "countryCode": "GB",
+            "countryName": "United Kingdom"
+          }
+        },
+        "location": {
+          "countryCode": "GB",
+          "countryName": "United Kingdom"
+        },
+        "deprecated": false,
+        "deprecationDate": null
+      },
+      {
+        "id": 10,
+        "providerCode": "CURATOR_REVIEW",
+        "name": "Ensembl US West mirror",
+        "urlPattern": "http://uswest.ensembl.org/id/{$id}",
+        "mirId": "MIR:00100561",
+        "description": "Ensembl US West mirror",
+        "official": false,
+        "sampleId": "ENSG00000139618",
+        "resourceHomeUrl": "http://uswest.ensembl.org/",
+        "institution": {
+          "id": 8,
+          "name": "Sanger Institute and European Bioinformatics Institute, Hinxton, Cambridge",
+          "homeUrl": "CURATOR_REVIEW",
+          "description": "CURATOR_REVIEW",
+          "rorId": null,
+          "location": {
+            "countryCode": "GB",
+            "countryName": "United Kingdom"
+          }
+        },
+        "location": {
+          "countryCode": "US",
+          "countryName": "United States"
+        },
+        "deprecated": false,
+        "deprecationDate": null
+      },
+      {
+        "id": 11,
+        "providerCode": "CURATOR_REVIEW",
+        "name": "Ensembl US East mirror",
+        "urlPattern": "http://useast.ensembl.org/id/{$id}",
+        "mirId": "MIR:00100562",
+        "description": "Ensembl US East mirror",
+        "official": false,
+        "sampleId": "ENSG00000139618",
+        "resourceHomeUrl": "http://useast.ensembl.org/",
+        "institution": {
+          "id": 8,
+          "name": "Sanger Institute and European Bioinformatics Institute, Hinxton, Cambridge",
+          "homeUrl": "CURATOR_REVIEW",
+          "description": "CURATOR_REVIEW",
+          "rorId": null,
+          "location": {
+            "countryCode": "GB",
+            "countryName": "United Kingdom"
+          }
+        },
+        "location": {
+          "countryCode": "US",
+          "countryName": "United States"
+        },
+        "deprecated": false,
+        "deprecationDate": null
+      },
+      {
+        "id": 12,
+        "providerCode": "CURATOR_REVIEW",
+        "name": "Ensembl Asia mirror",
+        "urlPattern": "http://asia.ensembl.org/id/{$id}",
+        "mirId": "MIR:00100563",
+        "description": "Ensembl Asia mirror",
+        "official": false,
+        "sampleId": "ENSG00000139618",
+        "resourceHomeUrl": "http://asia.ensembl.org/",
+        "institution": {
+          "id": 8,
+          "name": "Sanger Institute and European Bioinformatics Institute, Hinxton, Cambridge",
+          "homeUrl": "CURATOR_REVIEW",
+          "description": "CURATOR_REVIEW",
+          "rorId": null,
+          "location": {
+            "countryCode": "GB",
+            "countryName": "United Kingdom"
+          }
+        },
+        "location": {
+          "countryCode": "SG",
+          "countryName": "Singapore"
+        },
+        "deprecated": false,
+        "deprecationDate": null
+      }
+    ],
+    "created": "2019-06-11T14:15:27.869+0000",
+    "modified": "2023-01-09T13:51:48.046+0000",
+    "sampleId": "ENSG00000139618",
     "deprecated": false,
     "deprecationDate": null
   },
@@ -4103,50 +4103,6 @@
     "deprecated": false,
     "deprecationDate": null
   },
-  "mge": {
-    "id": 220,
-    "prefix": "mge",
-    "name": "Aclame",
-    "pattern": "^mge:\\d+$",
-    "namespaceEmbeddedInLui": true,
-    "description": "ACLAME is a database dedicated to the collection and classification of mobile genetic elements (MGEs) from various sources, comprising all known phage genomes, plasmids and transposons.",
-    "mirId": "MIR:00000063",
-    "resources": [
-      {
-        "id": 222,
-        "providerCode": "CURATOR_REVIEW",
-        "name": "Aclame database of mobile genetic elements",
-        "urlPattern": "http://aclame.ulb.ac.be/perl/Aclame/Genomes/mge_view.cgi?view=info&id=mge:{$id}",
-        "mirId": "MIR:00100091",
-        "description": "Aclame database of mobile genetic elements",
-        "official": false,
-        "sampleId": "2",
-        "resourceHomeUrl": "http://aclame.ulb.ac.be/",
-        "institution": {
-          "id": 221,
-          "name": "Service de Conformation de Macromol\u00e9cules Biologiques et de Bioinformatique, Universit\u00e9 Libre de Bruxelles",
-          "homeUrl": "CURATOR_REVIEW",
-          "description": "CURATOR_REVIEW",
-          "rorId": null,
-          "location": {
-            "countryCode": "BE",
-            "countryName": "Belgium"
-          }
-        },
-        "location": {
-          "countryCode": "BE",
-          "countryName": "Belgium"
-        },
-        "deprecated": false,
-        "deprecationDate": null
-      }
-    ],
-    "created": "2019-06-11T14:15:49.786+0000",
-    "modified": "2019-06-11T14:15:49.786+0000",
-    "sampleId": "2",
-    "deprecated": false,
-    "deprecationDate": null
-  },
   "isbn": {
     "id": 223,
     "prefix": "isbn",
@@ -4186,7 +4142,7 @@
       },
       {
         "id": 227,
-        "providerCode": "CURATOR_REVIEW",
+        "providerCode": "worldcat",
         "name": "ISBN database at WorldCat",
         "urlPattern": "http://www.worldcat.org/isbn/{$id}",
         "mirId": "MIR:00100093",
@@ -4828,78 +4784,6 @@
     "created": "2019-06-11T14:15:52.916+0000",
     "modified": "2019-06-11T14:15:52.916+0000",
     "sampleId": "37",
-    "deprecated": false,
-    "deprecationDate": null
-  },
-  "wikipathways": {
-    "id": 258,
-    "prefix": "wikipathways",
-    "name": "WikiPathways",
-    "pattern": "WP\\d{1,5}(\\_r\\d+)?$",
-    "namespaceEmbeddedInLui": false,
-    "description": "WikiPathways is a resource providing an open and public collection of  pathway maps created and curated by the community in a Wiki like style.\r\nAll content is under the Creative Commons Attribution 3.0 Unported license.",
-    "mirId": "MIR:00000076",
-    "resources": [
-      {
-        "id": 260,
-        "providerCode": "um",
-        "name": "WikiPathways",
-        "urlPattern": "http://www.wikipathways.org/instance/{$id}",
-        "mirId": "MIR:00100106",
-        "description": "WikiPathways",
-        "official": true,
-        "sampleId": "WP100",
-        "resourceHomeUrl": "http://www.wikipathways.org/",
-        "institution": {
-          "id": 283,
-          "name": "Maastricht University",
-          "homeUrl": "https://www.maastrichtuniversity.nl",
-          "description": "Maastricht University (UM) is the most international university in the Netherlands and, with 18,000 students and 4,400 employees, is still growing. The university stands out for its innovative education model, international character and multidisciplinary approach to research and education.\nThanks to its high-quality research and study programmes as well as a strong focus on social engagement, UM has quickly built up a solid reputation. Today it is considered one of the best young universities in the world.",
-          "rorId": "https://ror.org/02jz4aj89",
-          "location": {
-            "countryCode": "NL",
-            "countryName": "Netherlands"
-          }
-        },
-        "location": {
-          "countryCode": "US",
-          "countryName": "United States"
-        },
-        "deprecated": false,
-        "deprecationDate": null
-      },
-      {
-        "id": 2316,
-        "providerCode": "scholia",
-        "name": "Scholia",
-        "urlPattern": "https://scholia.toolforge.org/wikipathways/{$id}",
-        "mirId": "MIR:00000696",
-        "description": "Scholia is a service that creates visual scholarly profiles for topic, people, organizations, species, chemicals, etc using bibliographic and other information in Wikidata.\n",
-        "official": false,
-        "sampleId": "WP111",
-        "resourceHomeUrl": "https://scholia.toolforge.org/",
-        "institution": {
-          "id": 283,
-          "name": "Maastricht University",
-          "homeUrl": "https://www.maastrichtuniversity.nl",
-          "description": "Maastricht University (UM) is the most international university in the Netherlands and, with 18,000 students and 4,400 employees, is still growing. The university stands out for its innovative education model, international character and multidisciplinary approach to research and education.\nThanks to its high-quality research and study programmes as well as a strong focus on social engagement, UM has quickly built up a solid reputation. Today it is considered one of the best young universities in the world.",
-          "rorId": "https://ror.org/02jz4aj89",
-          "location": {
-            "countryCode": "NL",
-            "countryName": "Netherlands"
-          }
-        },
-        "location": {
-          "countryCode": "NL",
-          "countryName": "Netherlands"
-        },
-        "deprecated": false,
-        "deprecationDate": null
-      }
-    ],
-    "created": "2019-06-11T14:15:53.125+0000",
-    "modified": "2019-06-11T14:15:53.125+0000",
-    "sampleId": "WP100",
     "deprecated": false,
     "deprecationDate": null
   },
@@ -5655,6 +5539,78 @@
     "deprecated": false,
     "deprecationDate": null
   },
+  "wikipathways": {
+    "id": 258,
+    "prefix": "wikipathways",
+    "name": "WikiPathways",
+    "pattern": "WP\\d{1,5}(\\_r\\d+)?$",
+    "namespaceEmbeddedInLui": false,
+    "description": "WikiPathways is a resource providing an open and public collection of pathway maps created and curated by the community in a Wiki-like style.",
+    "mirId": "MIR:00000076",
+    "resources": [
+      {
+        "id": 260,
+        "providerCode": "um",
+        "name": "WikiPathways",
+        "urlPattern": "http://www.wikipathways.org/instance/{$id}",
+        "mirId": "MIR:00100106",
+        "description": "WikiPathways",
+        "official": true,
+        "sampleId": "WP100",
+        "resourceHomeUrl": "http://www.wikipathways.org/",
+        "institution": {
+          "id": 283,
+          "name": "Maastricht University",
+          "homeUrl": "https://www.maastrichtuniversity.nl",
+          "description": "Maastricht University (UM) is the most international university in the Netherlands and, with 18,000 students and 4,400 employees, is still growing. The university stands out for its innovative education model, international character and multidisciplinary approach to research and education.\nThanks to its high-quality research and study programmes as well as a strong focus on social engagement, UM has quickly built up a solid reputation. Today it is considered one of the best young universities in the world.",
+          "rorId": "https://ror.org/02jz4aj89",
+          "location": {
+            "countryCode": "NL",
+            "countryName": "Netherlands"
+          }
+        },
+        "location": {
+          "countryCode": "US",
+          "countryName": "United States"
+        },
+        "deprecated": false,
+        "deprecationDate": null
+      },
+      {
+        "id": 2316,
+        "providerCode": "scholia",
+        "name": "Scholia",
+        "urlPattern": "https://scholia.toolforge.org/wikipathways/{$id}",
+        "mirId": "MIR:00000696",
+        "description": "Scholia is a service that creates visual scholarly profiles for topic, people, organizations, species, chemicals, etc using bibliographic and other information in Wikidata.\n",
+        "official": false,
+        "sampleId": "WP111",
+        "resourceHomeUrl": "https://scholia.toolforge.org/",
+        "institution": {
+          "id": 283,
+          "name": "Maastricht University",
+          "homeUrl": "https://www.maastrichtuniversity.nl",
+          "description": "Maastricht University (UM) is the most international university in the Netherlands and, with 18,000 students and 4,400 employees, is still growing. The university stands out for its innovative education model, international character and multidisciplinary approach to research and education.\nThanks to its high-quality research and study programmes as well as a strong focus on social engagement, UM has quickly built up a solid reputation. Today it is considered one of the best young universities in the world.",
+          "rorId": "https://ror.org/02jz4aj89",
+          "location": {
+            "countryCode": "NL",
+            "countryName": "Netherlands"
+          }
+        },
+        "location": {
+          "countryCode": "NL",
+          "countryName": "Netherlands"
+        },
+        "deprecated": false,
+        "deprecationDate": null
+      }
+    ],
+    "created": "2019-06-11T14:15:53.125+0000",
+    "modified": "2023-01-05T18:26:05.922+0000",
+    "sampleId": "WP100",
+    "deprecated": false,
+    "deprecationDate": null
+  },
   "pharmgkb.drug": {
     "id": 302,
     "prefix": "pharmgkb.drug",
@@ -6312,50 +6268,6 @@
     "created": "2019-06-11T14:16:00.712+0000",
     "modified": "2019-06-11T14:16:00.712+0000",
     "sampleId": "12300",
-    "deprecated": false,
-    "deprecationDate": null
-  },
-  "genedb": {
-    "id": 341,
-    "prefix": "genedb",
-    "name": "GeneDB",
-    "pattern": "^[\\w\\d\\.-]*$",
-    "namespaceEmbeddedInLui": false,
-    "description": "GeneDB is a genome database for prokaryotic and eukaryotic organisms and provides a portal through which data generated by the \"Pathogen Genomics\" group at the Wellcome Trust Sanger Institute and other collaborating sequencing centres can be accessed.",
-    "mirId": "MIR:00000106",
-    "resources": [
-      {
-        "id": 343,
-        "providerCode": "CURATOR_REVIEW",
-        "name": "GeneDB at Sanger Institute",
-        "urlPattern": "https://www.genedb.org/gene/{$id}",
-        "mirId": "MIR:00100139",
-        "description": "GeneDB at Sanger Institute",
-        "official": false,
-        "sampleId": "LinJ.20.0070",
-        "resourceHomeUrl": "https://www.genedb.org/",
-        "institution": {
-          "id": 342,
-          "name": "Pathogen Genomics, Sanger Institute and European Bioinformatics Institute",
-          "homeUrl": "CURATOR_REVIEW",
-          "description": "CURATOR_REVIEW",
-          "rorId": null,
-          "location": {
-            "countryCode": "GB",
-            "countryName": "United Kingdom"
-          }
-        },
-        "location": {
-          "countryCode": "GB",
-          "countryName": "United Kingdom"
-        },
-        "deprecated": false,
-        "deprecationDate": null
-      }
-    ],
-    "created": "2019-06-11T14:16:00.951+0000",
-    "modified": "2019-06-11T14:16:00.951+0000",
-    "sampleId": "LinJ.20.0070",
     "deprecated": false,
     "deprecationDate": null
   },
@@ -8492,7 +8404,7 @@
         "id": 836,
         "providerCode": "CURATOR_REVIEW",
         "name": "ATCC in Virginia",
-        "urlPattern": "http://www.lgcstandards-atcc.org/Products/All/{$id}.aspx",
+        "urlPattern": "https://www.atcc.org/products/{$id}",
         "mirId": "MIR:00100365",
         "description": "ATCC in Virginia",
         "official": false,
@@ -9167,7 +9079,7 @@
         "urlPattern": "https://www.ncbi.nlm.nih.gov/snp/{$id}",
         "mirId": "MIR:00100206",
         "description": "dbSNP at NCBI",
-        "official": false,
+        "official": true,
         "sampleId": "rs121909098",
         "resourceHomeUrl": "https://www.ncbi.nlm.nih.gov/snp/",
         "institution": {
@@ -12312,7 +12224,7 @@
         "id": 688,
         "providerCode": "ebi",
         "name": "Vectorbase at EMBL-EBI",
-        "urlPattern": "https://www.vectorbase.org/search/site/{$id}?&site=\"Genome\"",
+        "urlPattern": "https://vectorbase.org/gene/{$id}",
         "mirId": "MIR:00100291",
         "description": "Vectorbase at EMBL-EBI",
         "official": true,
@@ -12340,50 +12252,6 @@
     "created": "2019-06-11T14:16:32.515+0000",
     "modified": "2019-06-11T14:16:32.515+0000",
     "sampleId": "ISCW007415",
-    "deprecated": false,
-    "deprecationDate": null
-  },
-  "cco": {
-    "id": 694,
-    "prefix": "cco",
-    "name": "Cell Cycle Ontology",
-    "pattern": "^CCO\\:\\w+$",
-    "namespaceEmbeddedInLui": true,
-    "description": "The Cell Cycle Ontology is an application ontology that captures and integrates detailed knowledge on the cell cycle process.",
-    "mirId": "MIR:00000234",
-    "resources": [
-      {
-        "id": 695,
-        "providerCode": "ols",
-        "name": "Cell Cycle Ontology through OLS",
-        "urlPattern": "https://www.ebi.ac.uk/ols/ontologies/cco/terms?obo_id=CCO:{$id}",
-        "mirId": "MIR:00100294",
-        "description": "Cell Cycle Ontology through OLS",
-        "official": false,
-        "sampleId": "0000003",
-        "resourceHomeUrl": "https://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=CCO",
-        "institution": {
-          "id": 2,
-          "name": "European Bioinformatics Institute",
-          "homeUrl": "https://www.ebi.ac.uk",
-          "description": "At EMBL-EBI, we make the world\u2019s public biological data freely available to the scientific community via a range of services and tools, perform basic research and provide professional training in bioinformatics. \nWe are part of the European Molecular Biology Laboratory (EMBL), an international, innovative and interdisciplinary research organisation funded by 26 member states and two associate member states.",
-          "rorId": "https://ror.org/02catss52",
-          "location": {
-            "countryCode": "GB",
-            "countryName": "United Kingdom"
-          }
-        },
-        "location": {
-          "countryCode": "GB",
-          "countryName": "United Kingdom"
-        },
-        "deprecated": false,
-        "deprecationDate": null
-      }
-    ],
-    "created": "2019-06-11T14:16:33.213+0000",
-    "modified": "2019-06-11T14:16:33.213+0000",
-    "sampleId": "0000003",
     "deprecated": false,
     "deprecationDate": null
   },
@@ -12820,6 +12688,50 @@
     "created": "2019-06-11T14:16:35.052+0000",
     "modified": "2019-06-11T14:16:35.052+0000",
     "sampleId": "0000208",
+    "deprecated": false,
+    "deprecationDate": null
+  },
+  "cco": {
+    "id": 694,
+    "prefix": "cco",
+    "name": "Cell Cycle Ontology",
+    "pattern": "^CCO:\\w+$",
+    "namespaceEmbeddedInLui": true,
+    "description": "The Cell Cycle Ontology is an application ontology that captures and integrates detailed knowledge on the cell cycle process.",
+    "mirId": "MIR:00000234",
+    "resources": [
+      {
+        "id": 695,
+        "providerCode": "ols",
+        "name": "Cell Cycle Ontology through OLS",
+        "urlPattern": "https://www.ebi.ac.uk/ols/ontologies/cco/terms?obo_id=CCO:{$id}",
+        "mirId": "MIR:00100294",
+        "description": "Cell Cycle Ontology through OLS",
+        "official": false,
+        "sampleId": "0000003",
+        "resourceHomeUrl": "https://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=CCO",
+        "institution": {
+          "id": 2,
+          "name": "European Bioinformatics Institute",
+          "homeUrl": "https://www.ebi.ac.uk",
+          "description": "At EMBL-EBI, we make the world\u2019s public biological data freely available to the scientific community via a range of services and tools, perform basic research and provide professional training in bioinformatics. \nWe are part of the European Molecular Biology Laboratory (EMBL), an international, innovative and interdisciplinary research organisation funded by 26 member states and two associate member states.",
+          "rorId": "https://ror.org/02catss52",
+          "location": {
+            "countryCode": "GB",
+            "countryName": "United Kingdom"
+          }
+        },
+        "location": {
+          "countryCode": "GB",
+          "countryName": "United Kingdom"
+        },
+        "deprecated": false,
+        "deprecationDate": null
+      }
+    ],
+    "created": "2019-06-11T14:16:33.213+0000",
+    "modified": "2023-01-10T14:47:52.365+0000",
+    "sampleId": "0000003",
     "deprecated": false,
     "deprecationDate": null
   },
@@ -13539,50 +13451,6 @@
     "deprecated": false,
     "deprecationDate": null
   },
-  "combine.specifications": {
-    "id": 765,
-    "prefix": "combine.specifications",
-    "name": "COMBINE specifications",
-    "pattern": "^\\w+(\\-|\\.|\\w)*$",
-    "namespaceEmbeddedInLui": false,
-    "description": "The 'COmputational Modeling in BIology' NEtwork (COMBINE) is an initiative to coordinate the development of the various community standards and formats for computational models, initially in Systems Biology and related fields. This collection pertains to specifications of the standard formats developed by the Computational Modeling in Biology Network.",
-    "mirId": "MIR:00000258",
-    "resources": [
-      {
-        "id": 766,
-        "providerCode": "ebi",
-        "name": "COMBINE at EBI",
-        "urlPattern": "https://co.mbine.org/specifications/{$id}",
-        "mirId": "MIR:00100329",
-        "description": "COMBINE at EBI",
-        "official": false,
-        "sampleId": "sbgn.er.level-1.version-1.2",
-        "resourceHomeUrl": "https://co.mbine.org/standards/",
-        "institution": {
-          "id": 2,
-          "name": "European Bioinformatics Institute",
-          "homeUrl": "https://www.ebi.ac.uk",
-          "description": "At EMBL-EBI, we make the world\u2019s public biological data freely available to the scientific community via a range of services and tools, perform basic research and provide professional training in bioinformatics. \nWe are part of the European Molecular Biology Laboratory (EMBL), an international, innovative and interdisciplinary research organisation funded by 26 member states and two associate member states.",
-          "rorId": "https://ror.org/02catss52",
-          "location": {
-            "countryCode": "GB",
-            "countryName": "United Kingdom"
-          }
-        },
-        "location": {
-          "countryCode": "GB",
-          "countryName": "United Kingdom"
-        },
-        "deprecated": false,
-        "deprecationDate": null
-      }
-    ],
-    "created": "2019-06-11T14:16:39.210+0000",
-    "modified": "2019-06-11T14:16:39.210+0000",
-    "sampleId": "sbgn.er.level-1.version-1.2",
-    "deprecated": false,
-    "deprecationDate": null
-  },
   "cabri": {
     "id": 767,
     "prefix": "cabri",
@@ -14123,78 +13991,6 @@
     "deprecated": false,
     "deprecationDate": null
   },
-  "massbank": {
-    "id": 800,
-    "prefix": "massbank",
-    "name": "MassBank",
-    "pattern": "^[A-Z]{2}[A-Z0-9][0-9]{5}$",
-    "namespaceEmbeddedInLui": false,
-    "description": "MassBank is a federated database of reference spectra from different instruments, including high-resolution mass spectra of small metabolites (<3000 Da).",
-    "mirId": "MIR:00000273",
-    "resources": [
-      {
-        "id": 802,
-        "providerCode": "CURATOR_REVIEW",
-        "name": "MassBank in Japan",
-        "urlPattern": "http://www.massbank.jp/RecordDisplay?id={$id}",
-        "mirId": "MIR:00100353",
-        "description": "MassBank in Japan",
-        "official": true,
-        "sampleId": "PB000166",
-        "resourceHomeUrl": "http://www.massbank.jp",
-        "institution": {
-          "id": 801,
-          "name": "The MassBank Consortium",
-          "homeUrl": "CURATOR_REVIEW",
-          "description": "CURATOR_REVIEW",
-          "rorId": null,
-          "location": {
-            "countryCode": "JP",
-            "countryName": "Japan"
-          }
-        },
-        "location": {
-          "countryCode": "JP",
-          "countryName": "Japan"
-        },
-        "deprecated": false,
-        "deprecationDate": null
-      },
-      {
-        "id": 804,
-        "providerCode": "CURATOR_REVIEW",
-        "name": "MassBank in Europe",
-        "urlPattern": "https://massbank.eu/MassBank/RecordDisplay?id={$id}",
-        "mirId": "MIR:00100666",
-        "description": "MassBank in Europe",
-        "official": false,
-        "sampleId": "PB000166",
-        "resourceHomeUrl": "https://massbank.eu/",
-        "institution": {
-          "id": 803,
-          "name": "NORMAN Network and The MassBank Consortium",
-          "homeUrl": "CURATOR_REVIEW",
-          "description": "CURATOR_REVIEW",
-          "rorId": null,
-          "location": {
-            "countryCode": "DE",
-            "countryName": "Germany"
-          }
-        },
-        "location": {
-          "countryCode": "DE",
-          "countryName": "Germany"
-        },
-        "deprecated": false,
-        "deprecationDate": null
-      }
-    ],
-    "created": "2019-06-11T14:16:42.071+0000",
-    "modified": "2019-06-11T14:16:42.071+0000",
-    "sampleId": "PB000166",
-    "deprecated": false,
-    "deprecationDate": null
-  },
   "gmd": {
     "id": 805,
     "prefix": "gmd",
@@ -14616,6 +14412,78 @@
     "created": "2019-06-11T14:16:44.374+0000",
     "modified": "2019-06-11T14:16:44.374+0000",
     "sampleId": "aap-1",
+    "deprecated": false,
+    "deprecationDate": null
+  },
+  "massbank": {
+    "id": 800,
+    "prefix": "massbank",
+    "name": "MassBank",
+    "pattern": "^MSBNK-[0-9a-zA-Z_]+-[A-Z0-9_]+$",
+    "namespaceEmbeddedInLui": false,
+    "description": "MassBank is a federated database of reference spectra from different instruments, including high-resolution mass spectra of small metabolites (<3000 Da).",
+    "mirId": "MIR:00000273",
+    "resources": [
+      {
+        "id": 804,
+        "providerCode": "massbankeu",
+        "name": "MassBank in Europe",
+        "urlPattern": "https://massbank.eu/MassBank/RecordDisplay?id={$id}",
+        "mirId": "MIR:00100666",
+        "description": "MassBank in Europe",
+        "official": false,
+        "sampleId": "PB000166",
+        "resourceHomeUrl": "https://massbank.eu/",
+        "institution": {
+          "id": 803,
+          "name": "NORMAN Network and The MassBank Consortium",
+          "homeUrl": "CURATOR_REVIEW",
+          "description": "CURATOR_REVIEW",
+          "rorId": null,
+          "location": {
+            "countryCode": "DE",
+            "countryName": "Germany"
+          }
+        },
+        "location": {
+          "countryCode": "DE",
+          "countryName": "Germany"
+        },
+        "deprecated": false,
+        "deprecationDate": null
+      },
+      {
+        "id": 802,
+        "providerCode": "massbankjp",
+        "name": "MassBank in Japan",
+        "urlPattern": "https://massbank.jp/RecordDisplay?id={$id}",
+        "mirId": "MIR:00100353",
+        "description": "MassBank in Japan",
+        "official": true,
+        "sampleId": "PB000166",
+        "resourceHomeUrl": "http://www.massbank.jp",
+        "institution": {
+          "id": 801,
+          "name": "The MassBank Consortium",
+          "homeUrl": "CURATOR_REVIEW",
+          "description": "CURATOR_REVIEW",
+          "rorId": null,
+          "location": {
+            "countryCode": "JP",
+            "countryName": "Japan"
+          }
+        },
+        "location": {
+          "countryCode": "JP",
+          "countryName": "Japan"
+        },
+        "deprecated": false,
+        "deprecationDate": null
+      }
+    ],
+    "created": "2019-06-11T14:16:42.071+0000",
+    "modified": "2022-12-13T16:15:18.652+0000",
+    "sampleId": "MSBNK-IPB_Halle-PB000166",
     "deprecated": false,
     "deprecationDate": null
   },
@@ -21051,50 +20919,6 @@
     "deprecated": false,
     "deprecationDate": null
   },
-  "panther.pthcmp": {
-    "id": 1217,
-    "prefix": "panther.pthcmp",
-    "name": "PANTHER Pathway Component",
-    "pattern": "^G|P|U|C|S\\d{5}$",
-    "namespaceEmbeddedInLui": false,
-    "description": "The PANTHER (Protein ANalysis THrough Evolutionary Relationships) Classification System is a resource that classifies genes by their functions, using published scientific experimental evidence and evolutionary relationships to predict function even in the absence of direct experimental evidence. The PANTHER Pathway Component collection references specific classes of molecules that play the same mechanistic role within a pathway, across species. Pathway\r\ncomponents may be proteins, genes/DNA, RNA, or simple molecules. Where the identified component is a protein, DNA, or transcribed RNA, it is associated with protein sequences in the PANTHER protein family trees through manual curation.",
-    "mirId": "MIR:00000422",
-    "resources": [
-      {
-        "id": 1218,
-        "providerCode": "CURATOR_REVIEW",
-        "name": "PANTHER Pathway Component at USC (Los Angeles)",
-        "urlPattern": "http://www.pantherdb.org/pathway/pathCatDetail.do?clsAccession={$id}",
-        "mirId": "MIR:00100545",
-        "description": "PANTHER Pathway Component at USC (Los Angeles)",
-        "official": false,
-        "sampleId": "P00266",
-        "resourceHomeUrl": "http://www.pantherdb.org/",
-        "institution": {
-          "id": 94,
-          "name": "Keck School of Medicine, University of Southern California",
-          "homeUrl": "CURATOR_REVIEW",
-          "description": "CURATOR_REVIEW",
-          "rorId": null,
-          "location": {
-            "countryCode": "US",
-            "countryName": "United States"
-          }
-        },
-        "location": {
-          "countryCode": "US",
-          "countryName": "United States"
-        },
-        "deprecated": false,
-        "deprecationDate": null
-      }
-    ],
-    "created": "2019-06-11T14:17:16.858+0000",
-    "modified": "2019-06-11T14:17:16.858+0000",
-    "sampleId": "P00266",
-    "deprecated": false,
-    "deprecationDate": null
-  },
   "gmd.profile": {
     "id": 1219,
     "prefix": "gmd.profile",
@@ -24787,50 +24611,6 @@
     "deprecated": false,
     "deprecationDate": null
   },
-  "gramene.growthstage": {
-    "id": 1437,
-    "prefix": "gramene.growthstage",
-    "name": "Gramene Growth Stage Ontology",
-    "pattern": "^GRO\\:\\d+$",
-    "namespaceEmbeddedInLui": true,
-    "description": "Gramene is a comparative genome mapping database for grasses and crop plants. It combines a semi-automatically generated database of cereal genomic and expressed sequence tag sequences, genetic maps, map relations, quantitative trait loci (QTL), and publications, with a curated database of mutants (genes and alleles), molecular markers, and proteins. This collection refers to growth stage ontology information in Gramene.",
-    "mirId": "MIR:00000508",
-    "resources": [
-      {
-        "id": 1438,
-        "providerCode": "CURATOR_REVIEW",
-        "name": "Gramene Growth Stage Ontology at Cold Spring Harbor",
-        "urlPattern": "http://www.gramene.org/db/ontology/search?id=GRO:{$id}",
-        "mirId": "MIR:00100649",
-        "description": "Gramene Growth Stage Ontology at Cold Spring Harbor",
-        "official": false,
-        "sampleId": "0007133",
-        "resourceHomeUrl": "http://www.gramene.org/",
-        "institution": {
-          "id": 556,
-          "name": "Cold Spring Harbor Laboratory, New York",
-          "homeUrl": "CURATOR_REVIEW",
-          "description": "CURATOR_REVIEW",
-          "rorId": null,
-          "location": {
-            "countryCode": "US",
-            "countryName": "United States"
-          }
-        },
-        "location": {
-          "countryCode": "US",
-          "countryName": "United States"
-        },
-        "deprecated": false,
-        "deprecationDate": null
-      }
-    ],
-    "created": "2019-06-11T14:17:36.384+0000",
-    "modified": "2019-06-11T14:17:36.384+0000",
-    "sampleId": "0007133",
-    "deprecated": false,
-    "deprecationDate": null
-  },
   "mgnify.samp": {
     "id": 1439,
     "prefix": "mgnify.samp",
@@ -25771,6 +25551,34 @@
           "name": "U.S. Food and Drug Administration, Maryland",
           "homeUrl": "CURATOR_REVIEW",
           "description": "CURATOR_REVIEW",
+          "rorId": null,
+          "location": {
+            "countryCode": "US",
+            "countryName": "United States"
+          }
+        },
+        "location": {
+          "countryCode": "US",
+          "countryName": "United States"
+        },
+        "deprecated": false,
+        "deprecationDate": null
+      },
+      {
+        "id": 3441,
+        "providerCode": "fda",
+        "name": "United States Food and Drug Administration",
+        "urlPattern": "https://precision.fda.gov/uniisearch/srs/unii/{$id}",
+        "mirId": "MIR:00000990",
+        "description": "Organization information obtained from ROR API using ROR ID 'https://ror.org/034xvzb47' with Wikidata IDs [Q204711], and ISNI IDs [0000 0001 2243 3366]",
+        "official": true,
+        "sampleId": "3G6A5W338E",
+        "resourceHomeUrl": "https://precision.fda.gov/uniisearch",
+        "institution": {
+          "id": 3440,
+          "name": "United States Food and Drug Administration",
+          "homeUrl": "https://www.fda.gov/",
+          "description": "Organization information obtained from ROR API using ROR ID 'https://ror.org/034xvzb47' with Wikidata IDs [Q204711], and ISNI IDs [0000 0001 2243 3366]",
           "rorId": null,
           "location": {
             "countryCode": "US",
@@ -28351,50 +28159,6 @@
     "deprecated": false,
     "deprecationDate": null
   },
-  "ark": {
-    "id": 1647,
-    "prefix": "ark",
-    "name": "ARK",
-    "pattern": "^(ark\\:)/*[0-9A-Za-z]+(?:/[\\w/.=*+@\\$-]*)?(?:\\?.*)?$",
-    "namespaceEmbeddedInLui": true,
-    "description": "An Archival Resource Key (ARK) is a Uniform Resource Locator (URL) that is a multi-purpose persistent identifier for information objects of any type.",
-    "mirId": "MIR:00000592",
-    "resources": [
-      {
-        "id": 1649,
-        "providerCode": "CURATOR_REVIEW",
-        "name": "ARK via the Name-to-Thing resolver.",
-        "urlPattern": "http://n2t.net/ark:{$id}",
-        "mirId": "MIR:00100792",
-        "description": "ARK via the Name-to-Thing resolver.",
-        "official": false,
-        "sampleId": "/12345/fk1234",
-        "resourceHomeUrl": "http://n2t.net/",
-        "institution": {
-          "id": 1648,
-          "name": "California Digital Library, University of California Office of the President",
-          "homeUrl": "CURATOR_REVIEW",
-          "description": "CURATOR_REVIEW",
-          "rorId": null,
-          "location": {
-            "countryCode": "US",
-            "countryName": "United States"
-          }
-        },
-        "location": {
-          "countryCode": "US",
-          "countryName": "United States"
-        },
-        "deprecated": false,
-        "deprecationDate": null
-      }
-    ],
-    "created": "2019-06-11T14:17:57.583+0000",
-    "modified": "2019-06-11T14:17:57.583+0000",
-    "sampleId": "/12345/fk1234",
-    "deprecated": false,
-    "deprecationDate": null
-  },
   "grid": {
     "id": 1650,
     "prefix": "grid",
@@ -28584,7 +28348,7 @@
         "id": 1665,
         "providerCode": "ebi",
         "name": "Identifiers.org Registry through EBI",
-        "urlPattern": "https://registry.identifiers.org/registry?query=\"MIR:{$id}\"",
+        "urlPattern": "https://registry.identifiers.org/registry?query=MIR:{$id}",
         "mirId": "MIR:00100800",
         "description": "Identifiers.org Registry through EBI",
         "official": false,
@@ -29155,50 +28919,6 @@
     "deprecated": false,
     "deprecationDate": null
   },
-  "biotools": {
-    "id": 1709,
-    "prefix": "biotools",
-    "name": "BioTools",
-    "pattern": "^[A-Za-z0-9\\_]*$",
-    "namespaceEmbeddedInLui": false,
-    "description": "Tool and data services registry.",
-    "mirId": "MIR:00000616",
-    "resources": [
-      {
-        "id": 1711,
-        "providerCode": "CURATOR_REVIEW",
-        "name": "BioTools",
-        "urlPattern": "https://bio.tools/{$id}",
-        "mirId": "MIR:00100820",
-        "description": "BioTools",
-        "official": false,
-        "sampleId": "uniprotkb",
-        "resourceHomeUrl": "https://bio.tools/",
-        "institution": {
-          "id": 1710,
-          "name": "Elixir-DK",
-          "homeUrl": "CURATOR_REVIEW",
-          "description": "CURATOR_REVIEW",
-          "rorId": null,
-          "location": {
-            "countryCode": "DK",
-            "countryName": "Denmark"
-          }
-        },
-        "location": {
-          "countryCode": "DK",
-          "countryName": "Denmark"
-        },
-        "deprecated": false,
-        "deprecationDate": null
-      }
-    ],
-    "created": "2019-06-11T14:18:03.353+0000",
-    "modified": "2019-06-11T14:18:03.353+0000",
-    "sampleId": "uniprotkb",
-    "deprecated": false,
-    "deprecationDate": null
-  },
   "aop": {
     "id": 1712,
     "prefix": "aop",
@@ -29331,50 +29051,6 @@
     "deprecated": false,
     "deprecationDate": null
   },
-  "cellosaurus": {
-    "id": 1662,
-    "prefix": "cellosaurus",
-    "name": "Cellosaurus",
-    "pattern": "^CVCL_[A-Z0-9]{4}$",
-    "namespaceEmbeddedInLui": false,
-    "description": "The Cellosaurus is a knowledge resource on cell lines. It attempts to describe all cell lines used in biomedical research. Its scope includes: Immortalized cell lines; naturally immortal cell lines (example: stem cell lines); finite life cell lines when those are distributed and used widely; vertebrate cell line with an emphasis on human, mouse and rat cell lines; and invertebrate (insects and ticks) cell lines. Its scope does not include primary cell lines (with the exception of the finite life cell lines described above) and plant cell lines.",
-    "mirId": "MIR:00000598",
-    "resources": [
-      {
-        "id": 1663,
-        "providerCode": "sib",
-        "name": "Cellosaurus through SIB",
-        "urlPattern": "https://web.expasy.org/cellosaurus/{$id}",
-        "mirId": "MIR:00100799",
-        "description": "Cellosaurus through SIB",
-        "official": false,
-        "sampleId": "CVCL_0030",
-        "resourceHomeUrl": "https://web.expasy.org/cellosaurus/",
-        "institution": {
-          "id": 1730,
-          "name": "SIB Swiss Institute of Bioinformatics",
-          "homeUrl": "https://www.sib.swiss",
-          "description": "SIB provides bioinformatics services and resources for scientists and clinicians from academia and industry in Switzerland and worldwide.",
-          "rorId": "https://ror.org/002n09z45",
-          "location": {
-            "countryCode": "CH",
-            "countryName": "Switzerland"
-          }
-        },
-        "location": {
-          "countryCode": "CH",
-          "countryName": "Switzerland"
-        },
-        "deprecated": false,
-        "deprecationDate": null
-      }
-    ],
-    "created": "2019-06-11T14:17:59.000+0000",
-    "modified": "2021-02-01T16:38:40.925+0000",
-    "sampleId": "CVCL_0030",
-    "deprecated": false,
-    "deprecationDate": null
-  },
   "metacyc.compound": {
     "id": 1691,
     "prefix": "metacyc.compound",
@@ -29460,6 +29136,94 @@
     "created": "2019-06-11T14:18:02.043+0000",
     "modified": "2021-04-17T19:55:01.284+0000",
     "sampleId": "RXN-14904",
+    "deprecated": false,
+    "deprecationDate": null
+  },
+  "biotools": {
+    "id": 1709,
+    "prefix": "biotools",
+    "name": "BioTools",
+    "pattern": "^[-A-Za-z0-9\\_]*$",
+    "namespaceEmbeddedInLui": false,
+    "description": "Tool and data services registry.",
+    "mirId": "MIR:00000616",
+    "resources": [
+      {
+        "id": 1711,
+        "providerCode": "CURATOR_REVIEW",
+        "name": "BioTools",
+        "urlPattern": "https://bio.tools/{$id}",
+        "mirId": "MIR:00100820",
+        "description": "BioTools",
+        "official": false,
+        "sampleId": "uniprotkb",
+        "resourceHomeUrl": "https://bio.tools/",
+        "institution": {
+          "id": 1710,
+          "name": "Elixir-DK",
+          "homeUrl": "CURATOR_REVIEW",
+          "description": "CURATOR_REVIEW",
+          "rorId": null,
+          "location": {
+            "countryCode": "DK",
+            "countryName": "Denmark"
+          }
+        },
+        "location": {
+          "countryCode": "DK",
+          "countryName": "Denmark"
+        },
+        "deprecated": false,
+        "deprecationDate": null
+      }
+    ],
+    "created": "2019-06-11T14:18:03.353+0000",
+    "modified": "2023-01-05T19:09:45.468+0000",
+    "sampleId": "uniprotkb",
+    "deprecated": false,
+    "deprecationDate": null
+  },
+  "cellosaurus": {
+    "id": 1662,
+    "prefix": "cellosaurus",
+    "name": "Cellosaurus",
+    "pattern": "^CVCL_[A-Z0-9]{4}(\\.txt)?$",
+    "namespaceEmbeddedInLui": false,
+    "description": "The Cellosaurus is a knowledge resource on cell lines. It attempts to describe all cell lines used in biomedical research. Its scope includes: Immortalized cell lines; naturally immortal cell lines (example: stem cell lines); finite life cell lines when those are distributed and used widely; vertebrate cell line with an emphasis on human, mouse and rat cell lines; and invertebrate (insects and ticks) cell lines. Its scope does not include primary cell lines (with the exception of the finite life cell lines described above) and plant cell lines.",
+    "mirId": "MIR:00000598",
+    "resources": [
+      {
+        "id": 1663,
+        "providerCode": "sib",
+        "name": "Cellosaurus through SIB",
+        "urlPattern": "https://www.cellosaurus.org/{$id}",
+        "mirId": "MIR:00100799",
+        "description": "Cellosaurus through SIB",
+        "official": false,
+        "sampleId": "CVCL_0030",
+        "resourceHomeUrl": "https://www.cellosaurus.org/",
+        "institution": {
+          "id": 1730,
+          "name": "SIB Swiss Institute of Bioinformatics",
+          "homeUrl": "https://www.sib.swiss",
+          "description": "SIB provides bioinformatics services and resources for scientists and clinicians from academia and industry in Switzerland and worldwide.",
+          "rorId": "https://ror.org/002n09z45",
+          "location": {
+            "countryCode": "CH",
+            "countryName": "Switzerland"
+          }
+        },
+        "location": {
+          "countryCode": "CH",
+          "countryName": "Switzerland"
+        },
+        "deprecated": false,
+        "deprecationDate": null
+      }
+    ],
+    "created": "2019-06-11T14:17:59.000+0000",
+    "modified": "2023-01-09T15:31:03.506+0000",
+    "sampleId": "CVCL_0030",
     "deprecated": false,
     "deprecationDate": null
   },
@@ -32695,50 +32459,6 @@
     "deprecated": false,
     "deprecationDate": null
   },
-  "biostudies": {
-    "id": 1921,
-    "prefix": "biostudies",
-    "name": "BioStudies database",
-    "pattern": "^S-[A-Z]{4}[A-Z\\d\\-]+$",
-    "namespaceEmbeddedInLui": false,
-    "description": "The BioStudies database holds descriptions of biological studies, links to data from these studies in other databases at EMBL-EBI or outside, as well as data that do not fit in the structured archives at EMBL-EBI. The database can accept a wide range of types of studies described via a simple format. It also enables manuscript authors to submit supplementary information and link to it from the publication.",
-    "mirId": "MIR:00000694",
-    "resources": [
-      {
-        "id": 1922,
-        "providerCode": "ebi",
-        "name": "BioStudies database",
-        "urlPattern": "https://www.ebi.ac.uk/biostudies/studies/{$id}",
-        "mirId": "MIR:00100926",
-        "description": "BioStudies database",
-        "official": true,
-        "sampleId": "S-EPMC6266652",
-        "resourceHomeUrl": "https://www.ebi.ac.uk/biostudies/",
-        "institution": {
-          "id": 2,
-          "name": "European Bioinformatics Institute",
-          "homeUrl": "https://www.ebi.ac.uk",
-          "description": "At EMBL-EBI, we make the world\u2019s public biological data freely available to the scientific community via a range of services and tools, perform basic research and provide professional training in bioinformatics. \nWe are part of the European Molecular Biology Laboratory (EMBL), an international, innovative and interdisciplinary research organisation funded by 26 member states and two associate member states.",
-          "rorId": "https://ror.org/02catss52",
-          "location": {
-            "countryCode": "GB",
-            "countryName": "United Kingdom"
-          }
-        },
-        "location": {
-          "countryCode": "GB",
-          "countryName": "United Kingdom"
-        },
-        "deprecated": false,
-        "deprecationDate": null
-      }
-    ],
-    "created": "2019-06-11T14:18:22.448+0000",
-    "modified": "2019-06-11T14:18:22.448+0000",
-    "sampleId": "S-EPMC6266652",
-    "deprecated": false,
-    "deprecationDate": null
-  },
   "cadsr": {
     "id": 1923,
     "prefix": "cadsr",
@@ -32868,6 +32588,50 @@
     "created": "2019-09-05T11:46:36.162+0000",
     "modified": "2019-09-05T11:46:36.162+0000",
     "sampleId": "C0004828",
+    "deprecated": false,
+    "deprecationDate": null
+  },
+  "biostudies": {
+    "id": 1921,
+    "prefix": "biostudies",
+    "name": "BioStudies database",
+    "pattern": "^S-[A-Z]{4}[\\-\\_A-Z\\d]+$",
+    "namespaceEmbeddedInLui": false,
+    "description": "The BioStudies database holds descriptions of biological studies, links to data from these studies in other databases at EMBL-EBI or outside, as well as data that do not fit in the structured archives at EMBL-EBI. The database can accept a wide range of types of studies described via a simple format. It also enables manuscript authors to submit supplementary information and link to it from the publication.",
+    "mirId": "MIR:00000694",
+    "resources": [
+      {
+        "id": 1922,
+        "providerCode": "ebi",
+        "name": "BioStudies database",
+        "urlPattern": "https://www.ebi.ac.uk/biostudies/studies/{$id}",
+        "mirId": "MIR:00100926",
+        "description": "BioStudies database",
+        "official": true,
+        "sampleId": "S-EPMC6266652",
+        "resourceHomeUrl": "https://www.ebi.ac.uk/biostudies/",
+        "institution": {
+          "id": 2,
+          "name": "European Bioinformatics Institute",
+          "homeUrl": "https://www.ebi.ac.uk",
+          "description": "At EMBL-EBI, we make the world\u2019s public biological data freely available to the scientific community via a range of services and tools, perform basic research and provide professional training in bioinformatics. \nWe are part of the European Molecular Biology Laboratory (EMBL), an international, innovative and interdisciplinary research organisation funded by 26 member states and two associate member states.",
+          "rorId": "https://ror.org/02catss52",
+          "location": {
+            "countryCode": "GB",
+            "countryName": "United Kingdom"
+          }
+        },
+        "location": {
+          "countryCode": "GB",
+          "countryName": "United Kingdom"
+        },
+        "deprecated": false,
+        "deprecationDate": null
+      }
+    ],
+    "created": "2019-06-11T14:18:22.448+0000",
+    "modified": "2023-01-12T08:36:02.758+0000",
+    "sampleId": "S-EPMC6266652",
     "deprecated": false,
     "deprecationDate": null
   },
@@ -34259,50 +34023,6 @@
     "deprecated": false,
     "deprecationDate": null
   },
-  "refseq": {
-    "id": 153,
-    "prefix": "refseq",
-    "name": "RefSeq",
-    "pattern": "^(((AC|AP|NC|NG|NM|NP|NR|NT|NW|XM|XP|XR|YP|ZP)_\\d+)|(NZ\\_[A-Z]{2,4}\\d+))(\\.\\d+)?$",
-    "namespaceEmbeddedInLui": false,
-    "description": "The Reference Sequence (RefSeq) collection aims to provide a comprehensive, integrated, non-redundant set of sequences, including genomic DNA, transcript (RNA), and protein products.",
-    "mirId": "MIR:00000039",
-    "resources": [
-      {
-        "id": 155,
-        "providerCode": "ncbi",
-        "name": "The NCBI Reference Sequence database",
-        "urlPattern": "https://www.ncbi.nlm.nih.gov/protein/{$id}",
-        "mirId": "MIR:00100067",
-        "description": "The NCBI Reference Sequence database",
-        "official": false,
-        "sampleId": "NP_012345",
-        "resourceHomeUrl": "https://www.ncbi.nlm.nih.gov/projects/RefSeq/",
-        "institution": {
-          "id": 26,
-          "name": "National Center for Biotechnology Information",
-          "homeUrl": "https://www.ncbi.nlm.nih.gov/",
-          "description": "The National Center for Biotechnology Information advances science and health by providing access to biomedical and genomic information.",
-          "rorId": "https://ror.org/02meqm098",
-          "location": {
-            "countryCode": "US",
-            "countryName": "United States"
-          }
-        },
-        "location": {
-          "countryCode": "US",
-          "countryName": "United States"
-        },
-        "deprecated": false,
-        "deprecationDate": null
-      }
-    ],
-    "created": "2019-06-11T14:15:43.085+0000",
-    "modified": "2020-03-31T09:55:28.774+0000",
-    "sampleId": "NP_012345",
-    "deprecated": false,
-    "deprecationDate": null
-  },
   "gold.genome": {
     "id": 1164,
     "prefix": "gold.genome",
@@ -34432,6 +34152,50 @@
     "created": "2020-04-22T09:46:18.729+0000",
     "modified": "2020-04-22T09:46:18.729+0000",
     "sampleId": "PGS000018",
+    "deprecated": false,
+    "deprecationDate": null
+  },
+  "refseq": {
+    "id": 153,
+    "prefix": "refseq",
+    "name": "RefSeq",
+    "pattern": "^(((WP|AC|AP|NC|NG|NM|NP|NR|NT|NW|XM|XP|XR|YP|ZP)_\\d+)|(NZ\\_[A-Z]{2,4}\\d+))(\\.\\d+)?$",
+    "namespaceEmbeddedInLui": false,
+    "description": "The Reference Sequence (RefSeq) collection aims to provide a comprehensive, integrated, non-redundant set of sequences, including genomic DNA, transcript (RNA), and protein products.",
+    "mirId": "MIR:00000039",
+    "resources": [
+      {
+        "id": 155,
+        "providerCode": "ncbi",
+        "name": "The NCBI Reference Sequence database",
+        "urlPattern": "https://www.ncbi.nlm.nih.gov/protein/{$id}",
+        "mirId": "MIR:00100067",
+        "description": "The NCBI Reference Sequence database",
+        "official": false,
+        "sampleId": "NP_012345",
+        "resourceHomeUrl": "https://www.ncbi.nlm.nih.gov/projects/RefSeq/",
+        "institution": {
+          "id": 26,
+          "name": "National Center for Biotechnology Information",
+          "homeUrl": "https://www.ncbi.nlm.nih.gov/",
+          "description": "The National Center for Biotechnology Information advances science and health by providing access to biomedical and genomic information.",
+          "rorId": "https://ror.org/02meqm098",
+          "location": {
+            "countryCode": "US",
+            "countryName": "United States"
+          }
+        },
+        "location": {
+          "countryCode": "US",
+          "countryName": "United States"
+        },
+        "deprecated": false,
+        "deprecationDate": null
+      }
+    ],
+    "created": "2019-06-11T14:15:43.085+0000",
+    "modified": "2023-01-04T19:52:50.191+0000",
+    "sampleId": "NP_012345",
     "deprecated": false,
     "deprecationDate": null
   },
@@ -35351,7 +35115,7 @@
         "urlPattern": "https://www.ebi.ac.uk/ols/ontologies/uberon/terms?obo_id=UBERON:{$id}",
         "mirId": "MIR:00100580",
         "description": "UBERON through OLS",
-        "official": false,
+        "official": true,
         "sampleId": "0008203",
         "resourceHomeUrl": "https://www.ebi.ac.uk/ols/ontologies/uberon",
         "institution": {
@@ -35684,50 +35448,6 @@
     "created": "2020-12-14T12:49:56.333+0000",
     "modified": "2020-12-14T12:49:56.333+0000",
     "sampleId": "SFB_COVID19_MW286762",
-    "deprecated": false,
-    "deprecationDate": null
-  },
-  "oma.hog": {
-    "id": 2484,
-    "prefix": "oma.hog",
-    "name": "OMA HOGs",
-    "pattern": "^HOG:[0-9]{7}(\\.[0-9a-z.]+)?(_[0-9]+)?$",
-    "namespaceEmbeddedInLui": true,
-    "description": "Hierarchical orthologous groups predicted by OMA (Orthologous MAtrix) database. Hierarchical orthologous groups are sets of genes that have started diverging from a single common ancestor gene at a certain taxonomic level of reference. ",
-    "mirId": "MIR:00000785",
-    "resources": [
-      {
-        "id": 2485,
-        "providerCode": "oma",
-        "name": "ETH Zurich",
-        "urlPattern": "https://omabrowser.org/oma/hog/resolve/HOG:{$id}/",
-        "mirId": "MIR:00000761",
-        "description": "Organization information obtained from ROR API using ROR ID 'https://ror.org/05a28rw58' with Wikidata IDs [Q11942], and ISNI IDs [0000 0001 2156 2780]",
-        "official": true,
-        "sampleId": "HOG:0459895",
-        "resourceHomeUrl": "https://omabrowser.org",
-        "institution": {
-          "id": 2483,
-          "name": "ETH Zurich",
-          "homeUrl": "https://ethz.ch/en.html",
-          "description": "Organization information obtained from ROR API using ROR ID 'https://ror.org/05a28rw58' with Wikidata IDs [Q11942], and ISNI IDs [0000 0001 2156 2780]",
-          "rorId": null,
-          "location": {
-            "countryCode": "CH",
-            "countryName": "Switzerland"
-          }
-        },
-        "location": {
-          "countryCode": "CH",
-          "countryName": "Switzerland"
-        },
-        "deprecated": false,
-        "deprecationDate": null
-      }
-    ],
-    "created": "2020-12-14T12:57:54.560+0000",
-    "modified": "2020-12-14T12:57:54.560+0000",
-    "sampleId": "HOG:0459895",
     "deprecated": false,
     "deprecationDate": null
   },
@@ -36184,7 +35904,7 @@
         "id": 2586,
         "providerCode": "ito",
         "name": "BioPortal at National Center for Biomedical Ontology",
-        "urlPattern": "https://bioportal.bioontology.org/ontologies/ITO/?p=classes&conceptid=https%3A%2F%2Fai-strategies.org%2Fontology%2F{$id}",
+        "urlPattern": "https://bioportal.bioontology.org/ontologies/ITO/?p=classes&conceptid=https://identifiers.org/ito:{$id}",
         "mirId": "MIR:00000801",
         "description": "BioPortal at National Center for Biomedical Ontology",
         "official": true,
@@ -40080,6 +39800,606 @@
     "created": "2022-11-29T12:03:56.649+0000",
     "modified": "2022-11-29T12:03:56.649+0000",
     "sampleId": "5ede4273-b26c-4ea4-adb7-3ce294ab3397",
+    "deprecated": false,
+    "deprecationDate": null
+  },
+  "combine.specifications": {
+    "id": 765,
+    "prefix": "combine.specifications",
+    "name": "COMBINE specifications",
+    "pattern": "^\\w+(\\-|\\.|\\w)*$",
+    "namespaceEmbeddedInLui": false,
+    "description": "The 'COmputational Modeling in BIology' NEtwork (COMBINE) is an initiative to coordinate the development of the various community standards and formats for computational models, initially in Systems Biology and related fields. This collection pertains to specifications of the standard formats developed by the Computational Modeling in Biology Network.",
+    "mirId": "MIR:00000258",
+    "resources": [
+      {
+        "id": 766,
+        "providerCode": "ebi",
+        "name": "COMBINE at EBI",
+        "urlPattern": "https://github.com/combine-org/combine-specifications/blob/main/specifications/{$id}.md",
+        "mirId": "MIR:00100329",
+        "description": "COMBINE at EBI",
+        "official": false,
+        "sampleId": "sed-ml.level-1.version-1",
+        "resourceHomeUrl": "https://co.mbine.org/standards/",
+        "institution": {
+          "id": 2,
+          "name": "European Bioinformatics Institute",
+          "homeUrl": "https://www.ebi.ac.uk",
+          "description": "At EMBL-EBI, we make the world\u2019s public biological data freely available to the scientific community via a range of services and tools, perform basic research and provide professional training in bioinformatics. \nWe are part of the European Molecular Biology Laboratory (EMBL), an international, innovative and interdisciplinary research organisation funded by 26 member states and two associate member states.",
+          "rorId": "https://ror.org/02catss52",
+          "location": {
+            "countryCode": "GB",
+            "countryName": "United Kingdom"
+          }
+        },
+        "location": {
+          "countryCode": "GB",
+          "countryName": "United Kingdom"
+        },
+        "deprecated": false,
+        "deprecationDate": null
+      }
+    ],
+    "created": "2019-06-11T14:16:39.210+0000",
+    "modified": "2023-01-04T15:31:16.641+0000",
+    "sampleId": "sed-ml.level-1.version-1",
+    "deprecated": false,
+    "deprecationDate": null
+  },
+  "panther.pthcmp": {
+    "id": 1217,
+    "prefix": "panther.pthcmp",
+    "name": "PANTHER Pathway Component",
+    "pattern": "^[GPUCS]\\d{5}$",
+    "namespaceEmbeddedInLui": false,
+    "description": "The PANTHER (Protein ANalysis THrough Evolutionary Relationships) Classification System is a resource that classifies genes by their functions, using published scientific experimental evidence and evolutionary relationships to predict function even in the absence of direct experimental evidence. The PANTHER Pathway Component collection references specific classes of molecules that play the same mechanistic role within a pathway, across species. Pathway\r\ncomponents may be proteins, genes/DNA, RNA, or simple molecules. Where the identified component is a protein, DNA, or transcribed RNA, it is associated with protein sequences in the PANTHER protein family trees through manual curation.",
+    "mirId": "MIR:00000422",
+    "resources": [
+      {
+        "id": 1218,
+        "providerCode": "CURATOR_REVIEW",
+        "name": "PANTHER Pathway Component at USC (Los Angeles)",
+        "urlPattern": "http://www.pantherdb.org/pathway/pathCatDetail.do?clsAccession={$id}",
+        "mirId": "MIR:00100545",
+        "description": "PANTHER Pathway Component at USC (Los Angeles)",
+        "official": false,
+        "sampleId": "P00266",
+        "resourceHomeUrl": "http://www.pantherdb.org/",
+        "institution": {
+          "id": 94,
+          "name": "Keck School of Medicine, University of Southern California",
+          "homeUrl": "CURATOR_REVIEW",
+          "description": "CURATOR_REVIEW",
+          "rorId": null,
+          "location": {
+            "countryCode": "US",
+            "countryName": "United States"
+          }
+        },
+        "location": {
+          "countryCode": "US",
+          "countryName": "United States"
+        },
+        "deprecated": false,
+        "deprecationDate": null
+      }
+    ],
+    "created": "2019-06-11T14:17:16.858+0000",
+    "modified": "2023-01-04T16:32:41.267+0000",
+    "sampleId": "P00266",
+    "deprecated": false,
+    "deprecationDate": null
+  },
+  "genedb": {
+    "id": 341,
+    "prefix": "genedb",
+    "name": "GeneDB",
+    "pattern": "^[\\w\\d\\.-]*$",
+    "namespaceEmbeddedInLui": false,
+    "description": "GeneDB is a genome database for prokaryotic and eukaryotic organisms and provides a portal through which data generated by the \"Pathogen Genomics\" group at the Wellcome Trust Sanger Institute and other collaborating sequencing centres can be accessed.",
+    "mirId": "MIR:00000106",
+    "resources": [
+      {
+        "id": 343,
+        "providerCode": "CURATOR_REVIEW",
+        "name": "GeneDB at Sanger Institute",
+        "urlPattern": "https://www.genedb.org/gene/{$id}",
+        "mirId": "MIR:00100139",
+        "description": "GeneDB at Sanger Institute",
+        "official": false,
+        "sampleId": "LinJ.20.0070",
+        "resourceHomeUrl": "https://www.genedb.org/",
+        "institution": {
+          "id": 342,
+          "name": "Pathogen Genomics, Sanger Institute and European Bioinformatics Institute",
+          "homeUrl": "CURATOR_REVIEW",
+          "description": "CURATOR_REVIEW",
+          "rorId": null,
+          "location": {
+            "countryCode": "GB",
+            "countryName": "United Kingdom"
+          }
+        },
+        "location": {
+          "countryCode": "GB",
+          "countryName": "United Kingdom"
+        },
+        "deprecated": false,
+        "deprecationDate": null
+      }
+    ],
+    "created": "2019-06-11T14:16:00.951+0000",
+    "modified": "2023-01-05T20:09:01.371+0000",
+    "sampleId": "LinJ.20.0070",
+    "deprecated": true,
+    "deprecationDate": "2023-01-05T20:09:01.370+0000"
+  },
+  "mge": {
+    "id": 220,
+    "prefix": "mge",
+    "name": "Aclame",
+    "pattern": "^mge:\\d+$",
+    "namespaceEmbeddedInLui": true,
+    "description": "ACLAME is a database dedicated to the collection and classification of mobile genetic elements (MGEs) from various sources, comprising all known phage genomes, plasmids and transposons.",
+    "mirId": "MIR:00000063",
+    "resources": [
+      {
+        "id": 222,
+        "providerCode": "CURATOR_REVIEW",
+        "name": "Aclame database of mobile genetic elements",
+        "urlPattern": "http://aclame.ulb.ac.be/perl/Aclame/Genomes/mge_view.cgi?view=info&id=mge:{$id}",
+        "mirId": "MIR:00100091",
+        "description": "Aclame database of mobile genetic elements",
+        "official": false,
+        "sampleId": "2",
+        "resourceHomeUrl": "http://aclame.ulb.ac.be/",
+        "institution": {
+          "id": 221,
+          "name": "Service de Conformation de Macromol\u00e9cules Biologiques et de Bioinformatique, Universit\u00e9 Libre de Bruxelles",
+          "homeUrl": "CURATOR_REVIEW",
+          "description": "CURATOR_REVIEW",
+          "rorId": null,
+          "location": {
+            "countryCode": "BE",
+            "countryName": "Belgium"
+          }
+        },
+        "location": {
+          "countryCode": "BE",
+          "countryName": "Belgium"
+        },
+        "deprecated": false,
+        "deprecationDate": null
+      }
+    ],
+    "created": "2019-06-11T14:15:49.786+0000",
+    "modified": "2023-01-10T13:18:19.511+0000",
+    "sampleId": "2",
+    "deprecated": true,
+    "deprecationDate": "2023-01-10T13:18:19.506+0000"
+  },
+  "oma.hog": {
+    "id": 2484,
+    "prefix": "oma.hog",
+    "name": "OMA HOGs",
+    "pattern": "^HOG:[0-9]{7}(\\.[0-9a-z.]+)?(_[0-9]+)?$",
+    "namespaceEmbeddedInLui": true,
+    "description": "Hierarchical orthologous groups predicted by OMA (Orthologous MAtrix) database. Hierarchical orthologous groups are sets of genes that have started diverging from a single common ancestor gene at a certain taxonomic level of reference. ",
+    "mirId": "MIR:00000785",
+    "resources": [
+      {
+        "id": 2485,
+        "providerCode": "oma",
+        "name": "ETH Zurich",
+        "urlPattern": "https://omabrowser.org/oma/hog/resolve/HOG:{$id}/",
+        "mirId": "MIR:00000761",
+        "description": "Organization information obtained from ROR API using ROR ID 'https://ror.org/05a28rw58' with Wikidata IDs [Q11942], and ISNI IDs [0000 0001 2156 2780]",
+        "official": true,
+        "sampleId": "HOG:0459895",
+        "resourceHomeUrl": "https://omabrowser.org",
+        "institution": {
+          "id": 2483,
+          "name": "ETH Zurich",
+          "homeUrl": "https://ethz.ch/en.html",
+          "description": "Organization information obtained from ROR API using ROR ID 'https://ror.org/05a28rw58' with Wikidata IDs [Q11942], and ISNI IDs [0000 0001 2156 2780]",
+          "rorId": null,
+          "location": {
+            "countryCode": "CH",
+            "countryName": "Switzerland"
+          }
+        },
+        "location": {
+          "countryCode": "CH",
+          "countryName": "Switzerland"
+        },
+        "deprecated": false,
+        "deprecationDate": null
+      }
+    ],
+    "created": "2020-12-14T12:57:54.560+0000",
+    "modified": "2023-01-10T16:04:39.504+0000",
+    "sampleId": "0459895",
+    "deprecated": false,
+    "deprecationDate": null
+  },
+  "gro": {
+    "id": 1437,
+    "prefix": "gro",
+    "name": "Gramene Growth Stage Ontology",
+    "pattern": "^GRO:\\d+$",
+    "namespaceEmbeddedInLui": true,
+    "description": "Gramene is a comparative genome mapping database for grasses and crop plants. It combines a semi-automatically generated database of cereal genomic and expressed sequence tag sequences, genetic maps, map relations, quantitative trait loci (QTL), and publications, with a curated database of mutants (genes and alleles), molecular markers, and proteins. This collection refers to growth stage ontology information in Gramene.",
+    "mirId": "MIR:00000508",
+    "resources": [
+      {
+        "id": 1438,
+        "providerCode": "CURATOR_REVIEW",
+        "name": "Gramene Growth Stage Ontology at Cold Spring Harbor",
+        "urlPattern": "http://www.gramene.org/db/ontology/search?id=GRO:{$id}",
+        "mirId": "MIR:00100649",
+        "description": "Gramene Growth Stage Ontology at Cold Spring Harbor",
+        "official": false,
+        "sampleId": "0007133",
+        "resourceHomeUrl": "http://www.gramene.org/",
+        "institution": {
+          "id": 556,
+          "name": "Cold Spring Harbor Laboratory, New York",
+          "homeUrl": "CURATOR_REVIEW",
+          "description": "CURATOR_REVIEW",
+          "rorId": null,
+          "location": {
+            "countryCode": "US",
+            "countryName": "United States"
+          }
+        },
+        "location": {
+          "countryCode": "US",
+          "countryName": "United States"
+        },
+        "deprecated": false,
+        "deprecationDate": null
+      }
+    ],
+    "created": "2019-06-11T14:17:36.384+0000",
+    "modified": "2023-01-10T16:08:16.467+0000",
+    "sampleId": "0007133",
+    "deprecated": false,
+    "deprecationDate": null
+  },
+  "tair.name": {
+    "id": 3369,
+    "prefix": "tair.name",
+    "name": "TAIR gene name",
+    "pattern": "^AT.G[0-9]{5}$",
+    "namespaceEmbeddedInLui": false,
+    "description": "The Arabidopsis Information Resource (TAIR) maintains a database of genetic and molecular biology data for the model higher plant Arabidopsis thaliana. The name of a Locus is unique and used by TAIR, TIGR, and MIPS.",
+    "mirId": "MIR:00000976",
+    "resources": [
+      {
+        "id": 3370,
+        "providerCode": "tair",
+        "name": "TAIR",
+        "urlPattern": "https://www.arabidopsis.org/servlets/TairObject?type=locus&name={$id}",
+        "mirId": "MIR:00000975",
+        "description": "The Arabidopsis Information Resource (TAIR) collects information and maintains a database of genetic and molecular biology data for Arabidopsis thaliana, a widely used model plant.",
+        "official": true,
+        "sampleId": "AT5G05330",
+        "resourceHomeUrl": "https://www.arabidopsis.org/index.jsp",
+        "institution": {
+          "id": 3367,
+          "name": "Phoenix Bioinformatics",
+          "homeUrl": "https://www.phoenixbioinformatics.org/",
+          "description": "Organization information obtained from ROR API using ROR ID 'https://ror.org/0018yg518' with no Wikidata information, and ISNI IDs [0000 0004 4665 2899]",
+          "rorId": null,
+          "location": {
+            "countryCode": "US",
+            "countryName": "United States"
+          }
+        },
+        "location": {
+          "countryCode": "US",
+          "countryName": "United States"
+        },
+        "deprecated": false,
+        "deprecationDate": null
+      }
+    ],
+    "created": "2023-01-12T10:08:07.976+0000",
+    "modified": "2023-01-12T10:08:07.976+0000",
+    "sampleId": "AT5G05330",
+    "deprecated": false,
+    "deprecationDate": null
+  },
+  "civic.vgid": {
+    "id": 3380,
+    "prefix": "civic.vgid",
+    "name": "CIViC Variant Group",
+    "pattern": "^[0-9]+$",
+    "namespaceEmbeddedInLui": false,
+    "description": "Variant Groups in CIViC provide user-defined grouping of Variants within and between genes based on unifying characteristics. CIViC curators are required to define a cohesive rationale for grouping these variants together, summarize their relevance to cancer diagnosis, prognosis or treatment and highlight any treatments or cancers of particular relevance",
+    "mirId": "MIR:00000979",
+    "resources": [
+      {
+        "id": 3381,
+        "providerCode": "civicdb",
+        "name": "Clinical Interpretation of Variants in Cancer (CIViC)",
+        "urlPattern": "https://civicdb.org/links/variant_group/{$id}",
+        "mirId": "MIR:00000978",
+        "description": "CIViC is an open access, open source, community-driven web resource for Clinical Interpretation of Variants in Cancer.",
+        "official": true,
+        "sampleId": "16",
+        "resourceHomeUrl": "https://civicdb.org/",
+        "institution": {
+          "id": 2750,
+          "name": "Washington University in St. Louis",
+          "homeUrl": "https://wustl.edu/",
+          "description": "Organization information obtained from ROR API using ROR ID 'https://ror.org/01yc7t268' with Wikidata IDs [Q777403], and ISNI IDs [0000 0001 2355 7002]",
+          "rorId": null,
+          "location": {
+            "countryCode": "US",
+            "countryName": "United States"
+          }
+        },
+        "location": {
+          "countryCode": "US",
+          "countryName": "United States"
+        },
+        "deprecated": false,
+        "deprecationDate": null
+      }
+    ],
+    "created": "2023-01-23T09:52:20.012+0000",
+    "modified": "2023-01-23T09:52:20.012+0000",
+    "sampleId": "16",
+    "deprecated": false,
+    "deprecationDate": null
+  },
+  "civic.mpid": {
+    "id": 3383,
+    "prefix": "civic.mpid",
+    "name": "CIViC Molecular Profile",
+    "pattern": "^[0-9]+$",
+    "namespaceEmbeddedInLui": false,
+    "description": "CIViC Molecular Profiles are combinations of one or more CIViC variants. Most Molecular Profiles are \u201cSimple\u201d Molecular Profiles comprised of a single variant. In most cases, these can be considered equivalent to the CIViC concept of a Variant. However, increasingly clinical significance must be considered in the context of multiple variants simultaneously. Complex Molecular Profiles in CIViC allow for curation of such variant combinations. Regardless of the nature of the Molecular Profile (Simple or Complex), it must have a Predictive, Prognostic, Predisposing, Diagnostic, Oncogenic, or Functional clinical relevance to be entered in CIViC.",
+    "mirId": "MIR:00000981",
+    "resources": [
+      {
+        "id": 3384,
+        "providerCode": "civicdb",
+        "name": "Clinical Interpretation of Variants in Cancer (CIViC)",
+        "urlPattern": "https://civicdb.org/links/molecular_profile/{$id}",
+        "mirId": "MIR:00000980",
+        "description": "CIViC is an open access, open source, community-driven web resource for Clinical Interpretation of Variants in Cancer.",
+        "official": true,
+        "sampleId": "559",
+        "resourceHomeUrl": "https://civicdb.org/",
+        "institution": {
+          "id": 2750,
+          "name": "Washington University in St. Louis",
+          "homeUrl": "https://wustl.edu/",
+          "description": "Organization information obtained from ROR API using ROR ID 'https://ror.org/01yc7t268' with Wikidata IDs [Q777403], and ISNI IDs [0000 0001 2355 7002]",
+          "rorId": null,
+          "location": {
+            "countryCode": "US",
+            "countryName": "United States"
+          }
+        },
+        "location": {
+          "countryCode": "US",
+          "countryName": "United States"
+        },
+        "deprecated": false,
+        "deprecationDate": null
+      }
+    ],
+    "created": "2023-01-23T09:53:23.139+0000",
+    "modified": "2023-01-23T09:53:23.139+0000",
+    "sampleId": "559",
+    "deprecated": false,
+    "deprecationDate": null
+  },
+  "clo": {
+    "id": 3391,
+    "prefix": "clo",
+    "name": "Cell Line Ontology",
+    "pattern": "^\\d{7}$",
+    "namespaceEmbeddedInLui": false,
+    "description": "The Cell Line Ontology is a community-based ontology of cell lines. The CLO is developed to unify publicly available cell line entry data from multiple sources to a standardized logically defined format based on consensus design patterns.",
+    "mirId": "MIR:00000983",
+    "resources": [
+      {
+        "id": 3392,
+        "providerCode": "ols",
+        "name": "CLO through OLS",
+        "urlPattern": "https://www.ebi.ac.uk/ols/ontologies/clo/terms?short_form=CLO_{$id}",
+        "mirId": "MIR:00000982",
+        "description": "Cell Line Ontology (CLO) through OLS. The Ontology Lookup Service (OLS) is a repository for biomedical ontologies that aims to provide a single point of access to the latest ontology versions. You can browse the ontologies through the website as well as programmatically via the OLS API. OLS is developed and maintained by the Samples, Phenotypes, and Ontologies Team at EMBL-EBI.",
+        "official": true,
+        "sampleId": "0000091",
+        "resourceHomeUrl": "https://www.ebi.ac.uk/ols/ontologies/clo",
+        "institution": {
+          "id": 3390,
+          "name": "University of Michigan\u2013Ann Arbor",
+          "homeUrl": "https://www.umich.edu/",
+          "description": "Organization information obtained from ROR API using ROR ID 'https://ror.org/00jmfr291' with Wikidata IDs [Q230492], and ISNI IDs [0000 0000 8683 7370]",
+          "rorId": null,
+          "location": {
+            "countryCode": "US",
+            "countryName": "United States"
+          }
+        },
+        "location": {
+          "countryCode": "US",
+          "countryName": "United States"
+        },
+        "deprecated": false,
+        "deprecationDate": null
+      },
+      {
+        "id": 3398,
+        "providerCode": "bioportal",
+        "name": "Center for Biomedical Informatics Research, Stanford",
+        "urlPattern": "https://bioportal.bioontology.org/ontologies/CLO/?p=classes&conceptid=http://purl.obolibrary.org/obo/CLO_{$id}",
+        "mirId": "MIR:00000984",
+        "description": "Our vision is that all biomedical knowledge and data are disseminated on the Internet using principled ontologies in such a way that the knowledge and data are semantically interoperable and useful for furthering biomedical science and clinical care. Our mission is to create software and support services for the application of principled ontologies in biomedical science and clinical care, ranging from tools for application developers to software for end-users.",
+        "official": false,
+        "sampleId": "0000091",
+        "resourceHomeUrl": "https://bioportal.bioontology.org",
+        "institution": {
+          "id": 3397,
+          "name": "Center for Biomedical Informatics Research, Stanford",
+          "homeUrl": "https://bioportal.bioontology.org",
+          "description": "Our vision is that all biomedical knowledge and data are disseminated on the Internet using principled ontologies in such a way that the knowledge and data are semantically interoperable and useful for furthering biomedical science and clinical care. Our mission is to create software and support services for the application of principled ontologies in biomedical science and clinical care, ranging from tools for application developers to software for end-users.",
+          "rorId": null,
+          "location": {
+            "countryCode": "US",
+            "countryName": "United States"
+          }
+        },
+        "location": {
+          "countryCode": "US",
+          "countryName": "United States"
+        },
+        "deprecated": false,
+        "deprecationDate": null
+      }
+    ],
+    "created": "2023-01-23T10:14:16.128+0000",
+    "modified": "2023-01-23T10:14:16.128+0000",
+    "sampleId": "0000091",
+    "deprecated": false,
+    "deprecationDate": null
+  },
+  "empiar": {
+    "id": 3404,
+    "prefix": "empiar",
+    "name": "EMPIAR",
+    "pattern": "EMPIAR-\\d{5,}",
+    "namespaceEmbeddedInLui": false,
+    "description": "EMPIAR, the Electron Microscopy Public Image Archive, is a public resource for raw images underpinning 3D cryo-EM maps and tomograms (themselves archived in EMDB). EMPIAR also accommodates 3D datasets obtained with volume EM techniques and soft and hard X-ray tomography.",
+    "mirId": "MIR:00000986",
+    "resources": [
+      {
+        "id": 3405,
+        "providerCode": "empiar",
+        "name": "European Bioinformatics Institute",
+        "urlPattern": "https://www.ebi.ac.uk/empiar/{$id}",
+        "mirId": "MIR:00000985",
+        "description": "At EMBL-EBI, we make the world\u2019s public biological data freely available to the scientific community via a range of services and tools, perform basic research and provide professional training in bioinformatics. \nWe are part of the European Molecular Biology Laboratory (EMBL), an international, innovative and interdisciplinary research organisation funded by 26 member states and two associate member states.",
+        "official": true,
+        "sampleId": "EMPIAR-10002",
+        "resourceHomeUrl": "https://www.ebi.ac.uk",
+        "institution": {
+          "id": 2,
+          "name": "European Bioinformatics Institute",
+          "homeUrl": "https://www.ebi.ac.uk",
+          "description": "At EMBL-EBI, we make the world\u2019s public biological data freely available to the scientific community via a range of services and tools, perform basic research and provide professional training in bioinformatics. \nWe are part of the European Molecular Biology Laboratory (EMBL), an international, innovative and interdisciplinary research organisation funded by 26 member states and two associate member states.",
+          "rorId": "https://ror.org/02catss52",
+          "location": {
+            "countryCode": "GB",
+            "countryName": "United Kingdom"
+          }
+        },
+        "location": {
+          "countryCode": "GB",
+          "countryName": "United Kingdom"
+        },
+        "deprecated": false,
+        "deprecationDate": null
+      }
+    ],
+    "created": "2023-01-25T11:52:06.260+0000",
+    "modified": "2023-01-25T11:52:06.260+0000",
+    "sampleId": "EMPIAR-10002",
+    "deprecated": false,
+    "deprecationDate": null
+  },
+  "ark": {
+    "id": 1647,
+    "prefix": "ark",
+    "name": "Archival Resource Key (ARK)",
+    "pattern": "^(ark\\:)/*[0-9A-Za-z]+(?:/[\\w/.=*+@\\$-]*)?(?:\\?.*)?$",
+    "namespaceEmbeddedInLui": true,
+    "description": "Archival Resource Keys (ARKs) serve as persistent identifiers, or stable, trusted references for information objects. Among other things, they aim to be web addresses (URLs) that don\u2019t return 404 Page Not Found errors. The ARK Alliance is an open global community supporting the ARK infrastructure on behalf of research and scholarship. End users, especially researchers, rely on ARKs for long term access to the global scientific and cultural record. Since 2001 some 8.2 billion ARKs have been created by over 1000 organizations \u2014 libraries, data centers, archives, museums, publishers, government agencies, and vendors. They identify anything digital, physical, or abstract. ARKs are open, mainstream, non-paywalled, decentralized persistent identifiers that can be created by an organization as soon as it is registered with a NAAN (Name Assigning Authority Number). Once registered, an ARK organization can create unlimited numbers of ARKs and publicize them via the n2t.net global resolver or via their own local resolver.",
+    "mirId": "MIR:00000592",
+    "resources": [
+      {
+        "id": 1649,
+        "providerCode": "CURATOR_REVIEW",
+        "name": "Archival Resource Key (ARK)",
+        "urlPattern": "http://n2t.net/ark:{$id}",
+        "mirId": "MIR:00100792",
+        "description": "ARKs via the Name-to-Thing (n2t.net) resolver.",
+        "official": false,
+        "sampleId": "/53355/cl010066723",
+        "resourceHomeUrl": "https://arks.org",
+        "institution": {
+          "id": 1648,
+          "name": "California Digital Library, University of California Office of the President",
+          "homeUrl": "CURATOR_REVIEW",
+          "description": "CURATOR_REVIEW",
+          "rorId": null,
+          "location": {
+            "countryCode": "US",
+            "countryName": "United States"
+          }
+        },
+        "location": {
+          "countryCode": "US",
+          "countryName": "United States"
+        },
+        "deprecated": false,
+        "deprecationDate": null
+      }
+    ],
+    "created": "2019-06-11T14:17:57.583+0000",
+    "modified": "2023-01-31T08:16:22.071+0000",
+    "sampleId": "/53355/cl010066723",
+    "deprecated": false,
+    "deprecationDate": null
+  },
+  "nlfff": {
+    "id": 3429,
+    "prefix": "nlfff",
+    "name": "NLFFF Database",
+    "pattern": "^[0-9]+$",
+    "namespaceEmbeddedInLui": false,
+    "description": "Nonlinear Force-Free Field Three-Dimensional Magnetic Fields Data of Solar Active Regions Database",
+    "mirId": "MIR:00000988",
+    "resources": [
+      {
+        "id": 3430,
+        "providerCode": "deeps",
+        "name": "Deepsolar Laboratory",
+        "urlPattern": "http://database.deepsolar.space:18080/dbs/nlfff/{$id}",
+        "mirId": "MIR:00000987",
+        "description": "State Key Laboratory of Space Weather, National Space Science Center, Chinese Academy of Sciences, Beijing, 100190, China",
+        "official": true,
+        "sampleId": "345201101230312003",
+        "resourceHomeUrl": "https://nlfff.dataset.deepsolar.space/en/",
+        "institution": {
+          "id": 3428,
+          "name": "Deepsolar Laboratory",
+          "homeUrl": "http://www.deepsolar.space",
+          "description": "State Key Laboratory of Space Weather, National Space Science Center, Chinese Academy of Sciences, Beijing, 100190, China",
+          "rorId": null,
+          "location": {
+            "countryCode": "CN",
+            "countryName": "China"
+          }
+        },
+        "location": {
+          "countryCode": "CN",
+          "countryName": "China"
+        },
+        "deprecated": false,
+        "deprecationDate": null
+      }
+    ],
+    "created": "2023-02-03T09:47:17.713+0000",
+    "modified": "2023-02-03T09:47:17.713+0000",
+    "sampleId": "345201101230312003",
     "deprecated": false,
     "deprecationDate": null
   },
