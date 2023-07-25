@@ -37,6 +37,10 @@ class Resource:
     location: dict = field(repr=False)
     deprecated: bool = field(repr=False)
     deprecationDate: str = field(repr=False)
+    protectedUrls: bool = field(repr=False, default=False)
+    renderProtectedLanding: bool = field(repr=False, default=False)
+    authHelpUrl: Optional[str] = field(repr=False, default=None)
+    authHelpDescription: Optional[str] = field(repr=False, default=None)
 
 
 @dataclass

@@ -146,7 +146,6 @@ class UnichemQuery:
                 source: UnichemSource = self.sources[source_id]
                 accession = item["src_compound_id"]
                 if source.baseIdUrl:
-
                     # create and clean url
                     if not source.baseIdUrl:
                         continue
@@ -173,7 +172,6 @@ class UnichemQuery:
 
 
 if __name__ == "__main__":
-
     # query sources
     sources = UnichemQuery.get_sources()
 

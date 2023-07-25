@@ -160,7 +160,6 @@ def update_ontology_file(ofile: OntologyFile) -> None:
             r.raise_for_status()
             with open(owl_path, "wb") as f:
                 for chunk in r.iter_content(chunk_size=8192):
-
                     f.write(chunk)
 
         # only store gzip version

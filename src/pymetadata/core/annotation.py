@@ -100,7 +100,6 @@ class RDFAnnotation:
         elif resource.startswith("urn:miriam:"):
             match3 = MIRIAM_URN_PATTERN.match(resource)
             if match3:
-
                 tokens = match3.group(1).split(":")
                 self.collection = tokens[0]
                 self.term = ":".join(tokens[1:]).replace("%3A", ":")
@@ -240,7 +239,6 @@ class RDFAnnotationData(RDFAnnotation):
         self.errors: List = []
 
         if self.collection:
-
             # register MIRIAM xrefs
             namespace = REGISTRY.ns_dict.get(self.collection, None)
             if not namespace:
@@ -254,7 +252,6 @@ class RDFAnnotationData(RDFAnnotation):
                 namespace.resources = []
 
             for ns_resource in namespace.resources:
-
                 # create url
                 url = ns_resource.urlPattern
 
