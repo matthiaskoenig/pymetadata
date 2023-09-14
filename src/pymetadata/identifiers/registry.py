@@ -4,11 +4,13 @@ Helper tools to work with identifiers registry.
 https://identifiers.org/
 https://docs.identifiers.org/articles/api.html
 """
+from __future__ import annotations
+import inspect
 import os
 import time
 from dataclasses import dataclass, field
 from pathlib import Path
-from typing import Dict, List, Optional
+from typing import Dict, List, Optional, Any
 
 import requests
 
@@ -42,6 +44,13 @@ class Resource:
     authHelpUrl: Optional[str] = field(repr=False, default=None)
     authHelpDescription: Optional[str] = field(repr=False, default=None)
 
+    @classmethod
+    def from_dict(cls, d: Dict[str, Any]) -> Resource:
+        """Handle additional keyword arguments."""
+        return cls(
+            **{k: v for k, v in d.items() if k in inspect.signature(cls).parameters}
+        )
+
 
 @dataclass
 class Namespace:
@@ -61,10 +70,17 @@ class Namespace:
     deprecated: bool = field(repr=False, default=False)
     deprecationDate: Optional[str] = field(repr=False, default=None)
 
+    @classmethod
+    def from_dict(cls, d: Dict[str, Any]) -> Namespace:
+        """Handle additional keyword arguments."""
+        return cls(
+            **{k: v for k, v in d.items() if k in inspect.signature(cls).parameters}
+        )
+
     def __post_init__(self) -> None:
         """Set resources."""
         if self.resources is not None:
-            self.resources = [Resource(**d) for d in self.resources]
+            self.resources = [Resource.from_dict(d) for d in self.resources]
         else:
             self.resources = list()
 
@@ -337,7 +353,7 @@ class Registry:
 
         ns_dict = {}
         for _, data in enumerate(namespaces):
-            ns = Namespace(**data)
+            ns = Namespace.from_dict(data)
             # for resource in ns.resources:
             #    print(resource)
 
