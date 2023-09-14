@@ -5,12 +5,13 @@ https://identifiers.org/
 https://docs.identifiers.org/articles/api.html
 """
 from __future__ import annotations
+
 import inspect
 import os
 import time
 from dataclasses import dataclass, field
 from pathlib import Path
-from typing import Dict, List, Optional, Any
+from typing import Any, Dict, List, Optional
 
 import requests
 
