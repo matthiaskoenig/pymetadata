@@ -357,13 +357,18 @@ class Registry:
             ns = Namespace.from_dict(data)
 
             # bugfix OLS4 (https://github.com/identifiers-org/identifiers-org.github.io/issues/231)
-            for resource in ns.resources:
-                if resource.urlPattern.startswith("https://www.ebi.ac.uk/ols/"):
-                    resource.urlPattern = resource.urlPattern.replace("/ols/", "/ols4/")
-                if resource.resourceHomeUrl.startswith("https://www.ebi.ac.uk/ols/"):
-                    resource.resourceHomeUrl = resource.resourceHomeUrl.replace(
-                        "/ols/", "/ols4/"
-                    )
+            if ns.resources:
+                for resource in ns.resources:
+                    if resource.urlPattern.startswith("https://www.ebi.ac.uk/ols/"):
+                        resource.urlPattern = resource.urlPattern.replace(
+                            "/ols/", "/ols4/"
+                        )
+                    if resource.resourceHomeUrl.startswith(
+                        "https://www.ebi.ac.uk/ols/"
+                    ):
+                        resource.resourceHomeUrl = resource.resourceHomeUrl.replace(
+                            "/ols/", "/ols4/"
+                        )
 
             ns_dict[ns.prefix] = ns
 
