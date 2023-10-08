@@ -349,6 +349,7 @@ _terms = {
     "SBO_0000340": "trimolecular association rate constant",
     "SBO_0000341": "association rate constant",
     "SBO_0000342": "molecular or genetic interaction",
+    "SBO_0000343": "genetic interaction",
     "SBO_0000344": "molecular interaction",
     "SBO_0000345": "time",
     "SBO_0000346": "temporal measure",
@@ -502,7 +503,6 @@ _terms = {
     "SBO_0000496": "transmembrane domain",
     "SBO_0000497": "ternary switch",
     "SBO_0000498": "relative activity",
-    "SBO_0000499": "genetic interaction",
     "SBO_0000500": "genetic suppression",
     "SBO_0000501": "genetic enhancement",
     "SBO_0000502": "synthetic lethality",
@@ -593,6 +593,7 @@ _terms = {
     "SBO_0000587": "transcellular membrane influx reaction",
     "SBO_0000588": "transcellular membrane efflux reaction",
     "SBO_0000589": "genetic production",
+    "SBO_0000590": "promoter",
     "SBO_0000591": "petri net transition",
     "SBO_0000592": "discrete amount of an entity pool",
     "SBO_0000593": "petri net place",
@@ -600,7 +601,6 @@ _terms = {
     "SBO_0000595": "dual-activity modifier",
     "SBO_0000596": "modifier of unknown activity",
     "SBO_0000597": "silencer",
-    "SBO_0000598": "promoter",
     "SBO_0000599": "port",
     "SBO_0000600": "input port",
     "SBO_0000601": "output port",
@@ -696,6 +696,8 @@ _terms = {
     "SBO_0000691": "hybrid stochastic continuous-discrete non-spatial framework",
     "SBO_0000692": "resource balance framework",
     "SBO_0000693": "constraint-based framework",
+    "SBO_0000694": "optimization framework",
+    "SBO_0000695": "ligation",
 }
 
 pattern = r"^SBO_\d{7}$"
@@ -2276,6 +2278,10 @@ class SBO(str, Enum):
     SBO_0000342 = "SBO_0000342"
     MOLECULAR_OR_GENETIC_INTERACTION = "SBO_0000342"
 
+    # genetic interaction
+    SBO_0000343 = "SBO_0000343"
+    GENETIC_INTERACTION = "SBO_0000343"
+
     # molecular interaction
     SBO_0000344 = "SBO_0000344"
     MOLECULAR_INTERACTION = "SBO_0000344"
@@ -2918,10 +2924,6 @@ class SBO(str, Enum):
     SBO_0000498 = "SBO_0000498"
     RELATIVE_ACTIVITY = "SBO_0000498"
 
-    # genetic interaction
-    SBO_0000499 = "SBO_0000499"
-    GENETIC_INTERACTION = "SBO_0000499"
-
     # genetic suppression
     SBO_0000500 = "SBO_0000500"
     GENETIC_SUPPRESSION = "SBO_0000500"
@@ -3292,6 +3294,10 @@ class SBO(str, Enum):
     SBO_0000589 = "SBO_0000589"
     GENETIC_PRODUCTION = "SBO_0000589"
 
+    # promoter
+    SBO_0000590 = "SBO_0000590"
+    PROMOTER = "SBO_0000590"
+
     # petri net transition
     SBO_0000591 = "SBO_0000591"
     PETRI_NET_TRANSITION = "SBO_0000591"
@@ -3319,10 +3325,6 @@ class SBO(str, Enum):
     # silencer
     SBO_0000597 = "SBO_0000597"
     SILENCER = "SBO_0000597"
-
-    # promoter
-    SBO_0000598 = "SBO_0000598"
-    PROMOTER = "SBO_0000598"
 
     # port
     SBO_0000599 = "SBO_0000599"
@@ -3705,6 +3707,18 @@ class SBO(str, Enum):
     # constraint-based framework
     SBO_0000693 = "SBO_0000693"
     CONSTRAINT_BASED_FRAMEWORK = "SBO_0000693"
+
+    # optimization framework
+    SBO_0000694 = "SBO_0000694"
+    OPTIMIZATION_FRAMEWORK = "SBO_0000694"
+
+    # ligation
+    SBO_0000695 = "SBO_0000695"
+    LIGATION = "SBO_0000695"
+
+    # part of
+    part_of = "part_of"
+    PART_OF = "part_of"
 
     @staticmethod
     def get_name(sbo: "SBO") -> Optional[str]:

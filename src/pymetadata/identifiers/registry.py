@@ -156,41 +156,41 @@ def ols_namespaces() -> Dict[str, Namespace]:
         ),
         Namespace(
             id=None,
+            prefix="chmo",
             pattern=r"^CHMO:\d+$",
             name="Chemical methods ontology",
-            prefix="chmo",
             description="CHMO, the chemical methods ontology",
             namespaceEmbeddedInLui=True,
         ),
         Namespace(
             id=None,
+            prefix="vto",
             pattern=r"^VTO:\d+$",
             name="Vertebrate Taxonomy Ontology",
-            prefix="vto",
             description="VTO Vertebrate Taxonomy Ontology",
             namespaceEmbeddedInLui=True,
         ),
         Namespace(
             id=None,
+            prefix="opmi",
             pattern=r"^OPMI:\d+$",
             name="Ontology of Precision Medicine and Investigation",
-            prefix="opmi",
             description="OPMI: Ontology of Precision Medicine and Investigation",
             namespaceEmbeddedInLui=True,
         ),
         Namespace(
             id=None,
+            prefix="mondo",
             pattern=r"^MONDO:\d+$",
             name="MONDO",
-            prefix="mondo",
             description="MONDO",
             namespaceEmbeddedInLui=True,
         ),
         Namespace(
             id=None,
+            prefix="stato",
             pattern=r"^STATO:\d+$",
             name="STATO",
-            prefix="stato",
             description="STATO is the statistical methods ontology. It contains "
             "concepts and properties related to statistical methods, "
             "probability distributions and other concepts related to "
@@ -200,50 +200,50 @@ def ols_namespaces() -> Dict[str, Namespace]:
         ),
         Namespace(
             id=None,
+            prefix="atol",
             pattern=r"^ATOL:\d+$",
             name="ATOL",
-            prefix="atol",
             description="Animal Trait Ontology for Livestock",
             namespaceEmbeddedInLui=True,
         ),
         Namespace(
             id=None,
+            prefix="nbo",
             pattern=r"^NBO:\d+$",
             name="NBO",
-            prefix="nbo",
             description="Neuro Behavior Ontology",
             namespaceEmbeddedInLui=True,
         ),
         Namespace(
             id=None,
+            prefix="scdo",
             pattern=r"^SCDO:\d+$",
             name="Sickle Cell Disease Ontology",
-            prefix="scdo",
             description="Sickle Cell Disease Ontology",
             namespaceEmbeddedInLui=True,
         ),
         Namespace(
             id=None,
+            prefix="fix",
             pattern=r"^FIX:\d+$",
             name="Physico-chemical methods and properties Ontology",
-            prefix="fix",
             description="Physico-chemical methods and properties Ontology",
             namespaceEmbeddedInLui=True,
         ),
         Namespace(
             id=None,
+            prefix="oba",
             pattern=r"^OBA:\d+$",
             name="Ontology of Biological Attributes",
-            prefix="oba",
             description="PubChem is an open chemistry database at the National "
             "Institutes of Health (NIH).",
             namespaceEmbeddedInLui=True,
         ),
         Namespace(
             id=None,
+            prefix="mmo",
             pattern=r"^MMO:\d+$",
             name="Measurement method ontology",
-            prefix="mmo",
             description="Measurement method ontology",
             namespaceEmbeddedInLui=True,
         ),
@@ -262,7 +262,7 @@ def ols_namespaces() -> Dict[str, Namespace]:
                 mirId=None,
                 sampleId=None,
                 resourceHomeUrl=None,
-                urlPattern=f"https://www.ebi.ac.uk/ols/ontologies/chebi/terms?obo_id={ns.prefix.upper()}"
+                urlPattern=f"https://www.ebi.ac.uk/ols4/ontologies/{ns.prefix}/terms?obo_id={ns.prefix.upper()}"
                 + ":{$id}",
                 **ols_info,
             )
@@ -355,8 +355,15 @@ class Registry:
         ns_dict = {}
         for _, data in enumerate(namespaces):
             ns = Namespace.from_dict(data)
-            # for resource in ns.resources:
-            #    print(resource)
+
+            # bugfix OLS4 (https://github.com/identifiers-org/identifiers-org.github.io/issues/231)
+            for resource in ns.resources:
+                if resource.urlPattern.startswith("https://www.ebi.ac.uk/ols/"):
+                    resource.urlPattern = resource.urlPattern.replace("/ols/", "/ols4/")
+                if resource.resourceHomeUrl.startswith("https://www.ebi.ac.uk/ols/"):
+                    resource.resourceHomeUrl = resource.resourceHomeUrl.replace(
+                        "/ols/", "/ols4/"
+                    )
 
             ns_dict[ns.prefix] = ns
 

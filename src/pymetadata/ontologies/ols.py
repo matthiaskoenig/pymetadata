@@ -1,4 +1,9 @@
-"""Lookup of ontology information from the ontology lookup service (OLS)."""
+"""Lookup of ontology information from the ontology lookup service (OLS).
+
+This uses the EMBL-EBI Ontology Lookup Service
+https://www.ebi.ac.uk/ols4
+
+"""
 import urllib.parse
 from dataclasses import dataclass, field
 from pathlib import Path
@@ -31,7 +36,7 @@ class OLSOntology:
 
 
 ONTOLOGIES = [
-    # ontologies which are used in the project
+    # ontologies which are used in most projects
     OLSOntology(name="sbo", iri_pattern="http://biomodels.net/SBO/SBO_{$Id}"),
     OLSOntology(
         name="ncbitaxon", iri_pattern="http://purl.obolibrary.org/obo/NCBITaxon_{$Id}"
@@ -65,7 +70,7 @@ ONTOLOGIES = [
 class OLSQuery:
     """Handling OLS queries."""
 
-    url_term_query = "https://www.ebi.ac.uk/ols/api/ontologies/{}/terms/{}"
+    url_term_query = "https://www.ebi.ac.uk/ols4/api/ontologies/{}/terms/{}"
 
     def __init__(
         self,
