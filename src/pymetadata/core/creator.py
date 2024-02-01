@@ -1,4 +1,5 @@
 """Creator information."""
+
 from typing import Optional
 
 

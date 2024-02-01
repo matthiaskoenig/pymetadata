@@ -1,4 +1,5 @@
 """pymetadata - Python utilities for metadata."""
+
 from pathlib import Path
 
 __author__ = "Matthias Koenig"

@@ -1,4 +1,5 @@
 """Test KISAO and SBO ontologies."""
+
 import pytest
 
 from pymetadata.metadata.kisao import KISAO

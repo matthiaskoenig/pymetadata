@@ -47,6 +47,54 @@
     "deprecated": true,
     "deprecationDate": "2023-01-05T20:09:01.370+0000"
   },
+  "refseq.gcf": {
+    "id": 3719,
+    "prefix": "refseq.gcf",
+    "name": "Genome assembly database - RefSeq accessions",
+    "pattern": "^GCF_[0-9]{9}(\\.[0-9]+)?$",
+    "namespaceEmbeddedInLui": false,
+    "description": "The genome assembly database contains detailed information about genome assemblies for eukaryota, bacteria and archaea. The scope of the genome collections database RefSeq accessions does not extend to viroids and bacteriophage.",
+    "mirId": "MIR:00001030",
+    "resources": [
+      {
+        "id": 3720,
+        "providerCode": "ncbi",
+        "name": "National Center for Biotechnology Information",
+        "urlPattern": "https://www.ncbi.nlm.nih.gov/datasets/genome/{$id}",
+        "mirId": "MIR:00001029",
+        "description": "The National Center for Biotechnology Information advances science and health by providing access to biomedical and genomic information.",
+        "official": true,
+        "sampleId": "GCF_000001405",
+        "resourceHomeUrl": "https://www.ncbi.nlm.nih.gov/",
+        "institution": {
+          "id": 26,
+          "name": "National Center for Biotechnology Information",
+          "homeUrl": "https://www.ncbi.nlm.nih.gov/",
+          "description": "The National Center for Biotechnology Information advances science and health by providing access to biomedical and genomic information.",
+          "rorId": "https://ror.org/02meqm098",
+          "location": {
+            "countryCode": "US",
+            "countryName": "United States"
+          }
+        },
+        "location": {
+          "countryCode": "US",
+          "countryName": "United States"
+        },
+        "deprecated": false,
+        "deprecationDate": null,
+        "protectedUrls": false,
+        "renderProtectedLanding": false,
+        "authHelpUrl": null,
+        "authHelpDescription": null
+      }
+    ],
+    "created": "2023-10-30T09:39:26.272+0000",
+    "modified": "2023-10-30T10:34:56.198+0000",
+    "sampleId": "GCF_000001405",
+    "deprecated": false,
+    "deprecationDate": null
+  },
   "bgee.stage": {
     "id": 1211,
     "prefix": "bgee.stage",
@@ -94,6 +142,54 @@
     "sampleId": "HsapDO:0000004",
     "deprecated": true,
     "deprecationDate": "2023-07-04T10:26:40.148+0000"
+  },
+  "maxo": {
+    "id": 3723,
+    "prefix": "maxo",
+    "name": "Medical Action Ontology",
+    "pattern": "\\d{7}",
+    "namespaceEmbeddedInLui": false,
+    "description": "An ontology to represent medically relevant actions, procedures, therapies, interventions, and recommendations.",
+    "mirId": "MIR:00001032",
+    "resources": [
+      {
+        "id": 3724,
+        "providerCode": "ols",
+        "name": "MAXO via OLS",
+        "urlPattern": "https://www.ebi.ac.uk/ols4/ontologies/maxo/terms?obo_id=MAXO:{$id}",
+        "mirId": "MIR:00001031",
+        "description": "The Ontology Lookup Service (OLS) is a repository for biomedical ontologies that aims to provide a single point of access to the latest ontology versions. You can browse the ontologies through the website as well as programmatically via the OLS API. OLS is developed and maintained by the\u2009Samples, Phenotypes and Ontologies Team (SPOT)\u2009 at\u2009EMBL-EBI.",
+        "official": true,
+        "sampleId": "0001073",
+        "resourceHomeUrl": "https://www.ebi.ac.uk/ols4/ontologies/maxo",
+        "institution": {
+          "id": 3722,
+          "name": "Monarch Initiative",
+          "homeUrl": "https://monarchinitiative.org/",
+          "description": "The Monarch Initiative is an integrative data and analytic platform connecting phenotypes to genotypes across species, bridging basic and applied research with semantics-based analysis. We have created or currently contribute to many essential bio-ontologies that together enable sophisticated and semantically integrated computational analysis across gene, genotype, variant, disease, and phenotype data. ",
+          "rorId": null,
+          "location": {
+            "countryCode": "US",
+            "countryName": "United States"
+          }
+        },
+        "location": {
+          "countryCode": "US",
+          "countryName": "United States"
+        },
+        "deprecated": false,
+        "deprecationDate": null,
+        "protectedUrls": false,
+        "renderProtectedLanding": false,
+        "authHelpUrl": null,
+        "authHelpDescription": null
+      }
+    ],
+    "created": "2023-10-30T09:40:47.492+0000",
+    "modified": "2023-10-30T09:40:47.492+0000",
+    "sampleId": "0001073",
+    "deprecated": false,
+    "deprecationDate": null
   },
   "signaling-gateway": {
     "id": 169,
@@ -239,6 +335,54 @@
     "deprecated": true,
     "deprecationDate": "2020-06-04T11:17:21.453+0000"
   },
+  "ncbidrs": {
+    "id": 3730,
+    "prefix": "ncbidrs",
+    "name": "NCBI Data Repository Service",
+    "pattern": "^[0-9a-fA-F]{32}$",
+    "namespaceEmbeddedInLui": false,
+    "description": "This is the namespace for the archive of sequence and other files provided by NCBI e.g. in SRA and dbGaP. These files are related to objects in the sequencing data model managed under the insdc.sra namespace. ",
+    "mirId": "MIR:00001034",
+    "resources": [
+      {
+        "id": 3731,
+        "providerCode": "ncbi",
+        "name": "National Center for Biotechnology Information",
+        "urlPattern": "https://locate.be-md.ncbi.nlm.nih.gov/ga4gh/drs/v1/objects/{$id}",
+        "mirId": "MIR:00001033",
+        "description": "The National Center for Biotechnology Information advances science and health by providing access to biomedical and genomic information.",
+        "official": true,
+        "sampleId": "72ff6ff882ec447f12df018e6183de59",
+        "resourceHomeUrl": "https://www.ncbi.nlm.nih.gov/",
+        "institution": {
+          "id": 26,
+          "name": "National Center for Biotechnology Information",
+          "homeUrl": "https://www.ncbi.nlm.nih.gov/",
+          "description": "The National Center for Biotechnology Information advances science and health by providing access to biomedical and genomic information.",
+          "rorId": "https://ror.org/02meqm098",
+          "location": {
+            "countryCode": "US",
+            "countryName": "United States"
+          }
+        },
+        "location": {
+          "countryCode": "US",
+          "countryName": "United States"
+        },
+        "deprecated": false,
+        "deprecationDate": null,
+        "protectedUrls": false,
+        "renderProtectedLanding": false,
+        "authHelpUrl": null,
+        "authHelpDescription": null
+      }
+    ],
+    "created": "2023-10-31T16:13:48.191+0000",
+    "modified": "2023-10-31T16:13:48.191+0000",
+    "sampleId": "72ff6ff882ec447f12df018e6183de59",
+    "deprecated": false,
+    "deprecationDate": null
+  },
   "eco": {
     "id": 197,
     "prefix": "eco",
@@ -319,6 +463,54 @@
     "deprecated": false,
     "deprecationDate": null
   },
+  "tricdb": {
+    "id": 3756,
+    "prefix": "tricdb",
+    "name": "tricdb",
+    "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$",
+    "namespaceEmbeddedInLui": false,
+    "description": "Tri\u00a9DB is a newly developed integrated platform functioning as a knowledge base and reporting system for cancer precision medicine. This platform harmonizes and mines cancer-related data from various aspects, presenting them on a centralized platform with enhanced accessibility, rich annotations, and robust analysis capabilities. The development of Tri\u00a9DB is aimed at meeting the needs of a broad range of researchers, thereby propelling both foundational and translational research in cancer precision medicine.",
+    "mirId": "MIR:00001036",
+    "resources": [
+      {
+        "id": 3757,
+        "providerCode": "id",
+        "name": "BaoLab",
+        "urlPattern": "http://biomeddb.org/Disease/Details?DISEASEID={$id}",
+        "mirId": "MIR:00001035",
+        "description": "Professor Bao's Laboratory at the School of Life Sciences, Hubei University",
+        "official": true,
+        "sampleId": "1eec8393-e598-41ed-9d8b-6d5b0db94470",
+        "resourceHomeUrl": "http://www.biomeddb.org/",
+        "institution": {
+          "id": 3755,
+          "name": "Hubei University",
+          "homeUrl": "http://eng.hubu.edu.cn/",
+          "description": "Hubei University, located in Wuhan, capital city of Central China\u2019s Hubei Province, is a key comprehensive university jointly administered by Hubei Provincial Government and China\u2019s Ministry of Education, covering arts, history, philosophy, science, engineering, economics, law, management, education, agriculture and medicine, with the disciplines of Material Science and Chemistry ranking top 1% in the world ESI.",
+          "rorId": null,
+          "location": {
+            "countryCode": "CN",
+            "countryName": "China"
+          }
+        },
+        "location": {
+          "countryCode": "CN",
+          "countryName": "China"
+        },
+        "deprecated": false,
+        "deprecationDate": null,
+        "protectedUrls": false,
+        "renderProtectedLanding": false,
+        "authHelpUrl": null,
+        "authHelpDescription": null
+      }
+    ],
+    "created": "2023-11-27T09:57:23.517+0000",
+    "modified": "2023-11-27T09:57:23.517+0000",
+    "sampleId": "1eec8393-e598-41ed-9d8b-6d5b0db94470",
+    "deprecated": false,
+    "deprecationDate": null
+  },
   "macie": {
     "id": 261,
     "prefix": "macie",
@@ -364,6 +556,54 @@
     "created": "2019-06-11T14:15:53.388+0000",
     "modified": "2019-06-11T14:15:53.388+0000",
     "sampleId": "M0001",
+    "deprecated": false,
+    "deprecationDate": null
+  },
+  "maggot": {
+    "id": 3759,
+    "prefix": "maggot",
+    "name": "Maggot",
+    "pattern": "^[A-Za-z0-9]+$",
+    "namespaceEmbeddedInLui": false,
+    "description": "Sharing descriptive Metadata is the first essential step towards Open Scientific Data. With this in mind, Maggot was specifically designed to annotate datasets by creating a metadata file to attach to the storage space. Indeed, it allows users to easily add descriptive metadata to datasets produced within a collective of people (research unit, platform, multi-partner project, etc.). This approach fits perfectly into a data management plan as it addresses the issues of data organization and documentation, data storage and frictionless metadata sharing within this same collective and beyond.",
+    "mirId": "MIR:00001038",
+    "resources": [
+      {
+        "id": 3760,
+        "providerCode": "maggot",
+        "name": "Bordeaux Metabolome",
+        "urlPattern": "https://pmb-bordeaux.fr/maggot/metadata/{$id}",
+        "mirId": "MIR:00001037",
+        "description": "Bordeaux Metabolome Facility provides equipments and expertise for the study of metabolome, lipidome and metabolic fluxes.",
+        "official": true,
+        "sampleId": "frim1",
+        "resourceHomeUrl": "https://eng-bfp.bordeaux-aquitaine.hub.inrae.fr/resources/metabolome-platform",
+        "institution": {
+          "id": 2292,
+          "name": "National Research Institute for Agriculture, Food and Environment",
+          "homeUrl": "https://www.inrae.fr/",
+          "description": "INRAE is France's new National Research Institute for Agriculture, Food and Environment, created on January 1, 2020, It was formed by the merger of INRA, the National Institute for Agricultural Research, and IRSTEA, the National Research Institute of Science and Technology for the Environment and Agriculture.",
+          "rorId": "https://ror.org/003vg9w96",
+          "location": {
+            "countryCode": "FR",
+            "countryName": "France"
+          }
+        },
+        "location": {
+          "countryCode": "FR",
+          "countryName": "France"
+        },
+        "deprecated": false,
+        "deprecationDate": null,
+        "protectedUrls": false,
+        "renderProtectedLanding": false,
+        "authHelpUrl": null,
+        "authHelpDescription": null
+      }
+    ],
+    "created": "2023-11-27T10:19:40.971+0000",
+    "modified": "2023-11-27T10:19:40.971+0000",
+    "sampleId": "frim1",
     "deprecated": false,
     "deprecationDate": null
   },
@@ -415,6 +655,54 @@
     "deprecated": false,
     "deprecationDate": null
   },
+  "hco": {
+    "id": 3781,
+    "prefix": "hco",
+    "name": "Human Chromosome Ontology",
+    "pattern": "^.+$",
+    "namespaceEmbeddedInLui": false,
+    "description": "The Human Chromosome Ontology (HCO) provides simple and stable URIs for human reference genome versions to semantically identify human chromosomes.",
+    "mirId": "MIR:00001040",
+    "resources": [
+      {
+        "id": 3782,
+        "providerCode": "dbcls",
+        "name": "Database Center for Life Science, Kashiwa, Chiba, Japan",
+        "urlPattern": "http://biohackathon.org/resource/hco#{$id}",
+        "mirId": "MIR:00001039",
+        "description": "Database Center for Life Science (DBCLS) is a part of Research Organization of Information and Systems (ROIS) and has been developing new technologies, services and standards for integrating biological databases, which include those developed and maintained in Japan as well as world-renowned databases.",
+        "official": true,
+        "sampleId": "MT",
+        "resourceHomeUrl": "https://dbcls.rois.ac.jp/",
+        "institution": {
+          "id": 3526,
+          "name": "Database Center for Life Science, Kashiwa, Chiba, Japan",
+          "homeUrl": "https://dbcls.rois.ac.jp/index-en.html",
+          "description": "Database Center for Life Science (DBCLS) is a part of Research Organization of Information and Systems (ROIS) and has been developing new technologies, services and standards for integrating biological databases, which include those developed and maintained in Japan as well as world-renowned databases.",
+          "rorId": null,
+          "location": {
+            "countryCode": "JP",
+            "countryName": "Japan"
+          }
+        },
+        "location": {
+          "countryCode": "JP",
+          "countryName": "Japan"
+        },
+        "deprecated": false,
+        "deprecationDate": null,
+        "protectedUrls": false,
+        "renderProtectedLanding": false,
+        "authHelpUrl": null,
+        "authHelpDescription": null
+      }
+    ],
+    "created": "2024-01-05T09:25:24.380+0000",
+    "modified": "2024-01-05T09:25:24.380+0000",
+    "sampleId": "MT",
+    "deprecated": false,
+    "deprecationDate": null
+  },
   "glycomedb": {
     "id": 363,
     "prefix": "glycomedb",
@@ -460,6 +748,102 @@
     "created": "2019-06-11T14:16:03.253+0000",
     "modified": "2019-06-11T14:16:03.253+0000",
     "sampleId": "G77500AY",
+    "deprecated": false,
+    "deprecationDate": null
+  },
+  "dg.4825": {
+    "id": 3142,
+    "prefix": "dg.4825",
+    "name": "ACCOuNT Data Commons",
+    "pattern": "[0-9a-fA-F]{8}\\-[0-9a-fA-F]{4}\\-[0-9a-fA-F]{4}\\-[0-9a-fA-F]{4}\\-[0-9a-fA-F]{12}",
+    "namespaceEmbeddedInLui": false,
+    "description": "This website provides a centralized, cloud-based discovery portal for African American pharmacogenomics data and aims to accelerate discovery of novel genetic variants in African Americans related to clinically actionable cardiovascular phenotypes.",
+    "mirId": "MIR:00001019",
+    "resources": [
+      {
+        "id": 3143,
+        "providerCode": "dg.4825",
+        "name": "ACCOuNT Data Commons",
+        "urlPattern": "https://gen3.datacommons.io/ga4gh/drs/v1/objects/dg.4825/{$id}",
+        "mirId": "MIR:00001013",
+        "description": "This website provides a centralized, cloud-based discovery portal for African American pharmacogenomics data and aims to accelerate discovery of novel genetic variants in African Americans related to clinically actionable cardiovascular phenotypes.",
+        "official": true,
+        "sampleId": "e322c7d9-a0fa-4a1d-83f0-0f06bda87fe8",
+        "resourceHomeUrl": "https://gen3.datacommons.io",
+        "institution": {
+          "id": 2820,
+          "name": "Open Commons Consortium",
+          "homeUrl": "https://www.occ-data.org/",
+          "description": "The Open Commons Consortium (OCC) manages and operates cloud computing, data commons, and data ecosystems to advance scientific, medical, health care and environmental research for human and societal impact.",
+          "rorId": null,
+          "location": {
+            "countryCode": "US",
+            "countryName": "United States"
+          }
+        },
+        "location": {
+          "countryCode": "US",
+          "countryName": "United States"
+        },
+        "deprecated": false,
+        "deprecationDate": null,
+        "protectedUrls": false,
+        "renderProtectedLanding": false,
+        "authHelpUrl": null,
+        "authHelpDescription": null
+      }
+    ],
+    "created": "2022-02-27T20:30:53.595+0000",
+    "modified": "2024-01-09T16:21:12.604+0000",
+    "sampleId": "e322c7d9-a0fa-4a1d-83f0-0f06bda87fe8",
+    "deprecated": false,
+    "deprecationDate": null
+  },
+  "vectorbase": {
+    "id": 687,
+    "prefix": "vectorbase",
+    "name": "VectorBase",
+    "pattern": "^\\D{4}\\d{6}(\\-\\D{2})?$",
+    "namespaceEmbeddedInLui": false,
+    "description": "VectorBase is part of the VEuPathDB, a NIAID-funded Bioinformatic Resource Center focused on invertebrate vectors of human pathogens and related species of interest. Currently, VectorBase contains genome information for approximately 80 organisms: mosquitoes, bed bugs, biting midges, ticks, tsetse flies, mites, sand flies, house flies, body lice, stable flies, kissing bugs, and a snail which is an intermediate host.",
+    "mirId": "MIR:00000232",
+    "resources": [
+      {
+        "id": 688,
+        "providerCode": "ebi",
+        "name": "Vectorbase at EMBL-EBI",
+        "urlPattern": "https://vectorbase.org/gene/{$id}",
+        "mirId": "MIR:00100291",
+        "description": "Vectorbase at EMBL-EBI",
+        "official": true,
+        "sampleId": "ISCW007415",
+        "resourceHomeUrl": "https://www.vectorbase.org/",
+        "institution": {
+          "id": 2,
+          "name": "European Bioinformatics Institute",
+          "homeUrl": "https://www.ebi.ac.uk",
+          "description": "At EMBL-EBI, we make the world\u2019s public biological data freely available to the scientific community via a range of services and tools, perform basic research and provide professional training in bioinformatics. \nWe are part of the European Molecular Biology Laboratory (EMBL), an international, innovative and interdisciplinary research organisation funded by 26 member states and two associate member states.",
+          "rorId": "https://ror.org/02catss52",
+          "location": {
+            "countryCode": "GB",
+            "countryName": "United Kingdom"
+          }
+        },
+        "location": {
+          "countryCode": "GB",
+          "countryName": "United Kingdom"
+        },
+        "deprecated": false,
+        "deprecationDate": null,
+        "protectedUrls": false,
+        "renderProtectedLanding": false,
+        "authHelpUrl": null,
+        "authHelpDescription": null
+      }
+    ],
+    "created": "2019-06-11T14:16:32.515+0000",
+    "modified": "2024-01-12T10:30:39.284+0000",
+    "sampleId": "ISCW007415",
     "deprecated": false,
     "deprecationDate": null
   },
@@ -1500,12 +1884,12 @@
         "id": 2703,
         "providerCode": "cellrepo",
         "name": "CellRepo",
-        "urlPattern": "https://cellrepo.ico2s.org/repositories/{$id}",
+        "urlPattern": "https://www.cellrepo.com/repositories/{$id}",
         "mirId": "MIR:00000826",
         "description": "CellRepo is the single worldwide version control repository for engineered and natural cell lines",
         "official": true,
-        "sampleId": "82",
-        "resourceHomeUrl": "https://cellrepo.ico2s.org/",
+        "sampleId": "7",
+        "resourceHomeUrl": "https://www.cellrepo.com/",
         "institution": {
           "id": 2701,
           "name": "Interdisciplinary Computing and Complex BioSystems (ICOS) Research Group, Newcastle University, Newcastle upon Tyne, UK",
@@ -15004,54 +15388,6 @@
     "created": "2019-06-11T14:16:31.786+0000",
     "modified": "2019-06-11T14:16:31.786+0000",
     "sampleId": "4349895",
-    "deprecated": false,
-    "deprecationDate": null
-  },
-  "vectorbase": {
-    "id": 687,
-    "prefix": "vectorbase",
-    "name": "VectorBase",
-    "pattern": "^\\D{4}\\d{6}(\\-\\D{2})?$",
-    "namespaceEmbeddedInLui": false,
-    "description": "VectorBase is an NIAID-funded Bioinformatic Resource Center focused on invertebrate vectors of human pathogens. VectorBase annotates and curates vector genomes providing a web accessible integrated resource for the research community. Currently, VectorBase contains genome information for three mosquito species: Aedes aegypti, Anopheles gambiae and Culex quinquefasciatus, a body louse Pediculus humanus and a tick species Ixodes scapularis.",
-    "mirId": "MIR:00000232",
-    "resources": [
-      {
-        "id": 688,
-        "providerCode": "ebi",
-        "name": "Vectorbase at EMBL-EBI",
-        "urlPattern": "https://vectorbase.org/gene/{$id}",
-        "mirId": "MIR:00100291",
-        "description": "Vectorbase at EMBL-EBI",
-        "official": true,
-        "sampleId": "ISCW007415",
-        "resourceHomeUrl": "https://www.vectorbase.org/",
-        "institution": {
-          "id": 2,
-          "name": "European Bioinformatics Institute",
-          "homeUrl": "https://www.ebi.ac.uk",
-          "description": "At EMBL-EBI, we make the world\u2019s public biological data freely available to the scientific community via a range of services and tools, perform basic research and provide professional training in bioinformatics. \nWe are part of the European Molecular Biology Laboratory (EMBL), an international, innovative and interdisciplinary research organisation funded by 26 member states and two associate member states.",
-          "rorId": "https://ror.org/02catss52",
-          "location": {
-            "countryCode": "GB",
-            "countryName": "United Kingdom"
-          }
-        },
-        "location": {
-          "countryCode": "GB",
-          "countryName": "United Kingdom"
-        },
-        "deprecated": false,
-        "deprecationDate": null,
-        "protectedUrls": false,
-        "renderProtectedLanding": false,
-        "authHelpUrl": null,
-        "authHelpDescription": null
-      }
-    ],
-    "created": "2019-06-11T14:16:32.515+0000",
-    "modified": "2019-06-11T14:16:32.515+0000",
-    "sampleId": "ISCW007415",
     "deprecated": false,
     "deprecationDate": null
   },
@@ -36863,86 +37199,6 @@
     "deprecated": false,
     "deprecationDate": null
   },
-  "insdc.gca": {
-    "id": 1685,
-    "prefix": "insdc.gca",
-    "name": "Genome assembly database",
-    "pattern": "^GC[AF]_[0-9]{9}\\.[0-9]+$",
-    "namespaceEmbeddedInLui": false,
-    "description": "The genome assembly database contains detailed information about genome assemblies for eukaryota, bacteria and archaea. The scope of the genome collections database does not extend to viruses, viroids and bacteriophage.",
-    "mirId": "MIR:00000607",
-    "resources": [
-      {
-        "id": 1686,
-        "providerCode": "CURATOR_REVIEW",
-        "name": "Genome assembly database through ENA",
-        "urlPattern": "https://www.ebi.ac.uk/ena/data/view/{$id}",
-        "mirId": "MIR:00100810",
-        "description": "Genome assembly database through ENA",
-        "official": false,
-        "sampleId": "GCA_000155495.1",
-        "resourceHomeUrl": "https://www.ebi.ac.uk/ena/browse/genome-assembly-database",
-        "institution": {
-          "id": 2,
-          "name": "European Bioinformatics Institute",
-          "homeUrl": "https://www.ebi.ac.uk",
-          "description": "At EMBL-EBI, we make the world\u2019s public biological data freely available to the scientific community via a range of services and tools, perform basic research and provide professional training in bioinformatics. \nWe are part of the European Molecular Biology Laboratory (EMBL), an international, innovative and interdisciplinary research organisation funded by 26 member states and two associate member states.",
-          "rorId": "https://ror.org/02catss52",
-          "location": {
-            "countryCode": "GB",
-            "countryName": "United Kingdom"
-          }
-        },
-        "location": {
-          "countryCode": "GB",
-          "countryName": "United Kingdom"
-        },
-        "deprecated": false,
-        "deprecationDate": null,
-        "protectedUrls": false,
-        "renderProtectedLanding": false,
-        "authHelpUrl": null,
-        "authHelpDescription": null
-      },
-      {
-        "id": 1687,
-        "providerCode": "ncbi",
-        "name": "Genome assembly database NCBI",
-        "urlPattern": "https://www.ncbi.nlm.nih.gov/datasets/genome/{$id}",
-        "mirId": "MIR:00100811",
-        "description": "Genome assembly database NCBI",
-        "official": false,
-        "sampleId": "GCA_000155495.1",
-        "resourceHomeUrl": "https://www.ncbi.nlm.nih.gov/datasets/genome/",
-        "institution": {
-          "id": 26,
-          "name": "National Center for Biotechnology Information",
-          "homeUrl": "https://www.ncbi.nlm.nih.gov/",
-          "description": "The National Center for Biotechnology Information advances science and health by providing access to biomedical and genomic information.",
-          "rorId": "https://ror.org/02meqm098",
-          "location": {
-            "countryCode": "US",
-            "countryName": "United States"
-          }
-        },
-        "location": {
-          "countryCode": "US",
-          "countryName": "United States"
-        },
-        "deprecated": false,
-        "deprecationDate": null,
-        "protectedUrls": false,
-        "renderProtectedLanding": false,
-        "authHelpUrl": null,
-        "authHelpDescription": null
-      }
-    ],
-    "created": "2019-06-11T14:18:01.236+0000",
-    "modified": "2020-03-31T12:32:16.941+0000",
-    "sampleId": "GCA_000155495.1",
-    "deprecated": false,
-    "deprecationDate": null
-  },
   "slm": {
     "id": 1539,
     "prefix": "slm",
@@ -37260,6 +37516,86 @@
     "created": "2019-06-11T14:17:05.115+0000",
     "modified": "2020-05-22T10:35:39.544+0000",
     "sampleId": "LRG_1",
+    "deprecated": false,
+    "deprecationDate": null
+  },
+  "insdc.gca": {
+    "id": 1685,
+    "prefix": "insdc.gca",
+    "name": "Genome assembly database - INSDC accessions",
+    "pattern": "^GCA_[0-9]{9}(\\.[0-9]+)?$",
+    "namespaceEmbeddedInLui": false,
+    "description": "The genome assembly database contains detailed information about genome assemblies for eukaryota, bacteria and archaea. The scope of the genome collections database does not extend to viruses, viroids and bacteriophage.",
+    "mirId": "MIR:00000607",
+    "resources": [
+      {
+        "id": 1686,
+        "providerCode": "CURATOR_REVIEW",
+        "name": "Genome assembly database through ENA",
+        "urlPattern": "https://www.ebi.ac.uk/ena/data/view/{$id}",
+        "mirId": "MIR:00100810",
+        "description": "Genome assembly database through ENA",
+        "official": false,
+        "sampleId": "GCA_000155495.1",
+        "resourceHomeUrl": "https://www.ebi.ac.uk/ena/browse/genome-assembly-database",
+        "institution": {
+          "id": 2,
+          "name": "European Bioinformatics Institute",
+          "homeUrl": "https://www.ebi.ac.uk",
+          "description": "At EMBL-EBI, we make the world\u2019s public biological data freely available to the scientific community via a range of services and tools, perform basic research and provide professional training in bioinformatics. \nWe are part of the European Molecular Biology Laboratory (EMBL), an international, innovative and interdisciplinary research organisation funded by 26 member states and two associate member states.",
+          "rorId": "https://ror.org/02catss52",
+          "location": {
+            "countryCode": "GB",
+            "countryName": "United Kingdom"
+          }
+        },
+        "location": {
+          "countryCode": "GB",
+          "countryName": "United Kingdom"
+        },
+        "deprecated": false,
+        "deprecationDate": null,
+        "protectedUrls": false,
+        "renderProtectedLanding": false,
+        "authHelpUrl": null,
+        "authHelpDescription": null
+      },
+      {
+        "id": 1687,
+        "providerCode": "ncbi",
+        "name": "Genome assembly database NCBI",
+        "urlPattern": "https://www.ncbi.nlm.nih.gov/datasets/genome/{$id}",
+        "mirId": "MIR:00100811",
+        "description": "Genome assembly database NCBI",
+        "official": false,
+        "sampleId": "GCA_000155495.1",
+        "resourceHomeUrl": "https://www.ncbi.nlm.nih.gov/datasets/genome/",
+        "institution": {
+          "id": 26,
+          "name": "National Center for Biotechnology Information",
+          "homeUrl": "https://www.ncbi.nlm.nih.gov/",
+          "description": "The National Center for Biotechnology Information advances science and health by providing access to biomedical and genomic information.",
+          "rorId": "https://ror.org/02meqm098",
+          "location": {
+            "countryCode": "US",
+            "countryName": "United States"
+          }
+        },
+        "location": {
+          "countryCode": "US",
+          "countryName": "United States"
+        },
+        "deprecated": false,
+        "deprecationDate": null,
+        "protectedUrls": false,
+        "renderProtectedLanding": false,
+        "authHelpUrl": null,
+        "authHelpDescription": null
+      }
+    ],
+    "created": "2019-06-11T14:18:01.236+0000",
+    "modified": "2023-10-30T09:41:30.572+0000",
+    "sampleId": "GCA_000155495.1",
     "deprecated": false,
     "deprecationDate": null
   },
@@ -40476,12 +40812,12 @@
         "id": 2757,
         "providerCode": "nmdc",
         "name": "Lawrence Berkeley National Laboratory",
-        "urlPattern": "https://drs.microbiomedata.org/objects/{$id}",
+        "urlPattern": "https://w3id.org/nmdc/{$id}",
         "mirId": "MIR:00000836",
-        "description": "Organization information obtained from ROR API using ROR ID 'https://ror.org/02jbv0t02' with Wikidata IDs [Q1133630,Q4686229], and ISNI IDs [0000 0001 2231 4551]",
+        "description": "A federally funded research and development centre in the hills of Berkeley, California, United States. Established in 1931 by the University of California (UC), the laboratory is sponsored by the United States Department of Energy and administered by the UC system.",
         "official": true,
         "sampleId": "6m4e-1vbv-03",
-        "resourceHomeUrl": "https://ror.org/02jbv0t02",
+        "resourceHomeUrl": "http://www.lbl.gov/",
         "institution": {
           "id": 2755,
           "name": "Lawrence Berkeley National Laboratory",
@@ -42140,54 +42476,6 @@
     "created": "2022-02-27T20:30:23.278+0000",
     "modified": "2022-02-27T20:30:23.278+0000",
     "sampleId": "2096a0d6-1846-4b98-9ba3-e4065d82111d",
-    "deprecated": false,
-    "deprecationDate": null
-  },
-  "dg.4825": {
-    "id": 3142,
-    "prefix": "dg.4825",
-    "name": "ACCOuNT Data Commons",
-    "pattern": "[0-9a-fA-F]{8}\\-[0-9a-fA-F]{4}\\-[0-9a-fA-F]{4}\\-[0-9a-fA-F]{4}\\-[0-9a-fA-F]{12}",
-    "namespaceEmbeddedInLui": false,
-    "description": "This website provides a centralized, cloud-based discovery portal for African American pharmacogenomics data and aims to accelerate discovery of novel genetic variants in African Americans related to clinically actionable cardiovascular phenotypes.",
-    "mirId": "MIR:00001019",
-    "resources": [
-      {
-        "id": 3143,
-        "providerCode": "dg.4825",
-        "name": "ACCOuNT Data Commons",
-        "urlPattern": "https://acct.bionimbus.org/ga4gh/drs/v1/objects/{$id}",
-        "mirId": "MIR:00001013",
-        "description": "This website provides a centralized, cloud-based discovery portal for African American pharmacogenomics data and aims to accelerate discovery of novel genetic variants in African Americans related to clinically actionable cardiovascular phenotypes.",
-        "official": true,
-        "sampleId": "003a12b5-1002-4791-bf7f-0d6f71ebd67b",
-        "resourceHomeUrl": "https://acct.bionimbus.org/",
-        "institution": {
-          "id": 2820,
-          "name": "Open Commons Consortium",
-          "homeUrl": "https://www.occ-data.org/",
-          "description": "The Open Commons Consortium (OCC) manages and operates cloud computing, data commons, and data ecosystems to advance scientific, medical, health care and environmental research for human and societal impact.",
-          "rorId": null,
-          "location": {
-            "countryCode": "US",
-            "countryName": "United States"
-          }
-        },
-        "location": {
-          "countryCode": "US",
-          "countryName": "United States"
-        },
-        "deprecated": false,
-        "deprecationDate": null,
-        "protectedUrls": false,
-        "renderProtectedLanding": false,
-        "authHelpUrl": null,
-        "authHelpDescription": null
-      }
-    ],
-    "created": "2022-02-27T20:30:53.595+0000",
-    "modified": "2022-02-27T20:30:53.595+0000",
-    "sampleId": "003a12b5-1002-4791-bf7f-0d6f71ebd67b",
     "deprecated": false,
     "deprecationDate": null
   },

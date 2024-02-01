@@ -1,4 +1,5 @@
 """Caching of information."""
+
 import json
 from json.encoder import JSONEncoder
 from pathlib import Path

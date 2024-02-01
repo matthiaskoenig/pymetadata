@@ -4,6 +4,7 @@ This uses the EMBL-EBI Ontology Lookup Service
 https://www.ebi.ac.uk/ols4
 
 """
+
 import urllib.parse
 from dataclasses import dataclass, field
 from pathlib import Path

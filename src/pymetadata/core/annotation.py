@@ -2,6 +2,7 @@
 
 Core data structure to store annotations.
 """
+
 import re
 import urllib
 from pprint import pprint

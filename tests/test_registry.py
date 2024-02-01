@@ -1,4 +1,5 @@
 """Test identifiers.org registry."""
+
 from pymetadata.identifiers.registry import Registry
 
 

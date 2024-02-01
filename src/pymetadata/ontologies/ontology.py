@@ -5,6 +5,7 @@ Special ontologies are provided as enums.
 
 Uses the OWL links provided on OLS4 to download the ontologies.
 """
+
 import gzip
 import importlib
 import re

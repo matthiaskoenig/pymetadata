@@ -1,4 +1,5 @@
 """Test annotations."""
+
 from typing import Union
 
 import pytest

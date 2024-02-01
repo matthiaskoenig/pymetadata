@@ -4,6 +4,7 @@ Helper tools to work with identifiers registry.
 https://identifiers.org/
 https://docs.identifiers.org/articles/api.html
 """
+
 from __future__ import annotations
 
 import inspect

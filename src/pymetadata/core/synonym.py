@@ -1,4 +1,5 @@
 """Synonym information."""
+
 from dataclasses import dataclass
 
 
