@@ -21,10 +21,6 @@ pymetadata: python utilities for metadata and COMBINE archives
    :target: http://opensource.org/licenses/LGPL-3.0
    :alt: GNU Lesser General Public License 3
 
-.. image:: https://codecov.io/gh/matthiaskoenig/pymetadata/branch/develop/graph/badge.svg
-   :target: https://codecov.io/gh/matthiaskoenig/pymetadata
-   :alt: Codecov
-
 .. image:: https://zenodo.org/badge/DOI/10.5281/zenodo.5308801.svg
    :target: https://doi.org/10.5281/zenodo.5308801
    :alt: Zenodo DOI
@@ -117,4 +113,4 @@ To install for development use::
 
     pip install -e .[development]
 
-© 2021-2022 Matthias König
+© 2021-2024 Matthias König
