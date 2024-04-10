@@ -86,7 +86,7 @@ class OLSQuery:
         self.cache_path = cache_path / "ols"
         self.cache = cache
 
-        if not self.cache_path.exists():
+        if cache and not self.cache_path.exists():
             self.cache_path.mkdir(parents=True)
 
     def get_iri(self, ontology: str, term: str) -> str:
