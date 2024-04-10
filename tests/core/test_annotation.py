@@ -114,6 +114,16 @@ rdf_annotation_data = [
         "http://identifiers.org/GO:0005829",
         "RDFAnnotation(BQB.IS|go|GO:0005829)",
     ),
+    (
+        BQB.IS,
+        "GO:0005829",
+        "RDFAnnotation(BQB.IS|go|GO:0005829)",
+    ),
+    (
+        BQB.IS,
+        "CHEBI:000012",
+        "RDFAnnotation(BQB.IS|chebi|CHEBI:000012)",
+    ),
 ]
 
 
