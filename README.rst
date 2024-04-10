@@ -8,27 +8,21 @@ pymetadata: python utilities for metadata and COMBINE archives
 .. image:: https://github.com/matthiaskoenig/pymetadata/workflows/CI-CD/badge.svg
    :target: https://github.com/matthiaskoenig/pymetadata/workflows/CI-CD
    :alt: GitHub Actions CI/CD Status
-
 .. image:: https://img.shields.io/pypi/v/pymetadata.svg
    :target: https://pypi.org/project/pymetadata/
    :alt: Current PyPI Version
-
 .. image:: https://img.shields.io/pypi/pyversions/pymetadata.svg
    :target: https://pypi.org/project/pymetadata/
    :alt: Supported Python Versions
-
 .. image:: https://img.shields.io/pypi/l/pymetadata.svg
    :target: http://opensource.org/licenses/LGPL-3.0
    :alt: GNU Lesser General Public License 3
-
 .. image:: https://zenodo.org/badge/DOI/10.5281/zenodo.5308801.svg
    :target: https://doi.org/10.5281/zenodo.5308801
    :alt: Zenodo DOI
-
 .. image:: https://img.shields.io/badge/code%20style-black-000000.svg
    :target: https://github.com/ambv/black
    :alt: Black
-
 .. image:: http://www.mypy-lang.org/static/mypy_badge.svg
    :target: http://mypy-lang.org/
    :alt: mypy

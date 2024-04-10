@@ -291,7 +291,7 @@ def try_ontology_import(ontology_id: str) -> None:
 
 if __name__ == "__main__":
     # download latest versions
-    # update_ontology_files()
+    update_ontology_files()
 
     # test loading of OWL files
     # ofile: OntologyFile
