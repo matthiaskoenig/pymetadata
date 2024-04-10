@@ -95,6 +95,102 @@
     "deprecated": false,
     "deprecationDate": null
   },
+  "synapse": {
+    "id": 3808,
+    "prefix": "synapse",
+    "name": "Synapse Data Repository",
+    "pattern": "[0-9]*\\.*[0-9]*",
+    "namespaceEmbeddedInLui": false,
+    "description": "Synapse is a collaborative, open-source research platform that allows teams to share data, track analyses, and collaborate.",
+    "mirId": "MIR:00001043",
+    "resources": [
+      {
+        "id": 3809,
+        "providerCode": "synapse",
+        "name": "Sage Bionetworks",
+        "urlPattern": "https://repo-prod.prod.sagebase.org/ga4gh/drs/v1/objects/syn{$id}",
+        "mirId": "MIR:00001042",
+        "description": "Sage Bionetworks is a trusted leader in data sharing and reuse, enabling a rapid acceleration in biomedical discoveries and the transformation of medicine.",
+        "official": true,
+        "sampleId": "41455251.1",
+        "resourceHomeUrl": "https://sagebionetworks.org",
+        "institution": {
+          "id": 3807,
+          "name": "Sage Bionetworks",
+          "homeUrl": "https://www.sagebionetworks.org",
+          "description": "Sage Bionetworks is a trusted leader in data sharing and reuse, enabling a rapid acceleration in biomedical discoveries and the transformation of medicine.",
+          "rorId": null,
+          "location": {
+            "countryCode": "US",
+            "countryName": "United States"
+          }
+        },
+        "location": {
+          "countryCode": "US",
+          "countryName": "United States"
+        },
+        "deprecated": false,
+        "deprecationDate": null,
+        "protectedUrls": false,
+        "renderProtectedLanding": false,
+        "authHelpUrl": null,
+        "authHelpDescription": null
+      }
+    ],
+    "created": "2024-03-20T10:13:27.272+0000",
+    "modified": "2024-03-20T10:13:27.272+0000",
+    "sampleId": "41455251.1",
+    "deprecated": false,
+    "deprecationDate": null
+  },
+  "cheminf": {
+    "id": 3819,
+    "prefix": "cheminf",
+    "name": "Chemical Information Ontology",
+    "pattern": "^CHEMINF:\\d+$",
+    "namespaceEmbeddedInLui": true,
+    "description": "The chemical information ontology (cheminf) describes information entities about chemical entities. It provides qualitative and quantitative attributes to richly describe chemicals.",
+    "mirId": "MIR:00001045",
+    "resources": [
+      {
+        "id": 3820,
+        "providerCode": "ols",
+        "name": "CHEMINF via OLS",
+        "urlPattern": "https://www.ebi.ac.uk/ols4/ontologies/cheminf/classes?obo_id=CHEMINF:{$id}",
+        "mirId": "MIR:00001044",
+        "description": "The chemical information ontology (cheminf) describes information entities about chemical entities. It provides qualitative and quantitative attributes to richly describe chemicals.",
+        "official": true,
+        "sampleId": "000306",
+        "resourceHomeUrl": "https://www.ebi.ac.uk/ols4/ontologies/cheminf",
+        "institution": {
+          "id": 2,
+          "name": "European Bioinformatics Institute",
+          "homeUrl": "https://www.ebi.ac.uk",
+          "description": "At EMBL-EBI, we make the world\u2019s public biological data freely available to the scientific community via a range of services and tools, perform basic research and provide professional training in bioinformatics. \nWe are part of the European Molecular Biology Laboratory (EMBL), an international, innovative and interdisciplinary research organisation funded by 26 member states and two associate member states.",
+          "rorId": "https://ror.org/02catss52",
+          "location": {
+            "countryCode": "GB",
+            "countryName": "United Kingdom"
+          }
+        },
+        "location": {
+          "countryCode": "GB",
+          "countryName": "United Kingdom"
+        },
+        "deprecated": false,
+        "deprecationDate": null,
+        "protectedUrls": false,
+        "renderProtectedLanding": false,
+        "authHelpUrl": null,
+        "authHelpDescription": null
+      }
+    ],
+    "created": "2024-03-20T10:24:50.346+0000",
+    "modified": "2024-03-20T10:29:26.220+0000",
+    "sampleId": "000306",
+    "deprecated": false,
+    "deprecationDate": null
+  },
   "bgee.stage": {
     "id": 1211,
     "prefix": "bgee.stage",
@@ -188,6 +284,54 @@
     "created": "2023-10-30T09:40:47.492+0000",
     "modified": "2023-10-30T09:40:47.492+0000",
     "sampleId": "0001073",
+    "deprecated": false,
+    "deprecationDate": null
+  },
+  "opl": {
+    "id": 3827,
+    "prefix": "opl",
+    "name": "Ontology for Parasite Lifecycle",
+    "pattern": "^OPL:\\d+$",
+    "namespaceEmbeddedInLui": true,
+    "description": "The Ontology for Parasite Lifecycle (OPL) models the life cycle stage details of various parasites, including Trypanosoma sp., Leishmania major, and Plasmodium sp., etc.",
+    "mirId": "MIR:00001047",
+    "resources": [
+      {
+        "id": 3828,
+        "providerCode": "ols",
+        "name": "OPL via OLS",
+        "urlPattern": "https://www.ebi.ac.uk/ols4/ontologies/opl/classes?obo_id=OPL:{$id}",
+        "mirId": "MIR:00001046",
+        "description": "The Ontology for Parasite Lifecycle (OPL) models the life cycle stage details of various parasites, including Trypanosoma sp., Leishmania major, and Plasmodium sp., etc",
+        "official": true,
+        "sampleId": "0000134",
+        "resourceHomeUrl": "https://www.ebi.ac.uk/ols4/ontologies/opl",
+        "institution": {
+          "id": 2,
+          "name": "European Bioinformatics Institute",
+          "homeUrl": "https://www.ebi.ac.uk",
+          "description": "At EMBL-EBI, we make the world\u2019s public biological data freely available to the scientific community via a range of services and tools, perform basic research and provide professional training in bioinformatics. \nWe are part of the European Molecular Biology Laboratory (EMBL), an international, innovative and interdisciplinary research organisation funded by 26 member states and two associate member states.",
+          "rorId": "https://ror.org/02catss52",
+          "location": {
+            "countryCode": "GB",
+            "countryName": "United Kingdom"
+          }
+        },
+        "location": {
+          "countryCode": "GB",
+          "countryName": "United Kingdom"
+        },
+        "deprecated": false,
+        "deprecationDate": null,
+        "protectedUrls": false,
+        "renderProtectedLanding": false,
+        "authHelpUrl": null,
+        "authHelpDescription": null
+      }
+    ],
+    "created": "2024-03-20T10:39:56.678+0000",
+    "modified": "2024-03-20T10:39:56.678+0000",
+    "sampleId": "0000134",
     "deprecated": false,
     "deprecationDate": null
   },
@@ -287,54 +431,6 @@
     "deprecated": true,
     "deprecationDate": "2023-07-04T10:26:56.707+0000"
   },
-  "miriam.collection": {
-    "id": 41,
-    "prefix": "miriam.collection",
-    "name": "MIRIAM Registry collection",
-    "pattern": "^MIR:000\\d{5}$",
-    "namespaceEmbeddedInLui": false,
-    "description": "MIRIAM Registry is an online resource created to catalogue collections (Gene Ontology, Taxonomy or PubMed are some examples) and the corresponding resources (physical locations) providing access to those data collections. The Registry provides unique and perennial URIs for each entity of those data collections.",
-    "mirId": "MIR:00000008",
-    "resources": [
-      {
-        "id": 42,
-        "providerCode": "ebi",
-        "name": "MIRIAM Resources (data collection)",
-        "urlPattern": "https://registry.identifiers.org/deprecation/resources/MIR:00100005/{$id}",
-        "mirId": "MIR:00100005",
-        "description": "MIRIAM Resources (data collection)",
-        "official": false,
-        "sampleId": "MIR:00000008",
-        "resourceHomeUrl": "https://www.ebi.ac.uk/miriam/",
-        "institution": {
-          "id": 2,
-          "name": "European Bioinformatics Institute",
-          "homeUrl": "https://www.ebi.ac.uk",
-          "description": "At EMBL-EBI, we make the world\u2019s public biological data freely available to the scientific community via a range of services and tools, perform basic research and provide professional training in bioinformatics. \nWe are part of the European Molecular Biology Laboratory (EMBL), an international, innovative and interdisciplinary research organisation funded by 26 member states and two associate member states.",
-          "rorId": "https://ror.org/02catss52",
-          "location": {
-            "countryCode": "GB",
-            "countryName": "United Kingdom"
-          }
-        },
-        "location": {
-          "countryCode": "GB",
-          "countryName": "United Kingdom"
-        },
-        "deprecated": true,
-        "deprecationDate": "2020-06-04T10:00:30.300+0000",
-        "protectedUrls": false,
-        "renderProtectedLanding": false,
-        "authHelpUrl": null,
-        "authHelpDescription": null
-      }
-    ],
-    "created": "2019-06-11T14:15:31.442+0000",
-    "modified": "2023-09-13T08:57:20.977+0000",
-    "sampleId": "MIR:00000008",
-    "deprecated": true,
-    "deprecationDate": "2020-06-04T11:17:21.453+0000"
-  },
   "ncbidrs": {
     "id": 3730,
     "prefix": "ncbidrs",
@@ -380,6 +476,102 @@
     "created": "2023-10-31T16:13:48.191+0000",
     "modified": "2023-10-31T16:13:48.191+0000",
     "sampleId": "72ff6ff882ec447f12df018e6183de59",
+    "deprecated": false,
+    "deprecationDate": null
+  },
+  "miriam.collection": {
+    "id": 41,
+    "prefix": "miriam.collection",
+    "name": "MIRIAM Registry collection",
+    "pattern": "^MIR:000\\d{5}$",
+    "namespaceEmbeddedInLui": false,
+    "description": "MIRIAM Registry is an online resource created to catalogue collections (Gene Ontology, Taxonomy or PubMed are some examples) and the corresponding resources (physical locations) providing access to those data collections. The Registry provides unique and perennial URIs for each entity of those data collections.",
+    "mirId": "MIR:00000008",
+    "resources": [
+      {
+        "id": 42,
+        "providerCode": "ebi",
+        "name": "MIRIAM Resources (data collection)",
+        "urlPattern": "https://registry.identifiers.org/deprecation/resources/MIR:00100005/{$id}",
+        "mirId": "MIR:00100005",
+        "description": "MIRIAM Resources (data collection)",
+        "official": false,
+        "sampleId": "MIR:00000008",
+        "resourceHomeUrl": "https://www.ebi.ac.uk/miriam/",
+        "institution": {
+          "id": 2,
+          "name": "European Bioinformatics Institute",
+          "homeUrl": "https://www.ebi.ac.uk",
+          "description": "At EMBL-EBI, we make the world\u2019s public biological data freely available to the scientific community via a range of services and tools, perform basic research and provide professional training in bioinformatics. \nWe are part of the European Molecular Biology Laboratory (EMBL), an international, innovative and interdisciplinary research organisation funded by 26 member states and two associate member states.",
+          "rorId": "https://ror.org/02catss52",
+          "location": {
+            "countryCode": "GB",
+            "countryName": "United Kingdom"
+          }
+        },
+        "location": {
+          "countryCode": "GB",
+          "countryName": "United Kingdom"
+        },
+        "deprecated": true,
+        "deprecationDate": "2020-06-04T10:00:30.300+0000",
+        "protectedUrls": false,
+        "renderProtectedLanding": false,
+        "authHelpUrl": null,
+        "authHelpDescription": null
+      }
+    ],
+    "created": "2019-06-11T14:15:31.442+0000",
+    "modified": "2024-02-06T14:56:58.330+0000",
+    "sampleId": "MIR:00000008",
+    "deprecated": true,
+    "deprecationDate": "2020-06-04T11:17:21.453+0000"
+  },
+  "mcro": {
+    "id": 3832,
+    "prefix": "mcro",
+    "name": "Model Card Ontology",
+    "pattern": "^MCRO:\\d+$",
+    "namespaceEmbeddedInLui": true,
+    "description": "An ontology representing the model card structure, he aim of this work is to describe machine learning models to communicate information about specific details about the model (trade offs, intended users, licensing, etc.). ",
+    "mirId": "MIR:00001049",
+    "resources": [
+      {
+        "id": 3833,
+        "providerCode": "ols",
+        "name": "MCRO via OLS",
+        "urlPattern": "https://www.ebi.ac.uk/ols4/ontologies/mcro/classes?obo_id=MCRO:{$id}",
+        "mirId": "MIR:00001048",
+        "description": "ontology modeling the model card report for machine learning model assests",
+        "official": true,
+        "sampleId": "0000027",
+        "resourceHomeUrl": "https://www.ebi.ac.uk/ols4/ontologies/mcro",
+        "institution": {
+          "id": 2,
+          "name": "European Bioinformatics Institute",
+          "homeUrl": "https://www.ebi.ac.uk",
+          "description": "At EMBL-EBI, we make the world\u2019s public biological data freely available to the scientific community via a range of services and tools, perform basic research and provide professional training in bioinformatics. \nWe are part of the European Molecular Biology Laboratory (EMBL), an international, innovative and interdisciplinary research organisation funded by 26 member states and two associate member states.",
+          "rorId": "https://ror.org/02catss52",
+          "location": {
+            "countryCode": "GB",
+            "countryName": "United Kingdom"
+          }
+        },
+        "location": {
+          "countryCode": "GB",
+          "countryName": "United Kingdom"
+        },
+        "deprecated": false,
+        "deprecationDate": null,
+        "protectedUrls": false,
+        "renderProtectedLanding": false,
+        "authHelpUrl": null,
+        "authHelpDescription": null
+      }
+    ],
+    "created": "2024-03-20T10:56:06.644+0000",
+    "modified": "2024-03-20T10:56:06.644+0000",
+    "sampleId": "0000027",
     "deprecated": false,
     "deprecationDate": null
   },
@@ -511,6 +703,54 @@
     "deprecated": false,
     "deprecationDate": null
   },
+  "stato": {
+    "id": 3842,
+    "prefix": "stato",
+    "name": "Statistical Ontology",
+    "pattern": "^STATO:\\d+$",
+    "namespaceEmbeddedInLui": true,
+    "description": "STATO is the statistical methods ontology. It contains concepts and properties related to statistical methods, probability distributions and other concepts related to statistical analysis, including relationships to study designs and plots.",
+    "mirId": "MIR:00001051",
+    "resources": [
+      {
+        "id": 3843,
+        "providerCode": "ols",
+        "name": "European Bioinformatics Institute",
+        "urlPattern": "https://www.ebi.ac.uk/ols4/ontologies/stato/classes?obo_id=STATO:{$id}",
+        "mirId": "MIR:00001050",
+        "description": "At EMBL-EBI, we make the world\u2019s public biological data freely available to the scientific community via a range of services and tools, perform basic research and provide professional training in bioinformatics. \nWe are part of the European Molecular Biology Laboratory (EMBL), an international, innovative and interdisciplinary research organisation funded by 26 member states and two associate member states.",
+        "official": true,
+        "sampleId": "0000138",
+        "resourceHomeUrl": "https://www.ebi.ac.uk",
+        "institution": {
+          "id": 2,
+          "name": "European Bioinformatics Institute",
+          "homeUrl": "https://www.ebi.ac.uk",
+          "description": "At EMBL-EBI, we make the world\u2019s public biological data freely available to the scientific community via a range of services and tools, perform basic research and provide professional training in bioinformatics. \nWe are part of the European Molecular Biology Laboratory (EMBL), an international, innovative and interdisciplinary research organisation funded by 26 member states and two associate member states.",
+          "rorId": "https://ror.org/02catss52",
+          "location": {
+            "countryCode": "GB",
+            "countryName": "United Kingdom"
+          }
+        },
+        "location": {
+          "countryCode": "GB",
+          "countryName": "United Kingdom"
+        },
+        "deprecated": false,
+        "deprecationDate": null,
+        "protectedUrls": false,
+        "renderProtectedLanding": false,
+        "authHelpUrl": null,
+        "authHelpDescription": null
+      }
+    ],
+    "created": "2024-03-20T11:10:30.918+0000",
+    "modified": "2024-03-20T11:10:30.918+0000",
+    "sampleId": "0000138",
+    "deprecated": false,
+    "deprecationDate": null
+  },
   "macie": {
     "id": 261,
     "prefix": "macie",
@@ -604,6 +844,86 @@
     "created": "2023-11-27T10:19:40.971+0000",
     "modified": "2023-11-27T10:19:40.971+0000",
     "sampleId": "frim1",
+    "deprecated": false,
+    "deprecationDate": null
+  },
+  "edam": {
+    "id": 575,
+    "prefix": "edam",
+    "name": "EDAM Ontology",
+    "pattern": "^(data|topic|operation|format)\\_\\d{4}$",
+    "namespaceEmbeddedInLui": false,
+    "description": "EDAM is an ontology of general bioinformatics concepts, including topics, data types, formats, identifiers and operations. EDAM provides a controlled vocabulary for the description, in semantic terms, of things such as: web services (e.g. WSDL files), applications, tool collections and packages, work-benches and workflow software, databases and ontologies, XSD data schema and data objects, data syntax and file formats, web portals and pages, resource catalogues and documents (such as scientific publications).",
+    "mirId": "MIR:00000189",
+    "resources": [
+      {
+        "id": 576,
+        "providerCode": "bptl",
+        "name": "EDAM through BioPortal",
+        "urlPattern": "http://purl.bioontology.org/ontology/EDAM/{$id}",
+        "mirId": "MIR:00100536",
+        "description": "EDAM through BioPortal",
+        "official": false,
+        "sampleId": "data_1664",
+        "resourceHomeUrl": "http://bioportal.bioontology.org/ontologies/EDAM",
+        "institution": {
+          "id": 5,
+          "name": "National Center for Biomedical Ontology, Stanford",
+          "homeUrl": "https://ncbo.bioontology.org/",
+          "description": "The goal of the National Center for Biomedical Ontology is to support biomedical researchers in their knowledge-intensive work, by providing online tools and a Web portal enabling them to access, review, and integrate disparate ontological resources in all aspects of biomedical investigation and clinical practice. A major focus of our work involves the use of biomedical ontologies to aid in the management and analysis of data derived from complex experiments.",
+          "rorId": null,
+          "location": {
+            "countryCode": "US",
+            "countryName": "United States"
+          }
+        },
+        "location": {
+          "countryCode": "US",
+          "countryName": "United States"
+        },
+        "deprecated": false,
+        "deprecationDate": null,
+        "protectedUrls": false,
+        "renderProtectedLanding": false,
+        "authHelpUrl": null,
+        "authHelpDescription": null
+      },
+      {
+        "id": 577,
+        "providerCode": "ols",
+        "name": "EDAM through OLS",
+        "urlPattern": "https://www.ebi.ac.uk/ols4/ontologies/edam/terms?short_form={$id}",
+        "mirId": "MIR:00100762",
+        "description": "EDAM through OLS",
+        "official": false,
+        "sampleId": "data_1664",
+        "resourceHomeUrl": "https://www.ebi.ac.uk/ols4/ontologies/edam",
+        "institution": {
+          "id": 2,
+          "name": "European Bioinformatics Institute",
+          "homeUrl": "https://www.ebi.ac.uk",
+          "description": "At EMBL-EBI, we make the world\u2019s public biological data freely available to the scientific community via a range of services and tools, perform basic research and provide professional training in bioinformatics. \nWe are part of the European Molecular Biology Laboratory (EMBL), an international, innovative and interdisciplinary research organisation funded by 26 member states and two associate member states.",
+          "rorId": "https://ror.org/02catss52",
+          "location": {
+            "countryCode": "GB",
+            "countryName": "United Kingdom"
+          }
+        },
+        "location": {
+          "countryCode": "GB",
+          "countryName": "United Kingdom"
+        },
+        "deprecated": false,
+        "deprecationDate": null,
+        "protectedUrls": false,
+        "renderProtectedLanding": false,
+        "authHelpUrl": null,
+        "authHelpDescription": null
+      }
+    ],
+    "created": "2019-06-11T14:16:22.318+0000",
+    "modified": "2024-03-20T11:53:50.927+0000",
+    "sampleId": "data_1664",
     "deprecated": false,
     "deprecationDate": null
   },
@@ -703,6 +1023,54 @@
     "deprecated": false,
     "deprecationDate": null
   },
+  "obcs": {
+    "id": 3852,
+    "prefix": "obcs",
+    "name": " Ontology of Biological and Clinical Statistics",
+    "pattern": "^OBCS:\\d+$",
+    "namespaceEmbeddedInLui": true,
+    "description": "OBCS stands for the Ontology of Biological and Clinical Statistics. OBCS is an ontology in the domain of biological and clinical statistics. It is aligned with the Basic Formal Ontology (BFO) and the Ontology for Biomedical Investigations (OBI)",
+    "mirId": "MIR:00001053",
+    "resources": [
+      {
+        "id": 3853,
+        "providerCode": "ols",
+        "name": "OBCS via OLS",
+        "urlPattern": "https://www.ebi.ac.uk/ols4/ontologies/obcs/classes?obo_id=OBCS:{$id}",
+        "mirId": "MIR:00001052",
+        "description": "OBCS stands for the Ontology of Biological and Clinical Statistics",
+        "official": true,
+        "sampleId": "0000086",
+        "resourceHomeUrl": "https://www.ebi.ac.uk/ols4/ontologies/obcs",
+        "institution": {
+          "id": 2,
+          "name": "European Bioinformatics Institute",
+          "homeUrl": "https://www.ebi.ac.uk",
+          "description": "At EMBL-EBI, we make the world\u2019s public biological data freely available to the scientific community via a range of services and tools, perform basic research and provide professional training in bioinformatics. \nWe are part of the European Molecular Biology Laboratory (EMBL), an international, innovative and interdisciplinary research organisation funded by 26 member states and two associate member states.",
+          "rorId": "https://ror.org/02catss52",
+          "location": {
+            "countryCode": "GB",
+            "countryName": "United Kingdom"
+          }
+        },
+        "location": {
+          "countryCode": "GB",
+          "countryName": "United Kingdom"
+        },
+        "deprecated": false,
+        "deprecationDate": null,
+        "protectedUrls": false,
+        "renderProtectedLanding": false,
+        "authHelpUrl": null,
+        "authHelpDescription": null
+      }
+    ],
+    "created": "2024-03-21T14:43:39.901+0000",
+    "modified": "2024-03-21T14:43:39.901+0000",
+    "sampleId": "0000086",
+    "deprecated": false,
+    "deprecationDate": null
+  },
   "glycomedb": {
     "id": 363,
     "prefix": "glycomedb",
@@ -799,6 +1167,86 @@
     "deprecated": false,
     "deprecationDate": null
   },
+  "mzspec": {
+    "id": 1735,
+    "prefix": "mzspec",
+    "name": "Universal Spectrum Identifier",
+    "pattern": "^mzspec:.+$",
+    "namespaceEmbeddedInLui": true,
+    "description": "The Universal Spectrum Identifier (USI) is a compound identifier that provides an abstract path to refer to a single spectrum generated by a mass spectrometer, and potentially the ion that is thought to have produced it.",
+    "mirId": "MIR:00000625",
+    "resources": [
+      {
+        "id": 2394,
+        "providerCode": "pc",
+        "name": "Institute for Systems Biology, Seattle, USA",
+        "urlPattern": "http://proteomecentral.proteomexchange.org/usi/?usi=mzspec:{$id}",
+        "mirId": "MIR:00000771",
+        "description": "Institute for Systems Biology (ISB), Seattle, USA is an independent research institute focusing on systems biology.",
+        "official": true,
+        "sampleId": "PXD000865:00603_F01_P004608_B00F_A00_R1:scan:14453:SSLLDVLAAR/2",
+        "resourceHomeUrl": "http://proteomecentral.proteomexchange.org/",
+        "institution": {
+          "id": 193,
+          "name": "Institute for Systems Biology",
+          "homeUrl": "https://isbscience.org/",
+          "description": "ISB was created in 2000 as the first-ever institute dedicated to systems biology.",
+          "rorId": "https://ror.org/02tpgw303",
+          "location": {
+            "countryCode": "US",
+            "countryName": "United States"
+          }
+        },
+        "location": {
+          "countryCode": "US",
+          "countryName": "United States"
+        },
+        "deprecated": false,
+        "deprecationDate": null,
+        "protectedUrls": false,
+        "renderProtectedLanding": false,
+        "authHelpUrl": null,
+        "authHelpDescription": null
+      },
+      {
+        "id": 1737,
+        "providerCode": "CURATOR_REVIEW",
+        "name": "Universal Spectrum Identifier through Peptide Atlas",
+        "urlPattern": "https://db.systemsbiology.net/sbeams/cgi/PeptideAtlas/ShowObservedSpectrum?usi=mzspec:{$id}",
+        "mirId": "MIR:00100829",
+        "description": "Universal Spectrum Identifier through Peptide Atlas",
+        "official": false,
+        "sampleId": "PXD002255:ES_XP_Ubi_97H_HCD_349:scan:9617:LAEIYVNSSFYK/2",
+        "resourceHomeUrl": "https://db.systemsbiology.net/sbeams/cgi/PeptideAtlas/ShowObservedSpectrum",
+        "institution": {
+          "id": 193,
+          "name": "Institute for Systems Biology",
+          "homeUrl": "https://isbscience.org/",
+          "description": "ISB was created in 2000 as the first-ever institute dedicated to systems biology.",
+          "rorId": "https://ror.org/02tpgw303",
+          "location": {
+            "countryCode": "US",
+            "countryName": "United States"
+          }
+        },
+        "location": {
+          "countryCode": "US",
+          "countryName": "United States"
+        },
+        "deprecated": false,
+        "deprecationDate": null,
+        "protectedUrls": false,
+        "renderProtectedLanding": false,
+        "authHelpUrl": null,
+        "authHelpDescription": null
+      }
+    ],
+    "created": "2019-06-11T14:18:05.468+0000",
+    "modified": "2024-03-22T09:42:52.380+0000",
+    "sampleId": "PXD002255:ES_XP_Ubi_97H_HCD_349:scan:9617:LAEIYVNSSFYK/2",
+    "deprecated": false,
+    "deprecationDate": null
+  },
   "vectorbase": {
     "id": 687,
     "prefix": "vectorbase",
@@ -846,6 +1294,102 @@
     "sampleId": "ISCW007415",
     "deprecated": false,
     "deprecationDate": null
+  },
+  "pride": {
+    "id": 228,
+    "prefix": "pride",
+    "name": "PRIDE",
+    "pattern": "^\\d+$",
+    "namespaceEmbeddedInLui": false,
+    "description": "The PRIDE PRoteomics IDEntifications database is a centralized, standards compliant, public data repository that provides protein and peptide identifications together with supporting evidence. This collection references experiments and assays.",
+    "mirId": "MIR:00000065",
+    "resources": [
+      {
+        "id": 229,
+        "providerCode": "ebi",
+        "name": "PRIDE at EBI",
+        "urlPattern": "https://www.ebi.ac.uk/pride/archive/assays/{$id}",
+        "mirId": "MIR:00100094",
+        "description": "PRIDE at EBI",
+        "official": true,
+        "sampleId": "1",
+        "resourceHomeUrl": "https://www.ebi.ac.uk/pride/",
+        "institution": {
+          "id": 2,
+          "name": "European Bioinformatics Institute",
+          "homeUrl": "https://www.ebi.ac.uk",
+          "description": "At EMBL-EBI, we make the world\u2019s public biological data freely available to the scientific community via a range of services and tools, perform basic research and provide professional training in bioinformatics. \nWe are part of the European Molecular Biology Laboratory (EMBL), an international, innovative and interdisciplinary research organisation funded by 26 member states and two associate member states.",
+          "rorId": "https://ror.org/02catss52",
+          "location": {
+            "countryCode": "GB",
+            "countryName": "United Kingdom"
+          }
+        },
+        "location": {
+          "countryCode": "GB",
+          "countryName": "United Kingdom"
+        },
+        "deprecated": false,
+        "deprecationDate": null,
+        "protectedUrls": false,
+        "renderProtectedLanding": false,
+        "authHelpUrl": null,
+        "authHelpDescription": null
+      }
+    ],
+    "created": "2019-06-11T14:15:50.454+0000",
+    "modified": "2024-03-22T10:18:22.059+0000",
+    "sampleId": "1",
+    "deprecated": true,
+    "deprecationDate": "2024-03-22T09:58:34.344+0000"
+  },
+  "3dmet": {
+    "id": 230,
+    "prefix": "3dmet",
+    "name": "3DMET",
+    "pattern": "^B\\d{5}$",
+    "namespaceEmbeddedInLui": false,
+    "description": "3DMET is a database collecting three-dimensional structures of natural metabolites.",
+    "mirId": "MIR:00000066",
+    "resources": [
+      {
+        "id": 232,
+        "providerCode": "nias",
+        "name": "3DMET database",
+        "urlPattern": "http://www.3dmet.dna.affrc.go.jp/cgi/show_data.php?acc={$id}",
+        "mirId": "MIR:00100095",
+        "description": "3DMET database",
+        "official": false,
+        "sampleId": "B00162",
+        "resourceHomeUrl": "http://www.3dmet.dna.affrc.go.jp/",
+        "institution": {
+          "id": 231,
+          "name": "National Institute of Agrobiological Sciences",
+          "homeUrl": "http://www.naro.affrc.go.jp/archive/nias/index_e.html",
+          "description": "The National Institute of Agrobiological Sciences (NIAS) is the largest agricultural research institute in Japan for basic life sciences. As a major research institute of the Ministry of Agriculture, Forestry and Fisheries (MAFF), it was formerly known as the National Institute of Agrobiological Resources (NIAR) until it was re-established as an independent administrative institution in April 1, 2001. The institute focuses on understanding the biological phenomena of agriculturally important plants, insects, microbes and animals to create innovative technologies, and eventually contribute to the solution of global issues such as food shortage due to rapid population growth and environmental problems due to climate change",
+          "rorId": "https://ror.org/01786mp71",
+          "location": {
+            "countryCode": "JP",
+            "countryName": "Japan"
+          }
+        },
+        "location": {
+          "countryCode": "JP",
+          "countryName": "Japan"
+        },
+        "deprecated": false,
+        "deprecationDate": null,
+        "protectedUrls": false,
+        "renderProtectedLanding": false,
+        "authHelpUrl": null,
+        "authHelpDescription": null
+      }
+    ],
+    "created": "2019-06-11T14:15:50.652+0000",
+    "modified": "2024-02-12T09:37:02.753+0000",
+    "sampleId": "B00162",
+    "deprecated": true,
+    "deprecationDate": "2024-02-12T09:35:45.473+0000"
   },
   "dragondb.allele": {
     "id": 873,
@@ -2860,7 +3404,7 @@
         "id": 45,
         "providerCode": "CURATOR_REVIEW",
         "name": "International Statistical Classification of Diseases and Related Health Problems",
-        "urlPattern": "http://apps.who.int/classifications/icd10/browse/2010/en#/{$id}",
+        "urlPattern": "https://icd.who.int/browse10/2019/en#/{$id}",
         "mirId": "MIR:00100016",
         "description": "International Statistical Classification of Diseases and Related Health Problems",
         "official": false,
@@ -6716,102 +7260,6 @@
     "created": "2019-06-11T14:15:50.037+0000",
     "modified": "2019-06-11T14:15:50.037+0000",
     "sampleId": "9781584885658",
-    "deprecated": false,
-    "deprecationDate": null
-  },
-  "pride": {
-    "id": 228,
-    "prefix": "pride",
-    "name": "PRIDE",
-    "pattern": "^\\d+$",
-    "namespaceEmbeddedInLui": false,
-    "description": "The PRIDE PRoteomics IDEntifications database is a centralized, standards compliant, public data repository that provides protein and peptide identifications together with supporting evidence. This collection references experiments and assays.",
-    "mirId": "MIR:00000065",
-    "resources": [
-      {
-        "id": 229,
-        "providerCode": "ebi",
-        "name": "PRIDE at EBI",
-        "urlPattern": "https://www.ebi.ac.uk/pride/archive/assays/{$id}",
-        "mirId": "MIR:00100094",
-        "description": "PRIDE at EBI",
-        "official": true,
-        "sampleId": "1",
-        "resourceHomeUrl": "https://www.ebi.ac.uk/pride/",
-        "institution": {
-          "id": 2,
-          "name": "European Bioinformatics Institute",
-          "homeUrl": "https://www.ebi.ac.uk",
-          "description": "At EMBL-EBI, we make the world\u2019s public biological data freely available to the scientific community via a range of services and tools, perform basic research and provide professional training in bioinformatics. \nWe are part of the European Molecular Biology Laboratory (EMBL), an international, innovative and interdisciplinary research organisation funded by 26 member states and two associate member states.",
-          "rorId": "https://ror.org/02catss52",
-          "location": {
-            "countryCode": "GB",
-            "countryName": "United Kingdom"
-          }
-        },
-        "location": {
-          "countryCode": "GB",
-          "countryName": "United Kingdom"
-        },
-        "deprecated": false,
-        "deprecationDate": null,
-        "protectedUrls": false,
-        "renderProtectedLanding": false,
-        "authHelpUrl": null,
-        "authHelpDescription": null
-      }
-    ],
-    "created": "2019-06-11T14:15:50.454+0000",
-    "modified": "2019-06-11T14:15:50.454+0000",
-    "sampleId": "1",
-    "deprecated": false,
-    "deprecationDate": null
-  },
-  "3dmet": {
-    "id": 230,
-    "prefix": "3dmet",
-    "name": "3DMET",
-    "pattern": "^B\\d{5}$",
-    "namespaceEmbeddedInLui": false,
-    "description": "3DMET is a database collecting three-dimensional structures of natural metabolites.",
-    "mirId": "MIR:00000066",
-    "resources": [
-      {
-        "id": 232,
-        "providerCode": "nias",
-        "name": "3DMET database",
-        "urlPattern": "http://www.3dmet.dna.affrc.go.jp/cgi/show_data.php?acc={$id}",
-        "mirId": "MIR:00100095",
-        "description": "3DMET database",
-        "official": false,
-        "sampleId": "B00162",
-        "resourceHomeUrl": "http://www.3dmet.dna.affrc.go.jp/",
-        "institution": {
-          "id": 231,
-          "name": "National Institute of Agrobiological Sciences",
-          "homeUrl": "http://www.naro.affrc.go.jp/archive/nias/index_e.html",
-          "description": "The National Institute of Agrobiological Sciences (NIAS) is the largest agricultural research institute in Japan for basic life sciences. As a major research institute of the Ministry of Agriculture, Forestry and Fisheries (MAFF), it was formerly known as the National Institute of Agrobiological Resources (NIAR) until it was re-established as an independent administrative institution in April 1, 2001. The institute focuses on understanding the biological phenomena of agriculturally important plants, insects, microbes and animals to create innovative technologies, and eventually contribute to the solution of global issues such as food shortage due to rapid population growth and environmental problems due to climate change",
-          "rorId": "https://ror.org/01786mp71",
-          "location": {
-            "countryCode": "JP",
-            "countryName": "Japan"
-          }
-        },
-        "location": {
-          "countryCode": "JP",
-          "countryName": "Japan"
-        },
-        "deprecated": false,
-        "deprecationDate": null,
-        "protectedUrls": false,
-        "renderProtectedLanding": false,
-        "authHelpUrl": null,
-        "authHelpDescription": null
-      }
-    ],
-    "created": "2019-06-11T14:15:50.652+0000",
-    "modified": "2019-06-11T14:15:50.652+0000",
-    "sampleId": "B00162",
     "deprecated": false,
     "deprecationDate": null
   },
@@ -13372,86 +13820,6 @@
     "created": "2019-06-11T14:16:32.004+0000",
     "modified": "2019-06-11T14:16:32.004+0000",
     "sampleId": "101",
-    "deprecated": false,
-    "deprecationDate": null
-  },
-  "edam": {
-    "id": 575,
-    "prefix": "edam",
-    "name": "EDAM Ontology",
-    "pattern": "^(data|topic|operation|format)\\_\\d{4}$",
-    "namespaceEmbeddedInLui": false,
-    "description": "EDAM is an ontology of general bioinformatics concepts, including topics, data types, formats, identifiers and operations. EDAM provides a controlled vocabulary for the description, in semantic terms, of things such as: web services (e.g. WSDL files), applications, tool collections and packages, work-benches and workflow software, databases and ontologies, XSD data schema and data objects, data syntax and file formats, web portals and pages, resource catalogues and documents (such as scientific publications).",
-    "mirId": "MIR:00000189",
-    "resources": [
-      {
-        "id": 576,
-        "providerCode": "bptl",
-        "name": "EDAM through BioPortal",
-        "urlPattern": "http://purl.bioontology.org/ontology/EDAM/{$id}",
-        "mirId": "MIR:00100536",
-        "description": "EDAM through BioPortal",
-        "official": false,
-        "sampleId": "data_1664",
-        "resourceHomeUrl": "http://bioportal.bioontology.org/ontologies/EDAM",
-        "institution": {
-          "id": 5,
-          "name": "National Center for Biomedical Ontology, Stanford",
-          "homeUrl": "https://ncbo.bioontology.org/",
-          "description": "The goal of the National Center for Biomedical Ontology is to support biomedical researchers in their knowledge-intensive work, by providing online tools and a Web portal enabling them to access, review, and integrate disparate ontological resources in all aspects of biomedical investigation and clinical practice. A major focus of our work involves the use of biomedical ontologies to aid in the management and analysis of data derived from complex experiments.",
-          "rorId": null,
-          "location": {
-            "countryCode": "US",
-            "countryName": "United States"
-          }
-        },
-        "location": {
-          "countryCode": "US",
-          "countryName": "United States"
-        },
-        "deprecated": false,
-        "deprecationDate": null,
-        "protectedUrls": false,
-        "renderProtectedLanding": false,
-        "authHelpUrl": null,
-        "authHelpDescription": null
-      },
-      {
-        "id": 577,
-        "providerCode": "ols",
-        "name": "EDAM through OLS",
-        "urlPattern": "https://www.ebi.ac.uk/ols4/ontologies/edam/terms?short_form={$id}",
-        "mirId": "MIR:00100762",
-        "description": "EDAM through OLS",
-        "official": false,
-        "sampleId": "data_1664",
-        "resourceHomeUrl": "https://www.ebi.ac.uk/ols4/ontologies/edam",
-        "institution": {
-          "id": 2,
-          "name": "European Bioinformatics Institute",
-          "homeUrl": "https://www.ebi.ac.uk",
-          "description": "At EMBL-EBI, we make the world\u2019s public biological data freely available to the scientific community via a range of services and tools, perform basic research and provide professional training in bioinformatics. \nWe are part of the European Molecular Biology Laboratory (EMBL), an international, innovative and interdisciplinary research organisation funded by 26 member states and two associate member states.",
-          "rorId": "https://ror.org/02catss52",
-          "location": {
-            "countryCode": "GB",
-            "countryName": "United Kingdom"
-          }
-        },
-        "location": {
-          "countryCode": "GB",
-          "countryName": "United Kingdom"
-        },
-        "deprecated": false,
-        "deprecationDate": null,
-        "protectedUrls": false,
-        "renderProtectedLanding": false,
-        "authHelpUrl": null,
-        "authHelpDescription": null
-      }
-    ],
-    "created": "2019-06-11T14:16:22.318+0000",
-    "modified": "2019-06-11T14:16:22.318+0000",
-    "sampleId": "data_1664",
     "deprecated": false,
     "deprecationDate": null
   },
@@ -21404,7 +21772,7 @@
         "id": 1040,
         "providerCode": "ebi",
         "name": "HGNC Symbol at HUGO Genome Nomenclature Committee",
-        "urlPattern": "https://www.genenames.org/cgi-bin/gene_symbol_report?match={$id}",
+        "urlPattern": "https://www.genenames.org/data/gene-symbol-report/#!/symbol/{$id}",
         "mirId": "MIR:00100460",
         "description": "HGNC Symbol at HUGO Genome Nomenclature Committee",
         "official": false,
@@ -23900,12 +24268,12 @@
         "id": 1188,
         "providerCode": "ebi",
         "name": "Rfam at EMBL-EBI",
-        "urlPattern": "https://rfam.xfam.org/family/{$id}",
+        "urlPattern": "https://rfam.org/family/{$id}",
         "mirId": "MIR:00100686",
         "description": "Rfam at EMBL-EBI",
         "official": true,
         "sampleId": "RF00230",
-        "resourceHomeUrl": "https://rfam.xfam.org/",
+        "resourceHomeUrl": "https://rfam.org/",
         "institution": {
           "id": 2,
           "name": "European Bioinformatics Institute",
@@ -32369,7 +32737,7 @@
         "description": "dbGaP through NCBI",
         "official": true,
         "sampleId": "phs000768.v2.p1",
-        "resourceHomeUrl": "https://www.ncbi.nlm.nih.gov/projects/gap",
+        "resourceHomeUrl": "https://www.ncbi.nlm.nih.gov/gap/",
         "institution": {
           "id": 26,
           "name": "National Center for Biotechnology Information",
@@ -33276,86 +33644,6 @@
     "created": "2019-06-11T14:18:05.215+0000",
     "modified": "2019-06-11T14:18:05.215+0000",
     "sampleId": "17:41223048",
-    "deprecated": false,
-    "deprecationDate": null
-  },
-  "mzspec": {
-    "id": 1735,
-    "prefix": "mzspec",
-    "name": "Universal Spectrum Identifier",
-    "pattern": "^mzspec:.+$",
-    "namespaceEmbeddedInLui": true,
-    "description": "The Universal Spectrum Identifier (USI) is a compound identifier that provides an abstract path to refer to a single spectrum generated by a mass spectrometer, and potentially the ion that is thought to have produced it.",
-    "mirId": "MIR:00000625",
-    "resources": [
-      {
-        "id": 1737,
-        "providerCode": "CURATOR_REVIEW",
-        "name": "Universal Spectrum Identifier through Peptide Atlas",
-        "urlPattern": "https://db.systemsbiology.net/sbeams/cgi/PeptideAtlas/ShowObservedSpectrum?usi=mzspec:{$id}",
-        "mirId": "MIR:00100829",
-        "description": "Universal Spectrum Identifier through Peptide Atlas",
-        "official": false,
-        "sampleId": "PXD002255::ES_XP_Ubi_97H_HCD_349:scan:9617:LAEIYVNSSFYK/2",
-        "resourceHomeUrl": "https://db.systemsbiology.net/sbeams/cgi/PeptideAtlas/ShowObservedSpectrum",
-        "institution": {
-          "id": 193,
-          "name": "Institute for Systems Biology",
-          "homeUrl": "https://isbscience.org/",
-          "description": "ISB was created in 2000 as the first-ever institute dedicated to systems biology.",
-          "rorId": "https://ror.org/02tpgw303",
-          "location": {
-            "countryCode": "US",
-            "countryName": "United States"
-          }
-        },
-        "location": {
-          "countryCode": "US",
-          "countryName": "United States"
-        },
-        "deprecated": false,
-        "deprecationDate": null,
-        "protectedUrls": false,
-        "renderProtectedLanding": false,
-        "authHelpUrl": null,
-        "authHelpDescription": null
-      },
-      {
-        "id": 2394,
-        "providerCode": "pc",
-        "name": "Institute for Systems Biology, Seattle, USA",
-        "urlPattern": "http://proteomecentral.proteomexchange.org/usi/?usi=mzspec:{$id}",
-        "mirId": "MIR:00000771",
-        "description": "Institute for Systems Biology (ISB), Seattle, USA is an independent research institute focusing on systems biology.",
-        "official": true,
-        "sampleId": "PXD000865:00603_F01_P004608_B00F_A00_R1:scan:14453:SSLLDVLAAR/2",
-        "resourceHomeUrl": "http://proteomecentral.proteomexchange.org/",
-        "institution": {
-          "id": 193,
-          "name": "Institute for Systems Biology",
-          "homeUrl": "https://isbscience.org/",
-          "description": "ISB was created in 2000 as the first-ever institute dedicated to systems biology.",
-          "rorId": "https://ror.org/02tpgw303",
-          "location": {
-            "countryCode": "US",
-            "countryName": "United States"
-          }
-        },
-        "location": {
-          "countryCode": "US",
-          "countryName": "United States"
-        },
-        "deprecated": false,
-        "deprecationDate": null,
-        "protectedUrls": false,
-        "renderProtectedLanding": false,
-        "authHelpUrl": null,
-        "authHelpDescription": null
-      }
-    ],
-    "created": "2019-06-11T14:18:05.468+0000",
-    "modified": "2019-06-11T14:18:05.468+0000",
-    "sampleId": "PXD002255::ES_XP_Ubi_97H_HCD_349:scan:9617:LAEIYVNSSFYK/2",
     "deprecated": false,
     "deprecationDate": null
   },
@@ -45487,54 +45775,6 @@
         "urlPattern": "https://www.ebi.ac.uk/ols4/ontologies/mondo/terms?obo_id=MONDO:{$id}",
         "mirId": null,
         "description": "mondo through OLS",
-        "official": false,
-        "sampleId": null,
-        "resourceHomeUrl": null,
-        "institution": {
-          "description": "At EMBL-EBI, we make the world\u2019s public biological data freely available to the scientific community via a range of services and tools, perform basic research and provide professional training in bioinformatics. \nWe are part of the European Molecular Biology Laboratory (EMBL), an international, innovative and interdisciplinary research organisation funded by 26 member states and two associate member states.",
-          "homeUrl": "https://www.ebi.ac.uk",
-          "id": 2,
-          "location": {
-            "countryCode": "GB",
-            "countryName": "United Kingdom"
-          },
-          "name": "European Bioinformatics Institute",
-          "rorId": "https://ror.org/02catss52"
-        },
-        "location": {
-          "countryCode": "GB",
-          "countryName": "United Kingdom"
-        },
-        "deprecated": false,
-        "deprecationDate": null,
-        "protectedUrls": false,
-        "renderProtectedLanding": false,
-        "authHelpUrl": null,
-        "authHelpDescription": null
-      }
-    ],
-    "created": null,
-    "modified": null,
-    "sampleId": null,
-    "deprecated": false,
-    "deprecationDate": null
-  },
-  "stato": {
-    "id": null,
-    "prefix": "stato",
-    "name": "STATO",
-    "pattern": "^STATO:\\d+$",
-    "namespaceEmbeddedInLui": true,
-    "description": "STATO is the statistical methods ontology. It contains concepts and properties related to statistical methods, probability distributions and other concepts related to statistical analysis, including relationships to study designs and plots.",
-    "mirId": null,
-    "resources": [
-      {
-        "id": null,
-        "providerCode": "ols",
-        "name": "stato through OLS",
-        "urlPattern": "https://www.ebi.ac.uk/ols4/ontologies/stato/terms?obo_id=STATO:{$id}",
-        "mirId": null,
-        "description": "stato through OLS",
         "official": false,
         "sampleId": null,
         "resourceHomeUrl": null,

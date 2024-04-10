@@ -189,18 +189,6 @@ def ols_namespaces() -> Dict[str, Namespace]:
         ),
         Namespace(
             id=None,
-            prefix="stato",
-            pattern=r"^STATO:\d+$",
-            name="STATO",
-            description="STATO is the statistical methods ontology. It contains "
-            "concepts and properties related to statistical methods, "
-            "probability distributions and other concepts related to "
-            "statistical analysis, including relationships to study "
-            "designs and plots.",
-            namespaceEmbeddedInLui=True,
-        ),
-        Namespace(
-            id=None,
             prefix="atol",
             pattern=r"^ATOL:\d+$",
             name="ATOL",
