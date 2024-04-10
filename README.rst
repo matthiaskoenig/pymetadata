@@ -4,12 +4,14 @@
 
 pymetadata: python utilities for metadata and COMBINE archives
 ==============================================================
+|icon1| |icon2| |icon3|
 
-.. image:: https://github.com/matthiaskoenig/pymetadata/workflows/CI-CD/badge.svg
+
+.. |icon1| image:: https://github.com/matthiaskoenig/pymetadata/workflows/CI-CD/badge.svg
    :target: https://github.com/matthiaskoenig/pymetadata/workflows/CI-CD
    :alt: GitHub Actions CI/CD Status
-   :height: 40
-.. image:: https://img.shields.io/pypi/v/pymetadata.svg
+   :height: 
+.. |icon2| image:: https://img.shields.io/pypi/v/pymetadata.svg
    :target: https://pypi.org/project/pymetadata/
    :alt: Current PyPI Version
    :height: 40
@@ -17,7 +19,7 @@ pymetadata: python utilities for metadata and COMBINE archives
    :target: https://pypi.org/project/pymetadata/
    :alt: Supported Python Versions
    :height: 40
-.. image:: https://img.shields.io/pypi/l/pymetadata.svg
+.. |icon3| image:: https://img.shields.io/pypi/l/pymetadata.svg
    :target: http://opensource.org/licenses/LGPL-3.0
    :alt: GNU Lesser General Public License 3
    :height: 40
