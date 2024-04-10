@@ -1,10 +1,10 @@
 """KISAO ontology."""
 
+from typing import Union, Optional
 from enum import Enum
-from typing import Optional, Union
 
 
-KISAOType = Union[str, "KISAO"]
+KISAOType = Union[str, 'KISAO']
 
 _terms = {
     "KISAO_0000000": "modelling and simulation algorithm",
@@ -481,6 +481,8 @@ _terms = {
     "KISAO_0000695": "parameters for",
     "KISAO_0000696": "steady state root-finding problem",
     "KISAO_0000697": "SDE solver",
+    "KISAO_0000698": "particle coordinates",
+    "KISAO_0000699": "DAE Solver",
     "KISAO_0000800": "systems property",
     "KISAO_0000801": "concentration control coefficient matrix (unscaled)",
     "KISAO_0000802": "control coefficient (scaled)",
@@ -1353,9 +1355,7 @@ class KISAO(str, Enum):
 
     # quasi-minimal residual variant of biconjugate gradient stabilized method
     KISAO_0000394 = "KISAO_0000394"
-    QUASI_MINIMAL_RESIDUAL_VARIANT_OF_BICONJUGATE_GRADIENT_STABILIZED_METHOD = (
-        "KISAO_0000394"
-    )
+    QUASI_MINIMAL_RESIDUAL_VARIANT_OF_BICONJUGATE_GRADIENT_STABILIZED_METHOD = "KISAO_0000394"
 
     # improved biconjugate gradient method
     KISAO_0000395 = "KISAO_0000395"
@@ -1771,9 +1771,7 @@ class KISAO(str, Enum):
 
     # parsimonious enzyme usage flux balance analysis (minimum sum of absolute fluxes)
     KISAO_0000528 = "KISAO_0000528"
-    PARSIMONIOUS_ENZYME_USAGE_FLUX_BALANCE_ANALYSIS__MINIMUM_SUM_OF_ABSOLUTE_FLUXES_ = (
-        "KISAO_0000528"
-    )
+    PARSIMONIOUS_ENZYME_USAGE_FLUX_BALANCE_ANALYSIS__MINIMUM_SUM_OF_ABSOLUTE_FLUXES_ = "KISAO_0000528"
 
     # parallelism
     KISAO_0000529 = "KISAO_0000529"
@@ -1873,9 +1871,7 @@ class KISAO(str, Enum):
 
     # parsimonius flux balance analysis (minimum number of active fluxes)
     KISAO_0000554 = "KISAO_0000554"
-    PARSIMONIUS_FLUX_BALANCE_ANALYSIS__MINIMUM_NUMBER_OF_ACTIVE_FLUXES_ = (
-        "KISAO_0000554"
-    )
+    PARSIMONIUS_FLUX_BALANCE_ANALYSIS__MINIMUM_NUMBER_OF_ACTIVE_FLUXES_ = "KISAO_0000554"
 
     # absolute quadrature tolerance
     KISAO_0000555 = "KISAO_0000555"
@@ -2111,9 +2107,7 @@ class KISAO(str, Enum):
 
     # stochastic simulation algorithm with normally-distributed next reaction times
     KISAO_0000613 = "KISAO_0000613"
-    STOCHASTIC_SIMULATION_ALGORITHM_WITH_NORMALLY_DISTRIBUTED_NEXT_REACTION_TIMES = (
-        "KISAO_0000613"
-    )
+    STOCHASTIC_SIMULATION_ALGORITHM_WITH_NORMALLY_DISTRIBUTED_NEXT_REACTION_TIMES = "KISAO_0000613"
 
     # implementation
     KISAO_0000614 = "KISAO_0000614"
@@ -2121,15 +2115,11 @@ class KISAO(str, Enum):
 
     # fully-implicit regular grid finite volume method with a variable time step
     KISAO_0000615 = "KISAO_0000615"
-    FULLY_IMPLICIT_REGULAR_GRID_FINITE_VOLUME_METHOD_WITH_A_VARIABLE_TIME_STEP = (
-        "KISAO_0000615"
-    )
+    FULLY_IMPLICIT_REGULAR_GRID_FINITE_VOLUME_METHOD_WITH_A_VARIABLE_TIME_STEP = "KISAO_0000615"
 
     # semi-implicit regular grid finite volume method with a fixed time step
     KISAO_0000616 = "KISAO_0000616"
-    SEMI_IMPLICIT_REGULAR_GRID_FINITE_VOLUME_METHOD_WITH_A_FIXED_TIME_STEP = (
-        "KISAO_0000616"
-    )
+    SEMI_IMPLICIT_REGULAR_GRID_FINITE_VOLUME_METHOD_WITH_A_FIXED_TIME_STEP = "KISAO_0000616"
 
     # IDA-CVODE hybrid method
     KISAO_0000617 = "KISAO_0000617"
@@ -2455,6 +2445,14 @@ class KISAO(str, Enum):
     KISAO_0000697 = "KISAO_0000697"
     SDE_SOLVER = "KISAO_0000697"
 
+    # particle coordinates
+    KISAO_0000698 = "KISAO_0000698"
+    PARTICLE_COORDINATES = "KISAO_0000698"
+
+    # DAE Solver
+    KISAO_0000699 = "KISAO_0000699"
+    DAE_SOLVER = "KISAO_0000699"
+
     # systems property
     KISAO_0000800 = "KISAO_0000800"
     SYSTEMS_PROPERTY = "KISAO_0000800"
@@ -2688,7 +2686,7 @@ class KISAO(str, Enum):
     VARIANCE = "KISAO_0000859"
 
     @staticmethod
-    def get_name(kisao: "KISAO") -> Optional[str]:
+    def get_name(kisao: 'KISAO') -> Optional[str]:
         """Get name for term.
 
         :returns: None if term does not exist in ontology.
@@ -2696,9 +2694,9 @@ class KISAO(str, Enum):
         return _terms.get(kisao.value, None)
 
     @classmethod
-    def validate(cls, kisao: "KISAOType") -> "KISAO":
+    def validate(cls, kisao: 'KISAOType') -> 'KISAO':
         """Validate and normalize kisao."""
-        term: "KISAO"
+        term: 'KISAO'
         if isinstance(kisao, str):
             if not kisao.startswith("KISAO"):
                 raise ValueError(kisao + " is not a KISAO id.")
@@ -2707,15 +2705,15 @@ class KISAO(str, Enum):
 
             term = getattr(cls, kisao)
 
-        elif isinstance(kisao, "KISAO"):
+        elif isinstance(kisao, 'KISAO'):
             term = kisao
         else:
             raise ValueError
 
         return term
 
-
 __all__ = [
     "KISAO",
     "KISAOType",
 ]
+
