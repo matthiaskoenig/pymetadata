@@ -4,37 +4,30 @@
 
 pymetadata: python utilities for metadata and COMBINE archives
 ==============================================================
-|icon1| |icon2| |icon3|
+|icon1| |icon2| |icon3| |icon4| |icon5| |icon6| |icon7|
 
 
 .. |icon1| image:: https://github.com/matthiaskoenig/pymetadata/workflows/CI-CD/badge.svg
    :target: https://github.com/matthiaskoenig/pymetadata/workflows/CI-CD
    :alt: GitHub Actions CI/CD Status
-   :height: 
 .. |icon2| image:: https://img.shields.io/pypi/v/pymetadata.svg
    :target: https://pypi.org/project/pymetadata/
    :alt: Current PyPI Version
-   :height: 40
-.. image:: https://img.shields.io/pypi/pyversions/pymetadata.svg
+.. |icon3| image:: https://img.shields.io/pypi/pyversions/pymetadata.svg
    :target: https://pypi.org/project/pymetadata/
    :alt: Supported Python Versions
-   :height: 40
-.. |icon3| image:: https://img.shields.io/pypi/l/pymetadata.svg
+.. |icon4| image:: https://img.shields.io/pypi/l/pymetadata.svg
    :target: http://opensource.org/licenses/LGPL-3.0
    :alt: GNU Lesser General Public License 3
-   :height: 40
-.. image:: https://zenodo.org/badge/DOI/10.5281/zenodo.5308801.svg
+.. |icon5| image:: https://zenodo.org/badge/DOI/10.5281/zenodo.5308801.svg
    :target: https://doi.org/10.5281/zenodo.5308801
    :alt: Zenodo DOI
-   :height: 40
-.. image:: https://img.shields.io/badge/code%20style-black-000000.svg
+.. |icon6| image:: https://img.shields.io/badge/code%20style-black-000000.svg
    :target: https://github.com/ambv/black
    :alt: Black
-   :height: 40
-.. image:: http://www.mypy-lang.org/static/mypy_badge.svg
+.. |icon7| image:: http://www.mypy-lang.org/static/mypy_badge.svg
    :target: http://mypy-lang.org/
    :alt: mypy
-   :height: 40
 
 pymetadata is a collection of python utilities for working with
 metadata in the context of COMBINE standards with source code available from 
