@@ -337,7 +337,7 @@ class Registry:
         registry_path: Optional[Path] = None,
     ) -> Dict[str, Namespace]:
         """Update registry from identifiers.org webservice."""
-        logger.warning(f"Update registry: '{Registry.URL}' -> '{registry_path}'")
+        logger.info(f"Update registry from '{Registry.URL}'")
         response = requests.get(Registry.URL)
         namespaces = response.json()["payload"]["namespaces"]
 
@@ -362,9 +362,6 @@ class Registry:
             ns_dict[ns.prefix] = ns
 
         if custom_namespaces is not None:
-            logger.warning(
-                f"Adding custom namespaces: {sorted(custom_namespaces.keys())}"
-            )
             for key, ns in custom_namespaces.items():
                 if key in ns_dict:
                     logger.error(
