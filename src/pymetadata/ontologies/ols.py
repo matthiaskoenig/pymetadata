@@ -80,9 +80,9 @@ class OLSQuery:
         cache: bool = CACHE_USE,
     ):
         """Initialize OLSQuery."""
-        self.ontologies = {
+        self.ontologies: Dict[str, OLSOntology] = {
             ontology.name: ontology for ontology in ontologies
-        }  # type: Dict[str, OLSOntology]
+        }
         self.cache_path = cache_path / "ols"
         self.cache = cache
 
@@ -137,11 +137,6 @@ class OLSQuery:
         # double urlencode iri for OLS
         urliri = urllib.parse.quote(iri, safe="")
         urliri = urllib.parse.quote(urliri, safe="")
-        # urliri = iri.replace(":", "%253A")
-        # urliri = urliri.replace("/", "%252F")
-
-        # term_id = term.split(":")[-1]
-        # url = ols_pattern.replace('{$id}', term_id)
         cache_path = self.cache_path / f"{urliri}.json"
         data: Dict[str, Any] = {}
         if self.cache:
@@ -177,7 +172,8 @@ class OLSQuery:
                 else:
                     data["errors"] = []
                     data["warnings"] = []
-                    write_json_cache(data=data, cache_path=cache_path)  # type: ignore
+                    if self.cache:
+                        write_json_cache(data=data, cache_path=cache_path)  # type: ignore
 
         return data
 

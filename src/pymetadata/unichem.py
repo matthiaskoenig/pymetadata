@@ -96,11 +96,12 @@ class UnichemQuery:
             sources = {source.sourceID: source for source in sources_list}
 
             # write cache
-            write_json_cache(
-                data=sources,
-                cache_path=unichem_sources_path,
-                json_encoder=DataclassJSONEncoder,
-            )
+            if cache:
+                write_json_cache(
+                    data=sources,
+                    cache_path=unichem_sources_path,
+                    json_encoder=DataclassJSONEncoder,
+                )
 
         return sources
 

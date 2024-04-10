@@ -9,7 +9,7 @@ from pymetadata.unichem import UnichemQuery, UnichemSource
 def test_get_sources(tmp_path: Path) -> None:
     """Test retrieving sources."""
     cache_path: Path = tmp_path
-    sources = UnichemQuery.get_sources(cache=False, cache_path=cache_path)
+    sources = UnichemQuery.get_sources(cache=True, cache_path=cache_path)
     assert sources
     assert (cache_path / "unichem_sources.json").exists()
 
