@@ -33,7 +33,7 @@ logger = log.get_logger(__name__)
 __all__ = ["EntryFormat", "ManifestEntry", "Manifest", "Omex"]
 
 
-IDENTIFIERS_PREFIX = "http://identifiers.org/combine.specifications:"
+IDENTIFIERS_PREFIX = "http://identifiers.org/combine.specifications/"
 PURL_PREFIX = "https://purl.org/NET/mediatypes/"
 
 
