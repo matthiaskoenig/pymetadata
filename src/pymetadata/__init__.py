@@ -11,4 +11,4 @@ RESOURCES_DIR: Path = Path(__file__).parent / "resources"
 ENUM_DIR: Path = Path(__file__).parent / "metadata"
 
 CACHE_USE: bool = False
-CACHE_PATH: Path = RESOURCES_DIR / "cache"
+CACHE_PATH: Path = Path.home() / ".cache" / "pymetadata"

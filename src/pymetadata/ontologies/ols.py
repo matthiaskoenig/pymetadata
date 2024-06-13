@@ -12,7 +12,8 @@ from typing import Any, Dict, List, Optional
 
 import requests
 
-from pymetadata import CACHE_PATH, CACHE_USE, log
+import pymetadata
+from pymetadata import log
 from pymetadata.cache import read_json_cache, write_json_cache
 from pymetadata.identifiers.registry import Registry
 
@@ -76,13 +77,18 @@ class OLSQuery:
     def __init__(
         self,
         ontologies: List[OLSOntology],
-        cache_path: Path = CACHE_PATH,
-        cache: bool = CACHE_USE,
+        cache_path: Optional[Path] = None,
+        cache: Optional[bool] = None,
     ):
         """Initialize OLSQuery."""
         self.ontologies: Dict[str, OLSOntology] = {
             ontology.name: ontology for ontology in ontologies
         }
+        if not cache_path:
+            cache_path = pymetadata.CACHE_PATH
+        if not cache:
+            cache = pymetadata.CACHE_USE
+
         self.cache_path = cache_path / "ols"
         self.cache = cache
 

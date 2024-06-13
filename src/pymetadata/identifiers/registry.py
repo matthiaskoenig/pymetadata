@@ -16,7 +16,8 @@ from typing import Any, Dict, List, Optional
 
 import requests
 
-from pymetadata import RESOURCES_DIR, log
+import pymetadata
+from pymetadata import CACHE_PATH, log
 from pymetadata.cache import DataclassJSONEncoder, read_json_cache, write_json_cache
 
 
@@ -298,7 +299,6 @@ class Registry:
 
     def __init__(
         self,
-        registry_path: Path = RESOURCES_DIR / "identifiers_registry.json",
         cache_duration: int = 24,
         cache: bool = True,
     ):
@@ -308,13 +308,13 @@ class Registry:
         :param cache_duration: Duration of caching in hours.
         :param cache: boolean flag to stop caching
         """
-        self.registry_path = registry_path
+        self.registry_path = pymetadata.CACHE_PATH / "identifiers_registry.json"
 
         # check if update needed
         if cache:
             if os.path.exists(self.registry_path):
                 registry_age = (
-                    time.time() - os.path.getmtime(registry_path)
+                    time.time() - os.path.getmtime(self.registry_path)
                 ) / 3600  # [hr]
                 update = registry_age > cache_duration
             else:

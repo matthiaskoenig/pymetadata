@@ -14,7 +14,8 @@ from typing import Dict, List, Optional
 
 import requests
 
-from pymetadata import CACHE_PATH, CACHE_USE, log
+import pymetadata
+from pymetadata import log
 from pymetadata.cache import DataclassJSONEncoder, read_json_cache, write_json_cache
 from pymetadata.core.xref import CrossReference
 
@@ -59,27 +60,27 @@ class UnichemQuery:
 
     sources: Dict[int, UnichemSource] = {}
 
-    def __init__(self, cache_path: Path = CACHE_PATH, cache: bool = CACHE_USE):
+    def __init__(self, cache_path: Optional[Path] = None, cache: Optional[bool] = None):
         """Initialize UnichemQuery."""
+        if cache_path is None:
+            cache_path = pymetadata.CACHE_PATH
+        if cache is None:
+            cache = pymetadata.CACHE_USE
+
         self.cache_path: Path = cache_path
         self.cache: bool = cache
 
         if not self.sources:
-            self.sources = self.get_sources(
-                cache_path=self.cache_path, cache=self.cache
-            )
+            self.sources = self.get_sources()
 
-    @classmethod
-    def get_sources(
-        cls, cache_path: Path = CACHE_PATH, cache: bool = CACHE_USE
-    ) -> Dict[int, UnichemSource]:
+    def get_sources(self) -> Dict[int, UnichemSource]:
         """Retrieve or query the sources."""
 
         sources: Dict[int, UnichemSource]
-        unichem_sources_path = cache_path / "unichem_sources.json"
+        unichem_sources_path = self.cache_path / "unichem_sources.json"
 
         data: Dict
-        if cache and unichem_sources_path.exists():
+        if self.cache and unichem_sources_path.exists():
             data = read_json_cache(unichem_sources_path)
             sources = {int(k): UnichemSource(**v) for k, v in data.items()}
         else:
@@ -96,7 +97,7 @@ class UnichemQuery:
             sources = {source.sourceID: source for source in sources_list}
 
             # write cache
-            if cache:
+            if self.cache:
                 write_json_cache(
                     data=sources,
                     cache_path=unichem_sources_path,
@@ -174,8 +175,10 @@ class UnichemQuery:
 
 
 if __name__ == "__main__":
+    pymetadata.CACHE_PATH = Path.home() / ".cache" / "pymetadata"
+
     # query sources
-    sources = UnichemQuery.get_sources()
+    sources = UnichemQuery().get_sources()
 
     # query xrefs
     inchikey = "NGBFQHCMQULJNZ-UHFFFAOYSA-N"

@@ -2,18 +2,19 @@
 
 from pathlib import Path
 from pprint import pprint
-from typing import Any, Dict
+from typing import Any, Dict, Optional
 
 from zeep import Client
 
-from pymetadata import CACHE_PATH, CACHE_USE, RESOURCES_DIR, log
+import pymetadata
+from pymetadata import log
 from pymetadata.cache import DataclassJSONEncoder, read_json_cache, write_json_cache
 
 
 logger = log.get_logger(__name__)
 
-# client = Client('https://www.ebi.ac.uk/webservices/chebi/2.0/webservice?wsdl')
-client = Client(str(RESOURCES_DIR / "chebi_webservice_wsdl.xml"))
+# FIXME: copy the file to the cache dir
+client = Client(str(pymetadata.RESOURCES_DIR / "chebi_webservice_wsdl.xml"))
 
 
 class ChebiQuery:
@@ -25,15 +26,19 @@ class ChebiQuery:
 
     @staticmethod
     def query(
-        chebi: str, cache: bool = CACHE_USE, cache_path: Path = CACHE_PATH
+        chebi: str, cache: Optional[bool] = None, cache_path: Optional[Path] = None
     ) -> Dict:
         """Query additional ChEBI information."""
 
         if not chebi:
             return dict()
+        if cache is None:
+            cache = pymetadata.CACHE_USE
+        if cache_path is None:
+            cache_path = pymetadata.CACHE_PATH
 
         # caching
-        chebi_base_path = cache_path / "chebi"
+        chebi_base_path = Path(cache_path) / "chebi"
         if not chebi_base_path.exists():
             chebi_base_path.mkdir(parents=True)
 
