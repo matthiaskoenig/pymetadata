@@ -43,6 +43,8 @@ def write_json_cache(
     :param json_encoder: optional JSON encoder
     :return:
     """
+    if not cache_path.exists():
+        cache_path.mkdir(parents=True)
     with open(cache_path, "w") as fp:
         logger.info(f"Write cache: {cache_path}")
         if json_encoder:
