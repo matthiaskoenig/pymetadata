@@ -2,20 +2,20 @@
 name = "pymetadata"
 version = "0.4.4"
 description = "pymetadata are python utilities for working with metadata."
-long_description = "file: README.rst"
-long_description_content_type = "text/x-rst"
+# long_description = "file: README.rst"
+# long_description_content_type = "text/x-rst"
 readme = "README.rst"
 requires-python = ">=3.10"
-url = "https://github.com/matthiaskoenig/pymetadata"
-download_url = "https://pypi.org/project/pymetadata"
+# url = "https://github.com/matthiaskoenig/pymetadata"
+# download_url = "https://pypi.org/project/pymetadata"
 #project_urls =
 #	Source Code = https://github.com/matthiaskoenig/pymetadata
 #	Documentation = https://github.com/matthiaskoenig/pymetadata
 #	Bug Tracker = https://github.com/matthiaskoenig/pymetadata/issues
-author = "Matthias König"
-author_email = "konigmatt@googlemail.com"
-maintainer = "Matthias König"
-maintainer_email = "konigmatt@googlemail.com"
+# author = "Matthias König"
+# author_email = "konigmatt@googlemail.com"
+# maintainer = "Matthias König"
+# maintainer_email = "konigmatt@googlemail.com"
 classifiers = [
 	"Development Status :: 4 - Beta",
 	"Intended Audience :: Science/Research",
@@ -29,7 +29,6 @@ classifiers = [
 	"Topic :: Scientific/Engineering",
 	"Topic :: Scientific/Engineering :: Bio-Informatics",
 ]
-license = "MIT"
 keywords = [
 	"modeling",
 	"standardization",
@@ -53,13 +52,13 @@ dependencies = [
 [project.optional-dependencies]
 dev = [
     "bump2version>=1.0.1",
+	"ruff>=0.8.6"
 ]
 test = [
     "mypy>=1.9.0",
     "tox>=4.14.2",
     "pytest>=8.1.1",
     "pytest-cov>=5.0.0",
-    "ruff>=0.8.6"
 ]
 
 #
@@ -82,23 +81,11 @@ test = [
 #[options.packages.find]
 #where = src
 #
-#[options.extras_require]
-#development =
-#	pip-tools>=7.4.1
-#	black>=24.3.0
-#	bump2version>=1.0.1
-#	isort>=5.13.2
-#	tox>=4.12.2
-#	flake8>=7.0.0
-#	flake8-mypy>=17.8.0
-#	mypy>=1.9.0
-#	pytest>=8.1.1
-#	pytest-cov>=5.0.0
-#    ruff>=0.8.6
-#
+
 #[bdist_wheel]
 #universal = 1
 #
+
 #[bumpversion]
 #current_version = 0.4.4
 #commit = True
@@ -128,89 +115,6 @@ test = [
 #search = __version__ = "{current_version}"
 #replace = __version__ = "{new_version}"
 
-# --- tox ---
-#[tox]
-#envlist = mypy, py3{10,11,12,13}
-#
-#[gh-actions]
-#python =
-#    3.10: py310
-#    3.11: py311
-#    3.12: py312
-#    3.13: py313
-#
-#[testenv]
-#deps=
-#    pytest
-#    pytest-cov
-#    pytest-raises
-#commands =
-#    pytest --cov=pymetadata --cov-report=xml
-#
-#[testenv:mypy]
-#skip_install = True
-#
-#deps=
-#    mypy
-#commands=
-#    mypy {toxinidir}/src/pymetadata {toxinidir}/setup.py {toxinidir}/tests --config-file tox.ini
-#
-#
-#[testenv:install]
-#skip_install = True
-#deps=
-#    build
-#    twine
-#commands=
-#    pip check {toxinidir}
-#    python -m build {toxinidir}
-#    twine check {toxinidir}/dist/*
-
-################################################################################
-# Testing tools configuration                                                  #
-################################################################################
-
-#[pytest]
-#testpaths =
-#    tests
-#markers =
-#    raises
-#
-#[mypy]
-## mypy src/pymetadata --config-file tox.ini
-#warn_return_any = True
-#follow_imports = silent
-#disallow_untyped_defs = True
-#disallow_incomplete_defs = True
-#
-#[mypy-pytest.*]
-#ignore_missing_imports = True
-#
-#[mypy-pydantic.*]
-#ignore_missing_imports = True
-#
-#[mypy-requests.*]
-#ignore_missing_imports = True
-#
-#[mypy-libcombine.*]
-#ignore_missing_imports = True
-#
-#[mypy-pronto.*]
-#ignore_missing_imports = True
-#
-#[mypy-rich.*]
-#ignore_missing_imports = True
-#
-#[mypy-jinja2.*]
-#ignore_missing_imports = True
-#
-#[mypy-zeep.*]
-#ignore_missing_imports = True
-#
-#[mypy-xmltodict.*]
-#ignore_missing_imports = True
-
-
 
 # --- ruff ---
 
@@ -218,7 +122,7 @@ test = [
 # Same as Black.
 line-length = 88
 indent-width = 4
-target-version = "py312"  # Adjust to your Python version
+target-version = "py313"  # Adjust to your Python version
 
 
 [tool.ruff.lint]

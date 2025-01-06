@@ -14,5 +14,15 @@ mkvirtualenv test --python=python3.11
 (test) pip install pymetadata
 ```
 
+## setup environment
+https://github.com/tox-dev/tox-uv
+uv tool install tox --with tox-uv
+tox r -e py312
+tox run-parallel
 
-0
+
+# install dev dependencies:
+uv pip install -r pyproject.toml --extra dev
+
+
+
