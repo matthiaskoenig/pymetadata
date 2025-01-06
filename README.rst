@@ -4,7 +4,7 @@
 
 pymetadata: python utilities for metadata and COMBINE archives
 ==============================================================
-|icon1| |icon2| |icon3| |icon4| |icon5| |icon6| |icon7|
+|icon1| |icon2| |icon3| |icon4| |icon5| |icon6|
 
 
 .. |icon1| image:: https://github.com/matthiaskoenig/pymetadata/workflows/CI-CD/badge.svg
@@ -17,15 +17,12 @@ pymetadata: python utilities for metadata and COMBINE archives
    :target: https://pypi.org/project/pymetadata/
    :alt: Supported Python Versions
 .. |icon4| image:: https://img.shields.io/pypi/l/pymetadata.svg
-   :target: http://opensource.org/licenses/LGPL-3.0
-   :alt: GNU Lesser General Public License 3
+   :target: https://opensource.org/licenses/MIT
+   :alt: MIT License
 .. |icon5| image:: https://zenodo.org/badge/DOI/10.5281/zenodo.5308801.svg
    :target: https://doi.org/10.5281/zenodo.5308801
    :alt: Zenodo DOI
-.. |icon6| image:: https://img.shields.io/badge/code%20style-black-000000.svg
-   :target: https://github.com/ambv/black
-   :alt: Black
-.. |icon7| image:: http://www.mypy-lang.org/static/mypy_badge.svg
+.. |icon6| image:: http://www.mypy-lang.org/static/mypy_badge.svg
    :target: http://mypy-lang.org/
    :alt: mypy
 
@@ -62,32 +59,12 @@ get started.
 
 License
 =======
-
-* Source Code: `LGPLv3 <http://opensource.org/licenses/LGPL-3.0>`__
-* Documentation: `CC BY-SA 4.0 <http://creativecommons.org/licenses/by-sa/4.0/>`__
-
-The pymetadata source is released under both the GPL and LGPL licenses version 2 or
-later. You may choose which license you choose to use the software under.
-
-This program is free software: you can redistribute it and/or modify it under
-the terms of the GNU General Public License or the GNU Lesser General Public
-License as published by the Free Software Foundation, either version 2 of the
-License, or (at your option) any later version.
-
-This program is distributed in the hope that it will be useful, but WITHOUT ANY
-WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
-PARTICULAR PURPOSE. See the GNU General Public License for more details.
+* Source Code: `MIT <https://opensource.org/license/MIT>`__
+* Documentation: `CC BY-SA 4.0 <https://creativecommons.org/licenses/by-sa/4.0/>`__
 
 Funding
 =======
-Matthias König (MK) was supported by the Federal Ministry of Education and Research 
-(BMBF, Germany) within the research network Systems Medicine of the Liver 
-(**LiSyM**, grant number 031L0054). MK is supported by the Federal Ministry of 
-Education and Research (BMBF, Germany) within ATLAS by grant number 031L0304B and 
-by the German Research Foundation (DFG) within the Research Unit Program FOR 5151 
-QuaLiPerF (Quantifying Liver Perfusion-Function Relationship in Complex Resection 
-- A Systems Medicine Approach) by grant number 436883643 and by grant number 
-465194077 (Priority Programme SPP 2311, Subproject SimLivA).
+Matthias König (MK) was supported by the Federal Ministry of Education and Research (BMBF, Germany) within the research network Systems Medicine of the Liver (**LiSyM**, grant number 031L0054). MK is supported by the Federal Ministry of Education and Research (BMBF, Germany) within ATLAS by grant number 031L0304B and by the German Research Foundation (DFG) within the Research Unit Program FOR 5151 QuaLiPerF (Quantifying Liver Perfusion-Function Relationship in Complex Resection - A Systems Medicine Approach) by grant number 436883643 and by grant number 465194077 (Priority Programme SPP 2311, Subproject SimLivA).
 
 Installation
 ============
@@ -124,5 +101,12 @@ To use a custom cache path use::
 
     import pymetadata
     pymetadata.CACHE_PATH = <cache_path>
+
+
+Checks
+==========
+- uv for project setup
+- ruff for linting, formating
+- mypy for type checking
 
 © 2021-2025 Matthias König

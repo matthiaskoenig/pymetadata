@@ -24,7 +24,6 @@ import xmltodict
 from pydantic import BaseModel, PrivateAttr
 
 from pymetadata import log
-from pymetadata.console import console
 
 
 logger = log.get_logger(__name__)

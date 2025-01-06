@@ -26,8 +26,6 @@ from pronto.relationship import Relationship as ProntoRelationship
 from pronto.term import Term as ProntoTerm
 
 from pymetadata import ENUM_DIR, RESOURCES_DIR, log
-from pymetadata.console import console
-
 
 logger = log.get_logger(__name__)
 
