@@ -125,4 +125,4 @@ To use a custom cache path use::
     import pymetadata
     pymetadata.CACHE_PATH = <cache_path>
 
-© 2021-2024 Matthias König
+© 2021-2025 Matthias König
