@@ -4,13 +4,14 @@
 * update ontologies via `ontology.update_ontology_files()`
 * update release notes in `release-notes` with commit
 * make sure all tests run (`tox run-parallel`)
+* check formating and linting (`ruff check`)
 * bump version (`bumpversion [major|minor|patch]`)
 * `git push --tags` (triggers release)
 * `git push`
 
 * test installation in virtualenv from pypi
 ```
-mkvirtualenv test --python=python3.11
+mkvirtualenv test --python=python3.13
 (test) pip install pymetadata
 ```
 
@@ -31,5 +32,9 @@ uv pip install -r pyproject.toml --extra dev
 # install tox-uv support
 uv tool install tox --with tox-uv
 ```
+
+pre-commit
+pip install pre-commit
+pre-commit install
 
 
