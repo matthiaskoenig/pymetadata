@@ -17,7 +17,7 @@ from typing import Any, Dict, List, Optional
 import requests
 
 import pymetadata
-from pymetadata import CACHE_PATH, log
+from pymetadata import log
 from pymetadata.cache import DataclassJSONEncoder, read_json_cache, write_json_cache
 
 

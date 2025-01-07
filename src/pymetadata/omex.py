@@ -24,7 +24,6 @@ import xmltodict
 from pydantic import BaseModel, PrivateAttr
 
 from pymetadata import log
-from pymetadata.console import console
 
 
 logger = log.get_logger(__name__)
@@ -291,10 +290,10 @@ class ManifestEntry(BaseModel):
     format: str
     master: bool = False
 
-    class Config:
-        """Pydantic configuration."""
-
-        use_enum_values = True
+    # pydantic configuration
+    model_config = {
+        "use_enum_values": True,
+    }
 
     @staticmethod
     def is_format(format_key: str, format: str) -> bool:

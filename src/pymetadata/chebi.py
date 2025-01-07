@@ -6,10 +6,10 @@ from typing import Any, Dict, Optional
 
 from zeep import Client
 
+
 import pymetadata
 from pymetadata import log
 from pymetadata.cache import DataclassJSONEncoder, read_json_cache, write_json_cache
-
 
 logger = log.get_logger(__name__)
 

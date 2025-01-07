@@ -8,6 +8,7 @@ build
 .idea
 cover/
 .tox/
+.venv
 .cache/
 .coverage
 coverage.xml
