@@ -574,6 +574,8 @@ class Omex:
             for file in files:
                 file_path = os.path.join(root, file)
                 location = f"./{os.path.relpath(file_path, directory)}"
+                # bugfix for windows paths
+                location = location.replace("\\", "/")
                 if location == "./manifest.xml":
                     # manifest is created from the internal manifest entries
                     continue
