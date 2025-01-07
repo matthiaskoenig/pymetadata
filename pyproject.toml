@@ -54,6 +54,7 @@ dev = [
 	"ruff>=0.8.6",
 	"pre-commit>=4.0.1",
 	"mypy>=1.9.0",
+	"hatch"
 ]
 test = [
     "tox>=4.14.2",
@@ -70,31 +71,3 @@ Download = "https://pypi.org/project/pymetadata"
 
 [tool.hatch.version]
 path = "./src/pymetadata/__init__.py"
-
-#[options]
-#zip_safe = True
-#
-
-#packages = find:
-#package_dir =
-#	= src
-#include_package_data = True
-#
-#[options.package_data]
-#pymetadata = py.typed
-#
-#[aliases]
-#test = pytest
-#
-#[options.packages.find]
-#where = src
-
-#[bdist_wheel]
-#universal = 1
-
-
-
-
-
-
-
