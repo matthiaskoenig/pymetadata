@@ -12,32 +12,33 @@
 
 * test installation in virtualenv from pypi
 ```
-mkvirtualenv test --python=python3.13
-(test) pip install pymetadata
+uv venv --python 3.13
+uv pip install pymetadata
 ```
 
-## setup environment
-
-https://github.com/tox-dev/tox-uv
-uv tool install tox --with tox-uv
-tox r -e py312
-tox run-parallel
-
-
-# install dev dependencies:
+# Install dev dependencies:
 ```bash
-# install dependencies
+# install core dependencies
 uv sync
 # install dev dependencies
 uv pip install -r pyproject.toml --extra dev
-# install tox-uv support
-uv tool install tox --with tox-uv
 ```
 
-# pre-commit
+## Setup tox testing
+See information on https://github.com/tox-dev/tox-uv
+```bash
+uv tool install tox --with tox-uv
+```
+Run single tox target
+```bash
+tox r -e py312
+```
+Run all tests in parallel
+```bash
+tox run-parallel
+```
+
+# Setup pre-commit
 pip install pre-commit
 pre-commit install
-
 pre-commit run
-
-
