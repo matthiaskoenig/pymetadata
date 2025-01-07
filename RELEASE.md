@@ -39,6 +39,8 @@ tox run-parallel
 ```
 
 # Setup pre-commit
-pip install pre-commit
+```bash
+uv pip install pre-commit
 pre-commit install
 pre-commit run
+```
