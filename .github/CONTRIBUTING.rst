@@ -18,13 +18,12 @@ detailed your report, the easier and thus faster we can help you.
 Fix Bugs
 ========
 
-Look through the GitHub issues for bugs. Anything tagged with "bug" and "help
-wanted" is open to whoever wants to implement it.
+Look through the GitHub issues for bugs.
 
 Implement Features
 ==================
 
-Look through the GitHub issues for features. Anything tagged with "feature" is open to whoever wants to implement it.
+Look through the GitHub issues for features.
 
 Write Documentation
 ===================
@@ -55,22 +54,21 @@ Ready to contribute? Here's how to set up pymetadata for local development.
    have never done this before, `follow the official guide
    <https://guides.github.com/activities/forking/>`_
 2. Clone your fork locally as described in the same guide.
-3. Install your local copy into a a Python virtual environment. You can `read
-   this guide to learn more
-   <https://realpython.com/python-virtual-environments-a-primer/>`_ about them
-   and how to create one. Alternatively, particularly if you are a Windows or
-   Mac user, you can also use `Anaconda <https://docs.anaconda.com/anaconda/>`_.
-   Assuming you have virtualenvwrapper installed, this is how you set up your
-   fork for local development
+3. Install your local copy into a a Python virtual environment. We recommend using ``uv`` for
+   managing the environments
 
    .. code-block:: console
 
-       mkvirtualenv pymetadata
-       cd pymetadata/
-       pip install -e .[development]
+        # install dependencies
+        uv sync
+        # install dev dependencies
+        uv pip install -r pyproject.toml --extra dev
+        # install tox-uv support
+        uv tool install tox --with tox-uv
+
 
 4. Create a branch for local development using the ``develop`` branch as a
-   starting point. Use ``fix``, ``refactor``, or ``feat`` as a prefix
+   starting point.
 
    .. code-block:: console
 
@@ -81,9 +79,7 @@ Ready to contribute? Here's how to set up pymetadata for local development.
 
 5. When making changes locally, it is helpful to ``git commit`` your work
    regularly. On one hand to save your work and on the other hand, the smaller
-   the steps, the easier it is to review your work later. Please use `semantic
-   commit messages
-   <http://karma-runner.github.io/2.0/dev/git-commit-msg.html>`_.
+   the steps, the easier it is to review your work later.
 
    .. code-block:: console
 
@@ -95,20 +91,8 @@ Ready to contribute? Here's how to set up pymetadata for local development.
 
    .. code-block:: console
 
-       tox
+       tox run-parallel
 
-   You can run all tests in parallel using
-
-   .. code-block:: console
-
-       tox -p
-
-   To fix the isort and black tests use
-   
-   .. code-block:: console
-
-       isort src/pymetadata
-       black src/pymetadata
 
 7. Push your branch to GitHub.
 
@@ -128,22 +112,6 @@ Once you have a new branch you can push your changes directly to the main
 repository and when finished, submit a pull request from that branch to
 ``develop``.
 
-Pull Request Guidelines
------------------------
-
-Before you submit a pull request, check that it meets these guidelines:
-
-1. The pull request should include tests in the ``pymetadata/test``
-   directory. Except in rare circumstances, code coverage must
-   not decrease (as reported by codecov which runs automatically when
-   you submit your pull request)
-2. If the pull request adds functionality, the docs should be
-   updated. Put your new functionality into a function with a
-   docstring.
-3. The pull request will be tested for several different Python versions.
-4. Someone from the @matthiaskoenig/pymetadata-core team will review your work and guide
-   you to a successful contribution.
-
 Unit tests and benchmarks
 -------------------------
 
@@ -153,7 +121,7 @@ tests that make sure that the code runs as intended.
 
 To run all tests do::
 
-    (pymetadata)$ pytest
+    $ tox run-parallel
 
 Branching model
 ---------------

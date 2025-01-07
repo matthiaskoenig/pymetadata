@@ -10,7 +10,6 @@ import pymetadata
 from pymetadata import log
 from pymetadata.cache import DataclassJSONEncoder, read_json_cache, write_json_cache
 
-
 logger = log.get_logger(__name__)
 
 # FIXME: copy the file to the cache dir

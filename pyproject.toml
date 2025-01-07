@@ -1,21 +1,19 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
 [project]
 name = "pymetadata"
 version = "0.4.4"
 description = "pymetadata are python utilities for working with metadata."
-# long_description = "file: README.rst"
-# long_description_content_type = "text/x-rst"
 readme = "README.rst"
 requires-python = ">=3.10"
-# url = "https://github.com/matthiaskoenig/pymetadata"
-# download_url = "https://pypi.org/project/pymetadata"
-#project_urls =
-#	Source Code = https://github.com/matthiaskoenig/pymetadata
-#	Documentation = https://github.com/matthiaskoenig/pymetadata
-#	Bug Tracker = https://github.com/matthiaskoenig/pymetadata/issues
-# author = "Matthias König"
-# author_email = "konigmatt@googlemail.com"
-# maintainer = "Matthias König"
-# maintainer_email = "konigmatt@googlemail.com"
+authors = [
+	{name="Matthias König", email="konigmatt@googlemail.com"}
+]
+maintainers = [
+	{name="Matthias König", email="konigmatt@googlemail.com"}
+]
 classifiers = [
 	"Development Status :: 4 - Beta",
 	"Intended Audience :: Science/Research",
@@ -49,20 +47,28 @@ dependencies = [
 	"xmltodict>=0.14.2",
 	"pydantic>=2.10.4",
 ]
+
 [project.optional-dependencies]
 dev = [
     "bump2version>=1.0.1",
-	"ruff>=0.8.6"
+	"ruff>=0.8.6",
+	"pre-commit>=4.0.1",
+	"mypy>=1.9.0",
 ]
 test = [
-    "mypy>=1.9.0",
     "tox>=4.14.2",
     "pytest>=8.1.1",
     "pytest-cov>=5.0.0",
 ]
 
-#
-#
+[project_urls]
+Homepage = "https://github.com/matthiaskoenig/pymetadata"
+Repository = "https://github.com/matthiaskoenig/pymetadata"
+Documentation = "https://github.com/matthiaskoenig/pymetadata"
+Issues = "https://github.com/matthiaskoenig/pymetadata/issues"
+Download = "https://pypi.org/project/pymetadata"
+
+
 #[options]
 #zip_safe = True
 #
@@ -84,7 +90,8 @@ test = [
 
 #[bdist_wheel]
 #universal = 1
-#
+
+# -----
 
 #[bumpversion]
 #current_version = 0.4.4
@@ -122,7 +129,8 @@ test = [
 # Same as Black.
 line-length = 88
 indent-width = 4
-target-version = "py313"  # Adjust to your Python version
+
+target-version = "py313"
 
 
 [tool.ruff.lint]
@@ -136,6 +144,8 @@ ignore = []
 fixable = ["ALL"]
 unfixable = []
 
+# Allow unused variables when underscore-prefixed.
+dummy-variable-rgx = "^(_+|(_+[a-zA-Z0-9_]*[a-zA-Z0-9]+?))$"
 
 [tool.ruff.format]
 # Like Black, use double quotes for strings.
