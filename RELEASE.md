@@ -5,7 +5,10 @@
 * update release notes in `release-notes` with commit
 * make sure all tests run (`tox run-parallel`)
 * check formating and linting (`ruff check`)
-* bump version (`bumpversion [major|minor|patch]`)
+* bump version (`bump-my-version bump [major|minor|patch] --dry-run -vv`)
+
+
+
 * `git push --tags` (triggers release)
 * `git push`
 
@@ -33,8 +36,10 @@ uv pip install -r pyproject.toml --extra dev
 uv tool install tox --with tox-uv
 ```
 
-pre-commit
+# pre-commit
 pip install pre-commit
 pre-commit install
+
+pre-commit run
 
 
