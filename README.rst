@@ -4,11 +4,11 @@
 
 pymetadata: python utilities for metadata and COMBINE archives
 ==============================================================
-|icon1| |icon2| |icon3| |icon4| |icon5| |icon6|
+|icon1| |icon2| |icon3| |icon4| |icon5|
 
 
 .. |icon1| image:: https://github.com/matthiaskoenig/pymetadata/workflows/CI-CD/badge.svg
-   :target: https://github.com/matthiaskoenig/pymetadata/workflows/CI-CD
+   :target: https://github.com/matthiaskoenig/pymetadata/actions/workflows/main.yml
    :alt: GitHub Actions CI/CD Status
 .. |icon2| image:: https://img.shields.io/pypi/v/pymetadata.svg
    :target: https://pypi.org/project/pymetadata/
@@ -22,9 +22,6 @@ pymetadata: python utilities for metadata and COMBINE archives
 .. |icon5| image:: https://zenodo.org/badge/DOI/10.5281/zenodo.5308801.svg
    :target: https://doi.org/10.5281/zenodo.5308801
    :alt: Zenodo DOI
-.. |icon6| image:: http://www.mypy-lang.org/static/mypy_badge.svg
-   :target: http://mypy-lang.org/
-   :alt: mypy
 
 pymetadata is a collection of python utilities for working with
 metadata in the context of COMBINE standards with source code available from 
