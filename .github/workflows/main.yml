@@ -41,13 +41,9 @@ jobs:
     #        python -m pip install --upgrade pip wheel
     #        python -m pip install tox tox-gh-actions
 
-    - name: Install tox github actions dependencies
-      run:
-        uv pip install tox-gh-actions
-
     - name: Test with tox
       run:
-        uvx --with tox-uv tox --
+        uvx --with tox-uv tox -e py${{ matrix.python-version }}
         # tox --
 
   release:
