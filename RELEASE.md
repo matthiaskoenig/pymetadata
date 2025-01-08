@@ -6,7 +6,7 @@
 * make sure all tests run (`tox run-parallel`)
 * check formating and linting (`ruff check`)
 * test bump version (`uv run bump-my-version bump [major|minor|patch] --dry-run -vv`)
-* bump version (`bump-my-version bump [major|minor|patch]`)
+* bump version (`uv run bump-my-version bump [major|minor|patch]`)
 * `git push --tags` (triggers release)
 * `git push`
 
