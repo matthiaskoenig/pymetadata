@@ -1,6 +1,6 @@
 name: CI-CD
 
-on: [push]
+on: [ push, pull_request ]
 jobs:
   test:
     runs-on: ${{ matrix.os }}
@@ -25,19 +25,14 @@ jobs:
 
     steps:
     - uses: actions/checkout@v4
-    - name: Set up Python ${{ matrix.python-version }}
-      uses: actions/setup-python@v5
+    - name: Install uv and set the python version
+      uses: astral-sh/setup-uv@v5
       with:
         python-version: ${{ matrix.python-version }}
-    - name: Install dependencies
-      run: |
-        python -m pip install --upgrade pip wheel
-        python -m pip install tox tox-gh-actions
-
-    # Update output format to enable automatic inline annotations.
+        enable-cache: true
     - name: Test with tox
       run:
-        tox --
+        uvx --with tox-uv tox -e py${{ matrix.python-version }}
 
   release:
     needs: test
