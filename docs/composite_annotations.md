@@ -13,7 +13,7 @@ of ATP in the cytoplasm, blood in a cardiac cavity, the glucokinase reaction).
 
 
 
-**entity** 
+**entity**
 OPB: https://bioportal.bioontology.org/ontologies/OPB
 Ontology of Physics for Biology
 
@@ -31,6 +31,6 @@ aborption rate: "Material flow rate"
 Property first; entity second
 
 
-**Properties of processes**  
+**Properties of processes**
 - describe process: source, sink & mediator; flow of material from one pool to another
 - to describe the source: stomach; sink

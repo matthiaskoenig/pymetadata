@@ -7,7 +7,7 @@ about: Report a bug to help improve this project
 
 Before you create a new problem report, please look through the list of existing open
  and closed issues to see if there are similar ones.
- 
+
 https://github.com/matthiaskoenig/pymetadata/issues
 
 -->

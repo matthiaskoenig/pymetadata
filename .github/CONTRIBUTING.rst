@@ -117,7 +117,7 @@ Unit tests and benchmarks
 
 pymetadata uses `pytest <http://docs.pytest.org/en/latest/>`_ for its
 unit-tests and new features should in general always come with new
-tests that make sure that the code runs as intended. 
+tests that make sure that the code runs as intended.
 
 To run all tests do::
 

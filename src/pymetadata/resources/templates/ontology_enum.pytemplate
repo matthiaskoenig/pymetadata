@@ -57,5 +57,3 @@ __all__ = [
     "{{ontology_id}}",
     "{{ontology_id}}Type",
 ]
-
-
