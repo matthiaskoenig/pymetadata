@@ -13,7 +13,7 @@ metadata in the context of COMBINE standards with source code available from
 
 Features include among others
 
-- COMBINE archive version 1 support (OMEX)
+- [core](src/pymetadata/core)COMBINE archive version 1 support (OMEX)
 - annotation classes and helpers
 - SBO and KISAO ontology enums
 
