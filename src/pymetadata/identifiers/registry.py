@@ -182,14 +182,6 @@ def ols_namespaces() -> Dict[str, Namespace]:
         ),
         Namespace(
             id=None,
-            prefix="mondo",
-            pattern=r"^MONDO:\d+$",
-            name="MONDO",
-            description="MONDO",
-            namespaceEmbeddedInLui=True,
-        ),
-        Namespace(
-            id=None,
             prefix="atol",
             pattern=r"^ATOL:\d+$",
             name="ATOL",
@@ -235,6 +227,14 @@ def ols_namespaces() -> Dict[str, Namespace]:
             pattern=r"^MMO:\d+$",
             name="Measurement method ontology",
             description="Measurement method ontology",
+            namespaceEmbeddedInLui=True,
+        ),
+        Namespace(
+            id=None,
+            prefix="symp",
+            pattern=r"^SYMP:\d+$",
+            name="Symptom ontology",
+            description="The Symptom Ontology has been developed as a standardized ontology for symptoms of human diseases.",
             namespaceEmbeddedInLui=True,
         ),
     ]

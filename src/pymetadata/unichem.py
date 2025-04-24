@@ -130,7 +130,7 @@ class UnichemQuery:
         xrefs: List[CrossReference] = []
         if data:
             if "error" in data:
-                logger.error(f"No xrefs for inchikey: '{inchikey}'")
+                logger.warning(f"No xrefs for inchikey: '{inchikey}'")
                 return []
 
             # process data
@@ -138,7 +138,7 @@ class UnichemQuery:
             for item in data:
                 source_id: int = int(item["src_id"])
                 if source_id not in self.sources:
-                    if source_id != 40:
+                    if source_id not in {40, 49, 50}:
                         # number 40 is missing from definitions
                         logger.error(
                             f"No UniChem source for source id '{source_id}', in item "
