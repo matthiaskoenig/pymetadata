@@ -19,7 +19,7 @@ import requests
 import pymetadata
 from pymetadata import log
 from pymetadata.cache import DataclassJSONEncoder, read_json_cache, write_json_cache
-
+from pymetadata.console import console
 
 logger = log.get_logger(__name__)
 
@@ -123,14 +123,6 @@ def ols_namespaces() -> Dict[str, Namespace]:
 
     # Custom namespaces for OLS ontology, for simple support
     namespaces = [
-        Namespace(
-            id=None,
-            prefix="snomed",
-            pattern=r"^\d+$",
-            name="SNOMED",
-            description="SNOMED CT or SNOMED Clinical Terms is a systematically organized computer processable collection of medical terms providing codes, terms, synonyms and definitions used in clinical documentation and reporting.",
-            namespaceEmbeddedInLui=True,
-        ),
         Namespace(
             id=None,
             prefix="omim",
@@ -344,21 +336,6 @@ class Registry:
         ns_dict = {}
         for _, data in enumerate(namespaces):
             ns = Namespace.from_dict(data)
-
-            # bugfix OLS4 (https://github.com/identifiers-org/identifiers-org.github.io/issues/231)
-            if ns.resources:
-                for resource in ns.resources:
-                    if resource.urlPattern.startswith("https://www.ebi.ac.uk/ols/"):
-                        resource.urlPattern = resource.urlPattern.replace(
-                            "/ols/", "/ols4/"
-                        )
-                    if resource.resourceHomeUrl.startswith(
-                        "https://www.ebi.ac.uk/ols/"
-                    ):
-                        resource.resourceHomeUrl = resource.resourceHomeUrl.replace(
-                            "/ols/", "/ols4/"
-                        )
-
             ns_dict[ns.prefix] = ns
 
         if custom_namespaces is not None:
@@ -394,4 +371,5 @@ class Registry:
 REGISTRY = Registry()
 
 if __name__ == "__main__":
-    registry = Registry()
+    registry = Registry(cache=False)
+    console.print(registry.ns_dict)
