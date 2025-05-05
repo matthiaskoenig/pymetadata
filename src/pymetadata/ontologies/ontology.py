@@ -26,6 +26,7 @@ from pronto.relationship import Relationship as ProntoRelationship
 from pronto.term import Term as ProntoTerm
 
 from pymetadata import ENUM_DIR, RESOURCES_DIR, log
+from pymetadata.console import console
 
 logger = log.get_logger(__name__)
 
@@ -51,18 +52,18 @@ class OntologyFile:
     @property
     def path(self) -> Path:
         """Path of ontology file."""
-        return RESOURCES_DIR / "ontologies" / f"{self.id.lower()}.{self.format}.gz"
+        return RESOURCES_DIR / "ontologies" / f"{self.id.lower()}.{self.format.value}.gz"
 
     @property
     def filename(self) -> str:
         """Filename of ontology file.
 
-        :return: ontolgoy filename
+        :return: ontology filename
         :rtype: str
         """
-        data = str(self.path)
-        print(data)
-        return data
+        name = str(self.path)
+        console.print(name)
+        return name
 
 
 _ontology_files: List[OntologyFile] = [
