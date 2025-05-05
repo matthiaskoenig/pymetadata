@@ -3,7 +3,7 @@
 from pathlib import Path
 
 __author__ = "Matthias Koenig"
-__version__ = "0.5.2"
+__version__ = "0.5.3"
 
 
 program_name: str = "pymetadata"
