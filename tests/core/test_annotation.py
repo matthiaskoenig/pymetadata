@@ -124,6 +124,11 @@ rdf_annotation_data = [
         "CHEBI:000012",
         "RDFAnnotation(BQB.IS|chebi|CHEBI:000012)",
     ),
+    (
+        BQB.IS,
+        "doi/10.3389/fphar.2025.1686415",
+        "RDFAnnotation(BQB.IS|doi|10.3389/fphar.2025.1686415)",
+    ),
 ]
 
 

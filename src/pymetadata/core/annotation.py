@@ -98,6 +98,8 @@ class RDFAnnotation:
                     f"{resource} does not conform to "
                     f"http(s)://identifiers.org/collection/id or http(s)://identifiers.org/id",
                 )
+
+        # handle urns
         elif resource.startswith("urn:miriam:"):
             match3 = MIRIAM_URN_PATTERN.match(resource)
             if match3:
@@ -113,13 +115,14 @@ class RDFAnnotation:
         else:
             # handle short notation
             tokens = resource.split("/")
-            if len(tokens) == 2:
+            if len(tokens) > 1:
                 self.collection = tokens[0]
                 self.term = "/".join(tokens[1:])
             elif len(tokens) == 1 and ":" in tokens[0]:
                 self.collection = tokens[0].split(":")[0].lower()
                 self.term = tokens[0]
 
+            # validation
             if len(tokens) < 2 and not self.collection:
                 logger.error(
                     f"Resource `{resource}` could not be split in collection and term. "
