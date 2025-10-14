@@ -1,28 +1,19 @@
 """Module for working with chebi."""
 
 from pathlib import Path
-from pprint import pprint
 from typing import Any, Dict, Optional
-
-from zeep import Client
-
+import requests
 
 import pymetadata
 from pymetadata import log
 from pymetadata.cache import DataclassJSONEncoder, read_json_cache, write_json_cache
+from pymetadata.console import console
 
 logger = log.get_logger(__name__)
 
-# FIXME: copy the file to the cache dir
-client = Client(str(pymetadata.RESOURCES_DIR / "chebi_webservice_wsdl.xml"))
-
 
 class ChebiQuery:
-    """Class to query information from ChEBI.
-
-    An overview over available methods:
-        python -mzeep https://www.ebi.ac.uk/webservices/chebi/2.0/webservice?wsdl
-    """
+    """Class to query information from ChEBI."""
 
     @staticmethod
     def query(
@@ -52,27 +43,28 @@ class ChebiQuery:
 
         # fetch and cache data
         if not data:
-            try:
-                result = client.service.getCompleteEntity(chebi)
-                # print(result)
-            except Exception:
+            response = requests.get(
+                url=f"https://www.ebi.ac.uk/chebi/backend/api/public/compounds/?chebi_ids={chebi}"
+            )
+            if response.status_code == 200:
+                result = response.json()
+            else:
                 logger.error(f"CHEBI information could not be retrieved for: {chebi}")
                 return dict()
 
-            # parse formula
-            formula = None
-            formulae = result["Formulae"]
-            if formulae:
-                formula = formulae[0]["data"]
-
+            result = result[chebi]["data"]
+            chemical_data = result["chemical_data"]
+            default_structure = result["default_structure"]
             data = {
                 "chebi": chebi,
-                "name": result["chebiAsciiName"],
+                "name": result["ascii_name"],
                 "definition": result["definition"],
-                "formula": formula,
-                "charge": result["charge"],
-                "mass": result["mass"],
-                "inchikey": result["inchiKey"],
+                "formula": chemical_data["formula"] if chemical_data else None,
+                "charge": chemical_data["charge"] if chemical_data else None,
+                "mass": chemical_data["mass"] if chemical_data else None,
+                "inchikey": default_structure["standard_inchi_key"]
+                if default_structure
+                else None,
             }
 
             logger.info(f"Write chebi: {chebi_path}")
@@ -86,7 +78,7 @@ class ChebiQuery:
 if __name__ == "__main__":
     chebis = ["CHEBI:2668", "CHEBI:138366", "CHEBI:9637", "CHEBI:155897"]
     for chebi in chebis:
-        print(chebi)
+        console.rule(chebi, align="left", style="bold white")
         d = ChebiQuery.query(chebi=chebi, cache=False)
-        pprint(d)
+        console.print(d)
         d = ChebiQuery.query(chebi=chebi, cache=True)
