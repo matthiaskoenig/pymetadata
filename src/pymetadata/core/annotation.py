@@ -265,14 +265,12 @@ class RDFAnnotation:
 
     def validate(self) -> bool:
         """Validate annotation."""
-        valid_qualifier = False
+        valid_qualifier: bool = False
         if self.qualifier:
-            valid_qualifier: bool = self.check_qualifier(self.qualifier)
-        valid_term = True
+            valid_qualifier = self.check_qualifier(self.qualifier)
+        valid_term: bool = True
         if self.collection and self.term:
-            valid_term: bool = self.check_term(
-                collection=self.collection, term=self.term
-            )
+            valid_term = self.check_term(collection=self.collection, term=self.term)
 
         return valid_qualifier and valid_term
 
