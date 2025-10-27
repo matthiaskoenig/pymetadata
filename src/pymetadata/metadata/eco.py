@@ -4,7 +4,7 @@ from typing import Union, Optional
 from enum import Enum
 
 
-ECOType = Union[str, 'ECO']
+ECOType = Union[str, "ECO"]
 
 _terms = {
     "ECO_0000000": "evidence",
@@ -593,7 +593,6 @@ _terms = {
     "ECO_0001557": "polyADP-ribosylation assay evidence",
     "ECO_0001558": "protein kinase assay evidence",
     "ECO_0001559": "sumoylation assay evidence",
-    "ECO_000156": "single-cell RNA-sequencing evidence used in automatic assertion",
     "ECO_0001560": "single-cell RNA-sequencing evidence",
     "ECO_0001561": "translation assay evidence",
     "ECO_0001562": "ubiquitination assay evidence",
@@ -1232,6 +1231,7 @@ _terms = {
     "ECO_0006404": "experimentally evolved mutant phenotypic evidence",
     "ECO_0006405": "experimentally evolved mutant phenotypic evidence used in automatic assertion",
     "ECO_0006406": "experimentally evolved mutant phenotypic evidence used in manual assertion",
+    "ECO_0006407": "single-cell RNA-sequencing evidence used in automatic assertion",
     "ECO_0007000": "high throughput mutant phenotypic evidence",
     "ECO_0007001": "high throughput mutant phenotypic evidence used in manual assertion",
     "ECO_0007002": "high throughput genetic interaction phenotypic evidence",
@@ -2629,7 +2629,9 @@ class ECO(str, Enum):
 
     # automatically integrated combinatorial evidence used in automatic assertion
     ECO_0000053 = "ECO_0000053"
-    AUTOMATICALLY_INTEGRATED_COMBINATORIAL_EVIDENCE_USED_IN_AUTOMATIC_ASSERTION = "ECO_0000053"
+    AUTOMATICALLY_INTEGRATED_COMBINATORIAL_EVIDENCE_USED_IN_AUTOMATIC_ASSERTION = (
+        "ECO_0000053"
+    )
 
     # double mutant phenotypic evidence
     ECO_0000054 = "ECO_0000054"
@@ -2917,7 +2919,9 @@ class ECO(str, Enum):
 
     # in vitro recombinant protein transcription reconstitution assay evidence
     ECO_0000152 = "ECO_0000152"
-    IN_VITRO_RECOMBINANT_PROTEIN_TRANSCRIPTION_RECONSTITUTION_ASSAY_EVIDENCE = "ECO_0000152"
+    IN_VITRO_RECOMBINANT_PROTEIN_TRANSCRIPTION_RECONSTITUTION_ASSAY_EVIDENCE = (
+        "ECO_0000152"
+    )
 
     # heterologous protein expression evidence
     ECO_0000154 = "ECO_0000154"
@@ -3181,11 +3185,15 @@ class ECO(str, Enum):
 
     # automatically integrated combinatorial evidence used in manual assertion
     ECO_0000245 = "ECO_0000245"
-    AUTOMATICALLY_INTEGRATED_COMBINATORIAL_EVIDENCE_USED_IN_MANUAL_ASSERTION = "ECO_0000245"
+    AUTOMATICALLY_INTEGRATED_COMBINATORIAL_EVIDENCE_USED_IN_MANUAL_ASSERTION = (
+        "ECO_0000245"
+    )
 
     # obsolete computational combinatorial evidence used in automatic assertion
     ECO_0000246 = "ECO_0000246"
-    OBSOLETE_COMPUTATIONAL_COMBINATORIAL_EVIDENCE_USED_IN_AUTOMATIC_ASSERTION = "ECO_0000246"
+    OBSOLETE_COMPUTATIONAL_COMBINATORIAL_EVIDENCE_USED_IN_AUTOMATIC_ASSERTION = (
+        "ECO_0000246"
+    )
 
     # sequence alignment evidence used in manual assertion
     ECO_0000247 = "ECO_0000247"
@@ -3237,7 +3245,9 @@ class ECO(str, Enum):
 
     # match to InterPro member signature evidence used in automatic assertion
     ECO_0000259 = "ECO_0000259"
-    MATCH_TO_INTERPRO_MEMBER_SIGNATURE_EVIDENCE_USED_IN_AUTOMATIC_ASSERTION = "ECO_0000259"
+    MATCH_TO_INTERPRO_MEMBER_SIGNATURE_EVIDENCE_USED_IN_AUTOMATIC_ASSERTION = (
+        "ECO_0000259"
+    )
 
     # match to InterPro member signature evidence used in manual assertion
     ECO_0000260 = "ECO_0000260"
@@ -3297,7 +3307,9 @@ class ECO(str, Enum):
 
     # differential methylation hybridization evidence used in manual assertion
     ECO_0000274 = "ECO_0000274"
-    DIFFERENTIAL_METHYLATION_HYBRIDIZATION_EVIDENCE_USED_IN_MANUAL_ASSERTION = "ECO_0000274"
+    DIFFERENTIAL_METHYLATION_HYBRIDIZATION_EVIDENCE_USED_IN_MANUAL_ASSERTION = (
+        "ECO_0000274"
+    )
 
     # expression microarray evidence used in manual assertion
     ECO_0000275 = "ECO_0000275"
@@ -3329,7 +3341,9 @@ class ECO(str, Enum):
 
     # spatial pattern of protein expression evidence used in manual assertion
     ECO_0000283 = "ECO_0000283"
-    SPATIAL_PATTERN_OF_PROTEIN_EXPRESSION_EVIDENCE_USED_IN_MANUAL_ASSERTION = "ECO_0000283"
+    SPATIAL_PATTERN_OF_PROTEIN_EXPRESSION_EVIDENCE_USED_IN_MANUAL_ASSERTION = (
+        "ECO_0000283"
+    )
 
     # protein expression evidence used in manual assertion
     ECO_0000284 = "ECO_0000284"
@@ -3349,7 +3363,9 @@ class ECO(str, Enum):
 
     # spatial pattern of transcript expression evidence used in manual assertion
     ECO_0000289 = "ECO_0000289"
-    SPATIAL_PATTERN_OF_TRANSCRIPT_EXPRESSION_EVIDENCE_USED_IN_MANUAL_ASSERTION = "ECO_0000289"
+    SPATIAL_PATTERN_OF_TRANSCRIPT_EXPRESSION_EVIDENCE_USED_IN_MANUAL_ASSERTION = (
+        "ECO_0000289"
+    )
 
     # subtractive hybridization evidence used in manual assertion
     ECO_0000290 = "ECO_0000290"
@@ -3365,7 +3381,9 @@ class ECO(str, Enum):
 
     # systematic evolution of ligands by exponential amplification evidence
     ECO_0000293 = "ECO_0000293"
-    SYSTEMATIC_EVOLUTION_OF_LIGANDS_BY_EXPONENTIAL_AMPLIFICATION_EVIDENCE = "ECO_0000293"
+    SYSTEMATIC_EVOLUTION_OF_LIGANDS_BY_EXPONENTIAL_AMPLIFICATION_EVIDENCE = (
+        "ECO_0000293"
+    )
 
     # bacterial one-hybrid evidence
     ECO_0000294 = "ECO_0000294"
@@ -3401,7 +3419,9 @@ class ECO(str, Enum):
 
     # author statement supported by traceable reference used in manual assertion
     ECO_0000304 = "ECO_0000304"
-    AUTHOR_STATEMENT_SUPPORTED_BY_TRACEABLE_REFERENCE_USED_IN_MANUAL_ASSERTION = "ECO_0000304"
+    AUTHOR_STATEMENT_SUPPORTED_BY_TRACEABLE_REFERENCE_USED_IN_MANUAL_ASSERTION = (
+        "ECO_0000304"
+    )
 
     # curator inference used in manual assertion
     ECO_0000305 = "ECO_0000305"
@@ -3409,7 +3429,9 @@ class ECO(str, Enum):
 
     # inference from background scientific knowledge used in manual assertion
     ECO_0000306 = "ECO_0000306"
-    INFERENCE_FROM_BACKGROUND_SCIENTIFIC_KNOWLEDGE_USED_IN_MANUAL_ASSERTION = "ECO_0000306"
+    INFERENCE_FROM_BACKGROUND_SCIENTIFIC_KNOWLEDGE_USED_IN_MANUAL_ASSERTION = (
+        "ECO_0000306"
+    )
 
     # no evidence data found used in manual assertion
     ECO_0000307 = "ECO_0000307"
@@ -3469,7 +3491,9 @@ class ECO(str, Enum):
 
     # rapid divergence from ancestral sequence evidence used in manual assertion
     ECO_0000321 = "ECO_0000321"
-    RAPID_DIVERGENCE_FROM_ANCESTRAL_SEQUENCE_EVIDENCE_USED_IN_MANUAL_ASSERTION = "ECO_0000321"
+    RAPID_DIVERGENCE_FROM_ANCESTRAL_SEQUENCE_EVIDENCE_USED_IN_MANUAL_ASSERTION = (
+        "ECO_0000321"
+    )
 
     # imported manually asserted information used in automatic assertion
     ECO_0000322 = "ECO_0000322"
@@ -3477,7 +3501,9 @@ class ECO(str, Enum):
 
     # imported automatically asserted information used in automatic assertion
     ECO_0000323 = "ECO_0000323"
-    IMPORTED_AUTOMATICALLY_ASSERTED_INFORMATION_USED_IN_AUTOMATIC_ASSERTION = "ECO_0000323"
+    IMPORTED_AUTOMATICALLY_ASSERTED_INFORMATION_USED_IN_AUTOMATIC_ASSERTION = (
+        "ECO_0000323"
+    )
 
     # imaging assay evidence
     ECO_0000324 = "ECO_0000324"
@@ -3557,11 +3583,15 @@ class ECO(str, Enum):
 
     # full support of intron positions by RNA-sequencing alignment evidence
     ECO_0000343 = "ECO_0000343"
-    FULL_SUPPORT_OF_INTRON_POSITIONS_BY_RNA_SEQUENCING_ALIGNMENT_EVIDENCE = "ECO_0000343"
+    FULL_SUPPORT_OF_INTRON_POSITIONS_BY_RNA_SEQUENCING_ALIGNMENT_EVIDENCE = (
+        "ECO_0000343"
+    )
 
     # partial support of intron positions by RNA-sequencing alignment evidence
     ECO_0000344 = "ECO_0000344"
-    PARTIAL_SUPPORT_OF_INTRON_POSITIONS_BY_RNA_SEQUENCING_ALIGNMENT_EVIDENCE = "ECO_0000344"
+    PARTIAL_SUPPORT_OF_INTRON_POSITIONS_BY_RNA_SEQUENCING_ALIGNMENT_EVIDENCE = (
+        "ECO_0000344"
+    )
 
     # single exon transcript confirmation via alignment evidence
     ECO_0000345 = "ECO_0000345"
@@ -4161,7 +4191,9 @@ class ECO(str, Enum):
 
     # terminal deoxynucleotidyl transferase dUTP nick end labeling assay evidence
     ECO_0001133 = "ECO_0001133"
-    TERMINAL_DEOXYNUCLEOTIDYL_TRANSFERASE_DUTP_NICK_END_LABELING_ASSAY_EVIDENCE = "ECO_0001133"
+    TERMINAL_DEOXYNUCLEOTIDYL_TRANSFERASE_DUTP_NICK_END_LABELING_ASSAY_EVIDENCE = (
+        "ECO_0001133"
+    )
 
     # urine test evidence
     ECO_0001134 = "ECO_0001134"
@@ -4209,7 +4241,9 @@ class ECO(str, Enum):
 
     # allograft transplantation phenotypic evidence used in manual assertion
     ECO_0001146 = "ECO_0001146"
-    ALLOGRAFT_TRANSPLANTATION_PHENOTYPIC_EVIDENCE_USED_IN_MANUAL_ASSERTION = "ECO_0001146"
+    ALLOGRAFT_TRANSPLANTATION_PHENOTYPIC_EVIDENCE_USED_IN_MANUAL_ASSERTION = (
+        "ECO_0001146"
+    )
 
     # anion-exchange chromatography evidence used in manual assertion
     ECO_0001147 = "ECO_0001147"
@@ -4245,7 +4279,9 @@ class ECO(str, Enum):
 
     # bromodeoxyuridine incorporation assay evidence used in manual assertion
     ECO_0001155 = "ECO_0001155"
-    BROMODEOXYURIDINE_INCORPORATION_ASSAY_EVIDENCE_USED_IN_MANUAL_ASSERTION = "ECO_0001155"
+    BROMODEOXYURIDINE_INCORPORATION_ASSAY_EVIDENCE_USED_IN_MANUAL_ASSERTION = (
+        "ECO_0001155"
+    )
 
     # caspase assay evidence used in manual assertion
     ECO_0001156 = "ECO_0001156"
@@ -4265,7 +4301,9 @@ class ECO(str, Enum):
 
     # chemiluminescence-linked immunoassay evidence used in manual assertion
     ECO_0001160 = "ECO_0001160"
-    CHEMILUMINESCENCE_LINKED_IMMUNOASSAY_EVIDENCE_USED_IN_MANUAL_ASSERTION = "ECO_0001160"
+    CHEMILUMINESCENCE_LINKED_IMMUNOASSAY_EVIDENCE_USED_IN_MANUAL_ASSERTION = (
+        "ECO_0001160"
+    )
 
     # chimeric protein phenotypic evidence used in manual assertion
     ECO_0001161 = "ECO_0001161"
@@ -4301,7 +4339,9 @@ class ECO(str, Enum):
 
     # constitutively active mutant protein evidence used in manual assertion
     ECO_0001169 = "ECO_0001169"
-    CONSTITUTIVELY_ACTIVE_MUTANT_PROTEIN_EVIDENCE_USED_IN_MANUAL_ASSERTION = "ECO_0001169"
+    CONSTITUTIVELY_ACTIVE_MUTANT_PROTEIN_EVIDENCE_USED_IN_MANUAL_ASSERTION = (
+        "ECO_0001169"
+    )
 
     # cross-linking evidence used in manual assertion
     ECO_0001170 = "ECO_0001170"
@@ -4321,7 +4361,9 @@ class ECO(str, Enum):
 
     # 4',6-diamidino-2-phenylindole staining evidence used in manual assertion
     ECO_0001174 = "ECO_0001174"
-    _4__6_DIAMIDINO_2_PHENYLINDOLE_STAINING_EVIDENCE_USED_IN_MANUAL_ASSERTION = "ECO_0001174"
+    _4__6_DIAMIDINO_2_PHENYLINDOLE_STAINING_EVIDENCE_USED_IN_MANUAL_ASSERTION = (
+        "ECO_0001174"
+    )
 
     # deletion mutation phenotypic evidence used in manual assertion
     ECO_0001175 = "ECO_0001175"
@@ -4337,7 +4379,9 @@ class ECO(str, Enum):
 
     # dominant-negative mutant phenotypic evidence used in manual assertion
     ECO_0001179 = "ECO_0001179"
-    DOMINANT_NEGATIVE_MUTANT_PHENOTYPIC_EVIDENCE_USED_IN_MANUAL_ASSERTION = "ECO_0001179"
+    DOMINANT_NEGATIVE_MUTANT_PHENOTYPIC_EVIDENCE_USED_IN_MANUAL_ASSERTION = (
+        "ECO_0001179"
+    )
 
     # eTag assay evidence used in manual assertion
     ECO_0001180 = "ECO_0001180"
@@ -4353,7 +4397,9 @@ class ECO(str, Enum):
 
     # fluorescence resonance energy transfer evidence used in manual assertion
     ECO_0001183 = "ECO_0001183"
-    FLUORESCENCE_RESONANCE_ENERGY_TRANSFER_EVIDENCE_USED_IN_MANUAL_ASSERTION = "ECO_0001183"
+    FLUORESCENCE_RESONANCE_ENERGY_TRANSFER_EVIDENCE_USED_IN_MANUAL_ASSERTION = (
+        "ECO_0001183"
+    )
 
     # gel-filtration evidence used in manual assertion
     ECO_0001184 = "ECO_0001184"
@@ -4425,7 +4471,9 @@ class ECO(str, Enum):
 
     # in vitro polyADP-ribosylation assay evidence used in manual assertion
     ECO_0001201 = "ECO_0001201"
-    IN_VITRO_POLYADP_RIBOSYLATION_ASSAY_EVIDENCE_USED_IN_MANUAL_ASSERTION = "ECO_0001201"
+    IN_VITRO_POLYADP_RIBOSYLATION_ASSAY_EVIDENCE_USED_IN_MANUAL_ASSERTION = (
+        "ECO_0001201"
+    )
 
     # in vitro protein kinase assay evidence used in manual assertion
     ECO_0001202 = "ECO_0001202"
@@ -4585,7 +4633,9 @@ class ECO(str, Enum):
 
     # nucleotide analog incorporation assay evidence used in manual assertion
     ECO_0001241 = "ECO_0001241"
-    NUCLEOTIDE_ANALOG_INCORPORATION_ASSAY_EVIDENCE_USED_IN_MANUAL_ASSERTION = "ECO_0001241"
+    NUCLEOTIDE_ANALOG_INCORPORATION_ASSAY_EVIDENCE_USED_IN_MANUAL_ASSERTION = (
+        "ECO_0001241"
+    )
 
     # phage display evidence used in manual assertion
     ECO_0001242 = "ECO_0001242"
@@ -4657,7 +4707,9 @@ class ECO(str, Enum):
 
     # syngeneic transplantation experiment evidence used in manual assertion
     ECO_0001259 = "ECO_0001259"
-    SYNGENEIC_TRANSPLANTATION_EXPERIMENT_EVIDENCE_USED_IN_MANUAL_ASSERTION = "ECO_0001259"
+    SYNGENEIC_TRANSPLANTATION_EXPERIMENT_EVIDENCE_USED_IN_MANUAL_ASSERTION = (
+        "ECO_0001259"
+    )
 
     # xenotransplantation phenotypic evidence used in manual assertion
     ECO_0001260 = "ECO_0001260"
@@ -4677,7 +4729,9 @@ class ECO(str, Enum):
 
     # tryptic phosphopeptide mapping assay evidence used in manual assertion
     ECO_0001265 = "ECO_0001265"
-    TRYPTIC_PHOSPHOPEPTIDE_MAPPING_ASSAY_EVIDENCE_USED_IN_MANUAL_ASSERTION = "ECO_0001265"
+    TRYPTIC_PHOSPHOPEPTIDE_MAPPING_ASSAY_EVIDENCE_USED_IN_MANUAL_ASSERTION = (
+        "ECO_0001265"
+    )
 
     # transgenic organism evidence used in manual assertion
     ECO_0001266 = "ECO_0001266"
@@ -4697,7 +4751,9 @@ class ECO(str, Enum):
 
     # restriction landmark genomic scanning evidence used in manual assertion
     ECO_0001270 = "ECO_0001270"
-    RESTRICTION_LANDMARK_GENOMIC_SCANNING_EVIDENCE_USED_IN_MANUAL_ASSERTION = "ECO_0001270"
+    RESTRICTION_LANDMARK_GENOMIC_SCANNING_EVIDENCE_USED_IN_MANUAL_ASSERTION = (
+        "ECO_0001270"
+    )
 
     # resonant mirror biosensor evidence used in manual assertion
     ECO_0001271 = "ECO_0001271"
@@ -4705,7 +4761,9 @@ class ECO(str, Enum):
 
     # high-performance liquid chromatography evidence used in manual assertion
     ECO_0001272 = "ECO_0001272"
-    HIGH_PERFORMANCE_LIQUID_CHROMATOGRAPHY_EVIDENCE_USED_IN_MANUAL_ASSERTION = "ECO_0001272"
+    HIGH_PERFORMANCE_LIQUID_CHROMATOGRAPHY_EVIDENCE_USED_IN_MANUAL_ASSERTION = (
+        "ECO_0001272"
+    )
 
     # ectopic expression evidence used in manual assertion
     ECO_0001273 = "ECO_0001273"
@@ -4779,10 +4837,6 @@ class ECO(str, Enum):
     ECO_0001559 = "ECO_0001559"
     SUMOYLATION_ASSAY_EVIDENCE = "ECO_0001559"
 
-    # single-cell RNA-sequencing evidence used in automatic assertion
-    ECO_000156 = "ECO_000156"
-    SINGLE_CELL_RNA_SEQUENCING_EVIDENCE_USED_IN_AUTOMATIC_ASSERTION = "ECO_000156"
-
     # single-cell RNA-sequencing evidence
     ECO_0001560 = "ECO_0001560"
     SINGLE_CELL_RNA_SEQUENCING_EVIDENCE = "ECO_0001560"
@@ -4805,7 +4859,9 @@ class ECO(str, Enum):
 
     # quantitative reverse transcription polymerase chain reaction evidence
     ECO_0001566 = "ECO_0001566"
-    QUANTITATIVE_REVERSE_TRANSCRIPTION_POLYMERASE_CHAIN_REACTION_EVIDENCE = "ECO_0001566"
+    QUANTITATIVE_REVERSE_TRANSCRIPTION_POLYMERASE_CHAIN_REACTION_EVIDENCE = (
+        "ECO_0001566"
+    )
 
     # quantitative reverse transcription polymerase chain reaction evidence used in manual assertion
     ECO_0001567 = "ECO_0001567"
@@ -4961,7 +5017,9 @@ class ECO(str, Enum):
 
     # electrophoretic mobility shift assay evidence used in manual assertion
     ECO_0001807 = "ECO_0001807"
-    ELECTROPHORETIC_MOBILITY_SHIFT_ASSAY_EVIDENCE_USED_IN_MANUAL_ASSERTION = "ECO_0001807"
+    ELECTROPHORETIC_MOBILITY_SHIFT_ASSAY_EVIDENCE_USED_IN_MANUAL_ASSERTION = (
+        "ECO_0001807"
+    )
 
     # reverse transcription polymerase chain reaction evidence used in manual assertion
     ECO_0001808 = "ECO_0001808"
@@ -4981,7 +5039,9 @@ class ECO(str, Enum):
 
     # genomic systematic evolution of ligands by exponential amplification evidence
     ECO_0001812 = "ECO_0001812"
-    GENOMIC_SYSTEMATIC_EVOLUTION_OF_LIGANDS_BY_EXPONENTIAL_AMPLIFICATION_EVIDENCE = "ECO_0001812"
+    GENOMIC_SYSTEMATIC_EVOLUTION_OF_LIGANDS_BY_EXPONENTIAL_AMPLIFICATION_EVIDENCE = (
+        "ECO_0001812"
+    )
 
     # heteronuclear single quantum coherence spectroscopy evidence
     ECO_0001813 = "ECO_0001813"
@@ -4989,7 +5049,9 @@ class ECO(str, Enum):
 
     # methidiumpropyl-ethylenediaminetetraacetic acid iron (II) footprinting evidence
     ECO_0001814 = "ECO_0001814"
-    METHIDIUMPROPYL_ETHYLENEDIAMINETETRAACETIC_ACID_IRON__II__FOOTPRINTING_EVIDENCE = "ECO_0001814"
+    METHIDIUMPROPYL_ETHYLENEDIAMINETETRAACETIC_ACID_IRON__II__FOOTPRINTING_EVIDENCE = (
+        "ECO_0001814"
+    )
 
     # copper-phenanthroline footprinting evidence
     ECO_0001815 = "ECO_0001815"
@@ -5041,7 +5103,9 @@ class ECO(str, Enum):
 
     # inference of sequence features from visual inspection used in manual assertion
     ECO_0001828 = "ECO_0001828"
-    INFERENCE_OF_SEQUENCE_FEATURES_FROM_VISUAL_INSPECTION_USED_IN_MANUAL_ASSERTION = "ECO_0001828"
+    INFERENCE_OF_SEQUENCE_FEATURES_FROM_VISUAL_INSPECTION_USED_IN_MANUAL_ASSERTION = (
+        "ECO_0001828"
+    )
 
     # ferric uptake regulator titration assay evidence
     ECO_0001829 = "ECO_0001829"
@@ -5089,7 +5153,9 @@ class ECO(str, Enum):
 
     # colorimetric in situ hybridization evidence used in automatic assertion
     ECO_0001840 = "ECO_0001840"
-    COLORIMETRIC_IN_SITU_HYBRIDIZATION_EVIDENCE_USED_IN_AUTOMATIC_ASSERTION = "ECO_0001840"
+    COLORIMETRIC_IN_SITU_HYBRIDIZATION_EVIDENCE_USED_IN_AUTOMATIC_ASSERTION = (
+        "ECO_0001840"
+    )
 
     # colorimetric in situ hybridization evidence used in manual assertion
     ECO_0001841 = "ECO_0001841"
@@ -5101,11 +5167,15 @@ class ECO(str, Enum):
 
     # random mutagenesis of specific target DNA evidence used in automatic assertion
     ECO_0001843 = "ECO_0001843"
-    RANDOM_MUTAGENESIS_OF_SPECIFIC_TARGET_DNA_EVIDENCE_USED_IN_AUTOMATIC_ASSERTION = "ECO_0001843"
+    RANDOM_MUTAGENESIS_OF_SPECIFIC_TARGET_DNA_EVIDENCE_USED_IN_AUTOMATIC_ASSERTION = (
+        "ECO_0001843"
+    )
 
     # random mutagenesis of specific target DNA evidence used in manual assertion
     ECO_0001844 = "ECO_0001844"
-    RANDOM_MUTAGENESIS_OF_SPECIFIC_TARGET_DNA_EVIDENCE_USED_IN_MANUAL_ASSERTION = "ECO_0001844"
+    RANDOM_MUTAGENESIS_OF_SPECIFIC_TARGET_DNA_EVIDENCE_USED_IN_MANUAL_ASSERTION = (
+        "ECO_0001844"
+    )
 
     # cell population optical density evidence
     ECO_0001845 = "ECO_0001845"
@@ -5313,7 +5383,9 @@ class ECO(str, Enum):
 
     # obsolete computationally derived logical inference used in automatic assertion
     ECO_0005539 = "ECO_0005539"
-    OBSOLETE_COMPUTATIONALLY_DERIVED_LOGICAL_INFERENCE_USED_IN_AUTOMATIC_ASSERTION = "ECO_0005539"
+    OBSOLETE_COMPUTATIONALLY_DERIVED_LOGICAL_INFERENCE_USED_IN_AUTOMATIC_ASSERTION = (
+        "ECO_0005539"
+    )
 
     # obsolete computationally derived logical inference from automatic assertion used in automatic assertion
     ECO_0005540 = "ECO_0005540"
@@ -5337,7 +5409,9 @@ class ECO(str, Enum):
 
     # biological system reconstruction evidence based on orthology evidence
     ECO_0005545 = "ECO_0005545"
-    BIOLOGICAL_SYSTEM_RECONSTRUCTION_EVIDENCE_BASED_ON_ORTHOLOGY_EVIDENCE = "ECO_0005545"
+    BIOLOGICAL_SYSTEM_RECONSTRUCTION_EVIDENCE_BASED_ON_ORTHOLOGY_EVIDENCE = (
+        "ECO_0005545"
+    )
 
     # biological system reconstruction evidence based on paralogy evidence used in manual assertion
     ECO_0005546 = "ECO_0005546"
@@ -5481,7 +5555,9 @@ class ECO(str, Enum):
 
     # enzyme-linked immunoabsorbent assay evidence used in manual assertion
     ECO_0005581 = "ECO_0005581"
-    ENZYME_LINKED_IMMUNOABSORBENT_ASSAY_EVIDENCE_USED_IN_MANUAL_ASSERTION = "ECO_0005581"
+    ENZYME_LINKED_IMMUNOABSORBENT_ASSAY_EVIDENCE_USED_IN_MANUAL_ASSERTION = (
+        "ECO_0005581"
+    )
 
     # cell-detached outside-out single-channel recording evidence
     ECO_0005582 = "ECO_0005582"
@@ -5525,7 +5601,9 @@ class ECO(str, Enum):
 
     # immunogold labelling electron microscopy assay evidence used in manual assertion
     ECO_0005592 = "ECO_0005592"
-    IMMUNOGOLD_LABELLING_ELECTRON_MICROSCOPY_ASSAY_EVIDENCE_USED_IN_MANUAL_ASSERTION = "ECO_0005592"
+    IMMUNOGOLD_LABELLING_ELECTRON_MICROSCOPY_ASSAY_EVIDENCE_USED_IN_MANUAL_ASSERTION = (
+        "ECO_0005592"
+    )
 
     # immunodetection assay evidence
     ECO_0005593 = "ECO_0005593"
@@ -5537,7 +5615,9 @@ class ECO(str, Enum):
 
     # immunoperoxidase immunolocalization evidence used in manual assertion
     ECO_0005595 = "ECO_0005595"
-    IMMUNOPEROXIDASE_IMMUNOLOCALIZATION_EVIDENCE_USED_IN_MANUAL_ASSERTION = "ECO_0005595"
+    IMMUNOPEROXIDASE_IMMUNOLOCALIZATION_EVIDENCE_USED_IN_MANUAL_ASSERTION = (
+        "ECO_0005595"
+    )
 
     # immunoperoxidase immunolocalization electron microscopy evidence
     ECO_0005596 = "ECO_0005596"
@@ -5561,7 +5641,9 @@ class ECO(str, Enum):
 
     # immunofluorescence confocal microscopy evidence used in manual assertion
     ECO_0005601 = "ECO_0005601"
-    IMMUNOFLUORESCENCE_CONFOCAL_MICROSCOPY_EVIDENCE_USED_IN_MANUAL_ASSERTION = "ECO_0005601"
+    IMMUNOFLUORESCENCE_CONFOCAL_MICROSCOPY_EVIDENCE_USED_IN_MANUAL_ASSERTION = (
+        "ECO_0005601"
+    )
 
     # protein mass spectrometry evidence
     ECO_0005603 = "ECO_0005603"
@@ -5613,11 +5695,15 @@ class ECO(str, Enum):
 
     # alkaline phosphatase reporter gene assay evidence used in manual assertion
     ECO_0005615 = "ECO_0005615"
-    ALKALINE_PHOSPHATASE_REPORTER_GENE_ASSAY_EVIDENCE_USED_IN_MANUAL_ASSERTION = "ECO_0005615"
+    ALKALINE_PHOSPHATASE_REPORTER_GENE_ASSAY_EVIDENCE_USED_IN_MANUAL_ASSERTION = (
+        "ECO_0005615"
+    )
 
     # beta-galactosidase reporter gene assay evidence used in manual assertion
     ECO_0005616 = "ECO_0005616"
-    BETA_GALACTOSIDASE_REPORTER_GENE_ASSAY_EVIDENCE_USED_IN_MANUAL_ASSERTION = "ECO_0005616"
+    BETA_GALACTOSIDASE_REPORTER_GENE_ASSAY_EVIDENCE_USED_IN_MANUAL_ASSERTION = (
+        "ECO_0005616"
+    )
 
     # chloramphenicol acetyltransferase reporter gene assay evidence used in manual assertion
     ECO_0005617 = "ECO_0005617"
@@ -5625,11 +5711,15 @@ class ECO(str, Enum):
 
     # chromatin immunoprecipitation-chip evidence used in automatic assertion
     ECO_0005618 = "ECO_0005618"
-    CHROMATIN_IMMUNOPRECIPITATION_CHIP_EVIDENCE_USED_IN_AUTOMATIC_ASSERTION = "ECO_0005618"
+    CHROMATIN_IMMUNOPRECIPITATION_CHIP_EVIDENCE_USED_IN_AUTOMATIC_ASSERTION = (
+        "ECO_0005618"
+    )
 
     # chromatin immunoprecipitation- exonuclease evidence used in automatic assertion
     ECO_0005619 = "ECO_0005619"
-    CHROMATIN_IMMUNOPRECIPITATION__EXONUCLEASE_EVIDENCE_USED_IN_AUTOMATIC_ASSERTION = "ECO_0005619"
+    CHROMATIN_IMMUNOPRECIPITATION__EXONUCLEASE_EVIDENCE_USED_IN_AUTOMATIC_ASSERTION = (
+        "ECO_0005619"
+    )
 
     # chromatin immunoprecipitation-PCR evidence used in manual assertion
     ECO_0005620 = "ECO_0005620"
@@ -5637,7 +5727,9 @@ class ECO(str, Enum):
 
     # chromatin immunoprecipitation-seq evidence used in automatic assertion
     ECO_0005621 = "ECO_0005621"
-    CHROMATIN_IMMUNOPRECIPITATION_SEQ_EVIDENCE_USED_IN_AUTOMATIC_ASSERTION = "ECO_0005621"
+    CHROMATIN_IMMUNOPRECIPITATION_SEQ_EVIDENCE_USED_IN_AUTOMATIC_ASSERTION = (
+        "ECO_0005621"
+    )
 
     # comparative genomics motif search evidence used in manual assertion
     ECO_0005622 = "ECO_0005622"
@@ -5645,7 +5737,9 @@ class ECO(str, Enum):
 
     # comparative genomics motif search evidence used in automatic assertion
     ECO_0005623 = "ECO_0005623"
-    COMPARATIVE_GENOMICS_MOTIF_SEARCH_EVIDENCE_USED_IN_AUTOMATIC_ASSERTION = "ECO_0005623"
+    COMPARATIVE_GENOMICS_MOTIF_SEARCH_EVIDENCE_USED_IN_AUTOMATIC_ASSERTION = (
+        "ECO_0005623"
+    )
 
     # consensus search evidence used in manual assertion
     ECO_0005624 = "ECO_0005624"
@@ -5661,7 +5755,9 @@ class ECO(str, Enum):
 
     # DNA adenine methyltransferase identification evidence used in manual assertion
     ECO_0005627 = "ECO_0005627"
-    DNA_ADENINE_METHYLTRANSFERASE_IDENTIFICATION_EVIDENCE_USED_IN_MANUAL_ASSERTION = "ECO_0005627"
+    DNA_ADENINE_METHYLTRANSFERASE_IDENTIFICATION_EVIDENCE_USED_IN_MANUAL_ASSERTION = (
+        "ECO_0005627"
+    )
 
     # DNA adenine methyltransferase identification evidence used in automatic assertion
     ECO_0005628 = "ECO_0005628"
@@ -5673,7 +5769,9 @@ class ECO(str, Enum):
 
     # cDNA to DNA expression microarray evidence used in automatic assertion
     ECO_0005630 = "ECO_0005630"
-    CDNA_TO_DNA_EXPRESSION_MICROARRAY_EVIDENCE_USED_IN_AUTOMATIC_ASSERTION = "ECO_0005630"
+    CDNA_TO_DNA_EXPRESSION_MICROARRAY_EVIDENCE_USED_IN_AUTOMATIC_ASSERTION = (
+        "ECO_0005630"
+    )
 
     # DNAse footprinting evidence used in manual assertion
     ECO_0005631 = "ECO_0005631"
@@ -5685,7 +5783,9 @@ class ECO(str, Enum):
 
     # ferric uptake regulator titration assay evidence used in manual assertion
     ECO_0005633 = "ECO_0005633"
-    FERRIC_UPTAKE_REGULATOR_TITRATION_ASSAY_EVIDENCE_USED_IN_MANUAL_ASSERTION = "ECO_0005633"
+    FERRIC_UPTAKE_REGULATOR_TITRATION_ASSAY_EVIDENCE_USED_IN_MANUAL_ASSERTION = (
+        "ECO_0005633"
+    )
 
     # genomic systematic evolution of ligands by exponential amplification evidence used in manual assertion
     ECO_0005634 = "ECO_0005634"
@@ -5697,7 +5797,9 @@ class ECO(str, Enum):
 
     # green fluorescent protein reporter gene assay evidence used in manual assertion
     ECO_0005636 = "ECO_0005636"
-    GREEN_FLUORESCENT_PROTEIN_REPORTER_GENE_ASSAY_EVIDENCE_USED_IN_MANUAL_ASSERTION = "ECO_0005636"
+    GREEN_FLUORESCENT_PROTEIN_REPORTER_GENE_ASSAY_EVIDENCE_USED_IN_MANUAL_ASSERTION = (
+        "ECO_0005636"
+    )
 
     # green fluorescent protein reporter gene assay evidence used in automatic assertion
     ECO_0005637 = "ECO_0005637"
@@ -5713,11 +5815,15 @@ class ECO(str, Enum):
 
     # glutathione S-transferase pull-down assay evidence used in manual assertion
     ECO_0005640 = "ECO_0005640"
-    GLUTATHIONE_S_TRANSFERASE_PULL_DOWN_ASSAY_EVIDENCE_USED_IN_MANUAL_ASSERTION = "ECO_0005640"
+    GLUTATHIONE_S_TRANSFERASE_PULL_DOWN_ASSAY_EVIDENCE_USED_IN_MANUAL_ASSERTION = (
+        "ECO_0005640"
+    )
 
     # beta-glucuronidase reporter gene assay evidence used in manual assertion
     ECO_0005641 = "ECO_0005641"
-    BETA_GLUCURONIDASE_REPORTER_GENE_ASSAY_EVIDENCE_USED_IN_MANUAL_ASSERTION = "ECO_0005641"
+    BETA_GLUCURONIDASE_REPORTER_GENE_ASSAY_EVIDENCE_USED_IN_MANUAL_ASSERTION = (
+        "ECO_0005641"
+    )
 
     # heteronuclear single quantum coherence spectroscopy evidence used in manual assertion
     ECO_0005642 = "ECO_0005642"
@@ -5733,11 +5839,15 @@ class ECO(str, Enum):
 
     # interferometric reflectance imaging sensor evidence used in manual assertion
     ECO_0005645 = "ECO_0005645"
-    INTERFEROMETRIC_REFLECTANCE_IMAGING_SENSOR_EVIDENCE_USED_IN_MANUAL_ASSERTION = "ECO_0005645"
+    INTERFEROMETRIC_REFLECTANCE_IMAGING_SENSOR_EVIDENCE_USED_IN_MANUAL_ASSERTION = (
+        "ECO_0005645"
+    )
 
     # interferometric reflectance imaging sensor evidence used in automatic assertion
     ECO_0005646 = "ECO_0005646"
-    INTERFEROMETRIC_REFLECTANCE_IMAGING_SENSOR_EVIDENCE_USED_IN_AUTOMATIC_ASSERTION = "ECO_0005646"
+    INTERFEROMETRIC_REFLECTANCE_IMAGING_SENSOR_EVIDENCE_USED_IN_AUTOMATIC_ASSERTION = (
+        "ECO_0005646"
+    )
 
     # isothermal titration calorimetry evidence used in manual assertion
     ECO_0005647 = "ECO_0005647"
@@ -5749,7 +5859,9 @@ class ECO(str, Enum):
 
     # machine learning prediction of motif instance evidence used in manual assertion
     ECO_0005649 = "ECO_0005649"
-    MACHINE_LEARNING_PREDICTION_OF_MOTIF_INSTANCE_EVIDENCE_USED_IN_MANUAL_ASSERTION = "ECO_0005649"
+    MACHINE_LEARNING_PREDICTION_OF_MOTIF_INSTANCE_EVIDENCE_USED_IN_MANUAL_ASSERTION = (
+        "ECO_0005649"
+    )
 
     # machine learning prediction of motif instance evidence used in automatic assertion
     ECO_0005650 = "ECO_0005650"
@@ -5777,7 +5889,9 @@ class ECO(str, Enum):
 
     # methylation interference footprinting evidence used in manual assertion
     ECO_0005656 = "ECO_0005656"
-    METHYLATION_INTERFERENCE_FOOTPRINTING_EVIDENCE_USED_IN_MANUAL_ASSERTION = "ECO_0005656"
+    METHYLATION_INTERFERENCE_FOOTPRINTING_EVIDENCE_USED_IN_MANUAL_ASSERTION = (
+        "ECO_0005656"
+    )
 
     # primer extension assay evidence used in manual assertion
     ECO_0005657 = "ECO_0005657"
@@ -5785,7 +5899,9 @@ class ECO(str, Enum):
 
     # position-specific scoring matrix motif search evidence used in manual assertion
     ECO_0005658 = "ECO_0005658"
-    POSITION_SPECIFIC_SCORING_MATRIX_MOTIF_SEARCH_EVIDENCE_USED_IN_MANUAL_ASSERTION = "ECO_0005658"
+    POSITION_SPECIFIC_SCORING_MATRIX_MOTIF_SEARCH_EVIDENCE_USED_IN_MANUAL_ASSERTION = (
+        "ECO_0005658"
+    )
 
     # position-specific scoring matrix motif search evidence used in automatic assertion
     ECO_0005659 = "ECO_0005659"
@@ -5793,7 +5909,9 @@ class ECO(str, Enum):
 
     # quantitative polymerase chain reaction evidence used in manual assertion
     ECO_0005660 = "ECO_0005660"
-    QUANTITATIVE_POLYMERASE_CHAIN_REACTION_EVIDENCE_USED_IN_MANUAL_ASSERTION = "ECO_0005660"
+    QUANTITATIVE_POLYMERASE_CHAIN_REACTION_EVIDENCE_USED_IN_MANUAL_ASSERTION = (
+        "ECO_0005660"
+    )
 
     # rapid amplification of cDNA ends polymerase chain reaction evidence used in manual assertion
     ECO_0005661 = "ECO_0005661"
@@ -5813,7 +5931,9 @@ class ECO(str, Enum):
 
     # site-directed mutagenesis phenotypic evidence used in manual assertion
     ECO_0005667 = "ECO_0005667"
-    SITE_DIRECTED_MUTAGENESIS_PHENOTYPIC_EVIDENCE_USED_IN_MANUAL_ASSERTION = "ECO_0005667"
+    SITE_DIRECTED_MUTAGENESIS_PHENOTYPIC_EVIDENCE_USED_IN_MANUAL_ASSERTION = (
+        "ECO_0005667"
+    )
 
     # survival rate analysis evidence used in manual assertion
     ECO_0005668 = "ECO_0005668"
@@ -5841,7 +5961,9 @@ class ECO(str, Enum):
 
     # ad-hoc qualitative phenotype observation evidence used in manual assertion
     ECO_0005674 = "ECO_0005674"
-    AD_HOC_QUALITATIVE_PHENOTYPE_OBSERVATION_EVIDENCE_USED_IN_MANUAL_ASSERTION = "ECO_0005674"
+    AD_HOC_QUALITATIVE_PHENOTYPE_OBSERVATION_EVIDENCE_USED_IN_MANUAL_ASSERTION = (
+        "ECO_0005674"
+    )
 
     # ad-hoc quantitative phenotype observation evidence
     ECO_0005675 = "ECO_0005675"
@@ -5849,7 +5971,9 @@ class ECO(str, Enum):
 
     # ad-hoc quantitative phenotype observation evidence used in manual assertion
     ECO_0005676 = "ECO_0005676"
-    AD_HOC_QUANTITATIVE_PHENOTYPE_OBSERVATION_EVIDENCE_USED_IN_MANUAL_ASSERTION = "ECO_0005676"
+    AD_HOC_QUANTITATIVE_PHENOTYPE_OBSERVATION_EVIDENCE_USED_IN_MANUAL_ASSERTION = (
+        "ECO_0005676"
+    )
 
     # dilution assay evidence
     ECO_0005800 = "ECO_0005800"
@@ -5905,7 +6029,9 @@ class ECO(str, Enum):
 
     # chromatin immunoprecipitation- exonuclease evidence used in manual assertion
     ECO_0006008 = "ECO_0006008"
-    CHROMATIN_IMMUNOPRECIPITATION__EXONUCLEASE_EVIDENCE_USED_IN_MANUAL_ASSERTION = "ECO_0006008"
+    CHROMATIN_IMMUNOPRECIPITATION__EXONUCLEASE_EVIDENCE_USED_IN_MANUAL_ASSERTION = (
+        "ECO_0006008"
+    )
 
     # chromatin immunoprecipitation-seq evidence used in manual assertion
     ECO_0006009 = "ECO_0006009"
@@ -5949,7 +6075,9 @@ class ECO(str, Enum):
 
     # inference based on individual clinical experience used in manual assertion
     ECO_0006019 = "ECO_0006019"
-    INFERENCE_BASED_ON_INDIVIDUAL_CLINICAL_EXPERIENCE_USED_IN_MANUAL_ASSERTION = "ECO_0006019"
+    INFERENCE_BASED_ON_INDIVIDUAL_CLINICAL_EXPERIENCE_USED_IN_MANUAL_ASSERTION = (
+        "ECO_0006019"
+    )
 
     # biofilm formation assay evidence
     ECO_0006020 = "ECO_0006020"
@@ -6021,7 +6149,9 @@ class ECO(str, Enum):
 
     # genetically encoded fluorescent sensor evidence used in manual assertion
     ECO_0006037 = "ECO_0006037"
-    GENETICALLY_ENCODED_FLUORESCENT_SENSOR_EVIDENCE_USED_IN_MANUAL_ASSERTION = "ECO_0006037"
+    GENETICALLY_ENCODED_FLUORESCENT_SENSOR_EVIDENCE_USED_IN_MANUAL_ASSERTION = (
+        "ECO_0006037"
+    )
 
     # genetically encoded fluorescent electrophysiology assay evidence
     ECO_0006038 = "ECO_0006038"
@@ -6033,7 +6163,9 @@ class ECO(str, Enum):
 
     # genetically encoded fluorescent ion concentration sensor assay evidence
     ECO_0006040 = "ECO_0006040"
-    GENETICALLY_ENCODED_FLUORESCENT_ION_CONCENTRATION_SENSOR_ASSAY_EVIDENCE = "ECO_0006040"
+    GENETICALLY_ENCODED_FLUORESCENT_ION_CONCENTRATION_SENSOR_ASSAY_EVIDENCE = (
+        "ECO_0006040"
+    )
 
     # genetically encoded fluorescent ion concentration sensor assay evidence used in manual assertion
     ECO_0006041 = "ECO_0006041"
@@ -6057,7 +6189,9 @@ class ECO(str, Enum):
 
     # single-unit extracellular recording evidence used in manual assertion
     ECO_0006046 = "ECO_0006046"
-    SINGLE_UNIT_EXTRACELLULAR_RECORDING_EVIDENCE_USED_IN_MANUAL_ASSERTION = "ECO_0006046"
+    SINGLE_UNIT_EXTRACELLULAR_RECORDING_EVIDENCE_USED_IN_MANUAL_ASSERTION = (
+        "ECO_0006046"
+    )
 
     # field potential recording evidence
     ECO_0006047 = "ECO_0006047"
@@ -6117,7 +6251,9 @@ class ECO(str, Enum):
 
     # immunofluorescence wide-field microscopy evidence used in manual assertion
     ECO_0006061 = "ECO_0006061"
-    IMMUNOFLUORESCENCE_WIDE_FIELD_MICROSCOPY_EVIDENCE_USED_IN_MANUAL_ASSERTION = "ECO_0006061"
+    IMMUNOFLUORESCENCE_WIDE_FIELD_MICROSCOPY_EVIDENCE_USED_IN_MANUAL_ASSERTION = (
+        "ECO_0006061"
+    )
 
     # wide-field fluorescence microscopy evidence used in manual assertion
     ECO_0006062 = "ECO_0006062"
@@ -6141,7 +6277,9 @@ class ECO(str, Enum):
 
     # fluorescence recovery after photobleaching evidence used in manual assertion
     ECO_0006067 = "ECO_0006067"
-    FLUORESCENCE_RECOVERY_AFTER_PHOTOBLEACHING_EVIDENCE_USED_IN_MANUAL_ASSERTION = "ECO_0006067"
+    FLUORESCENCE_RECOVERY_AFTER_PHOTOBLEACHING_EVIDENCE_USED_IN_MANUAL_ASSERTION = (
+        "ECO_0006067"
+    )
 
     # RNA-sequencing evidence used in manual assertion
     ECO_0006068 = "ECO_0006068"
@@ -6157,7 +6295,9 @@ class ECO(str, Enum):
 
     # immuno-labelling electron microscopy evidence used in manual assertion
     ECO_0006071 = "ECO_0006071"
-    IMMUNO_LABELLING_ELECTRON_MICROSCOPY_EVIDENCE_USED_IN_MANUAL_ASSERTION = "ECO_0006071"
+    IMMUNO_LABELLING_ELECTRON_MICROSCOPY_EVIDENCE_USED_IN_MANUAL_ASSERTION = (
+        "ECO_0006071"
+    )
 
     # immunofluorescence super resolution microscopy evidence
     ECO_0006072 = "ECO_0006072"
@@ -6165,7 +6305,9 @@ class ECO(str, Enum):
 
     # immunofluorescence super resolution microscopy evidence used in manual assertion
     ECO_0006073 = "ECO_0006073"
-    IMMUNOFLUORESCENCE_SUPER_RESOLUTION_MICROSCOPY_EVIDENCE_USED_IN_MANUAL_ASSERTION = "ECO_0006073"
+    IMMUNOFLUORESCENCE_SUPER_RESOLUTION_MICROSCOPY_EVIDENCE_USED_IN_MANUAL_ASSERTION = (
+        "ECO_0006073"
+    )
 
     # co-purification evidence used in manual assertion
     ECO_0006074 = "ECO_0006074"
@@ -6193,7 +6335,9 @@ class ECO(str, Enum):
 
     # split-ubiquitin functional complementation evidence used in manual assertion
     ECO_0006080 = "ECO_0006080"
-    SPLIT_UBIQUITIN_FUNCTIONAL_COMPLEMENTATION_EVIDENCE_USED_IN_MANUAL_ASSERTION = "ECO_0006080"
+    SPLIT_UBIQUITIN_FUNCTIONAL_COMPLEMENTATION_EVIDENCE_USED_IN_MANUAL_ASSERTION = (
+        "ECO_0006080"
+    )
 
     # far-Western blotting evidence used in manual assertion
     ECO_0006081 = "ECO_0006081"
@@ -6233,7 +6377,9 @@ class ECO(str, Enum):
 
     # protein-oligonucleotide microarray binding evidence used in manual assertion
     ECO_0006090 = "ECO_0006090"
-    PROTEIN_OLIGONUCLEOTIDE_MICROARRAY_BINDING_EVIDENCE_USED_IN_MANUAL_ASSERTION = "ECO_0006090"
+    PROTEIN_OLIGONUCLEOTIDE_MICROARRAY_BINDING_EVIDENCE_USED_IN_MANUAL_ASSERTION = (
+        "ECO_0006090"
+    )
 
     # functional complementation evidence used in manual assertion
     ECO_0006091 = "ECO_0006091"
@@ -6249,7 +6395,9 @@ class ECO(str, Enum):
 
     # suppressor/enhancer interaction phenotypic evidence used in manual assertion
     ECO_0006094 = "ECO_0006094"
-    SUPPRESSOR_ENHANCER_INTERACTION_PHENOTYPIC_EVIDENCE_USED_IN_MANUAL_ASSERTION = "ECO_0006094"
+    SUPPRESSOR_ENHANCER_INTERACTION_PHENOTYPIC_EVIDENCE_USED_IN_MANUAL_ASSERTION = (
+        "ECO_0006094"
+    )
 
     # double mutant phenotypic evidence used in manual assertion
     ECO_0006095 = "ECO_0006095"
@@ -6269,7 +6417,9 @@ class ECO(str, Enum):
 
     # temperature-sensitive mutant phenotypic evidence used in manual assertion
     ECO_0006099 = "ECO_0006099"
-    TEMPERATURE_SENSITIVE_MUTANT_PHENOTYPIC_EVIDENCE_USED_IN_MANUAL_ASSERTION = "ECO_0006099"
+    TEMPERATURE_SENSITIVE_MUTANT_PHENOTYPIC_EVIDENCE_USED_IN_MANUAL_ASSERTION = (
+        "ECO_0006099"
+    )
 
     # recessive mutant phenotype evidence
     ECO_0006100 = "ECO_0006100"
@@ -6321,11 +6471,15 @@ class ECO(str, Enum):
 
     # density functional theory simulation evidence used in manual assertion
     ECO_0006145 = "ECO_0006145"
-    DENSITY_FUNCTIONAL_THEORY_SIMULATION_EVIDENCE_USED_IN_MANUAL_ASSERTION = "ECO_0006145"
+    DENSITY_FUNCTIONAL_THEORY_SIMULATION_EVIDENCE_USED_IN_MANUAL_ASSERTION = (
+        "ECO_0006145"
+    )
 
     # density functional theory simulation evidence used in automatic assertion
     ECO_0006146 = "ECO_0006146"
-    DENSITY_FUNCTIONAL_THEORY_SIMULATION_EVIDENCE_USED_IN_AUTOMATIC_ASSERTION = "ECO_0006146"
+    DENSITY_FUNCTIONAL_THEORY_SIMULATION_EVIDENCE_USED_IN_AUTOMATIC_ASSERTION = (
+        "ECO_0006146"
+    )
 
     # documented statement evidence
     ECO_0006151 = "ECO_0006151"
@@ -6353,11 +6507,15 @@ class ECO(str, Enum):
 
     # self-reported individual's statement evidence used in manual assertion
     ECO_0006157 = "ECO_0006157"
-    SELF_REPORTED_INDIVIDUAL_S_STATEMENT_EVIDENCE_USED_IN_MANUAL_ASSERTION = "ECO_0006157"
+    SELF_REPORTED_INDIVIDUAL_S_STATEMENT_EVIDENCE_USED_IN_MANUAL_ASSERTION = (
+        "ECO_0006157"
+    )
 
     # self-reported individual's statement evidence used in automatic assertion
     ECO_0006158 = "ECO_0006158"
-    SELF_REPORTED_INDIVIDUAL_S_STATEMENT_EVIDENCE_USED_IN_AUTOMATIC_ASSERTION = "ECO_0006158"
+    SELF_REPORTED_INDIVIDUAL_S_STATEMENT_EVIDENCE_USED_IN_AUTOMATIC_ASSERTION = (
+        "ECO_0006158"
+    )
 
     # self-reported patient statement evidence used in manual assertion
     ECO_0006159 = "ECO_0006159"
@@ -6381,11 +6539,15 @@ class ECO(str, Enum):
 
     # nuclear magnetic resonance spectroscopy evidence used in automatic assertion
     ECO_0006164 = "ECO_0006164"
-    NUCLEAR_MAGNETIC_RESONANCE_SPECTROSCOPY_EVIDENCE_USED_IN_AUTOMATIC_ASSERTION = "ECO_0006164"
+    NUCLEAR_MAGNETIC_RESONANCE_SPECTROSCOPY_EVIDENCE_USED_IN_AUTOMATIC_ASSERTION = (
+        "ECO_0006164"
+    )
 
     # nuclear magnetic resonance spectroscopy evidence used in manual assertion
     ECO_0006165 = "ECO_0006165"
-    NUCLEAR_MAGNETIC_RESONANCE_SPECTROSCOPY_EVIDENCE_USED_IN_MANUAL_ASSERTION = "ECO_0006165"
+    NUCLEAR_MAGNETIC_RESONANCE_SPECTROSCOPY_EVIDENCE_USED_IN_MANUAL_ASSERTION = (
+        "ECO_0006165"
+    )
 
     # nuclear magnetic resonance imaging evidence
     ECO_0006166 = "ECO_0006166"
@@ -6393,7 +6555,9 @@ class ECO(str, Enum):
 
     # nuclear magnetic resonance imaging evidence used in automatic assertion
     ECO_0006167 = "ECO_0006167"
-    NUCLEAR_MAGNETIC_RESONANCE_IMAGING_EVIDENCE_USED_IN_AUTOMATIC_ASSERTION = "ECO_0006167"
+    NUCLEAR_MAGNETIC_RESONANCE_IMAGING_EVIDENCE_USED_IN_AUTOMATIC_ASSERTION = (
+        "ECO_0006167"
+    )
 
     # nuclear magnetic resonance imaging evidence used in manual assertion
     ECO_0006168 = "ECO_0006168"
@@ -6405,15 +6569,21 @@ class ECO(str, Enum):
 
     # quantitative western immunoblotting evidence used in manual assertion
     ECO_0006170 = "ECO_0006170"
-    QUANTITATIVE_WESTERN_IMMUNOBLOTTING_EVIDENCE_USED_IN_MANUAL_ASSERTION = "ECO_0006170"
+    QUANTITATIVE_WESTERN_IMMUNOBLOTTING_EVIDENCE_USED_IN_MANUAL_ASSERTION = (
+        "ECO_0006170"
+    )
 
     # quantitative western immunoblotting evidence used in automatic assertion
     ECO_0006171 = "ECO_0006171"
-    QUANTITATIVE_WESTERN_IMMUNOBLOTTING_EVIDENCE_USED_IN_AUTOMATIC_ASSERTION = "ECO_0006171"
+    QUANTITATIVE_WESTERN_IMMUNOBLOTTING_EVIDENCE_USED_IN_AUTOMATIC_ASSERTION = (
+        "ECO_0006171"
+    )
 
     # mixed support of intron positions by RNA-sequencing alignment evidence
     ECO_0006172 = "ECO_0006172"
-    MIXED_SUPPORT_OF_INTRON_POSITIONS_BY_RNA_SEQUENCING_ALIGNMENT_EVIDENCE = "ECO_0006172"
+    MIXED_SUPPORT_OF_INTRON_POSITIONS_BY_RNA_SEQUENCING_ALIGNMENT_EVIDENCE = (
+        "ECO_0006172"
+    )
 
     # mixed support of intron positions by RNA-sequencing alignment evidence used in automatic assertion
     ECO_0006173 = "ECO_0006173"
@@ -6473,11 +6643,15 @@ class ECO(str, Enum):
 
     # X-ray crystallography-based structural model with missing residue coordinates
     ECO_0006187 = "ECO_0006187"
-    X_RAY_CRYSTALLOGRAPHY_BASED_STRUCTURAL_MODEL_WITH_MISSING_RESIDUE_COORDINATES = "ECO_0006187"
+    X_RAY_CRYSTALLOGRAPHY_BASED_STRUCTURAL_MODEL_WITH_MISSING_RESIDUE_COORDINATES = (
+        "ECO_0006187"
+    )
 
     # X-ray crystallography-based structural model with high relative B-factor values
     ECO_0006188 = "ECO_0006188"
-    X_RAY_CRYSTALLOGRAPHY_BASED_STRUCTURAL_MODEL_WITH_HIGH_RELATIVE_B_FACTOR_VALUES = "ECO_0006188"
+    X_RAY_CRYSTALLOGRAPHY_BASED_STRUCTURAL_MODEL_WITH_HIGH_RELATIVE_B_FACTOR_VALUES = (
+        "ECO_0006188"
+    )
 
     # cryogenic electron microscopy-based structural model with missing residue coordinates
     ECO_0006189 = "ECO_0006189"
@@ -6517,11 +6691,15 @@ class ECO(str, Enum):
 
     # proton-based nuclear magnetic resonance evidence used in manual assertion
     ECO_0006198 = "ECO_0006198"
-    PROTON_BASED_NUCLEAR_MAGNETIC_RESONANCE_EVIDENCE_USED_IN_MANUAL_ASSERTION = "ECO_0006198"
+    PROTON_BASED_NUCLEAR_MAGNETIC_RESONANCE_EVIDENCE_USED_IN_MANUAL_ASSERTION = (
+        "ECO_0006198"
+    )
 
     # proton-based nuclear magnetic resonance evidence used in automatic assertion
     ECO_0006199 = "ECO_0006199"
-    PROTON_BASED_NUCLEAR_MAGNETIC_RESONANCE_EVIDENCE_USED_IN_AUTOMATIC_ASSERTION = "ECO_0006199"
+    PROTON_BASED_NUCLEAR_MAGNETIC_RESONANCE_EVIDENCE_USED_IN_AUTOMATIC_ASSERTION = (
+        "ECO_0006199"
+    )
 
     # circular dichroism evidence used in manual assertion
     ECO_0006200 = "ECO_0006200"
@@ -6533,11 +6711,15 @@ class ECO(str, Enum):
 
     # synchrotron radiation circular dichroism evidence used in manual assertion
     ECO_0006202 = "ECO_0006202"
-    SYNCHROTRON_RADIATION_CIRCULAR_DICHROISM_EVIDENCE_USED_IN_MANUAL_ASSERTION = "ECO_0006202"
+    SYNCHROTRON_RADIATION_CIRCULAR_DICHROISM_EVIDENCE_USED_IN_MANUAL_ASSERTION = (
+        "ECO_0006202"
+    )
 
     # synchrotron radiation circular dichroism evidence used in automatic assertion
     ECO_0006203 = "ECO_0006203"
-    SYNCHROTRON_RADIATION_CIRCULAR_DICHROISM_EVIDENCE_USED_IN_AUTOMATIC_ASSERTION = "ECO_0006203"
+    SYNCHROTRON_RADIATION_CIRCULAR_DICHROISM_EVIDENCE_USED_IN_AUTOMATIC_ASSERTION = (
+        "ECO_0006203"
+    )
 
     # far-UV circular dichroism evidence used in manual assertion
     ECO_0006204 = "ECO_0006204"
@@ -6637,11 +6819,15 @@ class ECO(str, Enum):
 
     # Fourier-transform infrared spectroscopy evidence used in manual assertion
     ECO_0006228 = "ECO_0006228"
-    FOURIER_TRANSFORM_INFRARED_SPECTROSCOPY_EVIDENCE_USED_IN_MANUAL_ASSERTION = "ECO_0006228"
+    FOURIER_TRANSFORM_INFRARED_SPECTROSCOPY_EVIDENCE_USED_IN_MANUAL_ASSERTION = (
+        "ECO_0006228"
+    )
 
     # Fourier-transform infrared spectroscopy evidence used in automatic assertion
     ECO_0006229 = "ECO_0006229"
-    FOURIER_TRANSFORM_INFRARED_SPECTROSCOPY_EVIDENCE_USED_IN_AUTOMATIC_ASSERTION = "ECO_0006229"
+    FOURIER_TRANSFORM_INFRARED_SPECTROSCOPY_EVIDENCE_USED_IN_AUTOMATIC_ASSERTION = (
+        "ECO_0006229"
+    )
 
     # heat capacity-based evidence used in manual assertion
     ECO_0006230 = "ECO_0006230"
@@ -6657,7 +6843,9 @@ class ECO(str, Enum):
 
     # differential scanning calorimetry evidence used in automatic assertion
     ECO_0006233 = "ECO_0006233"
-    DIFFERENTIAL_SCANNING_CALORIMETRY_EVIDENCE_USED_IN_AUTOMATIC_ASSERTION = "ECO_0006233"
+    DIFFERENTIAL_SCANNING_CALORIMETRY_EVIDENCE_USED_IN_AUTOMATIC_ASSERTION = (
+        "ECO_0006233"
+    )
 
     # selective antibody-based structural conformation evidence used in manual assertion
     ECO_0006234 = "ECO_0006234"
@@ -6693,15 +6881,21 @@ class ECO(str, Enum):
 
     # galactokinase reporter gene assay evidence used in automatic assertion
     ECO_0006242 = "ECO_0006242"
-    GALACTOKINASE_REPORTER_GENE_ASSAY_EVIDENCE_USED_IN_AUTOMATIC_ASSERTION = "ECO_0006242"
+    GALACTOKINASE_REPORTER_GENE_ASSAY_EVIDENCE_USED_IN_AUTOMATIC_ASSERTION = (
+        "ECO_0006242"
+    )
 
     # polyadenylated transcript 3'-end-sequencing evidence used in manual assertion
     ECO_0006243 = "ECO_0006243"
-    POLYADENYLATED_TRANSCRIPT_3__END_SEQUENCING_EVIDENCE_USED_IN_MANUAL_ASSERTION = "ECO_0006243"
+    POLYADENYLATED_TRANSCRIPT_3__END_SEQUENCING_EVIDENCE_USED_IN_MANUAL_ASSERTION = (
+        "ECO_0006243"
+    )
 
     # polyadenylated transcript 3'-end-sequencing evidence used in automatic assertion
     ECO_0006244 = "ECO_0006244"
-    POLYADENYLATED_TRANSCRIPT_3__END_SEQUENCING_EVIDENCE_USED_IN_AUTOMATIC_ASSERTION = "ECO_0006244"
+    POLYADENYLATED_TRANSCRIPT_3__END_SEQUENCING_EVIDENCE_USED_IN_AUTOMATIC_ASSERTION = (
+        "ECO_0006244"
+    )
 
     # colony boundary assay evidence used in manual assertion
     ECO_0006245 = "ECO_0006245"
@@ -6741,7 +6935,9 @@ class ECO(str, Enum):
 
     # site-directed spin-labelling electron paramagnetic resonance evidence
     ECO_0006254 = "ECO_0006254"
-    SITE_DIRECTED_SPIN_LABELLING_ELECTRON_PARAMAGNETIC_RESONANCE_EVIDENCE = "ECO_0006254"
+    SITE_DIRECTED_SPIN_LABELLING_ELECTRON_PARAMAGNETIC_RESONANCE_EVIDENCE = (
+        "ECO_0006254"
+    )
 
     # deglycosylation assay evidence
     ECO_0006255 = "ECO_0006255"
@@ -6849,11 +7045,15 @@ class ECO(str, Enum):
 
     # rotary shadowing electron microscopy evidence used in manual assertion
     ECO_0006281 = "ECO_0006281"
-    ROTARY_SHADOWING_ELECTRON_MICROSCOPY_EVIDENCE_USED_IN_MANUAL_ASSERTION = "ECO_0006281"
+    ROTARY_SHADOWING_ELECTRON_MICROSCOPY_EVIDENCE_USED_IN_MANUAL_ASSERTION = (
+        "ECO_0006281"
+    )
 
     # rotary shadowing electron microscopy evidence used in automatic assertion
     ECO_0006282 = "ECO_0006282"
-    ROTARY_SHADOWING_ELECTRON_MICROSCOPY_EVIDENCE_USED_IN_AUTOMATIC_ASSERTION = "ECO_0006282"
+    ROTARY_SHADOWING_ELECTRON_MICROSCOPY_EVIDENCE_USED_IN_AUTOMATIC_ASSERTION = (
+        "ECO_0006282"
+    )
 
     # electrospray ionization fourier transform ion cyclotron resonance mass spectrometry evidence used in manual assertion
     ECO_0006283 = "ECO_0006283"
@@ -6897,15 +7097,21 @@ class ECO(str, Enum):
 
     # protein fragment functional complementation evidence used in manual assertion
     ECO_0006293 = "ECO_0006293"
-    PROTEIN_FRAGMENT_FUNCTIONAL_COMPLEMENTATION_EVIDENCE_USED_IN_MANUAL_ASSERTION = "ECO_0006293"
+    PROTEIN_FRAGMENT_FUNCTIONAL_COMPLEMENTATION_EVIDENCE_USED_IN_MANUAL_ASSERTION = (
+        "ECO_0006293"
+    )
 
     # protein fragment functional complementation evidence used in automatic assertion
     ECO_0006294 = "ECO_0006294"
-    PROTEIN_FRAGMENT_FUNCTIONAL_COMPLEMENTATION_EVIDENCE_USED_IN_AUTOMATIC_ASSERTION = "ECO_0006294"
+    PROTEIN_FRAGMENT_FUNCTIONAL_COMPLEMENTATION_EVIDENCE_USED_IN_AUTOMATIC_ASSERTION = (
+        "ECO_0006294"
+    )
 
     # beta galactosidase functional complementation evidence used in manual assertion
     ECO_0006295 = "ECO_0006295"
-    BETA_GALACTOSIDASE_FUNCTIONAL_COMPLEMENTATION_EVIDENCE_USED_IN_MANUAL_ASSERTION = "ECO_0006295"
+    BETA_GALACTOSIDASE_FUNCTIONAL_COMPLEMENTATION_EVIDENCE_USED_IN_MANUAL_ASSERTION = (
+        "ECO_0006295"
+    )
 
     # beta galactosidase functional complementation evidence used in automatic assertion
     ECO_0006296 = "ECO_0006296"
@@ -6913,11 +7119,15 @@ class ECO(str, Enum):
 
     # GAL4-VP16 functional complementation evidence used in manual assertion
     ECO_0006297 = "ECO_0006297"
-    GAL4_VP16_FUNCTIONAL_COMPLEMENTATION_EVIDENCE_USED_IN_MANUAL_ASSERTION = "ECO_0006297"
+    GAL4_VP16_FUNCTIONAL_COMPLEMENTATION_EVIDENCE_USED_IN_MANUAL_ASSERTION = (
+        "ECO_0006297"
+    )
 
     # GAL4-VP16 functional complementation evidence used in automatic assertion
     ECO_0006298 = "ECO_0006298"
-    GAL4_VP16_FUNCTIONAL_COMPLEMENTATION_EVIDENCE_USED_IN_AUTOMATIC_ASSERTION = "ECO_0006298"
+    GAL4_VP16_FUNCTIONAL_COMPLEMENTATION_EVIDENCE_USED_IN_AUTOMATIC_ASSERTION = (
+        "ECO_0006298"
+    )
 
     # Raman spectroscopy evidence used in manual assertion
     ECO_0006299 = "ECO_0006299"
@@ -6949,7 +7159,9 @@ class ECO(str, Enum):
 
     # native protein gel electrophoresis evidence used in automatic assertion
     ECO_0006306 = "ECO_0006306"
-    NATIVE_PROTEIN_GEL_ELECTROPHORESIS_EVIDENCE_USED_IN_AUTOMATIC_ASSERTION = "ECO_0006306"
+    NATIVE_PROTEIN_GEL_ELECTROPHORESIS_EVIDENCE_USED_IN_AUTOMATIC_ASSERTION = (
+        "ECO_0006306"
+    )
 
     # turbidity measurement evidence used in manual assertion
     ECO_0006307 = "ECO_0006307"
@@ -6993,11 +7205,15 @@ class ECO(str, Enum):
 
     # temperature-induced protein unfolding evidence used in manual assertion
     ECO_0006317 = "ECO_0006317"
-    TEMPERATURE_INDUCED_PROTEIN_UNFOLDING_EVIDENCE_USED_IN_MANUAL_ASSERTION = "ECO_0006317"
+    TEMPERATURE_INDUCED_PROTEIN_UNFOLDING_EVIDENCE_USED_IN_MANUAL_ASSERTION = (
+        "ECO_0006317"
+    )
 
     # temperature-induced protein unfolding evidence used in automatic assertion
     ECO_0006318 = "ECO_0006318"
-    TEMPERATURE_INDUCED_PROTEIN_UNFOLDING_EVIDENCE_USED_IN_AUTOMATIC_ASSERTION = "ECO_0006318"
+    TEMPERATURE_INDUCED_PROTEIN_UNFOLDING_EVIDENCE_USED_IN_AUTOMATIC_ASSERTION = (
+        "ECO_0006318"
+    )
 
     # cell aggregation evidence used in manual assertion
     ECO_0006319 = "ECO_0006319"
@@ -7149,7 +7365,9 @@ class ECO(str, Enum):
 
     # thioflavin T based fluorescence spectroscopy evidence used in manual assertion
     ECO_0006356 = "ECO_0006356"
-    THIOFLAVIN_T_BASED_FLUORESCENCE_SPECTROSCOPY_EVIDENCE_USED_IN_MANUAL_ASSERTION = "ECO_0006356"
+    THIOFLAVIN_T_BASED_FLUORESCENCE_SPECTROSCOPY_EVIDENCE_USED_IN_MANUAL_ASSERTION = (
+        "ECO_0006356"
+    )
 
     # thioflavin T based fluorescence spectroscopy evidence used in automatic assertion
     ECO_0006357 = "ECO_0006357"
@@ -7161,15 +7379,21 @@ class ECO(str, Enum):
 
     # differential scanning fluorimetry evidence used in automatic assertion
     ECO_0006359 = "ECO_0006359"
-    DIFFERENTIAL_SCANNING_FLUORIMETRY_EVIDENCE_USED_IN_AUTOMATIC_ASSERTION = "ECO_0006359"
+    DIFFERENTIAL_SCANNING_FLUORIMETRY_EVIDENCE_USED_IN_AUTOMATIC_ASSERTION = (
+        "ECO_0006359"
+    )
 
     # fluorescence correlation spectroscopy evidence used in manual assertion
     ECO_0006360 = "ECO_0006360"
-    FLUORESCENCE_CORRELATION_SPECTROSCOPY_EVIDENCE_USED_IN_MANUAL_ASSERTION = "ECO_0006360"
+    FLUORESCENCE_CORRELATION_SPECTROSCOPY_EVIDENCE_USED_IN_MANUAL_ASSERTION = (
+        "ECO_0006360"
+    )
 
     # fluorescence correlation spectroscopy evidence used in automatic assertion
     ECO_0006361 = "ECO_0006361"
-    FLUORESCENCE_CORRELATION_SPECTROSCOPY_EVIDENCE_USED_IN_AUTOMATIC_ASSERTION = "ECO_0006361"
+    FLUORESCENCE_CORRELATION_SPECTROSCOPY_EVIDENCE_USED_IN_AUTOMATIC_ASSERTION = (
+        "ECO_0006361"
+    )
 
     # intrinsic fluorescence-based protein conformation evidence used in manual assertion
     ECO_0006362 = "ECO_0006362"
@@ -7181,11 +7405,15 @@ class ECO(str, Enum):
 
     # stopped-flow fluorescence spectroscopy evidence used in manual assertion
     ECO_0006364 = "ECO_0006364"
-    STOPPED_FLOW_FLUORESCENCE_SPECTROSCOPY_EVIDENCE_USED_IN_MANUAL_ASSERTION = "ECO_0006364"
+    STOPPED_FLOW_FLUORESCENCE_SPECTROSCOPY_EVIDENCE_USED_IN_MANUAL_ASSERTION = (
+        "ECO_0006364"
+    )
 
     # stopped-flow fluorescence spectroscopy evidence used in automatic assertion
     ECO_0006365 = "ECO_0006365"
-    STOPPED_FLOW_FLUORESCENCE_SPECTROSCOPY_EVIDENCE_USED_IN_AUTOMATIC_ASSERTION = "ECO_0006365"
+    STOPPED_FLOW_FLUORESCENCE_SPECTROSCOPY_EVIDENCE_USED_IN_AUTOMATIC_ASSERTION = (
+        "ECO_0006365"
+    )
 
     # temperature jump relaxation evidence used in manual assertion
     ECO_0006366 = "ECO_0006366"
@@ -7201,7 +7429,9 @@ class ECO(str, Enum):
 
     # computational structure modeling evidence used in automatic assertion
     ECO_0006369 = "ECO_0006369"
-    COMPUTATIONAL_STRUCTURE_MODELING_EVIDENCE_USED_IN_AUTOMATIC_ASSERTION = "ECO_0006369"
+    COMPUTATIONAL_STRUCTURE_MODELING_EVIDENCE_USED_IN_AUTOMATIC_ASSERTION = (
+        "ECO_0006369"
+    )
 
     # structural ensemble generation evidence used in manual assertion
     ECO_0006370 = "ECO_0006370"
@@ -7265,7 +7495,9 @@ class ECO(str, Enum):
 
     # host-surrogate penetration assay evidence used in automatic assertion
     ECO_0006385 = "ECO_0006385"
-    HOST_SURROGATE_PENETRATION_ASSAY_EVIDENCE_USED_IN_AUTOMATIC_ASSERTION = "ECO_0006385"
+    HOST_SURROGATE_PENETRATION_ASSAY_EVIDENCE_USED_IN_AUTOMATIC_ASSERTION = (
+        "ECO_0006385"
+    )
 
     # host penetration assay evidence used in manual assertion
     ECO_0006386 = "ECO_0006386"
@@ -7281,7 +7513,9 @@ class ECO(str, Enum):
 
     # iodine-125-labeled ligand binding evidence used in automatic assertion
     ECO_0006389 = "ECO_0006389"
-    IODINE_125_LABELED_LIGAND_BINDING_EVIDENCE_USED_IN_AUTOMATIC_ASSERTION = "ECO_0006389"
+    IODINE_125_LABELED_LIGAND_BINDING_EVIDENCE_USED_IN_AUTOMATIC_ASSERTION = (
+        "ECO_0006389"
+    )
 
     # bio-layer interferometry evidence used in manual assertion
     ECO_0006390 = "ECO_0006390"
@@ -7329,11 +7563,19 @@ class ECO(str, Enum):
 
     # experimentally evolved mutant phenotypic evidence used in automatic assertion
     ECO_0006405 = "ECO_0006405"
-    EXPERIMENTALLY_EVOLVED_MUTANT_PHENOTYPIC_EVIDENCE_USED_IN_AUTOMATIC_ASSERTION = "ECO_0006405"
+    EXPERIMENTALLY_EVOLVED_MUTANT_PHENOTYPIC_EVIDENCE_USED_IN_AUTOMATIC_ASSERTION = (
+        "ECO_0006405"
+    )
 
     # experimentally evolved mutant phenotypic evidence used in manual assertion
     ECO_0006406 = "ECO_0006406"
-    EXPERIMENTALLY_EVOLVED_MUTANT_PHENOTYPIC_EVIDENCE_USED_IN_MANUAL_ASSERTION = "ECO_0006406"
+    EXPERIMENTALLY_EVOLVED_MUTANT_PHENOTYPIC_EVIDENCE_USED_IN_MANUAL_ASSERTION = (
+        "ECO_0006406"
+    )
+
+    # single-cell RNA-sequencing evidence used in automatic assertion
+    ECO_0006407 = "ECO_0006407"
+    SINGLE_CELL_RNA_SEQUENCING_EVIDENCE_USED_IN_AUTOMATIC_ASSERTION = "ECO_0006407"
 
     # high throughput mutant phenotypic evidence
     ECO_0007000 = "ECO_0007000"
@@ -7349,7 +7591,9 @@ class ECO(str, Enum):
 
     # high throughput genetic interaction phenotypic evidence used in manual assertion
     ECO_0007003 = "ECO_0007003"
-    HIGH_THROUGHPUT_GENETIC_INTERACTION_PHENOTYPIC_EVIDENCE_USED_IN_MANUAL_ASSERTION = "ECO_0007003"
+    HIGH_THROUGHPUT_GENETIC_INTERACTION_PHENOTYPIC_EVIDENCE_USED_IN_MANUAL_ASSERTION = (
+        "ECO_0007003"
+    )
 
     # high throughput direct assay evidence
     ECO_0007004 = "ECO_0007004"
@@ -7453,7 +7697,9 @@ class ECO(str, Enum):
 
     # viral hemagglutination inhibition assay evidence used in manual assertion
     ECO_0007030 = "ECO_0007030"
-    VIRAL_HEMAGGLUTINATION_INHIBITION_ASSAY_EVIDENCE_USED_IN_MANUAL_ASSERTION = "ECO_0007030"
+    VIRAL_HEMAGGLUTINATION_INHIBITION_ASSAY_EVIDENCE_USED_IN_MANUAL_ASSERTION = (
+        "ECO_0007030"
+    )
 
     # compement fixation assay evidence
     ECO_0007031 = "ECO_0007031"
@@ -7541,7 +7787,9 @@ class ECO(str, Enum):
 
     # transmitted light brightfied mircoscopy evidence used in manual assertion
     ECO_0007052 = "ECO_0007052"
-    TRANSMITTED_LIGHT_BRIGHTFIED_MIRCOSCOPY_EVIDENCE_USED_IN_MANUAL_ASSERTION = "ECO_0007052"
+    TRANSMITTED_LIGHT_BRIGHTFIED_MIRCOSCOPY_EVIDENCE_USED_IN_MANUAL_ASSERTION = (
+        "ECO_0007052"
+    )
 
     # koehler illumination microscopy evidence
     ECO_0007053 = "ECO_0007053"
@@ -7557,7 +7805,9 @@ class ECO(str, Enum):
 
     # differential interference contrast microscopy evidence used in manual assertion
     ECO_0007056 = "ECO_0007056"
-    DIFFERENTIAL_INTERFERENCE_CONTRAST_MICROSCOPY_EVIDENCE_USED_IN_MANUAL_ASSERTION = "ECO_0007056"
+    DIFFERENTIAL_INTERFERENCE_CONTRAST_MICROSCOPY_EVIDENCE_USED_IN_MANUAL_ASSERTION = (
+        "ECO_0007056"
+    )
 
     # extended field laser confocal microscopy evidence
     ECO_0007057 = "ECO_0007057"
@@ -7565,7 +7815,9 @@ class ECO(str, Enum):
 
     # extended field laser confocal microscopy evidence used in manual assertion
     ECO_0007058 = "ECO_0007058"
-    EXTENDED_FIELD_LASER_CONFOCAL_MICROSCOPY_EVIDENCE_USED_IN_MANUAL_ASSERTION = "ECO_0007058"
+    EXTENDED_FIELD_LASER_CONFOCAL_MICROSCOPY_EVIDENCE_USED_IN_MANUAL_ASSERTION = (
+        "ECO_0007058"
+    )
 
     # confocal laser scanning microscopy evidence
     ECO_0007059 = "ECO_0007059"
@@ -7605,7 +7857,9 @@ class ECO(str, Enum):
 
     # colony papillation assay phenotypic evidence used in manual assertion
     ECO_0007068 = "ECO_0007068"
-    COLONY_PAPILLATION_ASSAY_PHENOTYPIC_EVIDENCE_USED_IN_MANUAL_ASSERTION = "ECO_0007068"
+    COLONY_PAPILLATION_ASSAY_PHENOTYPIC_EVIDENCE_USED_IN_MANUAL_ASSERTION = (
+        "ECO_0007068"
+    )
 
     # crystal violet staining evidence
     ECO_0007069 = "ECO_0007069"
@@ -7701,7 +7955,9 @@ class ECO(str, Enum):
 
     # voucher specimen phenotypic analysis evidence used in manual assertion
     ECO_0007093 = "ECO_0007093"
-    VOUCHER_SPECIMEN_PHENOTYPIC_ANALYSIS_EVIDENCE_USED_IN_MANUAL_ASSERTION = "ECO_0007093"
+    VOUCHER_SPECIMEN_PHENOTYPIC_ANALYSIS_EVIDENCE_USED_IN_MANUAL_ASSERTION = (
+        "ECO_0007093"
+    )
 
     # positional similarity evidence used in manual assertion
     ECO_0007094 = "ECO_0007094"
@@ -7729,7 +7985,9 @@ class ECO(str, Enum):
 
     # methylation-specific polymerase chain reaction evidence used in manual assertion
     ECO_0007100 = "ECO_0007100"
-    METHYLATION_SPECIFIC_POLYMERASE_CHAIN_REACTION_EVIDENCE_USED_IN_MANUAL_ASSERTION = "ECO_0007100"
+    METHYLATION_SPECIFIC_POLYMERASE_CHAIN_REACTION_EVIDENCE_USED_IN_MANUAL_ASSERTION = (
+        "ECO_0007100"
+    )
 
     # southern hybridization evidence used in manual assertion
     ECO_0007101 = "ECO_0007101"
@@ -7741,7 +7999,9 @@ class ECO(str, Enum):
 
     # epitope-tagged protein immunolocalization evidence used in manual assertion
     ECO_0007103 = "ECO_0007103"
-    EPITOPE_TAGGED_PROTEIN_IMMUNOLOCALIZATION_EVIDENCE_USED_IN_MANUAL_ASSERTION = "ECO_0007103"
+    EPITOPE_TAGGED_PROTEIN_IMMUNOLOCALIZATION_EVIDENCE_USED_IN_MANUAL_ASSERTION = (
+        "ECO_0007103"
+    )
 
     # co-fractionation evidence used in manual assertion
     ECO_0007104 = "ECO_0007104"
@@ -7757,11 +8017,15 @@ class ECO(str, Enum):
 
     # beta-glucuronidase fusion protein localization evidence used in manual assertion
     ECO_0007108 = "ECO_0007108"
-    BETA_GLUCURONIDASE_FUSION_PROTEIN_LOCALIZATION_EVIDENCE_USED_IN_MANUAL_ASSERTION = "ECO_0007108"
+    BETA_GLUCURONIDASE_FUSION_PROTEIN_LOCALIZATION_EVIDENCE_USED_IN_MANUAL_ASSERTION = (
+        "ECO_0007108"
+    )
 
     # beta-galactosidase fusion protein localization evidence used in manual assertion
     ECO_0007109 = "ECO_0007109"
-    BETA_GALACTOSIDASE_FUSION_PROTEIN_LOCALIZATION_EVIDENCE_USED_IN_MANUAL_ASSERTION = "ECO_0007109"
+    BETA_GALACTOSIDASE_FUSION_PROTEIN_LOCALIZATION_EVIDENCE_USED_IN_MANUAL_ASSERTION = (
+        "ECO_0007109"
+    )
 
     # thin layer chromatography evidence used in manual assertion
     ECO_0007110 = "ECO_0007110"
@@ -7785,7 +8049,9 @@ class ECO(str, Enum):
 
     # two-electrode voltage clamp recording evidence used in manual assertion
     ECO_0007115 = "ECO_0007115"
-    TWO_ELECTRODE_VOLTAGE_CLAMP_RECORDING_EVIDENCE_USED_IN_MANUAL_ASSERTION = "ECO_0007115"
+    TWO_ELECTRODE_VOLTAGE_CLAMP_RECORDING_EVIDENCE_USED_IN_MANUAL_ASSERTION = (
+        "ECO_0007115"
+    )
 
     # biochemical trait analysis evidence used in manual assertion
     ECO_0007116 = "ECO_0007116"
@@ -7861,7 +8127,9 @@ class ECO(str, Enum):
 
     # environmental perturbation phenotypic evidence used in manual assertion
     ECO_0007136 = "ECO_0007136"
-    ENVIRONMENTAL_PERTURBATION_PHENOTYPIC_EVIDENCE_USED_IN_MANUAL_ASSERTION = "ECO_0007136"
+    ENVIRONMENTAL_PERTURBATION_PHENOTYPIC_EVIDENCE_USED_IN_MANUAL_ASSERTION = (
+        "ECO_0007136"
+    )
 
     # tissue ablation phenotypic evidence used in manual assertion
     ECO_0007137 = "ECO_0007137"
@@ -7877,11 +8145,15 @@ class ECO(str, Enum):
 
     # green fluorescent protein immunolocalization evidence used in manual assertion
     ECO_0007142 = "ECO_0007142"
-    GREEN_FLUORESCENT_PROTEIN_IMMUNOLOCALIZATION_EVIDENCE_USED_IN_MANUAL_ASSERTION = "ECO_0007142"
+    GREEN_FLUORESCENT_PROTEIN_IMMUNOLOCALIZATION_EVIDENCE_USED_IN_MANUAL_ASSERTION = (
+        "ECO_0007142"
+    )
 
     # beta-galactosidase protein immunolocalization evidence used in manual assertion
     ECO_0007143 = "ECO_0007143"
-    BETA_GALACTOSIDASE_PROTEIN_IMMUNOLOCALIZATION_EVIDENCE_USED_IN_MANUAL_ASSERTION = "ECO_0007143"
+    BETA_GALACTOSIDASE_PROTEIN_IMMUNOLOCALIZATION_EVIDENCE_USED_IN_MANUAL_ASSERTION = (
+        "ECO_0007143"
+    )
 
     # cap analysis of gene expression evidence used in manual assertion
     ECO_0007144 = "ECO_0007144"
@@ -7889,7 +8161,9 @@ class ECO(str, Enum):
 
     # nano-cap analysis of gene expression evidence used in manual assertion
     ECO_0007145 = "ECO_0007145"
-    NANO_CAP_ANALYSIS_OF_GENE_EXPRESSION_EVIDENCE_USED_IN_MANUAL_ASSERTION = "ECO_0007145"
+    NANO_CAP_ANALYSIS_OF_GENE_EXPRESSION_EVIDENCE_USED_IN_MANUAL_ASSERTION = (
+        "ECO_0007145"
+    )
 
     # particle size and count assay evidence used in manual assertion
     ECO_0007146 = "ECO_0007146"
@@ -7905,7 +8179,9 @@ class ECO(str, Enum):
 
     # two-dimensional agarose gel electrophoresis evidence used in manual assertion
     ECO_0007149 = "ECO_0007149"
-    TWO_DIMENSIONAL_AGAROSE_GEL_ELECTROPHORESIS_EVIDENCE_USED_IN_MANUAL_ASSERTION = "ECO_0007149"
+    TWO_DIMENSIONAL_AGAROSE_GEL_ELECTROPHORESIS_EVIDENCE_USED_IN_MANUAL_ASSERTION = (
+        "ECO_0007149"
+    )
 
     # plasmid maintenance assay evidence used in manual assertion
     ECO_0007150 = "ECO_0007150"
@@ -7913,7 +8189,9 @@ class ECO(str, Enum):
 
     # specific protein inhibition by antibody evidence used in manual assertion
     ECO_0007151 = "ECO_0007151"
-    SPECIFIC_PROTEIN_INHIBITION_BY_ANTIBODY_EVIDENCE_USED_IN_MANUAL_ASSERTION = "ECO_0007151"
+    SPECIFIC_PROTEIN_INHIBITION_BY_ANTIBODY_EVIDENCE_USED_IN_MANUAL_ASSERTION = (
+        "ECO_0007151"
+    )
 
     # single exon transcript confirmation via alignment evidence used in manual assertion
     ECO_0007152 = "ECO_0007152"
@@ -7933,7 +8211,9 @@ class ECO(str, Enum):
 
     # biological target-disease association via drug evidence used in manual assertion
     ECO_0007156 = "ECO_0007156"
-    BIOLOGICAL_TARGET_DISEASE_ASSOCIATION_VIA_DRUG_EVIDENCE_USED_IN_MANUAL_ASSERTION = "ECO_0007156"
+    BIOLOGICAL_TARGET_DISEASE_ASSOCIATION_VIA_DRUG_EVIDENCE_USED_IN_MANUAL_ASSERTION = (
+        "ECO_0007156"
+    )
 
     # cell staining evidence used in manual assertion
     ECO_0007157 = "ECO_0007157"
@@ -7941,7 +8221,9 @@ class ECO(str, Enum):
 
     # obsolete visual sequence inspection evidence used in manual assertion
     ECO_0007158 = "ECO_0007158"
-    OBSOLETE_VISUAL_SEQUENCE_INSPECTION_EVIDENCE_USED_IN_MANUAL_ASSERTION = "ECO_0007158"
+    OBSOLETE_VISUAL_SEQUENCE_INSPECTION_EVIDENCE_USED_IN_MANUAL_ASSERTION = (
+        "ECO_0007158"
+    )
 
     # ATP bioluminescence assay evidence used in manual assertion
     ECO_0007159 = "ECO_0007159"
@@ -7973,7 +8255,9 @@ class ECO(str, Enum):
 
     # repeat expansion mutation phenotypic evidence used in manual assertion
     ECO_0007166 = "ECO_0007166"
-    REPEAT_EXPANSION_MUTATION_PHENOTYPIC_EVIDENCE_USED_IN_MANUAL_ASSERTION = "ECO_0007166"
+    REPEAT_EXPANSION_MUTATION_PHENOTYPIC_EVIDENCE_USED_IN_MANUAL_ASSERTION = (
+        "ECO_0007166"
+    )
 
     # splice site mutation phenotypic evidence used in manual assertion
     ECO_0007167 = "ECO_0007167"
@@ -8013,7 +8297,9 @@ class ECO(str, Enum):
 
     # cell-attached single-channel recording evidence used in manual assertion
     ECO_0007176 = "ECO_0007176"
-    CELL_ATTACHED_SINGLE_CHANNEL_RECORDING_EVIDENCE_USED_IN_MANUAL_ASSERTION = "ECO_0007176"
+    CELL_ATTACHED_SINGLE_CHANNEL_RECORDING_EVIDENCE_USED_IN_MANUAL_ASSERTION = (
+        "ECO_0007176"
+    )
 
     # cell-detached inside-out single-channel recording evidence used in manual assertion
     ECO_0007177 = "ECO_0007177"
@@ -8033,7 +8319,9 @@ class ECO(str, Enum):
 
     # cut-open oocyte voltage clamp recording evidence used in manual assertion
     ECO_0007181 = "ECO_0007181"
-    CUT_OPEN_OOCYTE_VOLTAGE_CLAMP_RECORDING_EVIDENCE_USED_IN_MANUAL_ASSERTION = "ECO_0007181"
+    CUT_OPEN_OOCYTE_VOLTAGE_CLAMP_RECORDING_EVIDENCE_USED_IN_MANUAL_ASSERTION = (
+        "ECO_0007181"
+    )
 
     # macropatch voltage clamp recording evidence used in manual assertion
     ECO_0007182 = "ECO_0007182"
@@ -8061,15 +8349,21 @@ class ECO(str, Enum):
 
     # obsolete inference from experimental data evidence used in manual assertion
     ECO_0007189 = "ECO_0007189"
-    OBSOLETE_INFERENCE_FROM_EXPERIMENTAL_DATA_EVIDENCE_USED_IN_MANUAL_ASSERTION = "ECO_0007189"
+    OBSOLETE_INFERENCE_FROM_EXPERIMENTAL_DATA_EVIDENCE_USED_IN_MANUAL_ASSERTION = (
+        "ECO_0007189"
+    )
 
     # obsolete inference from phenotype manipulation evidence used in manual assertion
     ECO_0007190 = "ECO_0007190"
-    OBSOLETE_INFERENCE_FROM_PHENOTYPE_MANIPULATION_EVIDENCE_USED_IN_MANUAL_ASSERTION = "ECO_0007190"
+    OBSOLETE_INFERENCE_FROM_PHENOTYPE_MANIPULATION_EVIDENCE_USED_IN_MANUAL_ASSERTION = (
+        "ECO_0007190"
+    )
 
     # inference by association of genotype from phenotype used in manual assertion
     ECO_0007191 = "ECO_0007191"
-    INFERENCE_BY_ASSOCIATION_OF_GENOTYPE_FROM_PHENOTYPE_USED_IN_MANUAL_ASSERTION = "ECO_0007191"
+    INFERENCE_BY_ASSOCIATION_OF_GENOTYPE_FROM_PHENOTYPE_USED_IN_MANUAL_ASSERTION = (
+        "ECO_0007191"
+    )
 
     # motility assay evidence used in manual assertion
     ECO_0007192 = "ECO_0007192"
@@ -8077,7 +8371,9 @@ class ECO(str, Enum):
 
     # loss-of-function mutant phenotype evidence used in automatic assertion
     ECO_0007193 = "ECO_0007193"
-    LOSS_OF_FUNCTION_MUTANT_PHENOTYPE_EVIDENCE_USED_IN_AUTOMATIC_ASSERTION = "ECO_0007193"
+    LOSS_OF_FUNCTION_MUTANT_PHENOTYPE_EVIDENCE_USED_IN_AUTOMATIC_ASSERTION = (
+        "ECO_0007193"
+    )
 
     # structural similarity evidence used in automatic assertion
     ECO_0007194 = "ECO_0007194"
@@ -8085,11 +8381,15 @@ class ECO(str, Enum):
 
     # gain-of-function mutant phenotypic evidence used in automatic assertion
     ECO_0007196 = "ECO_0007196"
-    GAIN_OF_FUNCTION_MUTANT_PHENOTYPIC_EVIDENCE_USED_IN_AUTOMATIC_ASSERTION = "ECO_0007196"
+    GAIN_OF_FUNCTION_MUTANT_PHENOTYPIC_EVIDENCE_USED_IN_AUTOMATIC_ASSERTION = (
+        "ECO_0007196"
+    )
 
     # voucher specimen phenotypic analysis evidence used in automatic assertion
     ECO_0007197 = "ECO_0007197"
-    VOUCHER_SPECIMEN_PHENOTYPIC_ANALYSIS_EVIDENCE_USED_IN_AUTOMATIC_ASSERTION = "ECO_0007197"
+    VOUCHER_SPECIMEN_PHENOTYPIC_ANALYSIS_EVIDENCE_USED_IN_AUTOMATIC_ASSERTION = (
+        "ECO_0007197"
+    )
 
     # positional similarity evidence used in automatic assertion
     ECO_0007198 = "ECO_0007198"
@@ -8125,11 +8425,15 @@ class ECO(str, Enum):
 
     # intermethylated site amplification evidence used in automatic assertion
     ECO_0007206 = "ECO_0007206"
-    INTERMETHYLATED_SITE_AMPLIFICATION_EVIDENCE_USED_IN_AUTOMATIC_ASSERTION = "ECO_0007206"
+    INTERMETHYLATED_SITE_AMPLIFICATION_EVIDENCE_USED_IN_AUTOMATIC_ASSERTION = (
+        "ECO_0007206"
+    )
 
     # epitope-tagged protein immunolocalization evidence used in automatic assertion
     ECO_0007207 = "ECO_0007207"
-    EPITOPE_TAGGED_PROTEIN_IMMUNOLOCALIZATION_EVIDENCE_USED_IN_AUTOMATIC_ASSERTION = "ECO_0007207"
+    EPITOPE_TAGGED_PROTEIN_IMMUNOLOCALIZATION_EVIDENCE_USED_IN_AUTOMATIC_ASSERTION = (
+        "ECO_0007207"
+    )
 
     # co-fractionation evidence used in automatic assertion
     ECO_0007208 = "ECO_0007208"
@@ -8173,7 +8477,9 @@ class ECO(str, Enum):
 
     # two-electrode voltage clamp recording evidence used in automatic assertion
     ECO_0007219 = "ECO_0007219"
-    TWO_ELECTRODE_VOLTAGE_CLAMP_RECORDING_EVIDENCE_USED_IN_AUTOMATIC_ASSERTION = "ECO_0007219"
+    TWO_ELECTRODE_VOLTAGE_CLAMP_RECORDING_EVIDENCE_USED_IN_AUTOMATIC_ASSERTION = (
+        "ECO_0007219"
+    )
 
     # biochemical trait analysis evidence used in automatic assertion
     ECO_0007220 = "ECO_0007220"
@@ -8225,7 +8531,9 @@ class ECO(str, Enum):
 
     # chromatin immunoprecipitation-qPCR evidence used in automatic assertion
     ECO_0007233 = "ECO_0007233"
-    CHROMATIN_IMMUNOPRECIPITATION_QPCR_EVIDENCE_USED_IN_AUTOMATIC_ASSERTION = "ECO_0007233"
+    CHROMATIN_IMMUNOPRECIPITATION_QPCR_EVIDENCE_USED_IN_AUTOMATIC_ASSERTION = (
+        "ECO_0007233"
+    )
 
     # 4C evidence used in automatic assertion
     ECO_0007234 = "ECO_0007234"
@@ -8249,7 +8557,9 @@ class ECO(str, Enum):
 
     # environmental perturbation phenotypic evidence used in automatic assertion
     ECO_0007240 = "ECO_0007240"
-    ENVIRONMENTAL_PERTURBATION_PHENOTYPIC_EVIDENCE_USED_IN_AUTOMATIC_ASSERTION = "ECO_0007240"
+    ENVIRONMENTAL_PERTURBATION_PHENOTYPIC_EVIDENCE_USED_IN_AUTOMATIC_ASSERTION = (
+        "ECO_0007240"
+    )
 
     # tissue ablation phenotypic evidence used in automatic assertion
     ECO_0007241 = "ECO_0007241"
@@ -8277,7 +8587,9 @@ class ECO(str, Enum):
 
     # nano-cap analysis of gene expression evidence used in automatic assertion
     ECO_0007249 = "ECO_0007249"
-    NANO_CAP_ANALYSIS_OF_GENE_EXPRESSION_EVIDENCE_USED_IN_AUTOMATIC_ASSERTION = "ECO_0007249"
+    NANO_CAP_ANALYSIS_OF_GENE_EXPRESSION_EVIDENCE_USED_IN_AUTOMATIC_ASSERTION = (
+        "ECO_0007249"
+    )
 
     # particle size and count assay evidence used in automatic assertion
     ECO_0007250 = "ECO_0007250"
@@ -8289,11 +8601,15 @@ class ECO(str, Enum):
 
     # pulsed-field gel electrophoresis evidence used in automatic assertion
     ECO_0007252 = "ECO_0007252"
-    PULSED_FIELD_GEL_ELECTROPHORESIS_EVIDENCE_USED_IN_AUTOMATIC_ASSERTION = "ECO_0007252"
+    PULSED_FIELD_GEL_ELECTROPHORESIS_EVIDENCE_USED_IN_AUTOMATIC_ASSERTION = (
+        "ECO_0007252"
+    )
 
     # two-dimensional agarose gel electrophoresis evidence used in automatic assertion
     ECO_0007253 = "ECO_0007253"
-    TWO_DIMENSIONAL_AGAROSE_GEL_ELECTROPHORESIS_EVIDENCE_USED_IN_AUTOMATIC_ASSERTION = "ECO_0007253"
+    TWO_DIMENSIONAL_AGAROSE_GEL_ELECTROPHORESIS_EVIDENCE_USED_IN_AUTOMATIC_ASSERTION = (
+        "ECO_0007253"
+    )
 
     # plasmid maintenance assay evidence used in automatic assertion
     ECO_0007254 = "ECO_0007254"
@@ -8301,7 +8617,9 @@ class ECO(str, Enum):
 
     # specific protein inhibition by antibody evidence used in automatic assertion
     ECO_0007255 = "ECO_0007255"
-    SPECIFIC_PROTEIN_INHIBITION_BY_ANTIBODY_EVIDENCE_USED_IN_AUTOMATIC_ASSERTION = "ECO_0007255"
+    SPECIFIC_PROTEIN_INHIBITION_BY_ANTIBODY_EVIDENCE_USED_IN_AUTOMATIC_ASSERTION = (
+        "ECO_0007255"
+    )
 
     # single exon transcript confirmation via alignment evidence used in automatic assertion
     ECO_0007256 = "ECO_0007256"
@@ -8329,7 +8647,9 @@ class ECO(str, Enum):
 
     # obsolete visual sequence inspection evidence used in automatic assertion
     ECO_0007262 = "ECO_0007262"
-    OBSOLETE_VISUAL_SEQUENCE_INSPECTION_EVIDENCE_USED_IN_AUTOMATIC_ASSERTION = "ECO_0007262"
+    OBSOLETE_VISUAL_SEQUENCE_INSPECTION_EVIDENCE_USED_IN_AUTOMATIC_ASSERTION = (
+        "ECO_0007262"
+    )
 
     # ATP bioluminescence assay evidence used in automatic assertion
     ECO_0007263 = "ECO_0007263"
@@ -8361,7 +8681,9 @@ class ECO(str, Enum):
 
     # repeat expansion mutation phenotypic evidence used in automatic assertion
     ECO_0007270 = "ECO_0007270"
-    REPEAT_EXPANSION_MUTATION_PHENOTYPIC_EVIDENCE_USED_IN_AUTOMATIC_ASSERTION = "ECO_0007270"
+    REPEAT_EXPANSION_MUTATION_PHENOTYPIC_EVIDENCE_USED_IN_AUTOMATIC_ASSERTION = (
+        "ECO_0007270"
+    )
 
     # splice site mutation phenotypic evidence used in automatic assertion
     ECO_0007271 = "ECO_0007271"
@@ -8369,7 +8691,9 @@ class ECO(str, Enum):
 
     # translocation mutation phenotypic evidence used in automatic assertion
     ECO_0007272 = "ECO_0007272"
-    TRANSLOCATION_MUTATION_PHENOTYPIC_EVIDENCE_USED_IN_AUTOMATIC_ASSERTION = "ECO_0007272"
+    TRANSLOCATION_MUTATION_PHENOTYPIC_EVIDENCE_USED_IN_AUTOMATIC_ASSERTION = (
+        "ECO_0007272"
+    )
 
     # in-gel protein kinase assay evidence used in automatic assertion
     ECO_0007273 = "ECO_0007273"
@@ -8397,11 +8721,15 @@ class ECO(str, Enum):
 
     # whole-cell voltage clamp recording evidence used in automatic assertion
     ECO_0007279 = "ECO_0007279"
-    WHOLE_CELL_VOLTAGE_CLAMP_RECORDING_EVIDENCE_USED_IN_AUTOMATIC_ASSERTION = "ECO_0007279"
+    WHOLE_CELL_VOLTAGE_CLAMP_RECORDING_EVIDENCE_USED_IN_AUTOMATIC_ASSERTION = (
+        "ECO_0007279"
+    )
 
     # cell-attached single-channel recording evidence used in automatic assertion
     ECO_0007280 = "ECO_0007280"
-    CELL_ATTACHED_SINGLE_CHANNEL_RECORDING_EVIDENCE_USED_IN_AUTOMATIC_ASSERTION = "ECO_0007280"
+    CELL_ATTACHED_SINGLE_CHANNEL_RECORDING_EVIDENCE_USED_IN_AUTOMATIC_ASSERTION = (
+        "ECO_0007280"
+    )
 
     # cell-detached inside-out single-channel recording evidence used in automatic assertion
     ECO_0007281 = "ECO_0007281"
@@ -8413,7 +8741,9 @@ class ECO(str, Enum):
 
     # electroencephalography recording evidence used in automatic assertion
     ECO_0007283 = "ECO_0007283"
-    ELECTROENCEPHALOGRAPHY_RECORDING_EVIDENCE_USED_IN_AUTOMATIC_ASSERTION = "ECO_0007283"
+    ELECTROENCEPHALOGRAPHY_RECORDING_EVIDENCE_USED_IN_AUTOMATIC_ASSERTION = (
+        "ECO_0007283"
+    )
 
     # cell-detached outside-out single-channel recording evidence used in automatic assertion
     ECO_0007284 = "ECO_0007284"
@@ -8421,11 +8751,15 @@ class ECO(str, Enum):
 
     # cut-open oocyte voltage clamp recording evidence used in automatic assertion
     ECO_0007285 = "ECO_0007285"
-    CUT_OPEN_OOCYTE_VOLTAGE_CLAMP_RECORDING_EVIDENCE_USED_IN_AUTOMATIC_ASSERTION = "ECO_0007285"
+    CUT_OPEN_OOCYTE_VOLTAGE_CLAMP_RECORDING_EVIDENCE_USED_IN_AUTOMATIC_ASSERTION = (
+        "ECO_0007285"
+    )
 
     # macropatch voltage clamp recording evidence used in automatic assertion
     ECO_0007286 = "ECO_0007286"
-    MACROPATCH_VOLTAGE_CLAMP_RECORDING_EVIDENCE_USED_IN_AUTOMATIC_ASSERTION = "ECO_0007286"
+    MACROPATCH_VOLTAGE_CLAMP_RECORDING_EVIDENCE_USED_IN_AUTOMATIC_ASSERTION = (
+        "ECO_0007286"
+    )
 
     # protein mass spectrometry evidence used in automatic assertion
     ECO_0007288 = "ECO_0007288"
@@ -8449,7 +8783,9 @@ class ECO(str, Enum):
 
     # obsolete inference from experimental data evidence used in automatic assertion
     ECO_0007293 = "ECO_0007293"
-    OBSOLETE_INFERENCE_FROM_EXPERIMENTAL_DATA_EVIDENCE_USED_IN_AUTOMATIC_ASSERTION = "ECO_0007293"
+    OBSOLETE_INFERENCE_FROM_EXPERIMENTAL_DATA_EVIDENCE_USED_IN_AUTOMATIC_ASSERTION = (
+        "ECO_0007293"
+    )
 
     # obsolete inference from phenotype manipulation evidence used in automatic assertion
     ECO_0007294 = "ECO_0007294"
@@ -8457,7 +8793,9 @@ class ECO(str, Enum):
 
     # inference by association of genotype from phenotype used in automatic assertion
     ECO_0007295 = "ECO_0007295"
-    INFERENCE_BY_ASSOCIATION_OF_GENOTYPE_FROM_PHENOTYPE_USED_IN_AUTOMATIC_ASSERTION = "ECO_0007295"
+    INFERENCE_BY_ASSOCIATION_OF_GENOTYPE_FROM_PHENOTYPE_USED_IN_AUTOMATIC_ASSERTION = (
+        "ECO_0007295"
+    )
 
     # motility assay evidence used in automatic assertion
     ECO_0007296 = "ECO_0007296"
@@ -8477,7 +8815,9 @@ class ECO(str, Enum):
 
     # cRNA to DNA expression microarray evidence used in automatic assertion
     ECO_0007300 = "ECO_0007300"
-    CRNA_TO_DNA_EXPRESSION_MICROARRAY_EVIDENCE_USED_IN_AUTOMATIC_ASSERTION = "ECO_0007300"
+    CRNA_TO_DNA_EXPRESSION_MICROARRAY_EVIDENCE_USED_IN_AUTOMATIC_ASSERTION = (
+        "ECO_0007300"
+    )
 
     # expression microarray evidence used in automatic assertion
     ECO_0007301 = "ECO_0007301"
@@ -8485,7 +8825,9 @@ class ECO(str, Enum):
 
     # differential methylation hybridization evidence used in automatic assertion
     ECO_0007302 = "ECO_0007302"
-    DIFFERENTIAL_METHYLATION_HYBRIDIZATION_EVIDENCE_USED_IN_AUTOMATIC_ASSERTION = "ECO_0007302"
+    DIFFERENTIAL_METHYLATION_HYBRIDIZATION_EVIDENCE_USED_IN_AUTOMATIC_ASSERTION = (
+        "ECO_0007302"
+    )
 
     # transcript expression evidence used in automatic assertion
     ECO_0007303 = "ECO_0007303"
@@ -8501,7 +8843,9 @@ class ECO(str, Enum):
 
     # qualitative western immunoblotting evidence used in automatic assertion
     ECO_0007306 = "ECO_0007306"
-    QUALITATIVE_WESTERN_IMMUNOBLOTTING_EVIDENCE_USED_IN_AUTOMATIC_ASSERTION = "ECO_0007306"
+    QUALITATIVE_WESTERN_IMMUNOBLOTTING_EVIDENCE_USED_IN_AUTOMATIC_ASSERTION = (
+        "ECO_0007306"
+    )
 
     # direct assay evidence used in automatic assertion
     ECO_0007307 = "ECO_0007307"
@@ -8521,11 +8865,15 @@ class ECO(str, Enum):
 
     # spatial pattern of protein expression evidence used in automatic assertion
     ECO_0007312 = "ECO_0007312"
-    SPATIAL_PATTERN_OF_PROTEIN_EXPRESSION_EVIDENCE_USED_IN_AUTOMATIC_ASSERTION = "ECO_0007312"
+    SPATIAL_PATTERN_OF_PROTEIN_EXPRESSION_EVIDENCE_USED_IN_AUTOMATIC_ASSERTION = (
+        "ECO_0007312"
+    )
 
     # DNA to cDNA expression microarray evidence used in automatic assertion
     ECO_0007313 = "ECO_0007313"
-    DNA_TO_CDNA_EXPRESSION_MICROARRAY_EVIDENCE_USED_IN_AUTOMATIC_ASSERTION = "ECO_0007313"
+    DNA_TO_CDNA_EXPRESSION_MICROARRAY_EVIDENCE_USED_IN_AUTOMATIC_ASSERTION = (
+        "ECO_0007313"
+    )
 
     # differential hybridization evidence used in automatic assertion
     ECO_0007314 = "ECO_0007314"
@@ -8541,7 +8889,9 @@ class ECO(str, Enum):
 
     # spatial pattern of transcript expression evidence used in automatic assertion
     ECO_0007317 = "ECO_0007317"
-    SPATIAL_PATTERN_OF_TRANSCRIPT_EXPRESSION_EVIDENCE_USED_IN_AUTOMATIC_ASSERTION = "ECO_0007317"
+    SPATIAL_PATTERN_OF_TRANSCRIPT_EXPRESSION_EVIDENCE_USED_IN_AUTOMATIC_ASSERTION = (
+        "ECO_0007317"
+    )
 
     # subtractive hybridization evidence used in automatic assertion
     ECO_0007318 = "ECO_0007318"
@@ -8553,11 +8903,15 @@ class ECO(str, Enum):
 
     # author statement without traceable support used in automatic assertion
     ECO_0007320 = "ECO_0007320"
-    AUTHOR_STATEMENT_WITHOUT_TRACEABLE_SUPPORT_USED_IN_AUTOMATIC_ASSERTION = "ECO_0007320"
+    AUTHOR_STATEMENT_WITHOUT_TRACEABLE_SUPPORT_USED_IN_AUTOMATIC_ASSERTION = (
+        "ECO_0007320"
+    )
 
     # author statement supported by traceable reference used in automatic assertion
     ECO_0007321 = "ECO_0007321"
-    AUTHOR_STATEMENT_SUPPORTED_BY_TRACEABLE_REFERENCE_USED_IN_AUTOMATIC_ASSERTION = "ECO_0007321"
+    AUTHOR_STATEMENT_SUPPORTED_BY_TRACEABLE_REFERENCE_USED_IN_AUTOMATIC_ASSERTION = (
+        "ECO_0007321"
+    )
 
     # curator inference used in automatic assertion
     ECO_0007322 = "ECO_0007322"
@@ -8565,7 +8919,9 @@ class ECO(str, Enum):
 
     # inference from background scientific knowledge used in automatic assertion
     ECO_0007323 = "ECO_0007323"
-    INFERENCE_FROM_BACKGROUND_SCIENTIFIC_KNOWLEDGE_USED_IN_AUTOMATIC_ASSERTION = "ECO_0007323"
+    INFERENCE_FROM_BACKGROUND_SCIENTIFIC_KNOWLEDGE_USED_IN_AUTOMATIC_ASSERTION = (
+        "ECO_0007323"
+    )
 
     # no evidence data found used in automatic assertion
     ECO_0007324 = "ECO_0007324"
@@ -8597,7 +8953,9 @@ class ECO(str, Enum):
 
     # rapid divergence from ancestral sequence evidence used in automatic assertion
     ECO_0007331 = "ECO_0007331"
-    RAPID_DIVERGENCE_FROM_ANCESTRAL_SEQUENCE_EVIDENCE_USED_IN_AUTOMATIC_ASSERTION = "ECO_0007331"
+    RAPID_DIVERGENCE_FROM_ANCESTRAL_SEQUENCE_EVIDENCE_USED_IN_AUTOMATIC_ASSERTION = (
+        "ECO_0007331"
+    )
 
     # physical interaction evidence used in automatic assertion
     ECO_0007332 = "ECO_0007332"
@@ -8625,11 +8983,15 @@ class ECO(str, Enum):
 
     # [3H]-thymidine incorporation assay evidence used in automatic assertion
     ECO_0007338 = "ECO_0007338"
-    _3H__THYMIDINE_INCORPORATION_ASSAY_EVIDENCE_USED_IN_AUTOMATIC_ASSERTION = "ECO_0007338"
+    _3H__THYMIDINE_INCORPORATION_ASSAY_EVIDENCE_USED_IN_AUTOMATIC_ASSERTION = (
+        "ECO_0007338"
+    )
 
     # [3H]arachidonic acid release assay evidence used in automatic assertion
     ECO_0007339 = "ECO_0007339"
-    _3H_ARACHIDONIC_ACID_RELEASE_ASSAY_EVIDENCE_USED_IN_AUTOMATIC_ASSERTION = "ECO_0007339"
+    _3H_ARACHIDONIC_ACID_RELEASE_ASSAY_EVIDENCE_USED_IN_AUTOMATIC_ASSERTION = (
+        "ECO_0007339"
+    )
 
     # adhesion assay evidence used in automatic assertion
     ECO_0007340 = "ECO_0007340"
@@ -8645,7 +9007,9 @@ class ECO(str, Enum):
 
     # allograft transplantation phenotypic evidence used in automatic assertion
     ECO_0007343 = "ECO_0007343"
-    ALLOGRAFT_TRANSPLANTATION_PHENOTYPIC_EVIDENCE_USED_IN_AUTOMATIC_ASSERTION = "ECO_0007343"
+    ALLOGRAFT_TRANSPLANTATION_PHENOTYPIC_EVIDENCE_USED_IN_AUTOMATIC_ASSERTION = (
+        "ECO_0007343"
+    )
 
     # anion-exchange chromatography evidence used in automatic assertion
     ECO_0007344 = "ECO_0007344"
@@ -8685,11 +9049,15 @@ class ECO(str, Enum):
 
     # bromodeoxyuridine incorporation assay evidence used in automatic assertion
     ECO_0007353 = "ECO_0007353"
-    BROMODEOXYURIDINE_INCORPORATION_ASSAY_EVIDENCE_USED_IN_AUTOMATIC_ASSERTION = "ECO_0007353"
+    BROMODEOXYURIDINE_INCORPORATION_ASSAY_EVIDENCE_USED_IN_AUTOMATIC_ASSERTION = (
+        "ECO_0007353"
+    )
 
     # nucleotide analog incorporation assay evidence used in automatic assertion
     ECO_0007354 = "ECO_0007354"
-    NUCLEOTIDE_ANALOG_INCORPORATION_ASSAY_EVIDENCE_USED_IN_AUTOMATIC_ASSERTION = "ECO_0007354"
+    NUCLEOTIDE_ANALOG_INCORPORATION_ASSAY_EVIDENCE_USED_IN_AUTOMATIC_ASSERTION = (
+        "ECO_0007354"
+    )
 
     # caspase assay evidence used in automatic assertion
     ECO_0007355 = "ECO_0007355"
@@ -8709,7 +9077,9 @@ class ECO(str, Enum):
 
     # chemiluminescence-linked immunoassay evidence used in automatic assertion
     ECO_0007359 = "ECO_0007359"
-    CHEMILUMINESCENCE_LINKED_IMMUNOASSAY_EVIDENCE_USED_IN_AUTOMATIC_ASSERTION = "ECO_0007359"
+    CHEMILUMINESCENCE_LINKED_IMMUNOASSAY_EVIDENCE_USED_IN_AUTOMATIC_ASSERTION = (
+        "ECO_0007359"
+    )
 
     # chimeric protein phenotypic evidence used in automatic assertion
     ECO_0007360 = "ECO_0007360"
@@ -8757,7 +9127,9 @@ class ECO(str, Enum):
 
     # constitutively active mutant protein evidence used in automatic assertion
     ECO_0007371 = "ECO_0007371"
-    CONSTITUTIVELY_ACTIVE_MUTANT_PROTEIN_EVIDENCE_USED_IN_AUTOMATIC_ASSERTION = "ECO_0007371"
+    CONSTITUTIVELY_ACTIVE_MUTANT_PROTEIN_EVIDENCE_USED_IN_AUTOMATIC_ASSERTION = (
+        "ECO_0007371"
+    )
 
     # cross-linking evidence used in automatic assertion
     ECO_0007372 = "ECO_0007372"
@@ -8785,7 +9157,9 @@ class ECO(str, Enum):
 
     # 4',6-diamidino-2-phenylindole staining evidence used in automatic assertion
     ECO_0007378 = "ECO_0007378"
-    _4__6_DIAMIDINO_2_PHENYLINDOLE_STAINING_EVIDENCE_USED_IN_AUTOMATIC_ASSERTION = "ECO_0007378"
+    _4__6_DIAMIDINO_2_PHENYLINDOLE_STAINING_EVIDENCE_USED_IN_AUTOMATIC_ASSERTION = (
+        "ECO_0007378"
+    )
 
     # deletion mutation phenotypic evidence used in automatic assertion
     ECO_0007379 = "ECO_0007379"
@@ -8801,7 +9175,9 @@ class ECO(str, Enum):
 
     # dominant-negative mutant phenotypic evidence used in automatic assertion
     ECO_0007382 = "ECO_0007382"
-    DOMINANT_NEGATIVE_MUTANT_PHENOTYPIC_EVIDENCE_USED_IN_AUTOMATIC_ASSERTION = "ECO_0007382"
+    DOMINANT_NEGATIVE_MUTANT_PHENOTYPIC_EVIDENCE_USED_IN_AUTOMATIC_ASSERTION = (
+        "ECO_0007382"
+    )
 
     # eTag assay evidence used in automatic assertion
     ECO_0007383 = "ECO_0007383"
@@ -8817,11 +9193,15 @@ class ECO(str, Enum):
 
     # fluorescence in situ hybridization evidence used in automatic assertion
     ECO_0007386 = "ECO_0007386"
-    FLUORESCENCE_IN_SITU_HYBRIDIZATION_EVIDENCE_USED_IN_AUTOMATIC_ASSERTION = "ECO_0007386"
+    FLUORESCENCE_IN_SITU_HYBRIDIZATION_EVIDENCE_USED_IN_AUTOMATIC_ASSERTION = (
+        "ECO_0007386"
+    )
 
     # fluorescence resonance energy transfer evidence used in automatic assertion
     ECO_0007387 = "ECO_0007387"
-    FLUORESCENCE_RESONANCE_ENERGY_TRANSFER_EVIDENCE_USED_IN_AUTOMATIC_ASSERTION = "ECO_0007387"
+    FLUORESCENCE_RESONANCE_ENERGY_TRANSFER_EVIDENCE_USED_IN_AUTOMATIC_ASSERTION = (
+        "ECO_0007387"
+    )
 
     # gel-filtration evidence used in automatic assertion
     ECO_0007388 = "ECO_0007388"
@@ -8889,7 +9269,9 @@ class ECO(str, Enum):
 
     # in vitro polyADP-ribosylation assay evidence used in automatic assertion
     ECO_0007404 = "ECO_0007404"
-    IN_VITRO_POLYADP_RIBOSYLATION_ASSAY_EVIDENCE_USED_IN_AUTOMATIC_ASSERTION = "ECO_0007404"
+    IN_VITRO_POLYADP_RIBOSYLATION_ASSAY_EVIDENCE_USED_IN_AUTOMATIC_ASSERTION = (
+        "ECO_0007404"
+    )
 
     # in vitro protein kinase assay evidence used in automatic assertion
     ECO_0007405 = "ECO_0007405"
@@ -9029,7 +9411,9 @@ class ECO(str, Enum):
 
     # multiplex bead-based immunoassay evidence used in automatic assertion
     ECO_0007439 = "ECO_0007439"
-    MULTIPLEX_BEAD_BASED_IMMUNOASSAY_EVIDENCE_USED_IN_AUTOMATIC_ASSERTION = "ECO_0007439"
+    MULTIPLEX_BEAD_BASED_IMMUNOASSAY_EVIDENCE_USED_IN_AUTOMATIC_ASSERTION = (
+        "ECO_0007439"
+    )
 
     # natural variation mutant evidence used in automatic assertion
     ECO_0007440 = "ECO_0007440"
@@ -9109,7 +9493,9 @@ class ECO(str, Enum):
 
     # syngeneic transplantation experiment evidence used in automatic assertion
     ECO_0007459 = "ECO_0007459"
-    SYNGENEIC_TRANSPLANTATION_EXPERIMENT_EVIDENCE_USED_IN_AUTOMATIC_ASSERTION = "ECO_0007459"
+    SYNGENEIC_TRANSPLANTATION_EXPERIMENT_EVIDENCE_USED_IN_AUTOMATIC_ASSERTION = (
+        "ECO_0007459"
+    )
 
     # xenotransplantation phenotypic evidence used in automatic assertion
     ECO_0007460 = "ECO_0007460"
@@ -9129,7 +9515,9 @@ class ECO(str, Enum):
 
     # tryptic phosphopeptide mapping assay evidence used in automatic assertion
     ECO_0007464 = "ECO_0007464"
-    TRYPTIC_PHOSPHOPEPTIDE_MAPPING_ASSAY_EVIDENCE_USED_IN_AUTOMATIC_ASSERTION = "ECO_0007464"
+    TRYPTIC_PHOSPHOPEPTIDE_MAPPING_ASSAY_EVIDENCE_USED_IN_AUTOMATIC_ASSERTION = (
+        "ECO_0007464"
+    )
 
     # transgenic organism evidence used in automatic assertion
     ECO_0007465 = "ECO_0007465"
@@ -9153,7 +9541,9 @@ class ECO(str, Enum):
 
     # restriction landmark genomic scanning evidence used in automatic assertion
     ECO_0007470 = "ECO_0007470"
-    RESTRICTION_LANDMARK_GENOMIC_SCANNING_EVIDENCE_USED_IN_AUTOMATIC_ASSERTION = "ECO_0007470"
+    RESTRICTION_LANDMARK_GENOMIC_SCANNING_EVIDENCE_USED_IN_AUTOMATIC_ASSERTION = (
+        "ECO_0007470"
+    )
 
     # resonant mirror biosensor evidence used in automatic assertion
     ECO_0007471 = "ECO_0007471"
@@ -9161,7 +9551,9 @@ class ECO(str, Enum):
 
     # high-performance liquid chromatography evidence used in automatic assertion
     ECO_0007472 = "ECO_0007472"
-    HIGH_PERFORMANCE_LIQUID_CHROMATOGRAPHY_EVIDENCE_USED_IN_AUTOMATIC_ASSERTION = "ECO_0007472"
+    HIGH_PERFORMANCE_LIQUID_CHROMATOGRAPHY_EVIDENCE_USED_IN_AUTOMATIC_ASSERTION = (
+        "ECO_0007472"
+    )
 
     # ectopic expression evidence used in automatic assertion
     ECO_0007473 = "ECO_0007473"
@@ -9169,7 +9561,9 @@ class ECO(str, Enum):
 
     # electrophoretic mobility shift assay evidence used in automatic assertion
     ECO_0007474 = "ECO_0007474"
-    ELECTROPHORETIC_MOBILITY_SHIFT_ASSAY_EVIDENCE_USED_IN_AUTOMATIC_ASSERTION = "ECO_0007474"
+    ELECTROPHORETIC_MOBILITY_SHIFT_ASSAY_EVIDENCE_USED_IN_AUTOMATIC_ASSERTION = (
+        "ECO_0007474"
+    )
 
     # reverse transcription polymerase chain reaction evidence used in automatic assertion
     ECO_0007475 = "ECO_0007475"
@@ -9177,7 +9571,9 @@ class ECO(str, Enum):
 
     # in vivo polyADP-ribosylation assay evidence used in automatic assertion
     ECO_0007476 = "ECO_0007476"
-    IN_VIVO_POLYADP_RIBOSYLATION_ASSAY_EVIDENCE_USED_IN_AUTOMATIC_ASSERTION = "ECO_0007476"
+    IN_VIVO_POLYADP_RIBOSYLATION_ASSAY_EVIDENCE_USED_IN_AUTOMATIC_ASSERTION = (
+        "ECO_0007476"
+    )
 
     # DNA dot blot assay evidence used in automatic assertion
     ECO_0007477 = "ECO_0007477"
@@ -9225,11 +9621,15 @@ class ECO(str, Enum):
 
     # enzyme-linked immunoabsorbent assay evidence used in automatic assertion
     ECO_0007488 = "ECO_0007488"
-    ENZYME_LINKED_IMMUNOABSORBENT_ASSAY_EVIDENCE_USED_IN_AUTOMATIC_ASSERTION = "ECO_0007488"
+    ENZYME_LINKED_IMMUNOABSORBENT_ASSAY_EVIDENCE_USED_IN_AUTOMATIC_ASSERTION = (
+        "ECO_0007488"
+    )
 
     # high throughput mass spectrometry evidence used in automatic assertion
     ECO_0007489 = "ECO_0007489"
-    HIGH_THROUGHPUT_MASS_SPECTROMETRY_EVIDENCE_USED_IN_AUTOMATIC_ASSERTION = "ECO_0007489"
+    HIGH_THROUGHPUT_MASS_SPECTROMETRY_EVIDENCE_USED_IN_AUTOMATIC_ASSERTION = (
+        "ECO_0007489"
+    )
 
     # confocal microscopy evidence used in automatic assertion
     ECO_0007490 = "ECO_0007490"
@@ -9249,7 +9649,9 @@ class ECO(str, Enum):
 
     # immunoperoxidase immunolocalization evidence used in automatic assertion
     ECO_0007494 = "ECO_0007494"
-    IMMUNOPEROXIDASE_IMMUNOLOCALIZATION_EVIDENCE_USED_IN_AUTOMATIC_ASSERTION = "ECO_0007494"
+    IMMUNOPEROXIDASE_IMMUNOLOCALIZATION_EVIDENCE_USED_IN_AUTOMATIC_ASSERTION = (
+        "ECO_0007494"
+    )
 
     # immunoperoxidase immunolocalization electron microscopy evidence used in automatic assertion
     ECO_0007495 = "ECO_0007495"
@@ -9257,7 +9659,9 @@ class ECO(str, Enum):
 
     # immunofluorescence confocal microscopy evidence used in automatic assertion
     ECO_0007496 = "ECO_0007496"
-    IMMUNOFLUORESCENCE_CONFOCAL_MICROSCOPY_EVIDENCE_USED_IN_AUTOMATIC_ASSERTION = "ECO_0007496"
+    IMMUNOFLUORESCENCE_CONFOCAL_MICROSCOPY_EVIDENCE_USED_IN_AUTOMATIC_ASSERTION = (
+        "ECO_0007496"
+    )
 
     # immunofluorescence evidence used in automatic assertion
     ECO_0007497 = "ECO_0007497"
@@ -9269,11 +9673,15 @@ class ECO(str, Enum):
 
     # alkaline phosphatase reporter gene assay evidence used in automatic assertion
     ECO_0007499 = "ECO_0007499"
-    ALKALINE_PHOSPHATASE_REPORTER_GENE_ASSAY_EVIDENCE_USED_IN_AUTOMATIC_ASSERTION = "ECO_0007499"
+    ALKALINE_PHOSPHATASE_REPORTER_GENE_ASSAY_EVIDENCE_USED_IN_AUTOMATIC_ASSERTION = (
+        "ECO_0007499"
+    )
 
     # beta-galactosidase reporter gene assay evidence used in automatic assertion
     ECO_0007500 = "ECO_0007500"
-    BETA_GALACTOSIDASE_REPORTER_GENE_ASSAY_EVIDENCE_USED_IN_AUTOMATIC_ASSERTION = "ECO_0007500"
+    BETA_GALACTOSIDASE_REPORTER_GENE_ASSAY_EVIDENCE_USED_IN_AUTOMATIC_ASSERTION = (
+        "ECO_0007500"
+    )
 
     # chloramphenicol acetyltransferase reporter gene assay evidence used in automatic assertion
     ECO_0007501 = "ECO_0007501"
@@ -9281,7 +9689,9 @@ class ECO(str, Enum):
 
     # chromatin immunoprecipitation-PCR evidence used in automatic assertion
     ECO_0007502 = "ECO_0007502"
-    CHROMATIN_IMMUNOPRECIPITATION_PCR_EVIDENCE_USED_IN_AUTOMATIC_ASSERTION = "ECO_0007502"
+    CHROMATIN_IMMUNOPRECIPITATION_PCR_EVIDENCE_USED_IN_AUTOMATIC_ASSERTION = (
+        "ECO_0007502"
+    )
 
     # immunoprecipitation evidence used in automatic assertion
     ECO_0007503 = "ECO_0007503"
@@ -9289,7 +9699,9 @@ class ECO(str, Enum):
 
     # copper-phenanthroline footprinting evidence used in automatic assertion
     ECO_0007504 = "ECO_0007504"
-    COPPER_PHENANTHROLINE_FOOTPRINTING_EVIDENCE_USED_IN_AUTOMATIC_ASSERTION = "ECO_0007504"
+    COPPER_PHENANTHROLINE_FOOTPRINTING_EVIDENCE_USED_IN_AUTOMATIC_ASSERTION = (
+        "ECO_0007504"
+    )
 
     # nucleic acid binding evidence used in automatic assertion
     ECO_0007505 = "ECO_0007505"
@@ -9309,7 +9721,9 @@ class ECO(str, Enum):
 
     # ferric uptake regulator titration assay evidence used in automatic assertion
     ECO_0007509 = "ECO_0007509"
-    FERRIC_UPTAKE_REGULATOR_TITRATION_ASSAY_EVIDENCE_USED_IN_AUTOMATIC_ASSERTION = "ECO_0007509"
+    FERRIC_UPTAKE_REGULATOR_TITRATION_ASSAY_EVIDENCE_USED_IN_AUTOMATIC_ASSERTION = (
+        "ECO_0007509"
+    )
 
     # systematic evolution of ligands by exponential amplification evidence used in automatic assertion
     ECO_0007510 = "ECO_0007510"
@@ -9317,11 +9731,15 @@ class ECO(str, Enum):
 
     # glutathione S-transferase pull-down assay evidence used in automatic assertion
     ECO_0007511 = "ECO_0007511"
-    GLUTATHIONE_S_TRANSFERASE_PULL_DOWN_ASSAY_EVIDENCE_USED_IN_AUTOMATIC_ASSERTION = "ECO_0007511"
+    GLUTATHIONE_S_TRANSFERASE_PULL_DOWN_ASSAY_EVIDENCE_USED_IN_AUTOMATIC_ASSERTION = (
+        "ECO_0007511"
+    )
 
     # beta-glucuronidase reporter gene assay evidence used in automatic assertion
     ECO_0007512 = "ECO_0007512"
-    BETA_GLUCURONIDASE_REPORTER_GENE_ASSAY_EVIDENCE_USED_IN_AUTOMATIC_ASSERTION = "ECO_0007512"
+    BETA_GLUCURONIDASE_REPORTER_GENE_ASSAY_EVIDENCE_USED_IN_AUTOMATIC_ASSERTION = (
+        "ECO_0007512"
+    )
 
     # heteronuclear single quantum coherence spectroscopy evidence used in automatic assertion
     ECO_0007513 = "ECO_0007513"
@@ -9333,7 +9751,9 @@ class ECO(str, Enum):
 
     # isothermal titration calorimetry evidence used in automatic assertion
     ECO_0007515 = "ECO_0007515"
-    ISOTHERMAL_TITRATION_CALORIMETRY_EVIDENCE_USED_IN_AUTOMATIC_ASSERTION = "ECO_0007515"
+    ISOTHERMAL_TITRATION_CALORIMETRY_EVIDENCE_USED_IN_AUTOMATIC_ASSERTION = (
+        "ECO_0007515"
+    )
 
     # luciferase reporter gene assay evidence used in automatic assertion
     ECO_0007516 = "ECO_0007516"
@@ -9349,7 +9769,9 @@ class ECO(str, Enum):
 
     # methylation interference footprinting evidence used in automatic assertion
     ECO_0007519 = "ECO_0007519"
-    METHYLATION_INTERFERENCE_FOOTPRINTING_EVIDENCE_USED_IN_AUTOMATIC_ASSERTION = "ECO_0007519"
+    METHYLATION_INTERFERENCE_FOOTPRINTING_EVIDENCE_USED_IN_AUTOMATIC_ASSERTION = (
+        "ECO_0007519"
+    )
 
     # primer extension assay evidence used in automatic assertion
     ECO_0007520 = "ECO_0007520"
@@ -9357,7 +9779,9 @@ class ECO(str, Enum):
 
     # quantitative polymerase chain reaction evidence used in automatic assertion
     ECO_0007521 = "ECO_0007521"
-    QUANTITATIVE_POLYMERASE_CHAIN_REACTION_EVIDENCE_USED_IN_AUTOMATIC_ASSERTION = "ECO_0007521"
+    QUANTITATIVE_POLYMERASE_CHAIN_REACTION_EVIDENCE_USED_IN_AUTOMATIC_ASSERTION = (
+        "ECO_0007521"
+    )
 
     # rapid amplification of cDNA ends polymerase chain reaction evidence used in automatic assertion
     ECO_0007522 = "ECO_0007522"
@@ -9369,7 +9793,9 @@ class ECO(str, Enum):
 
     # site-directed mutagenesis phenotypic evidence used in automatic assertion
     ECO_0007524 = "ECO_0007524"
-    SITE_DIRECTED_MUTAGENESIS_PHENOTYPIC_EVIDENCE_USED_IN_AUTOMATIC_ASSERTION = "ECO_0007524"
+    SITE_DIRECTED_MUTAGENESIS_PHENOTYPIC_EVIDENCE_USED_IN_AUTOMATIC_ASSERTION = (
+        "ECO_0007524"
+    )
 
     # survival rate analysis evidence used in automatic assertion
     ECO_0007525 = "ECO_0007525"
@@ -9385,11 +9811,15 @@ class ECO(str, Enum):
 
     # ad-hoc qualitative phenotype observation evidence used in automatic assertion
     ECO_0007528 = "ECO_0007528"
-    AD_HOC_QUALITATIVE_PHENOTYPE_OBSERVATION_EVIDENCE_USED_IN_AUTOMATIC_ASSERTION = "ECO_0007528"
+    AD_HOC_QUALITATIVE_PHENOTYPE_OBSERVATION_EVIDENCE_USED_IN_AUTOMATIC_ASSERTION = (
+        "ECO_0007528"
+    )
 
     # ad-hoc quantitative phenotype observation evidence used in automatic assertion
     ECO_0007529 = "ECO_0007529"
-    AD_HOC_QUANTITATIVE_PHENOTYPE_OBSERVATION_EVIDENCE_USED_IN_AUTOMATIC_ASSERTION = "ECO_0007529"
+    AD_HOC_QUANTITATIVE_PHENOTYPE_OBSERVATION_EVIDENCE_USED_IN_AUTOMATIC_ASSERTION = (
+        "ECO_0007529"
+    )
 
     # cell transfection experiment evidence used in automatic assertion
     ECO_0007530 = "ECO_0007530"
@@ -9425,7 +9855,9 @@ class ECO(str, Enum):
 
     # whole-cell patch-clamp recording evidence used in automatic assertion
     ECO_0007538 = "ECO_0007538"
-    WHOLE_CELL_PATCH_CLAMP_RECORDING_EVIDENCE_USED_IN_AUTOMATIC_ASSERTION = "ECO_0007538"
+    WHOLE_CELL_PATCH_CLAMP_RECORDING_EVIDENCE_USED_IN_AUTOMATIC_ASSERTION = (
+        "ECO_0007538"
+    )
 
     # author statement supported from referenced clinical study used in automatic assertion
     ECO_0007539 = "ECO_0007539"
@@ -9433,7 +9865,9 @@ class ECO(str, Enum):
 
     # inference based on individual clinical experience used in automatic assertion
     ECO_0007540 = "ECO_0007540"
-    INFERENCE_BASED_ON_INDIVIDUAL_CLINICAL_EXPERIENCE_USED_IN_AUTOMATIC_ASSERTION = "ECO_0007540"
+    INFERENCE_BASED_ON_INDIVIDUAL_CLINICAL_EXPERIENCE_USED_IN_AUTOMATIC_ASSERTION = (
+        "ECO_0007540"
+    )
 
     # biofilm formation assay evidence used in automatic assertion
     ECO_0007541 = "ECO_0007541"
@@ -9469,7 +9903,9 @@ class ECO(str, Enum):
 
     # genetically encoded fluorescent sensor evidence used in automatic assertion
     ECO_0007549 = "ECO_0007549"
-    GENETICALLY_ENCODED_FLUORESCENT_SENSOR_EVIDENCE_USED_IN_AUTOMATIC_ASSERTION = "ECO_0007549"
+    GENETICALLY_ENCODED_FLUORESCENT_SENSOR_EVIDENCE_USED_IN_AUTOMATIC_ASSERTION = (
+        "ECO_0007549"
+    )
 
     # genetically encoded fluorescent electrophysiology assay evidence used in automatic assertion
     ECO_0007550 = "ECO_0007550"
@@ -9489,7 +9925,9 @@ class ECO(str, Enum):
 
     # single-unit extracellular recording evidence used in automatic assertion
     ECO_0007554 = "ECO_0007554"
-    SINGLE_UNIT_EXTRACELLULAR_RECORDING_EVIDENCE_USED_IN_AUTOMATIC_ASSERTION = "ECO_0007554"
+    SINGLE_UNIT_EXTRACELLULAR_RECORDING_EVIDENCE_USED_IN_AUTOMATIC_ASSERTION = (
+        "ECO_0007554"
+    )
 
     # field potential recording evidence used in automatic assertion
     ECO_0007555 = "ECO_0007555"
@@ -9513,11 +9951,15 @@ class ECO(str, Enum):
 
     # immunofluorescence wide-field microscopy evidence used in automatic assertion
     ECO_0007560 = "ECO_0007560"
-    IMMUNOFLUORESCENCE_WIDE_FIELD_MICROSCOPY_EVIDENCE_USED_IN_AUTOMATIC_ASSERTION = "ECO_0007560"
+    IMMUNOFLUORESCENCE_WIDE_FIELD_MICROSCOPY_EVIDENCE_USED_IN_AUTOMATIC_ASSERTION = (
+        "ECO_0007560"
+    )
 
     # wide-field fluorescence microscopy evidence used in automatic assertion
     ECO_0007561 = "ECO_0007561"
-    WIDE_FIELD_FLUORESCENCE_MICROSCOPY_EVIDENCE_USED_IN_AUTOMATIC_ASSERTION = "ECO_0007561"
+    WIDE_FIELD_FLUORESCENCE_MICROSCOPY_EVIDENCE_USED_IN_AUTOMATIC_ASSERTION = (
+        "ECO_0007561"
+    )
 
     # over expression analysis evidence used in automatic assertion
     ECO_0007562 = "ECO_0007562"
@@ -9529,11 +9971,15 @@ class ECO(str, Enum):
 
     # fluorescence recovery after photobleaching evidence used in automatic assertion
     ECO_0007564 = "ECO_0007564"
-    FLUORESCENCE_RECOVERY_AFTER_PHOTOBLEACHING_EVIDENCE_USED_IN_AUTOMATIC_ASSERTION = "ECO_0007564"
+    FLUORESCENCE_RECOVERY_AFTER_PHOTOBLEACHING_EVIDENCE_USED_IN_AUTOMATIC_ASSERTION = (
+        "ECO_0007564"
+    )
 
     # immuno-labelling electron microscopy evidence used in automatic assertion
     ECO_0007565 = "ECO_0007565"
-    IMMUNO_LABELLING_ELECTRON_MICROSCOPY_EVIDENCE_USED_IN_AUTOMATIC_ASSERTION = "ECO_0007565"
+    IMMUNO_LABELLING_ELECTRON_MICROSCOPY_EVIDENCE_USED_IN_AUTOMATIC_ASSERTION = (
+        "ECO_0007565"
+    )
 
     # immunofluorescence super resolution microscopy evidence used in automatic assertion
     ECO_0007566 = "ECO_0007566"
@@ -9549,7 +9995,9 @@ class ECO(str, Enum):
 
     # split-ubiquitin functional complementation evidence used in automatic assertion
     ECO_0007569 = "ECO_0007569"
-    SPLIT_UBIQUITIN_FUNCTIONAL_COMPLEMENTATION_EVIDENCE_USED_IN_AUTOMATIC_ASSERTION = "ECO_0007569"
+    SPLIT_UBIQUITIN_FUNCTIONAL_COMPLEMENTATION_EVIDENCE_USED_IN_AUTOMATIC_ASSERTION = (
+        "ECO_0007569"
+    )
 
     # far-Western blotting evidence used in automatic assertion
     ECO_0007570 = "ECO_0007570"
@@ -9581,7 +10029,9 @@ class ECO(str, Enum):
 
     # protein-oligonucleotide microarray binding evidence used in automatic assertion
     ECO_0007577 = "ECO_0007577"
-    PROTEIN_OLIGONUCLEOTIDE_MICROARRAY_BINDING_EVIDENCE_USED_IN_AUTOMATIC_ASSERTION = "ECO_0007577"
+    PROTEIN_OLIGONUCLEOTIDE_MICROARRAY_BINDING_EVIDENCE_USED_IN_AUTOMATIC_ASSERTION = (
+        "ECO_0007577"
+    )
 
     # functional complementation evidence used in automatic assertion
     ECO_0007578 = "ECO_0007578"
@@ -9597,7 +10047,9 @@ class ECO(str, Enum):
 
     # suppressor/enhancer interaction phenotypic evidence used in automatic assertion
     ECO_0007581 = "ECO_0007581"
-    SUPPRESSOR_ENHANCER_INTERACTION_PHENOTYPIC_EVIDENCE_USED_IN_AUTOMATIC_ASSERTION = "ECO_0007581"
+    SUPPRESSOR_ENHANCER_INTERACTION_PHENOTYPIC_EVIDENCE_USED_IN_AUTOMATIC_ASSERTION = (
+        "ECO_0007581"
+    )
 
     # double mutant phenotypic evidence used in automatic assertion
     ECO_0007582 = "ECO_0007582"
@@ -9605,7 +10057,9 @@ class ECO(str, Enum):
 
     # epistatic interaction phenotypic evidence used in automatic assertion
     ECO_0007583 = "ECO_0007583"
-    EPISTATIC_INTERACTION_PHENOTYPIC_EVIDENCE_USED_IN_AUTOMATIC_ASSERTION = "ECO_0007583"
+    EPISTATIC_INTERACTION_PHENOTYPIC_EVIDENCE_USED_IN_AUTOMATIC_ASSERTION = (
+        "ECO_0007583"
+    )
 
     # functional complementation in heterologous system evidence used in automatic assertion
     ECO_0007584 = "ECO_0007584"
@@ -9613,7 +10067,9 @@ class ECO(str, Enum):
 
     # temperature-sensitive mutant phenotypic evidence used in automatic assertion
     ECO_0007585 = "ECO_0007585"
-    TEMPERATURE_SENSITIVE_MUTANT_PHENOTYPIC_EVIDENCE_USED_IN_AUTOMATIC_ASSERTION = "ECO_0007585"
+    TEMPERATURE_SENSITIVE_MUTANT_PHENOTYPIC_EVIDENCE_USED_IN_AUTOMATIC_ASSERTION = (
+        "ECO_0007585"
+    )
 
     # recessive mutant phenotype evidence used in automatic assertion
     ECO_0007586 = "ECO_0007586"
@@ -9621,7 +10077,9 @@ class ECO(str, Enum):
 
     # high throughput mutant phenotypic evidence used in automatic assertion
     ECO_0007587 = "ECO_0007587"
-    HIGH_THROUGHPUT_MUTANT_PHENOTYPIC_EVIDENCE_USED_IN_AUTOMATIC_ASSERTION = "ECO_0007587"
+    HIGH_THROUGHPUT_MUTANT_PHENOTYPIC_EVIDENCE_USED_IN_AUTOMATIC_ASSERTION = (
+        "ECO_0007587"
+    )
 
     # high throughput genetic interaction phenotypic evidence used in automatic assertion
     ECO_0007588 = "ECO_0007588"
@@ -9633,7 +10091,9 @@ class ECO(str, Enum):
 
     # high throughput expression pattern evidence used in automatic assertion
     ECO_0007590 = "ECO_0007590"
-    HIGH_THROUGHPUT_EXPRESSION_PATTERN_EVIDENCE_USED_IN_AUTOMATIC_ASSERTION = "ECO_0007590"
+    HIGH_THROUGHPUT_EXPRESSION_PATTERN_EVIDENCE_USED_IN_AUTOMATIC_ASSERTION = (
+        "ECO_0007590"
+    )
 
     # radioligand binding assay evidence used in automatic assertion
     ECO_0007591 = "ECO_0007591"
@@ -9677,7 +10137,9 @@ class ECO(str, Enum):
 
     # viral hemagglutination inhibition assay evidence used in automatic assertion
     ECO_0007601 = "ECO_0007601"
-    VIRAL_HEMAGGLUTINATION_INHIBITION_ASSAY_EVIDENCE_USED_IN_AUTOMATIC_ASSERTION = "ECO_0007601"
+    VIRAL_HEMAGGLUTINATION_INHIBITION_ASSAY_EVIDENCE_USED_IN_AUTOMATIC_ASSERTION = (
+        "ECO_0007601"
+    )
 
     # compement fixation assay evidence used in automatic assertion
     ECO_0007602 = "ECO_0007602"
@@ -9705,7 +10167,9 @@ class ECO(str, Enum):
 
     # transmission electron microscopy evidence used in automatic assertion
     ECO_0007608 = "ECO_0007608"
-    TRANSMISSION_ELECTRON_MICROSCOPY_EVIDENCE_USED_IN_AUTOMATIC_ASSERTION = "ECO_0007608"
+    TRANSMISSION_ELECTRON_MICROSCOPY_EVIDENCE_USED_IN_AUTOMATIC_ASSERTION = (
+        "ECO_0007608"
+    )
 
     # scanning electron microscopy evidence used in automatic assertion
     ECO_0007609 = "ECO_0007609"
@@ -9721,7 +10185,9 @@ class ECO(str, Enum):
 
     # transmitted light brightfied mircoscopy evidence used in automatic assertion
     ECO_0007612 = "ECO_0007612"
-    TRANSMITTED_LIGHT_BRIGHTFIED_MIRCOSCOPY_EVIDENCE_USED_IN_AUTOMATIC_ASSERTION = "ECO_0007612"
+    TRANSMITTED_LIGHT_BRIGHTFIED_MIRCOSCOPY_EVIDENCE_USED_IN_AUTOMATIC_ASSERTION = (
+        "ECO_0007612"
+    )
 
     # koehler illumination microscopy evidence used in automatic assertion
     ECO_0007613 = "ECO_0007613"
@@ -9733,11 +10199,15 @@ class ECO(str, Enum):
 
     # extended field laser confocal microscopy evidence used in automatic assertion
     ECO_0007615 = "ECO_0007615"
-    EXTENDED_FIELD_LASER_CONFOCAL_MICROSCOPY_EVIDENCE_USED_IN_AUTOMATIC_ASSERTION = "ECO_0007615"
+    EXTENDED_FIELD_LASER_CONFOCAL_MICROSCOPY_EVIDENCE_USED_IN_AUTOMATIC_ASSERTION = (
+        "ECO_0007615"
+    )
 
     # confocal laser scanning microscopy evidence used in automatic assertion
     ECO_0007616 = "ECO_0007616"
-    CONFOCAL_LASER_SCANNING_MICROSCOPY_EVIDENCE_USED_IN_AUTOMATIC_ASSERTION = "ECO_0007616"
+    CONFOCAL_LASER_SCANNING_MICROSCOPY_EVIDENCE_USED_IN_AUTOMATIC_ASSERTION = (
+        "ECO_0007616"
+    )
 
     # light scattering evidence used in automatic assertion
     ECO_0007617 = "ECO_0007617"
@@ -9753,7 +10223,9 @@ class ECO(str, Enum):
 
     # colony papillation assay phenotypic evidence used in automatic assertion
     ECO_0007620 = "ECO_0007620"
-    COLONY_PAPILLATION_ASSAY_PHENOTYPIC_EVIDENCE_USED_IN_AUTOMATIC_ASSERTION = "ECO_0007620"
+    COLONY_PAPILLATION_ASSAY_PHENOTYPIC_EVIDENCE_USED_IN_AUTOMATIC_ASSERTION = (
+        "ECO_0007620"
+    )
 
     # crystal violet staining evidence used in automatic assertion
     ECO_0007621 = "ECO_0007621"
@@ -9805,7 +10277,9 @@ class ECO(str, Enum):
 
     # transcriptional activation assay evidence used in automatic assertion
     ECO_0007633 = "ECO_0007633"
-    TRANSCRIPTIONAL_ACTIVATION_ASSAY_EVIDENCE_USED_IN_AUTOMATIC_ASSERTION = "ECO_0007633"
+    TRANSCRIPTIONAL_ACTIVATION_ASSAY_EVIDENCE_USED_IN_AUTOMATIC_ASSERTION = (
+        "ECO_0007633"
+    )
 
     # experimental phenotypic evidence used in manual assertion
     ECO_0007634 = "ECO_0007634"
@@ -9897,7 +10371,9 @@ class ECO(str, Enum):
 
     # manually integrated combinatorial experimental evidence used in manual assertion
     ECO_0007656 = "ECO_0007656"
-    MANUALLY_INTEGRATED_COMBINATORIAL_EXPERIMENTAL_EVIDENCE_USED_IN_MANUAL_ASSERTION = "ECO_0007656"
+    MANUALLY_INTEGRATED_COMBINATORIAL_EXPERIMENTAL_EVIDENCE_USED_IN_MANUAL_ASSERTION = (
+        "ECO_0007656"
+    )
 
     # manually integrated combinatorial experimental evidence used in automatic assertion
     ECO_0007657 = "ECO_0007657"
@@ -9921,7 +10397,9 @@ class ECO(str, Enum):
 
     # manually integrated combinatorial computational and experimental evidence
     ECO_0007662 = "ECO_0007662"
-    MANUALLY_INTEGRATED_COMBINATORIAL_COMPUTATIONAL_AND_EXPERIMENTAL_EVIDENCE = "ECO_0007662"
+    MANUALLY_INTEGRATED_COMBINATORIAL_COMPUTATIONAL_AND_EXPERIMENTAL_EVIDENCE = (
+        "ECO_0007662"
+    )
 
     # manually integrated combinatorial computational and experimental evidence used in manual assertion
     ECO_0007663 = "ECO_0007663"
@@ -9933,7 +10411,9 @@ class ECO(str, Enum):
 
     # automatically integrated combinatorial computational and experimental evidence
     ECO_0007665 = "ECO_0007665"
-    AUTOMATICALLY_INTEGRATED_COMBINATORIAL_COMPUTATIONAL_AND_EXPERIMENTAL_EVIDENCE = "ECO_0007665"
+    AUTOMATICALLY_INTEGRATED_COMBINATORIAL_COMPUTATIONAL_AND_EXPERIMENTAL_EVIDENCE = (
+        "ECO_0007665"
+    )
 
     # automatically integrated combinatorial computational and experimental evidence used in manual assertion
     ECO_0007666 = "ECO_0007666"
@@ -9969,7 +10449,9 @@ class ECO(str, Enum):
 
     # manually integrated combinatorial evidence used in automatic assertion
     ECO_0007676 = "ECO_0007676"
-    MANUALLY_INTEGRATED_COMBINATORIAL_EVIDENCE_USED_IN_AUTOMATIC_ASSERTION = "ECO_0007676"
+    MANUALLY_INTEGRATED_COMBINATORIAL_EVIDENCE_USED_IN_AUTOMATIC_ASSERTION = (
+        "ECO_0007676"
+    )
 
     # combinatorial computational evidence
     ECO_0007677 = "ECO_0007677"
@@ -10049,7 +10531,9 @@ class ECO(str, Enum):
 
     # DNA synthesis cell proliferation assay evidence used in manual assertion
     ECO_0007697 = "ECO_0007697"
-    DNA_SYNTHESIS_CELL_PROLIFERATION_ASSAY_EVIDENCE_USED_IN_MANUAL_ASSERTION = "ECO_0007697"
+    DNA_SYNTHESIS_CELL_PROLIFERATION_ASSAY_EVIDENCE_USED_IN_MANUAL_ASSERTION = (
+        "ECO_0007697"
+    )
 
     # apoptotic assay evidence used in manual assertion
     ECO_0007698 = "ECO_0007698"
@@ -10153,7 +10637,9 @@ class ECO(str, Enum):
 
     # in vitro transcription reconstitution assay evidence used in manual assertion
     ECO_0007723 = "ECO_0007723"
-    IN_VITRO_TRANSCRIPTION_RECONSTITUTION_ASSAY_EVIDENCE_USED_IN_MANUAL_ASSERTION = "ECO_0007723"
+    IN_VITRO_TRANSCRIPTION_RECONSTITUTION_ASSAY_EVIDENCE_USED_IN_MANUAL_ASSERTION = (
+        "ECO_0007723"
+    )
 
     # localization evidence used in manual assertion
     ECO_0007724 = "ECO_0007724"
@@ -10193,7 +10679,9 @@ class ECO(str, Enum):
 
     # high throughput nucleotide sequencing assay evidence used in manual assertion
     ECO_0007734 = "ECO_0007734"
-    HIGH_THROUGHPUT_NUCLEOTIDE_SEQUENCING_ASSAY_EVIDENCE_USED_IN_MANUAL_ASSERTION = "ECO_0007734"
+    HIGH_THROUGHPUT_NUCLEOTIDE_SEQUENCING_ASSAY_EVIDENCE_USED_IN_MANUAL_ASSERTION = (
+        "ECO_0007734"
+    )
 
     # structure determination evidence used in manual assertion
     ECO_0007735 = "ECO_0007735"
@@ -10229,7 +10717,9 @@ class ECO(str, Enum):
 
     # combinatorial computational and experimental evidence used in manual assertion
     ECO_0007744 = "ECO_0007744"
-    COMBINATORIAL_COMPUTATIONAL_AND_EXPERIMENTAL_EVIDENCE_USED_IN_MANUAL_ASSERTION = "ECO_0007744"
+    COMBINATORIAL_COMPUTATIONAL_AND_EXPERIMENTAL_EVIDENCE_USED_IN_MANUAL_ASSERTION = (
+        "ECO_0007744"
+    )
 
     # combinatorial experimental evidence used in manual assertion
     ECO_0007745 = "ECO_0007745"
@@ -10273,7 +10763,9 @@ class ECO(str, Enum):
 
     # curator inference from MedlinePlus encyclopedia used in manual assertion
     ECO_0007755 = "ECO_0007755"
-    CURATOR_INFERENCE_FROM_MEDLINEPLUS_ENCYCLOPEDIA_USED_IN_MANUAL_ASSERTION = "ECO_0007755"
+    CURATOR_INFERENCE_FROM_MEDLINEPLUS_ENCYCLOPEDIA_USED_IN_MANUAL_ASSERTION = (
+        "ECO_0007755"
+    )
 
     # curator inference from Britannica used in manual assertion
     ECO_0007756 = "ECO_0007756"
@@ -10297,7 +10789,9 @@ class ECO(str, Enum):
 
     # curator inference from MedlinePlus dictionary used in manual assertion
     ECO_0007761 = "ECO_0007761"
-    CURATOR_INFERENCE_FROM_MEDLINEPLUS_DICTIONARY_USED_IN_MANUAL_ASSERTION = "ECO_0007761"
+    CURATOR_INFERENCE_FROM_MEDLINEPLUS_DICTIONARY_USED_IN_MANUAL_ASSERTION = (
+        "ECO_0007761"
+    )
 
     # curator inference from Oxford Dictionary used in manual assertion
     ECO_0007762 = "ECO_0007762"
@@ -10305,7 +10799,9 @@ class ECO(str, Enum):
 
     # curator inference from Merriam-Webster Dictionary used in manual assertion
     ECO_0007763 = "ECO_0007763"
-    CURATOR_INFERENCE_FROM_MERRIAM_WEBSTER_DICTIONARY_USED_IN_MANUAL_ASSERTION = "ECO_0007763"
+    CURATOR_INFERENCE_FROM_MERRIAM_WEBSTER_DICTIONARY_USED_IN_MANUAL_ASSERTION = (
+        "ECO_0007763"
+    )
 
     # reporter gene assay evidence used in automatic assertion
     ECO_0007765 = "ECO_0007765"
@@ -10353,7 +10849,9 @@ class ECO(str, Enum):
 
     # DNA synthesis cell proliferation assay evidence used in automatic assertion
     ECO_0007776 = "ECO_0007776"
-    DNA_SYNTHESIS_CELL_PROLIFERATION_ASSAY_EVIDENCE_USED_IN_AUTOMATIC_ASSERTION = "ECO_0007776"
+    DNA_SYNTHESIS_CELL_PROLIFERATION_ASSAY_EVIDENCE_USED_IN_AUTOMATIC_ASSERTION = (
+        "ECO_0007776"
+    )
 
     # apoptotic assay evidence used in automatic assertion
     ECO_0007777 = "ECO_0007777"
@@ -10465,7 +10963,9 @@ class ECO(str, Enum):
 
     # in vitro transcription reconstitution assay evidence used in automatic assertion
     ECO_0007804 = "ECO_0007804"
-    IN_VITRO_TRANSCRIPTION_RECONSTITUTION_ASSAY_EVIDENCE_USED_IN_AUTOMATIC_ASSERTION = "ECO_0007804"
+    IN_VITRO_TRANSCRIPTION_RECONSTITUTION_ASSAY_EVIDENCE_USED_IN_AUTOMATIC_ASSERTION = (
+        "ECO_0007804"
+    )
 
     # substance quantification evidence used in automatic assertion
     ECO_0007805 = "ECO_0007805"
@@ -10489,7 +10989,9 @@ class ECO(str, Enum):
 
     # anatomical perturbation phenotypic evidence used in automatic assertion
     ECO_0007810 = "ECO_0007810"
-    ANATOMICAL_PERTURBATION_PHENOTYPIC_EVIDENCE_USED_IN_AUTOMATIC_ASSERTION = "ECO_0007810"
+    ANATOMICAL_PERTURBATION_PHENOTYPIC_EVIDENCE_USED_IN_AUTOMATIC_ASSERTION = (
+        "ECO_0007810"
+    )
 
     # cleavage arrested development evidence used in automatic assertion
     ECO_0007811 = "ECO_0007811"
@@ -10505,7 +11007,9 @@ class ECO(str, Enum):
 
     # high throughput nucleotide sequencing assay evidence used in automatic assertion
     ECO_0007814 = "ECO_0007814"
-    HIGH_THROUGHPUT_NUCLEOTIDE_SEQUENCING_ASSAY_EVIDENCE_USED_IN_AUTOMATIC_ASSERTION = "ECO_0007814"
+    HIGH_THROUGHPUT_NUCLEOTIDE_SEQUENCING_ASSAY_EVIDENCE_USED_IN_AUTOMATIC_ASSERTION = (
+        "ECO_0007814"
+    )
 
     # structure determination evidence used in automatic assertion
     ECO_0007815 = "ECO_0007815"
@@ -10557,7 +11061,9 @@ class ECO(str, Enum):
 
     # biological system reconstruction evidence used in automatic assertion
     ECO_0007827 = "ECO_0007827"
-    BIOLOGICAL_SYSTEM_RECONSTRUCTION_EVIDENCE_USED_IN_AUTOMATIC_ASSERTION = "ECO_0007827"
+    BIOLOGICAL_SYSTEM_RECONSTRUCTION_EVIDENCE_USED_IN_AUTOMATIC_ASSERTION = (
+        "ECO_0007827"
+    )
 
     # biological system reconstruction evidence by experimental evidence used in automatic assertion
     ECO_0007828 = "ECO_0007828"
@@ -10577,7 +11083,9 @@ class ECO(str, Enum):
 
     # curator inference from authoritative source used in automatic assertion
     ECO_0007833 = "ECO_0007833"
-    CURATOR_INFERENCE_FROM_AUTHORITATIVE_SOURCE_USED_IN_AUTOMATIC_ASSERTION = "ECO_0007833"
+    CURATOR_INFERENCE_FROM_AUTHORITATIVE_SOURCE_USED_IN_AUTOMATIC_ASSERTION = (
+        "ECO_0007833"
+    )
 
     # curator inference from encyclopedia used in automatic assertion
     ECO_0007834 = "ECO_0007834"
@@ -10593,7 +11101,9 @@ class ECO(str, Enum):
 
     # curator inference from MedlinePlus encyclopedia used in automatic assertion
     ECO_0007837 = "ECO_0007837"
-    CURATOR_INFERENCE_FROM_MEDLINEPLUS_ENCYCLOPEDIA_USED_IN_AUTOMATIC_ASSERTION = "ECO_0007837"
+    CURATOR_INFERENCE_FROM_MEDLINEPLUS_ENCYCLOPEDIA_USED_IN_AUTOMATIC_ASSERTION = (
+        "ECO_0007837"
+    )
 
     # curator inference from book used in automatic assertion
     ECO_0007838 = "ECO_0007838"
@@ -10605,11 +11115,15 @@ class ECO(str, Enum):
 
     # curator inference from MedlinePlus dictionary used in automatic assertion
     ECO_0007840 = "ECO_0007840"
-    CURATOR_INFERENCE_FROM_MEDLINEPLUS_DICTIONARY_USED_IN_AUTOMATIC_ASSERTION = "ECO_0007840"
+    CURATOR_INFERENCE_FROM_MEDLINEPLUS_DICTIONARY_USED_IN_AUTOMATIC_ASSERTION = (
+        "ECO_0007840"
+    )
 
     # curator inference from Merriam-Webster Dictionary used in automatic assertion
     ECO_0007841 = "ECO_0007841"
-    CURATOR_INFERENCE_FROM_MERRIAM_WEBSTER_DICTIONARY_USED_IN_AUTOMATIC_ASSERTION = "ECO_0007841"
+    CURATOR_INFERENCE_FROM_MERRIAM_WEBSTER_DICTIONARY_USED_IN_AUTOMATIC_ASSERTION = (
+        "ECO_0007841"
+    )
 
     # curator inference from Oxford Dictionary used in automatic assertion
     ECO_0007842 = "ECO_0007842"
@@ -10617,7 +11131,9 @@ class ECO(str, Enum):
 
     # curator inference from journal publication used in automatic assertion
     ECO_0007843 = "ECO_0007843"
-    CURATOR_INFERENCE_FROM_JOURNAL_PUBLICATION_USED_IN_AUTOMATIC_ASSERTION = "ECO_0007843"
+    CURATOR_INFERENCE_FROM_JOURNAL_PUBLICATION_USED_IN_AUTOMATIC_ASSERTION = (
+        "ECO_0007843"
+    )
 
     # radioisotope quantification assay evidence
     ECO_0007844 = "ECO_0007844"
@@ -10625,7 +11141,9 @@ class ECO(str, Enum):
 
     # radioisotope quantification assay evidence used in automatic assertion
     ECO_0007845 = "ECO_0007845"
-    RADIOISOTOPE_QUANTIFICATION_ASSAY_EVIDENCE_USED_IN_AUTOMATIC_ASSERTION = "ECO_0007845"
+    RADIOISOTOPE_QUANTIFICATION_ASSAY_EVIDENCE_USED_IN_AUTOMATIC_ASSERTION = (
+        "ECO_0007845"
+    )
 
     # radioisotope quantification assay evidence used in manual assertion
     ECO_0007846 = "ECO_0007846"
@@ -10637,7 +11155,9 @@ class ECO(str, Enum):
 
     # fluorescence quantification assay evidence used in automatic assertion
     ECO_0007848 = "ECO_0007848"
-    FLUORESCENCE_QUANTIFICATION_ASSAY_EVIDENCE_USED_IN_AUTOMATIC_ASSERTION = "ECO_0007848"
+    FLUORESCENCE_QUANTIFICATION_ASSAY_EVIDENCE_USED_IN_AUTOMATIC_ASSERTION = (
+        "ECO_0007848"
+    )
 
     # fluorescence quantification assay evidence used in manual assertion
     ECO_0007849 = "ECO_0007849"
@@ -10669,11 +11189,15 @@ class ECO(str, Enum):
 
     # deep learning neural network method evidence used in manual assertion
     ECO_0008005 = "ECO_0008005"
-    DEEP_LEARNING_NEURAL_NETWORK_METHOD_EVIDENCE_USED_IN_MANUAL_ASSERTION = "ECO_0008005"
+    DEEP_LEARNING_NEURAL_NETWORK_METHOD_EVIDENCE_USED_IN_MANUAL_ASSERTION = (
+        "ECO_0008005"
+    )
 
     # deep learning neural network method evidence used in automatic assertion
     ECO_0008006 = "ECO_0008006"
-    DEEP_LEARNING_NEURAL_NETWORK_METHOD_EVIDENCE_USED_IN_AUTOMATIC_ASSERTION = "ECO_0008006"
+    DEEP_LEARNING_NEURAL_NETWORK_METHOD_EVIDENCE_USED_IN_AUTOMATIC_ASSERTION = (
+        "ECO_0008006"
+    )
 
     # rule-based machine learning method evidence used in manual assertion
     ECO_0008007 = "ECO_0008007"
@@ -10681,7 +11205,9 @@ class ECO(str, Enum):
 
     # rule-based machine learning method evidence used in automatic assertion
     ECO_0008008 = "ECO_0008008"
-    RULE_BASED_MACHINE_LEARNING_METHOD_EVIDENCE_USED_IN_AUTOMATIC_ASSERTION = "ECO_0008008"
+    RULE_BASED_MACHINE_LEARNING_METHOD_EVIDENCE_USED_IN_AUTOMATIC_ASSERTION = (
+        "ECO_0008008"
+    )
 
     # single molecule fluorescence in situ hybridization evidence
     ECO_0008009 = "ECO_0008009"
@@ -10709,7 +11235,9 @@ class ECO(str, Enum):
 
     # inference of intermediate molecular structure from structure of final molecule
     ECO_0008015 = "ECO_0008015"
-    INFERENCE_OF_INTERMEDIATE_MOLECULAR_STRUCTURE_FROM_STRUCTURE_OF_FINAL_MOLECULE = "ECO_0008015"
+    INFERENCE_OF_INTERMEDIATE_MOLECULAR_STRUCTURE_FROM_STRUCTURE_OF_FINAL_MOLECULE = (
+        "ECO_0008015"
+    )
 
     # single molecule fluorescence in situ hybridization evidence used in manual assertion
     ECO_0008016 = "ECO_0008016"
@@ -10753,11 +11281,15 @@ class ECO(str, Enum):
 
     # coordinate mapping to geographic property shapefiles used in manual assertion
     ECO_0008026 = "ECO_0008026"
-    COORDINATE_MAPPING_TO_GEOGRAPHIC_PROPERTY_SHAPEFILES_USED_IN_MANUAL_ASSERTION = "ECO_0008026"
+    COORDINATE_MAPPING_TO_GEOGRAPHIC_PROPERTY_SHAPEFILES_USED_IN_MANUAL_ASSERTION = (
+        "ECO_0008026"
+    )
 
     # coordinate mapping to geographic property shapefiles used in automatic assertion
     ECO_0008027 = "ECO_0008027"
-    COORDINATE_MAPPING_TO_GEOGRAPHIC_PROPERTY_SHAPEFILES_USED_IN_AUTOMATIC_ASSERTION = "ECO_0008027"
+    COORDINATE_MAPPING_TO_GEOGRAPHIC_PROPERTY_SHAPEFILES_USED_IN_AUTOMATIC_ASSERTION = (
+        "ECO_0008027"
+    )
 
     # inference of intermediate molecular structure from structure of final molecule used in manual assertion
     ECO_0008028 = "ECO_0008028"
@@ -10789,7 +11321,9 @@ class ECO(str, Enum):
 
     # author inference based on intrinsic disorder prediction used in manual assertion
     ECO_0008035 = "ECO_0008035"
-    AUTHOR_INFERENCE_BASED_ON_INTRINSIC_DISORDER_PREDICTION_USED_IN_MANUAL_ASSERTION = "ECO_0008035"
+    AUTHOR_INFERENCE_BASED_ON_INTRINSIC_DISORDER_PREDICTION_USED_IN_MANUAL_ASSERTION = (
+        "ECO_0008035"
+    )
 
     # author inference based on intrinsic disorder prediction used in automatic assertion
     ECO_0008036 = "ECO_0008036"
@@ -10997,11 +11531,15 @@ class ECO(str, Enum):
 
     # antibody-specificity based MHC presentation evidence used in manual assertion
     ECO_0008087 = "ECO_0008087"
-    ANTIBODY_SPECIFICITY_BASED_MHC_PRESENTATION_EVIDENCE_USED_IN_MANUAL_ASSERTION = "ECO_0008087"
+    ANTIBODY_SPECIFICITY_BASED_MHC_PRESENTATION_EVIDENCE_USED_IN_MANUAL_ASSERTION = (
+        "ECO_0008087"
+    )
 
     # antibody-specificity based MHC presentation evidence used in automatic assertion
     ECO_0008088 = "ECO_0008088"
-    ANTIBODY_SPECIFICITY_BASED_MHC_PRESENTATION_EVIDENCE_USED_IN_AUTOMATIC_ASSERTION = "ECO_0008088"
+    ANTIBODY_SPECIFICITY_BASED_MHC_PRESENTATION_EVIDENCE_USED_IN_AUTOMATIC_ASSERTION = (
+        "ECO_0008088"
+    )
 
     # antibody 10.3.6-specificity based MHC presentation evidence used in manual assertion
     ECO_0008089 = "ECO_0008089"
@@ -11309,11 +11847,15 @@ class ECO(str, Enum):
 
     # protein expression-based MHC presentation evidence used in manual assertion
     ECO_0008165 = "ECO_0008165"
-    PROTEIN_EXPRESSION_BASED_MHC_PRESENTATION_EVIDENCE_USED_IN_MANUAL_ASSERTION = "ECO_0008165"
+    PROTEIN_EXPRESSION_BASED_MHC_PRESENTATION_EVIDENCE_USED_IN_MANUAL_ASSERTION = (
+        "ECO_0008165"
+    )
 
     # protein expression-based MHC presentation evidence used in automatic assertion
     ECO_0008166 = "ECO_0008166"
-    PROTEIN_EXPRESSION_BASED_MHC_PRESENTATION_EVIDENCE_USED_IN_AUTOMATIC_ASSERTION = "ECO_0008166"
+    PROTEIN_EXPRESSION_BASED_MHC_PRESENTATION_EVIDENCE_USED_IN_AUTOMATIC_ASSERTION = (
+        "ECO_0008166"
+    )
 
     # specific MHC protein expression-based MHC presentation evidence used in manual assertion
     ECO_0008167 = "ECO_0008167"
@@ -11325,11 +11867,15 @@ class ECO(str, Enum):
 
     # MHC:ligand binding based MHC restriction evidence used in manual assertion
     ECO_0008169 = "ECO_0008169"
-    MHC_LIGAND_BINDING_BASED_MHC_RESTRICTION_EVIDENCE_USED_IN_MANUAL_ASSERTION = "ECO_0008169"
+    MHC_LIGAND_BINDING_BASED_MHC_RESTRICTION_EVIDENCE_USED_IN_MANUAL_ASSERTION = (
+        "ECO_0008169"
+    )
 
     # MHC:ligand binding based MHC restriction evidence used in automatic assertion
     ECO_0008170 = "ECO_0008170"
-    MHC_LIGAND_BINDING_BASED_MHC_RESTRICTION_EVIDENCE_USED_IN_AUTOMATIC_ASSERTION = "ECO_0008170"
+    MHC_LIGAND_BINDING_BASED_MHC_RESTRICTION_EVIDENCE_USED_IN_AUTOMATIC_ASSERTION = (
+        "ECO_0008170"
+    )
 
     # MHC complex binding prediction based MHC restriction evidence used in manual assertion
     ECO_0008171 = "ECO_0008171"
@@ -11357,19 +11903,27 @@ class ECO(str, Enum):
 
     # MHC-specific blocking based MHC restriction evidence used in manual assertion
     ECO_0008177 = "ECO_0008177"
-    MHC_SPECIFIC_BLOCKING_BASED_MHC_RESTRICTION_EVIDENCE_USED_IN_MANUAL_ASSERTION = "ECO_0008177"
+    MHC_SPECIFIC_BLOCKING_BASED_MHC_RESTRICTION_EVIDENCE_USED_IN_MANUAL_ASSERTION = (
+        "ECO_0008177"
+    )
 
     # MHC-specific blocking based MHC restriction evidence used in automatic assertion
     ECO_0008178 = "ECO_0008178"
-    MHC_SPECIFIC_BLOCKING_BASED_MHC_RESTRICTION_EVIDENCE_USED_IN_AUTOMATIC_ASSERTION = "ECO_0008178"
+    MHC_SPECIFIC_BLOCKING_BASED_MHC_RESTRICTION_EVIDENCE_USED_IN_AUTOMATIC_ASSERTION = (
+        "ECO_0008178"
+    )
 
     # specific MHC molecule based MHC restriction evidence used in manual assertion
     ECO_0008179 = "ECO_0008179"
-    SPECIFIC_MHC_MOLECULE_BASED_MHC_RESTRICTION_EVIDENCE_USED_IN_MANUAL_ASSERTION = "ECO_0008179"
+    SPECIFIC_MHC_MOLECULE_BASED_MHC_RESTRICTION_EVIDENCE_USED_IN_MANUAL_ASSERTION = (
+        "ECO_0008179"
+    )
 
     # specific MHC molecule based MHC restriction evidence used in automatic assertion
     ECO_0008180 = "ECO_0008180"
-    SPECIFIC_MHC_MOLECULE_BASED_MHC_RESTRICTION_EVIDENCE_USED_IN_AUTOMATIC_ASSERTION = "ECO_0008180"
+    SPECIFIC_MHC_MOLECULE_BASED_MHC_RESTRICTION_EVIDENCE_USED_IN_AUTOMATIC_ASSERTION = (
+        "ECO_0008180"
+    )
 
     # T cell type based MHC restriction evidence used in manual assertion
     ECO_0008181 = "ECO_0008181"
@@ -11377,7 +11931,9 @@ class ECO(str, Enum):
 
     # T cell type based MHC restriction evidence used in automatic assertion
     ECO_0008182 = "ECO_0008182"
-    T_CELL_TYPE_BASED_MHC_RESTRICTION_EVIDENCE_USED_IN_AUTOMATIC_ASSERTION = "ECO_0008182"
+    T_CELL_TYPE_BASED_MHC_RESTRICTION_EVIDENCE_USED_IN_AUTOMATIC_ASSERTION = (
+        "ECO_0008182"
+    )
 
     # DNA catabolic process, endonucleolytic
     GO_0000737 = "GO_0000737"
@@ -11617,7 +12173,9 @@ class ECO(str, Enum):
 
     # cellular component disassembly involved in execution phase of apoptosis
     GO_0006921 = "GO_0006921"
-    CELLULAR_COMPONENT_DISASSEMBLY_INVOLVED_IN_EXECUTION_PHASE_OF_APOPTOSIS = "GO_0006921"
+    CELLULAR_COMPONENT_DISASSEMBLY_INVOLVED_IN_EXECUTION_PHASE_OF_APOPTOSIS = (
+        "GO_0006921"
+    )
 
     # movement of cell or subcellular component
     GO_0006928 = "GO_0006928"
@@ -12685,11 +13243,15 @@ class ECO(str, Enum):
 
     # negative regulation of nucleobase-containing compound metabolic process
     GO_0045934 = "GO_0045934"
-    NEGATIVE_REGULATION_OF_NUCLEOBASE_CONTAINING_COMPOUND_METABOLIC_PROCESS = "GO_0045934"
+    NEGATIVE_REGULATION_OF_NUCLEOBASE_CONTAINING_COMPOUND_METABOLIC_PROCESS = (
+        "GO_0045934"
+    )
 
     # positive regulation of nucleobase-containing compound metabolic process
     GO_0045935 = "GO_0045935"
-    POSITIVE_REGULATION_OF_NUCLEOBASE_CONTAINING_COMPOUND_METABOLIC_PROCESS = "GO_0045935"
+    POSITIVE_REGULATION_OF_NUCLEOBASE_CONTAINING_COMPOUND_METABOLIC_PROCESS = (
+        "GO_0045935"
+    )
 
     # heterocycle metabolic process
     GO_0046483 = "GO_0046483"
@@ -13249,11 +13811,15 @@ class ECO(str, Enum):
 
     # negative regulation of plasma membrane bounded cell projection assembly
     GO_0120033 = "GO_0120033"
-    NEGATIVE_REGULATION_OF_PLASMA_MEMBRANE_BOUNDED_CELL_PROJECTION_ASSEMBLY = "GO_0120033"
+    NEGATIVE_REGULATION_OF_PLASMA_MEMBRANE_BOUNDED_CELL_PROJECTION_ASSEMBLY = (
+        "GO_0120033"
+    )
 
     # positive regulation of plasma membrane bounded cell projection assembly
     GO_0120034 = "GO_0120034"
-    POSITIVE_REGULATION_OF_PLASMA_MEMBRANE_BOUNDED_CELL_PROJECTION_ASSEMBLY = "GO_0120034"
+    POSITIVE_REGULATION_OF_PLASMA_MEMBRANE_BOUNDED_CELL_PROJECTION_ASSEMBLY = (
+        "GO_0120034"
+    )
 
     # regulation of plasma membrane bounded cell projection organization
     GO_0120035 = "GO_0120035"
@@ -13429,11 +13995,15 @@ class ECO(str, Enum):
 
     # negative regulation of tumor necrosis factor superfamily cytokine production
     GO_1903556 = "GO_1903556"
-    NEGATIVE_REGULATION_OF_TUMOR_NECROSIS_FACTOR_SUPERFAMILY_CYTOKINE_PRODUCTION = "GO_1903556"
+    NEGATIVE_REGULATION_OF_TUMOR_NECROSIS_FACTOR_SUPERFAMILY_CYTOKINE_PRODUCTION = (
+        "GO_1903556"
+    )
 
     # positive regulation of tumor necrosis factor superfamily cytokine production
     GO_1903557 = "GO_1903557"
-    POSITIVE_REGULATION_OF_TUMOR_NECROSIS_FACTOR_SUPERFAMILY_CYTOKINE_PRODUCTION = "GO_1903557"
+    POSITIVE_REGULATION_OF_TUMOR_NECROSIS_FACTOR_SUPERFAMILY_CYTOKINE_PRODUCTION = (
+        "GO_1903557"
+    )
 
     # regulation of DNA catabolic process
     GO_1903624 = "GO_1903624"
@@ -14325,7 +14895,9 @@ class ECO(str, Enum):
 
     # detection of specific nucleic acid polymers with complementary probes
     OBI_0000874 = "OBI_0000874"
-    DETECTION_OF_SPECIFIC_NUCLEIC_ACID_POLYMERS_WITH_COMPLEMENTARY_PROBES = "OBI_0000874"
+    DETECTION_OF_SPECIFIC_NUCLEIC_ACID_POLYMERS_WITH_COMPLEMENTARY_PROBES = (
+        "OBI_0000874"
+    )
 
     # RNA extract
     OBI_0000880 = "OBI_0000880"
@@ -14853,11 +15425,15 @@ class ECO(str, Enum):
 
     # assay measuring a binding constant of a B cell epitope:antibody complex
     OBI_0001709 = "OBI_0001709"
-    ASSAY_MEASURING_A_BINDING_CONSTANT_OF_A_B_CELL_EPITOPE_ANTIBODY_COMPLEX = "OBI_0001709"
+    ASSAY_MEASURING_A_BINDING_CONSTANT_OF_A_B_CELL_EPITOPE_ANTIBODY_COMPLEX = (
+        "OBI_0001709"
+    )
 
     # 3D molecular structure determination assay of an antigen:antibody complex
     OBI_0001721 = "OBI_0001721"
-    _3D_MOLECULAR_STRUCTURE_DETERMINATION_ASSAY_OF_AN_ANTIGEN_ANTIBODY_COMPLEX = "OBI_0001721"
+    _3D_MOLECULAR_STRUCTURE_DETERMINATION_ASSAY_OF_AN_ANTIGEN_ANTIBODY_COMPLEX = (
+        "OBI_0001721"
+    )
 
     # X-ray crystallography assay determining the 3D structure of a B cell epitope:antibody complex
     OBI_0001738 = "OBI_0001738"
@@ -14953,7 +15529,9 @@ class ECO(str, Enum):
 
     # 3D molecular structure determination assay of a T cell epitope:MHC:TCR complex
     OBI_0001999 = "OBI_0001999"
-    _3D_MOLECULAR_STRUCTURE_DETERMINATION_ASSAY_OF_A_T_CELL_EPITOPE_MHC_TCR_COMPLEX = "OBI_0001999"
+    _3D_MOLECULAR_STRUCTURE_DETERMINATION_ASSAY_OF_A_T_CELL_EPITOPE_MHC_TCR_COMPLEX = (
+        "OBI_0001999"
+    )
 
     # epigenetic modification assay
     OBI_0002020 = "OBI_0002020"
@@ -14973,7 +15551,9 @@ class ECO(str, Enum):
 
     # assay measuring a binding constant of a T cell epitope:MHC:TCR complex
     OBI_0002059 = "OBI_0002059"
-    ASSAY_MEASURING_A_BINDING_CONSTANT_OF_A_T_CELL_EPITOPE_MHC_TCR_COMPLEX = "OBI_0002059"
+    ASSAY_MEASURING_A_BINDING_CONSTANT_OF_A_T_CELL_EPITOPE_MHC_TCR_COMPLEX = (
+        "OBI_0002059"
+    )
 
     # MHC ligand assay
     OBI_0002075 = "OBI_0002075"
@@ -15792,7 +16372,7 @@ class ECO(str, Enum):
     USES = "uses"
 
     @staticmethod
-    def get_name(eco: 'ECO') -> Optional[str]:
+    def get_name(eco: "ECO") -> Optional[str]:
         """Get name for term.
 
         :returns: None if term does not exist in ontology.
@@ -15800,9 +16380,9 @@ class ECO(str, Enum):
         return _terms.get(eco.value, None)
 
     @classmethod
-    def validate(cls, eco: 'ECOType') -> 'ECO':
+    def validate(cls, eco: "ECOType") -> "ECO":
         """Validate and normalize eco."""
-        term: 'ECO'
+        term: "ECO"
         if isinstance(eco, str):
             if not eco.startswith("ECO"):
                 raise ValueError(eco + " is not a ECO id.")
@@ -15811,12 +16391,13 @@ class ECO(str, Enum):
 
             term = getattr(cls, eco)
 
-        elif isinstance(eco, 'ECO'):
+        elif isinstance(eco, "ECO"):
             term = eco
         else:
             raise ValueError
 
         return term
+
 
 __all__ = [
     "ECO",
