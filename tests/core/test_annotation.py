@@ -144,6 +144,16 @@ rdf_annotation_data = [
         "https://bioregistry.io/chebi:15996",
         "RDFAnnotation(BQB.IS|None|https://bioregistry.io/chebi:15996|bioregistry.io)",
     ),
+    (
+        BQB.IS,
+        "hmdb/HMDB0000122",
+        "RDFAnnotation(BQB.IS|hmdb|HMDB0000122|identifiers.org)",
+    ),
+    (
+        BQB.IS,
+        "hmdb:HMDB0000122",
+        "RDFAnnotation(BQB.IS|hmdb|HMDB0000122|identifiers.org)",
+    ),
 ]
 
 

@@ -184,7 +184,7 @@ class RDFAnnotation:
         namespace = REGISTRY.ns_dict.get(collection, None)
         if namespace and not namespace.namespaceEmbeddedInLui:
             # shorter term
-            if term.lower().startswith(collection):
+            if term.lower().startswith(f"{collection}:"):
                 tokens = term.split(":")
                 term = ":".join(tokens[1:])
 
@@ -399,8 +399,12 @@ if __name__ == "__main__":
     for annotation in [
         RDFAnnotation(
             qualifier=BQB.IS_VERSION_OF,
-            resource="https://bioregistry.io/chebi:15996",
+            resource="hmdb/HMDB0000122",
         ),
+        # RDFAnnotation(
+        #     qualifier=BQB.IS_VERSION_OF,
+        #     resource="https://bioregistry.io/chebi:15996",
+        # ),
         # RDFAnnotation(
         #     qualifier=BQB.IS_VERSION_OF,
         #     resource="NCIT:C75913",
