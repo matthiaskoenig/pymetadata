@@ -22,8 +22,12 @@ from pymetadata.ontologies.ols import ONTOLOGIES, OLSQuery
 OLS_QUERY = OLSQuery(ontologies=ONTOLOGIES)
 
 IDENTIFIERS_ORG_PREFIX: Final = "https://identifiers.org"
-IDENTIFIERS_ORG_PATTERN1: Final = re.compile(r"^https?://identifiers.org/(.+?)/(.+)")
-IDENTIFIERS_ORG_PATTERN2: Final = re.compile(r"^https?://identifiers.org/(.+)")
+IDENTIFIERS_ORG_PATTERN_COMPACT: Final = re.compile(
+    r"^https?://identifiers.org/([a-zA-Z0-9.]+):(.+)"
+)
+IDENTIFIERS_ORG_PATTERN_CLASSIC: Final = re.compile(
+    r"^https?://identifiers.org/([a-zA-Z0-9.]+)/(.+)"
+)
 
 BIOREGISTRY_PREFIX: Final = "https://bioregistry.io"
 BIOREGISTRY_PATTERN: Final = re.compile(r"^https?://bioregistry.io/(.+)")
@@ -62,7 +66,9 @@ class RDFAnnotation:
         "biomodels.sbo": "sbo",
     }
 
-    def __init__(self, qualifier: Union[BQB, BQM], resource: str):
+    def __init__(
+        self, qualifier: Union[BQB, BQM], resource: str, validate: bool = True
+    ):
         """Initialize RDFAnnotation."""
         self.qualifier: Union[BQB, BQM] = qualifier
         self.collection: Optional[str] = None
@@ -87,28 +93,19 @@ class RDFAnnotation:
 
         # handle urls
         if resource.startswith("http"):
-            match1 = IDENTIFIERS_ORG_PATTERN1.match(resource)
-            if match1:
-                # handle identifiers.org pattern
-                self.collection, self.term = match1.group(1), match1.group(2)
+            # tests new compact patterns
+            match_compact = IDENTIFIERS_ORG_PATTERN_COMPACT.match(resource)
+            if match_compact:
+                self.collection = match_compact.group(1).lower()
+                self.term = f"{match_compact.group(1)}:{match_compact.group(2)}"
                 self.provider = ProviderType.IDENTIFIERS_ORG
 
             if not self.collection:
-                # tests new compact patterns
-                match2 = IDENTIFIERS_ORG_PATTERN2.match(resource)
-                if match2:
-                    tokens = match2.group(1).split(":")
-                    if len(tokens) == 2:
-                        self.collection = tokens[0].lower()
-
-                        # check if the namespace is embedded
-                        self.term = match2.group(1)
-                        self.provider = ProviderType.IDENTIFIERS_ORG
-                    else:
-                        logger.warning(
-                            f"Identifiers.org URL does not conform to new"
-                            f"short pattern: {resource}"
-                        )
+                match_classic = IDENTIFIERS_ORG_PATTERN_CLASSIC.match(resource)
+                if match_classic:
+                    self.collection = match_classic.group(1).lower()
+                    self.term = match_classic.group(2)
+                    self.provider = ProviderType.IDENTIFIERS_ORG
 
             if not self.collection:
                 # other urls are directly stored as resources without collection
@@ -119,7 +116,7 @@ class RDFAnnotation:
                     console.print(self.provider)
                 else:
                     self.provider = ProviderType.NONE
-                    logger.warning(
+                    logger.debug(
                         f"{resource} does not conform to "
                         f"http(s)://identifiers.org/collection/id or http(s)://identifiers.org/id or "
                         f"https://bioregistry.io/id .",
@@ -173,7 +170,8 @@ class RDFAnnotation:
         if self.collection in self.replaced_collections:
             self.collection = self.replaced_collections[self.collection]
 
-        self.validate()
+        if validate:
+            self.validate()
 
     @staticmethod
     def shorten_compact_term(term: str, collection: str) -> str:
@@ -242,15 +240,14 @@ class RDFAnnotation:
         m = p.match(term)
         if not m:
             logger.error(
-                f"Term `{term}` did not match pattern "
-                f"`{namespace.pattern}` for collection `{collection}`."
+                f"Term `{term}` did not match pattern `{namespace.pattern}` for collection `{collection}`."
             )
             return False
 
         return True
 
     @staticmethod
-    def check_qualifier(qualifier: Union[BQB, BQM]) -> None:
+    def check_qualifier(qualifier: Union[BQB, BQM]) -> bool:
         """Check that the qualifier is an allowed qualifier.
 
         :param qualifier:
@@ -259,17 +256,25 @@ class RDFAnnotation:
         if not isinstance(qualifier, (BQB, BQM)):
             supported_qualifiers = [e.value for e in BQB] + [e.value for e in BQM]
 
-            raise ValueError(
-                f"qualifier `{qualifier}` is not in supported qualifiers: "
-                f"`{supported_qualifiers}`"
+            logger.error(
+                f"qualifier `{qualifier}` is not in supported qualifiers: '{supported_qualifiers}'."
+            )
+            return False
+
+        return True
+
+    def validate(self) -> bool:
+        """Validate annotation."""
+        valid_qualifier = False
+        if self.qualifier:
+            valid_qualifier: bool = self.check_qualifier(self.qualifier)
+        valid_term = True
+        if self.collection and self.term:
+            valid_term: bool = self.check_term(
+                collection=self.collection, term=self.term
             )
 
-    def validate(self) -> None:
-        """Validate annotation."""
-        if self.qualifier:
-            self.check_qualifier(self.qualifier)
-        if self.collection and self.term:
-            self.check_term(collection=self.collection, term=self.term)
+        return valid_qualifier and valid_term
 
 
 class RDFAnnotationData(RDFAnnotation):
@@ -399,8 +404,12 @@ if __name__ == "__main__":
     for annotation in [
         RDFAnnotation(
             qualifier=BQB.IS_VERSION_OF,
-            resource="hmdb/HMDB0000122",
+            resource="https://identifiers.org/DOI:10.1016/j.jtbi.2004.04.039",
         ),
+        # RDFAnnotation(
+        #     qualifier=BQB.IS_VERSION_OF,
+        #     resource="hmdb/HMDB0000122",
+        # ),
         # RDFAnnotation(
         #     qualifier=BQB.IS_VERSION_OF,
         #     resource="https://bioregistry.io/chebi:15996",

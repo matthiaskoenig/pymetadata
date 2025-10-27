@@ -11,6 +11,11 @@ from pymetadata.identifiers.miriam import BQB, BQM
 rdf_annotation_data = [
     (
         BQB.IS,
+        "https://identifiers.org/DOI:10.1016/j.jtbi.2004.04.039",
+        "RDFAnnotation(BQB.IS|doi|10.1016/j.jtbi.2004.04.039|identifiers.org)",
+    ),
+    (
+        BQB.IS,
         "NCIT:C75913",
         "RDFAnnotation(BQB.IS|ncit|C75913|identifiers.org)",
     ),
