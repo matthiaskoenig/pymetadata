@@ -13,9 +13,9 @@ metadata in the context of COMBINE standards with source code available from
 
 Features include among others
 
-- [core](src/pymetadata/core)COMBINE archive version 1 support (OMEX)
+- COMBINE archive version 1 support (OMEX)
 - annotation classes and helpers
-- SBO and KISAO ontology enums
+- SBO, KISAO and ECO ontology enums
 
 If you have any questions or issues please [open an issue](https://github.com/matthiaskoenig/pymetadata/issues).
 
@@ -26,8 +26,6 @@ see [omex_example.py](src/pymetadata/examples/omex_example.py).
 # How to cite
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.5308801.svg)](https://doi.org/10.5281/zenodo.5308801)
 
-# Contributing
-Contributions are always welcome! Please read the [contributing guidelines](https://github.com/matthiaskoenig/pymetadata/blob/develop/.github/CONTRIBUTING.rst) to get started.
 
 # License
 - Source Code: [MIT](https://opensource.org/license/MIT)
@@ -42,19 +40,6 @@ can be installed via
 
 ```bash
 pip install pymetadata
-```
-
-## Develop version
-The latest develop version can be installed via
-```bash
-pip install git+https://github.com/matthiaskoenig/pymetadata.git@develop
-```
-
-Or via cloning the repository and installing via
-```bash
-git clone https://github.com/matthiaskoenig/pymetadata.git
-cd pymetadata
-pip install -e .
 ```
 
 # Cache path
