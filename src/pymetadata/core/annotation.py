@@ -164,9 +164,10 @@ class RDFAnnotation:
                 self.provider = ProviderType.NONE
 
         # shorten compact terms
-        self.term = self.shorten_compact_term(
-            term=self.term, collection=self.collection
-        )
+        if self.term and self.collection:
+            self.term = self.shorten_compact_term(
+                term=self.term, collection=self.collection
+            )
 
         # clean legacy collections
         if self.collection in self.replaced_collections:
@@ -175,7 +176,7 @@ class RDFAnnotation:
         self.validate()
 
     @staticmethod
-    def shorten_compact_term(term, collection) -> str:
+    def shorten_compact_term(term: str, collection: str) -> str:
         """Shorten the compact terms and return term.
 
         If the namespace is not embeddd in the term return the shortened term.
