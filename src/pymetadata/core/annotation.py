@@ -113,7 +113,6 @@ class RDFAnnotation:
                 self.term = resource
                 if BIOREGISTRY_PATTERN.match(resource):
                     self.provider = ProviderType.BIOREGISTRY_IO
-                    console.print(self.provider)
                 else:
                     self.provider = ProviderType.NONE
                     logger.debug(
