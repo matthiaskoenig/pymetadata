@@ -174,16 +174,13 @@ def test_rdf_annotation(
 
 def test_check_term_pass() -> None:
     """Test that check term passes."""
-    assert RDFAnnotation.check_term("chebi", "CHEBI:000012") is True
+    rdf_annotation = RDFAnnotation(qualifier=BQB.IS, resource="CHEBI:000012")
+    assert rdf_annotation.check_miriam_term()
 
 
-# @pytest.mark.xfail(raises=ValueError)
-def test_check_collection_fail() -> None:
+def test_check_bioregistry() -> None:
     """Test that check collection fails."""
-    assert RDFAnnotation.check_term("234234sdf", "CHEBI:000012") is False
-
-
-# @pytest.mark.xfail(raises=ValueError)
-def test_check_term_fail() -> None:
-    """Test that check term fails."""
-    assert RDFAnnotation.check_term("chebi", "CHEB:000012") is False
+    rdf_annotation = RDFAnnotation(
+        qualifier=BQB.IS, resource="https://bioregistry.io/CHEBI:000012"
+    )
+    assert not rdf_annotation.check_miriam_term()

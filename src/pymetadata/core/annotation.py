@@ -74,7 +74,7 @@ class RDFAnnotation:
         self.collection: Optional[str] = None
         self.term: Optional[str] = None
         self.resource: str = resource
-        self.provider: ProviderType = ProviderType.IDENTIFIERS_ORG
+        self.provider: ProviderType = ProviderType.NONE
 
         if not qualifier:
             raise ValueError(
@@ -203,13 +203,14 @@ class RDFAnnotation:
         if not self.term:
             return None
 
-        if self.collection is not None:
-            if self.term.startswith(f"{self.collection.upper()}:"):
-                return f"{IDENTIFIERS_ORG_PREFIX}/{self.term}"
+        if self.provider == ProviderType.IDENTIFIERS_ORG:
+            if self.collection is not None:
+                if self.term.startswith(f"{self.collection.upper()}:"):
+                    return f"{IDENTIFIERS_ORG_PREFIX}/{self.term}"
+                else:
+                    return f"{IDENTIFIERS_ORG_PREFIX}/{self.collection}/{self.term}"
             else:
-                return f"{IDENTIFIERS_ORG_PREFIX}/{self.collection}/{self.term}"
-        else:
-            return self.term
+                return self.term
 
     def __repr__(self) -> str:
         """Get representation string."""
@@ -223,24 +224,28 @@ class RDFAnnotation:
             "term": self.term,
         }
 
-    @staticmethod
-    def check_term(collection: str, term: str) -> bool:
+    def check_miriam_term(self) -> bool:
         """Check that term follows id pattern for collection.
 
         Uses the Identifiers collection information.
         """
-        namespace = REGISTRY.ns_dict.get(collection, None)
+        if self.provider != ProviderType.IDENTIFIERS_ORG:
+            return False
+
+        # find the miriam namespace
+        namespace = REGISTRY.ns_dict.get(self.collection, None)
         if not namespace:
             logger.error(
-                f"MIRIAM collection `{collection}` does not exist for term `{term}`"
+                f"MIRIAM namespace `{self.collection}` does not exist for `{self}`"
             )
             return False
 
+        # check the pattern
         p = re.compile(namespace.pattern)
-        m = p.match(term)
+        m = p.match(self.term)
         if not m:
             logger.error(
-                f"Term `{term}` did not match pattern `{namespace.pattern}` for collection `{collection}`."
+                f"Term `{self.term}` did not match pattern `{namespace.pattern}` for collection `{self.collection}`."
             )
             return False
 
@@ -270,7 +275,7 @@ class RDFAnnotation:
             valid_qualifier = self.check_qualifier(self.qualifier)
         valid_term: bool = True
         if self.collection and self.term:
-            valid_term = self.check_term(collection=self.collection, term=self.term)
+            valid_term = self.check_miriam_term()
 
         return valid_qualifier and valid_term
 
