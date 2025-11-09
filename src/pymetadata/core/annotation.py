@@ -12,10 +12,9 @@ from typing import Any, Dict, Final, List, Optional, Tuple, Union
 import requests
 
 from pymetadata import log
-from pymetadata.console import console
 from pymetadata.core.xref import CrossReference, is_url
 from pymetadata.identifiers.miriam import BQB, BQM
-from pymetadata.identifiers.registry import REGISTRY
+from pymetadata.identifiers.registry import REGISTRY, Namespace
 from pymetadata.ontologies.ols import ONTOLOGIES, OLSQuery
 
 
@@ -176,7 +175,7 @@ class RDFAnnotation:
     def shorten_compact_term(term: str, collection: str) -> str:
         """Shorten the compact terms and return term.
 
-        If the namespace is not embeddd in the term return the shortened term.
+        If the namespace is not embedded in the term return the shortened term.
         """
         namespace = REGISTRY.ns_dict.get(collection, None)
         if namespace and not namespace.namespaceEmbeddedInLui:
@@ -204,12 +203,14 @@ class RDFAnnotation:
 
         if self.provider == ProviderType.IDENTIFIERS_ORG:
             if self.collection is not None:
-                if self.term.startswith(f"{self.collection.upper()}:"):
-                    return f"{IDENTIFIERS_ORG_PREFIX}/{self.term}"
-                else:
-                    return f"{IDENTIFIERS_ORG_PREFIX}/{self.collection}/{self.term}"
-            else:
-                return self.term
+                namespace = REGISTRY.ns_dict.get(self.collection, None)
+                if namespace:
+                    if namespace.namespaceEmbeddedInLui:
+                        return f"{IDENTIFIERS_ORG_PREFIX}/{self.term}"
+                    else:
+                        return f"{IDENTIFIERS_ORG_PREFIX}/{self.collection}/{self.term}"
+
+        return self.term
 
     def __repr__(self) -> str:
         """Get representation string."""
@@ -232,20 +233,26 @@ class RDFAnnotation:
             return False
 
         # find the miriam namespace
-        namespace = REGISTRY.ns_dict.get(self.collection, None)
-        if not namespace:
-            logger.error(
-                f"MIRIAM namespace `{self.collection}` does not exist for `{self}`"
-            )
+        if self.collection:
+            namespace: Optional[Namespace] = REGISTRY.ns_dict.get(self.collection, None)
+            if not namespace:
+                logger.error(
+                    f"MIRIAM namespace `{self.collection}` does not exist for `{self}`"
+                )
+                return False
+        else:
             return False
 
         # check the pattern
-        p = re.compile(namespace.pattern)
-        m = p.match(self.term)
-        if not m:
-            logger.error(
-                f"Term `{self.term}` did not match pattern `{namespace.pattern}` for collection `{self.collection}`."
-            )
+        if self.term:
+            p = re.compile(namespace.pattern)
+            m = p.match(self.term)
+            if not m:
+                logger.error(
+                    f"Term `{self.term}` did not match pattern `{namespace.pattern}` for collection `{self.collection}`."
+                )
+                return False
+        else:
             return False
 
         return True
