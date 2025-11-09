@@ -1,3 +1,4 @@
+uv.lock
 .vscode
 *.pyc
 *~
@@ -8,6 +9,7 @@ build
 .idea
 cover/
 .tox/
+.venv
 .cache/
 .coverage
 coverage.xml

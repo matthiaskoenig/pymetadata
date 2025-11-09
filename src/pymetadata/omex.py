@@ -24,7 +24,6 @@ import xmltodict
 from pydantic import BaseModel, PrivateAttr
 
 from pymetadata import log
-from pymetadata.console import console
 
 
 logger = log.get_logger(__name__)
@@ -33,7 +32,7 @@ logger = log.get_logger(__name__)
 __all__ = ["EntryFormat", "ManifestEntry", "Manifest", "Omex"]
 
 
-IDENTIFIERS_PREFIX = "https://identifiers.org/combine.specifications:"
+IDENTIFIERS_PREFIX = "http://identifiers.org/combine.specifications/"
 PURL_PREFIX = "https://purl.org/NET/mediatypes/"
 
 
@@ -291,10 +290,10 @@ class ManifestEntry(BaseModel):
     format: str
     master: bool = False
 
-    class Config:
-        """Pydantic configuration."""
-
-        use_enum_values = True
+    # pydantic configuration
+    model_config = {
+        "use_enum_values": True,
+    }
 
     @staticmethod
     def is_format(format_key: str, format: str) -> bool:
@@ -481,7 +480,7 @@ class Omex:
             logger.warning(f"'omex_path' should be 'Path': '{omex_path}'")
             omex_path = Path(omex_path)
 
-        if not omex_path.exists:
+        if not omex_path.exists():
             raise ValueError(f"'omex_path' does not exist: '{omex_path}'.")
         if not omex_path.is_file():
             raise ValueError(f"'omex_path' is not a file: '{omex_path}'.")
@@ -547,7 +546,7 @@ class Omex:
             logger.warning(f"'directory' should be 'Path': '{directory}'")
             directory = Path(directory)
 
-        if not directory.exists:
+        if not directory.exists():
             msg = f"'directory' does not exist: '{directory}'."
             logger.error(msg)
             raise ValueError(msg)
@@ -575,6 +574,8 @@ class Omex:
             for file in files:
                 file_path = os.path.join(root, file)
                 location = f"./{os.path.relpath(file_path, directory)}"
+                # bugfix for windows paths
+                location = location.replace("\\", "/")
                 if location == "./manifest.xml":
                     # manifest is created from the internal manifest entries
                     continue
@@ -618,7 +619,7 @@ class Omex:
             logger.warning(f"'entry_path' should be 'Path': '{entry_path}'")
             entry_path = Path(entry_path)
 
-        if not entry_path.exists:
+        if not entry_path.exists():
             msg = f"'entry_path' does not exist: '{entry_path}'."
             logger.error(msg)
             raise ValueError(msg)

@@ -2,14 +2,17 @@
 
 Core data structure to store annotations.
 """
+
 import re
 import urllib
+from enum import Enum
 from pprint import pprint
-from typing import Any, Dict, List, Optional, Tuple, Union
+from typing import Any, Dict, Final, List, Optional, Tuple, Union
 
 import requests
 
 from pymetadata import log
+from pymetadata.console import console
 from pymetadata.core.xref import CrossReference, is_url
 from pymetadata.identifiers.miriam import BQB, BQM
 from pymetadata.identifiers.registry import REGISTRY
@@ -18,19 +21,35 @@ from pymetadata.ontologies.ols import ONTOLOGIES, OLSQuery
 
 OLS_QUERY = OLSQuery(ontologies=ONTOLOGIES)
 
-IDENTIFIERS_ORG_PREFIX = "https://identifiers.org"
-IDENTIFIERS_ORG_PATTERN1 = re.compile(r"^https?://identifiers.org/(.+?)/(.+)")
-IDENTIFIERS_ORG_PATTERN2 = re.compile(r"^https?://identifiers.org/(.+)")
-MIRIAM_URN_PATTERN = re.compile(r"^urn:miriam:(.+)")
+IDENTIFIERS_ORG_PREFIX: Final = "https://identifiers.org"
+IDENTIFIERS_ORG_PATTERN_COMPACT: Final = re.compile(
+    r"^https?://identifiers.org/([a-zA-Z0-9.]+):(.+)"
+)
+IDENTIFIERS_ORG_PATTERN_CLASSIC: Final = re.compile(
+    r"^https?://identifiers.org/([a-zA-Z0-9.]+)/(.+)"
+)
+
+BIOREGISTRY_PREFIX: Final = "https://bioregistry.io"
+BIOREGISTRY_PATTERN: Final = re.compile(r"^https?://bioregistry.io/(.+)")
+
+MIRIAM_URN_PATTERN: Final = re.compile(r"^urn:miriam:(.+)")
 
 logger = log.get_logger(__name__)
+
+
+class ProviderType(str, Enum):
+    """Provider type."""
+
+    IDENTIFIERS_ORG = "identifiers.org"
+    BIOREGISTRY_IO = "bioregistry.io"
+    NONE = "none"
 
 
 class RDFAnnotation:
     """RDFAnnotation class.
 
     Basic storage of annotation information. This consists of the relation
-    and the the resource.
+    and the resource.
     The annotations can be attached to other objects thereby forming
     triples which can be converted to RDF.
 
@@ -39,14 +58,23 @@ class RDFAnnotation:
         - `collection/term`, i.e., the combination of collection and term
         - `http(s)://arbitrary.url`, an arbitrary URL
         - urn:miriam:uniprot:P03023
+        - https://bioregistry.io/chebi:15996 urls via the bioregistry provider
     """
 
-    def __init__(self, qualifier: Union[BQB, BQM], resource: str):
+    replaced_collections: Dict[str, str] = {
+        "obo.go": "go",
+        "biomodels.sbo": "sbo",
+    }
+
+    def __init__(
+        self, qualifier: Union[BQB, BQM], resource: str, validate: bool = True
+    ):
         """Initialize RDFAnnotation."""
         self.qualifier: Union[BQB, BQM] = qualifier
         self.collection: Optional[str] = None
         self.term: Optional[str] = None
         self.resource: str = resource
+        self.provider: ProviderType = ProviderType.NONE
 
         if not qualifier:
             raise ValueError(
@@ -65,55 +93,61 @@ class RDFAnnotation:
 
         # handle urls
         if resource.startswith("http"):
-            match1 = IDENTIFIERS_ORG_PATTERN1.match(resource)
-            if match1:
-                # handle identifiers.org pattern
-                self.collection, self.term = match1.group(1), match1.group(2)
+            # tests new compact patterns
+            match_compact = IDENTIFIERS_ORG_PATTERN_COMPACT.match(resource)
+            if match_compact:
+                self.collection = match_compact.group(1).lower()
+                self.term = f"{match_compact.group(1)}:{match_compact.group(2)}"
+                self.provider = ProviderType.IDENTIFIERS_ORG
 
             if not self.collection:
-                # tests new short pattern
-                match2 = IDENTIFIERS_ORG_PATTERN2.match(resource)
-                if match2:
-                    tokens = match2.group(1).split(":")
-                    if len(tokens) == 2:
-                        self.collection = tokens[0].lower()
-                        self.term = match2.group(1)
-                    else:
-                        logger.warning(
-                            f"Identifiers.org URL does not conform to new"
-                            f"short pattern: {resource}"
-                        )
+                match_classic = IDENTIFIERS_ORG_PATTERN_CLASSIC.match(resource)
+                if match_classic:
+                    self.collection = match_classic.group(1).lower()
+                    self.term = match_classic.group(2)
+                    self.provider = ProviderType.IDENTIFIERS_ORG
 
             if not self.collection:
                 # other urls are directly stored as resources without collection
                 self.collection = None
                 self.term = resource
-                logger.debug(
-                    f"{resource} does not conform to "
-                    f"http(s)://identifiers.org/collection/id or http(s)://identifiers.org/id",
-                )
+                if BIOREGISTRY_PATTERN.match(resource):
+                    self.provider = ProviderType.BIOREGISTRY_IO
+                else:
+                    self.provider = ProviderType.NONE
+                    logger.debug(
+                        f"{resource} does not conform to "
+                        f"http(s)://identifiers.org/collection/id or http(s)://identifiers.org/id or "
+                        f"https://bioregistry.io/id .",
+                    )
+
+        # handle urns
         elif resource.startswith("urn:miriam:"):
             match3 = MIRIAM_URN_PATTERN.match(resource)
             if match3:
-
                 tokens = match3.group(1).split(":")
                 self.collection = tokens[0]
                 self.term = ":".join(tokens[1:]).replace("%3A", ":")
+                self.provider = ProviderType.IDENTIFIERS_ORG
+
                 logger.warning(
-                    f"Deprecated urn pattern `{resource}`, update to "
+                    f"Deprecated urn pattern `{resource}` updated: "
                     f"{self.resource_normalized}"
                 )
 
         else:
             # handle short notation
             tokens = resource.split("/")
-            if len(tokens) == 2:
+            if len(tokens) > 1:
                 self.collection = tokens[0]
                 self.term = "/".join(tokens[1:])
+                self.provider = ProviderType.IDENTIFIERS_ORG
             elif len(tokens) == 1 and ":" in tokens[0]:
                 self.collection = tokens[0].split(":")[0].lower()
                 self.term = tokens[0]
+                self.provider = ProviderType.IDENTIFIERS_ORG
 
+            # validation
             if len(tokens) < 2 and not self.collection:
                 logger.error(
                     f"Resource `{resource}` could not be split in collection and term. "
@@ -123,18 +157,35 @@ class RDFAnnotation:
                 )
                 self.collection = None
                 self.term = resource
+                self.provider = ProviderType.NONE
 
-        self.clean()
+        # shorten compact terms
+        if self.term and self.collection:
+            self.term = self.shorten_compact_term(
+                term=self.term, collection=self.collection
+            )
 
-        self.validate()
+        # clean legacy collections
+        if self.collection in self.replaced_collections:
+            self.collection = self.replaced_collections[self.collection]
 
-    def clean(self) -> None:
-        """Clean collection and term information."""
-        if self.collection:
-            if self.collection == "biomodels.sbo":
-                self.collection = "sbo"
-            if self.collection == "obo.go":
-                self.collection = "go"
+        if validate:
+            self.validate()
+
+    @staticmethod
+    def shorten_compact_term(term: str, collection: str) -> str:
+        """Shorten the compact terms and return term.
+
+        If the namespace is not embeddd in the term return the shortened term.
+        """
+        namespace = REGISTRY.ns_dict.get(collection, None)
+        if namespace and not namespace.namespaceEmbeddedInLui:
+            # shorter term
+            if term.lower().startswith(f"{collection}:"):
+                tokens = term.split(":")
+                term = ":".join(tokens[1:])
+
+        return term
 
     @staticmethod
     def from_tuple(t: Tuple[Union[BQB, BQM], str]) -> "RDFAnnotation":
@@ -151,51 +202,56 @@ class RDFAnnotation:
         if not self.term:
             return None
 
-        if self.collection:
-            if self.term.startswith(f"{self.collection.upper()}:"):
-                return f"{IDENTIFIERS_ORG_PREFIX}/{self.term}"
+        if self.provider == ProviderType.IDENTIFIERS_ORG:
+            if self.collection is not None:
+                if self.term.startswith(f"{self.collection.upper()}:"):
+                    return f"{IDENTIFIERS_ORG_PREFIX}/{self.term}"
+                else:
+                    return f"{IDENTIFIERS_ORG_PREFIX}/{self.collection}/{self.term}"
             else:
-                return f"{IDENTIFIERS_ORG_PREFIX}/{self.collection}/{self.term}"
-        else:
-            return self.term
+                return self.term
 
     def __repr__(self) -> str:
         """Get representation string."""
-        return f"RDFAnnotation({self.qualifier}|{self.collection}|{self.term})"
+        return f"RDFAnnotation({self.qualifier}|{self.collection}|{self.term}|{self.provider.value})"
 
     def to_dict(self) -> Dict:
         """Convert to dict."""
         return {
-            "qualifier": self.qualifier.value,  # FIXME use enums!
+            "qualifier": self.qualifier.value,
             "collection": self.collection,
             "term": self.term,
         }
 
-    @staticmethod
-    def check_term(collection: str, term: str) -> bool:
+    def check_miriam_term(self) -> bool:
         """Check that term follows id pattern for collection.
 
         Uses the Identifiers collection information.
         """
-        namespace = REGISTRY.ns_dict.get(collection, None)
-        if not namespace:
-            raise ValueError(
-                f"MIRIAM collection `{collection}` does not exist for term `{term}`"
-            )
+        if self.provider != ProviderType.IDENTIFIERS_ORG:
+            return False
 
+        # find the miriam namespace
+        namespace = REGISTRY.ns_dict.get(self.collection, None)
+        if not namespace:
+            logger.error(
+                f"MIRIAM namespace `{self.collection}` does not exist for `{self}`"
+            )
+            return False
+
+        # check the pattern
         p = re.compile(namespace.pattern)
-        m = p.match(term)
+        m = p.match(self.term)
         if not m:
-            raise ValueError(
-                f"Term `{term}` did not match pattern "
-                f"`{namespace.pattern}` for collection `{collection}`."
+            logger.error(
+                f"Term `{self.term}` did not match pattern `{namespace.pattern}` for collection `{self.collection}`."
             )
             return False
 
         return True
 
     @staticmethod
-    def check_qualifier(qualifier: Union[BQB, BQM]) -> None:
+    def check_qualifier(qualifier: Union[BQB, BQM]) -> bool:
         """Check that the qualifier is an allowed qualifier.
 
         :param qualifier:
@@ -204,17 +260,23 @@ class RDFAnnotation:
         if not isinstance(qualifier, (BQB, BQM)):
             supported_qualifiers = [e.value for e in BQB] + [e.value for e in BQM]
 
-            raise ValueError(
-                f"qualifier `{qualifier}` is not in supported qualifiers: "
-                f"`{supported_qualifiers}`"
+            logger.error(
+                f"qualifier `{qualifier}` is not in supported qualifiers: '{supported_qualifiers}'."
             )
+            return False
 
-    def validate(self) -> None:
+        return True
+
+    def validate(self) -> bool:
         """Validate annotation."""
+        valid_qualifier: bool = False
         if self.qualifier:
-            self.check_qualifier(self.qualifier)
+            valid_qualifier = self.check_qualifier(self.qualifier)
+        valid_term: bool = True
         if self.collection and self.term:
-            self.check_term(collection=self.collection, term=self.term)
+            valid_term = self.check_miriam_term()
+
+        return valid_qualifier and valid_term
 
 
 class RDFAnnotationData(RDFAnnotation):
@@ -239,7 +301,6 @@ class RDFAnnotationData(RDFAnnotation):
         self.errors: List = []
 
         if self.collection:
-
             # register MIRIAM xrefs
             namespace = REGISTRY.ns_dict.get(self.collection, None)
             if not namespace:
@@ -253,7 +314,6 @@ class RDFAnnotationData(RDFAnnotation):
                 namespace.resources = []
 
             for ns_resource in namespace.resources:
-
                 # create url
                 url = ns_resource.urlPattern
 
@@ -344,52 +404,67 @@ class RDFAnnotationData(RDFAnnotation):
 
 if __name__ == "__main__":
     for annotation in [
-        # FIXME: support this
         RDFAnnotation(
             qualifier=BQB.IS_VERSION_OF,
-            resource="NCIT:C75913",
+            resource="https://identifiers.org/DOI:10.1016/j.jtbi.2004.04.039",
         ),
-        RDFAnnotation(
-            qualifier=BQB.IS_VERSION_OF,
-            resource="taxonomy/562",
-        ),
-        RDFAnnotation(
-            qualifier=BQB.IS_VERSION_OF,
-            resource="http://identifiers.org/taxonomy/9606",
-        ),
-        RDFAnnotation(
-            qualifier=BQB.IS_VERSION_OF,
-            resource="http://identifiers.org/biomodels.sbo/SBO:0000247",
-        ),
-        RDFAnnotation(
-            qualifier=BQB.IS_VERSION_OF, resource="urn:miriam:obo.go:GO%3A0005623"
-        ),
-        RDFAnnotation(
-            qualifier=BQB.IS_VERSION_OF, resource="urn:miriam:chebi:CHEBI%3A33699"
-        ),
-        RDFAnnotation(qualifier=BQB.IS_VERSION_OF, resource="chebi/CHEBI:456215"),
-        RDFAnnotation(
-            qualifier=BQB.IS, resource="https://en.wikipedia.org/wiki/Cytosol"
-        ),
-        RDFAnnotation(
-            qualifier=BQB.IS_VERSION_OF, resource="urn:miriam:uniprot:P03023"
-        ),
-        RDFAnnotation(
-            qualifier=BQB.IS_VERSION_OF,
-            resource="https://identifiers.org/go/GO:0005829",
-        ),
-        RDFAnnotation(
-            qualifier=BQB.IS_VERSION_OF, resource="http://identifiers.org/go/GO:0005829"
-        ),
-        RDFAnnotation(
-            qualifier=BQB.IS_VERSION_OF, resource="https://identifiers.org/GO:0005829"
-        ),
-        RDFAnnotation(
-            qualifier=BQB.IS_VERSION_OF, resource="http://identifiers.org/GO:0005829"
-        ),
-        RDFAnnotation(qualifier=BQB.IS_VERSION_OF, resource="bto/BTO:0000089"),
-        RDFAnnotation(qualifier=BQB.IS_VERSION_OF, resource="BTO:0000089"),
-        RDFAnnotation(qualifier=BQB.IS_VERSION_OF, resource="chebi/CHEBI:000012"),
+        # RDFAnnotation(
+        #     qualifier=BQB.IS_VERSION_OF,
+        #     resource="hmdb/HMDB0000122",
+        # ),
+        # RDFAnnotation(
+        #     qualifier=BQB.IS_VERSION_OF,
+        #     resource="https://bioregistry.io/chebi:15996",
+        # ),
+        # RDFAnnotation(
+        #     qualifier=BQB.IS_VERSION_OF,
+        #     resource="NCIT:C75913",
+        # ),
+        # RDFAnnotation(
+        #     qualifier=BQB.IS_VERSION_OF,
+        #     resource="ncit:C75913",
+        # ),
+        # RDFAnnotation(
+        #     qualifier=BQB.IS_VERSION_OF,
+        #     resource="taxonomy/562",
+        # ),
+        # RDFAnnotation(
+        #     qualifier=BQB.IS_VERSION_OF,
+        #     resource="http://identifiers.org/taxonomy/9606",
+        # ),
+        # RDFAnnotation(
+        #     qualifier=BQB.IS_VERSION_OF,
+        #     resource="http://identifiers.org/biomodels.sbo/SBO:0000247",
+        # ),
+        # RDFAnnotation(
+        #     qualifier=BQB.IS_VERSION_OF, resource="urn:miriam:obo.go:GO%3A0005623"
+        # ),
+        # RDFAnnotation(
+        #     qualifier=BQB.IS_VERSION_OF, resource="urn:miriam:chebi:CHEBI%3A33699"
+        # ),
+        # RDFAnnotation(qualifier=BQB.IS_VERSION_OF, resource="chebi/CHEBI:456215"),
+        # RDFAnnotation(
+        #     qualifier=BQB.IS, resource="https://en.wikipedia.org/wiki/Cytosol"
+        # ),
+        # RDFAnnotation(
+        #     qualifier=BQB.IS_VERSION_OF, resource="urn:miriam:uniprot:P03023"
+        # ),
+        # RDFAnnotation(
+        #     qualifier=BQB.IS_VERSION_OF,
+        #     resource="http://identifiers.org/go/GO:0005829",
+        # ),
+        # RDFAnnotation(
+        #     qualifier=BQB.IS_VERSION_OF, resource="http://identifiers.org/go/GO:0005829"
+        # ),
+        # RDFAnnotation(
+        #     qualifier=BQB.IS_VERSION_OF, resource="http://identifiers.org/GO:0005829"
+        # ),
+        # RDFAnnotation(
+        #     qualifier=BQB.IS_VERSION_OF, resource="http://identifiers.org/GO:0005829"
+        # ),
+        # RDFAnnotation(qualifier=BQB.IS_VERSION_OF, resource="bto/BTO:0000089"),
+        # RDFAnnotation(qualifier=BQB.IS_VERSION_OF, resource="BTO:0000089"),
+        # RDFAnnotation(qualifier=BQB.IS_VERSION_OF, resource="chebi/CHEBI:000012"),
     ]:
         print("-" * 80)
         data = RDFAnnotationData(annotation)

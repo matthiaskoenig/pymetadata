@@ -2,7 +2,10 @@
 
 This file allows to download the ontologies for local use.
 Special ontologies are provided as enums.
+
+Uses the OWL links provided on OLS4 to download the ontologies.
 """
+
 import gzip
 import importlib
 import re
@@ -23,7 +26,7 @@ from pronto.relationship import Relationship as ProntoRelationship
 from pronto.term import Term as ProntoTerm
 
 from pymetadata import ENUM_DIR, RESOURCES_DIR, log
-
+from pymetadata.console import console
 
 logger = log.get_logger(__name__)
 
@@ -49,18 +52,18 @@ class OntologyFile:
     @property
     def path(self) -> Path:
         """Path of ontology file."""
-        return RESOURCES_DIR / "ontologies" / f"{self.id.lower()}.{self.format}.gz"
+        return RESOURCES_DIR / "ontologies" / f"{self.id.lower()}.{self.format.value}.gz"
 
     @property
     def filename(self) -> str:
         """Filename of ontology file.
 
-        :return: ontolgoy filename
+        :return: ontology filename
         :rtype: str
         """
-        data = str(self.path)
-        print(data)
-        return data
+        name = str(self.path)
+        console.print(name)
+        return name
 
 
 _ontology_files: List[OntologyFile] = [
@@ -68,7 +71,7 @@ _ontology_files: List[OntologyFile] = [
         "BTO",
         name="The BRENDA Tissue Ontology (BTO)",
         format=OntologyFormat.OWL,
-        source="https://www.ebi.ac.uk/ols/ontologies/bto/download",
+        source="http://purl.obolibrary.org/obo/bto.owl",
         bioportal=False,
         ols=True,
     ),
@@ -76,7 +79,7 @@ _ontology_files: List[OntologyFile] = [
         "CHEBI",
         name="Chemical Entities of Biological Interest Ontology",
         format=OntologyFormat.OWL,
-        source="https://www.ebi.ac.uk/ols/ontologies/chebi/download",
+        source="http://purl.obolibrary.org/obo/chebi.owl",
         bioportal=True,
         ols=True,
     ),
@@ -84,7 +87,7 @@ _ontology_files: List[OntologyFile] = [
         "FMA",
         name="Foundational Model of Anatomy",
         format=OntologyFormat.OWL,
-        source="https://www.ebi.ac.uk/ols/ontologies/fma/download",
+        source="http://purl.obolibrary.org/obo/fma.owl",
         bioportal=True,
         ols=True,
     ),
@@ -92,7 +95,7 @@ _ontology_files: List[OntologyFile] = [
         "ECO",
         name="Evidence & Conclusion Ontology (ECO)",
         format=OntologyFormat.OWL,
-        source="https://www.ebi.ac.uk/ols/ontologies/eco/download",
+        source="http://purl.obolibrary.org/obo/eco.owl",
         bioportal=True,
         ols=True,
     ),
@@ -100,7 +103,7 @@ _ontology_files: List[OntologyFile] = [
         "GO",
         name="Gene Ontology",
         format=OntologyFormat.OWL,
-        source="https://www.ebi.ac.uk/ols/ontologies/go/download",
+        source="http://purl.obolibrary.org/obo/go/extensions/go-plus.owl",
         bioportal=True,
         ols=True,
     ),
@@ -117,7 +120,7 @@ _ontology_files: List[OntologyFile] = [
         "SBO",
         name="Systems Biology Ontology",
         format=OntologyFormat.OWL,
-        source="https://www.ebi.ac.uk/ols/ontologies/sbo/download",
+        source="https://raw.githubusercontent.com/EBI-BioModels/SBO/master/SBO_OWL.owl",
         bioportal=True,
         ols=True,
     ),
@@ -125,7 +128,7 @@ _ontology_files: List[OntologyFile] = [
         "NCIT",
         name="National Cancer Institute Thesaurus",
         format=OntologyFormat.OWL,
-        source="https://www.ebi.ac.uk/ols/ontologies/ncit/download",
+        source="http://purl.obolibrary.org/obo/ncit.owl",
         bioportal=True,
         ols=True,
     ),
@@ -133,7 +136,7 @@ _ontology_files: List[OntologyFile] = [
     #     "NCBITAXON",
     #     name="NCBI organismal classification",
     #     format=OntologyFormat.OWL,
-    #     source="https://www.ebi.ac.uk/ols/ontologies/ncbitaxon/download",
+    #     source=OLS_BASE_URL + "ncbitaxon",
     #     bioportal=False,
     #     ols=True,
     # ),
@@ -160,7 +163,6 @@ def update_ontology_file(ofile: OntologyFile) -> None:
             r.raise_for_status()
             with open(owl_path, "wb") as f:
                 for chunk in r.iter_content(chunk_size=8192):
-
                     f.write(chunk)
 
         # only store gzip version
@@ -242,6 +244,9 @@ def create_ontology_enum(ontology_id: str, pattern: str) -> None:
             # fix the ids
             if ontology_id == "KISAO":
                 term_id = term_id.replace("http://www.biomodels.net/kisao/KISAO#", "")
+            if ontology_id == "SBO":
+                term_id = term_id.replace("http://biomodels.net/SBO/", "")
+
             if ":" in term_id:
                 term_id = term_id.replace(":", "_")
 
@@ -285,13 +290,12 @@ def try_ontology_import(ontology_id: str) -> None:
 
 if __name__ == "__main__":
     # download latest versions
-    # update_ontology_files()
+    update_ontology_files()
 
-    # load OWL files
+    # test loading of OWL files
     # ofile: OntologyFile
     # for oid, ofile in ontology_files.items():
-
-    #     print("-" * 80)
+    #     console.rule(style="white")
     #     ontology = Ontology(ontology_id=oid)
     #     console.print(ontology)
     # ontology = Ontology(ontology_id="CHEBI")

@@ -1,4 +1,10 @@
-"""Lookup of ontology information from the ontology lookup service (OLS)."""
+"""Lookup of ontology information from the ontology lookup service (OLS).
+
+This uses the EMBL-EBI Ontology Lookup Service
+https://www.ebi.ac.uk/ols4
+
+"""
+
 import urllib.parse
 from dataclasses import dataclass, field
 from pathlib import Path
@@ -6,7 +12,8 @@ from typing import Any, Dict, List, Optional
 
 import requests
 
-from pymetadata import CACHE_PATH, CACHE_USE, log
+import pymetadata
+from pymetadata import log
 from pymetadata.cache import read_json_cache, write_json_cache
 from pymetadata.identifiers.registry import Registry
 
@@ -31,7 +38,7 @@ class OLSOntology:
 
 
 ONTOLOGIES = [
-    # ontologies which are used in the project
+    # ontologies which are used in most projects
     OLSOntology(name="sbo", iri_pattern="http://biomodels.net/SBO/SBO_{$Id}"),
     OLSOntology(
         name="ncbitaxon", iri_pattern="http://purl.obolibrary.org/obo/NCBITaxon_{$Id}"
@@ -65,22 +72,27 @@ ONTOLOGIES = [
 class OLSQuery:
     """Handling OLS queries."""
 
-    url_term_query = "https://www.ebi.ac.uk/ols/api/ontologies/{}/terms/{}"
+    url_term_query = "https://www.ebi.ac.uk/ols4/api/ontologies/{}/terms/{}"
 
     def __init__(
         self,
         ontologies: List[OLSOntology],
-        cache_path: Path = CACHE_PATH,
-        cache: bool = CACHE_USE,
+        cache_path: Optional[Path] = None,
+        cache: Optional[bool] = None,
     ):
         """Initialize OLSQuery."""
-        self.ontologies = {
+        self.ontologies: Dict[str, OLSOntology] = {
             ontology.name: ontology for ontology in ontologies
-        }  # type: Dict[str, OLSOntology]
+        }
+        if not cache_path:
+            cache_path = pymetadata.CACHE_PATH
+        if not cache:
+            cache = pymetadata.CACHE_USE
+
         self.cache_path = cache_path / "ols"
         self.cache = cache
 
-        if not self.cache_path.exists():
+        if cache and not self.cache_path.exists():
             self.cache_path.mkdir(parents=True)
 
     def get_iri(self, ontology: str, term: str) -> str:
@@ -131,20 +143,18 @@ class OLSQuery:
         # double urlencode iri for OLS
         urliri = urllib.parse.quote(iri, safe="")
         urliri = urllib.parse.quote(urliri, safe="")
-        # urliri = iri.replace(":", "%253A")
-        # urliri = urliri.replace("/", "%252F")
-
-        # term_id = term.split(":")[-1]
-        # url = ols_pattern.replace('{$id}', term_id)
         cache_path = self.cache_path / f"{urliri}.json"
+        data: Dict[str, Any] = {}
         if self.cache:
-            data = read_json_cache(cache_path=cache_path)
-        else:
-            data = {}
+            try:
+                data = read_json_cache(cache_path=cache_path)
+            except IOError:
+                # cache does not exist
+                pass
 
         if not data:
             url = self.url_term_query.format(ontology, urliri)
-            logger.warning(f"Query: {url}")
+            logger.info(f"Query: {url}")
             response = requests.get(url)
 
             if response.status_code != 200:
@@ -168,7 +178,8 @@ class OLSQuery:
                 else:
                     data["errors"] = []
                     data["warnings"] = []
-                    write_json_cache(data=data, cache_path=cache_path)  # type: ignore
+                    if self.cache:
+                        write_json_cache(data=data, cache_path=cache_path)  # type: ignore
 
         return data
 

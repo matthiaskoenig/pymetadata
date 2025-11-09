@@ -1,4 +1,5 @@
 """Caching of information."""
+
 import json
 from json.encoder import JSONEncoder
 from pathlib import Path
@@ -42,6 +43,7 @@ def write_json_cache(
     :param json_encoder: optional JSON encoder
     :return:
     """
+    cache_path.parent.mkdir(parents=True, exist_ok=True)
     with open(cache_path, "w") as fp:
         logger.info(f"Write cache: {cache_path}")
         if json_encoder:

@@ -1,5 +1,5 @@
 """Example for reading and writing omex archives."""
-import zipfile
+
 from pathlib import Path
 
 from pymetadata import RESOURCES_DIR

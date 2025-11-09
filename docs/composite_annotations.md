@@ -2,7 +2,7 @@
 
 Composite annotations are semantic annotations that are comprised of multiple annotation
 terms linked using  standard  qualifiers  (also  known  as  “relations”  or  “predicates”)
-to  indicate  the  meaning  of  anannotation.
+to  indicate  the  meaning  of  annotation.
 Composite annotations are used when a single knowledge resource term is not available to
 sufficiently define a model or data element.  For model-component annotations,
 composite annotations have two primary components:
@@ -13,7 +13,7 @@ of ATP in the cytoplasm, blood in a cardiac cavity, the glucokinase reaction).
 
 
 
-**entity** 
+**entity**
 OPB: https://bioportal.bioontology.org/ontologies/OPB
 Ontology of Physics for Biology
 
@@ -31,6 +31,6 @@ aborption rate: "Material flow rate"
 Property first; entity second
 
 
-**Properties of processes**  
+**Properties of processes**
 - describe process: source, sink & mediator; flow of material from one pool to another
 - to describe the source: stomach; sink

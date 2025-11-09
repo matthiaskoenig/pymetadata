@@ -1,10 +1,10 @@
 """SBO ontology."""
 
+from typing import Union, Optional
 from enum import Enum
-from typing import Optional, Union
 
 
-SBOType = Union[str, "SBO"]
+SBOType = Union[str, 'SBO']
 
 _terms = {
     "SBO_0000000": "systems biology representation",
@@ -349,6 +349,7 @@ _terms = {
     "SBO_0000340": "trimolecular association rate constant",
     "SBO_0000341": "association rate constant",
     "SBO_0000342": "molecular or genetic interaction",
+    "SBO_0000343": "genetic interaction",
     "SBO_0000344": "molecular interaction",
     "SBO_0000345": "time",
     "SBO_0000346": "temporal measure",
@@ -502,7 +503,6 @@ _terms = {
     "SBO_0000496": "transmembrane domain",
     "SBO_0000497": "ternary switch",
     "SBO_0000498": "relative activity",
-    "SBO_0000499": "genetic interaction",
     "SBO_0000500": "genetic suppression",
     "SBO_0000501": "genetic enhancement",
     "SBO_0000502": "synthetic lethality",
@@ -593,6 +593,7 @@ _terms = {
     "SBO_0000587": "transcellular membrane influx reaction",
     "SBO_0000588": "transcellular membrane efflux reaction",
     "SBO_0000589": "genetic production",
+    "SBO_0000590": "promoter",
     "SBO_0000591": "petri net transition",
     "SBO_0000592": "discrete amount of an entity pool",
     "SBO_0000593": "petri net place",
@@ -600,7 +601,6 @@ _terms = {
     "SBO_0000595": "dual-activity modifier",
     "SBO_0000596": "modifier of unknown activity",
     "SBO_0000597": "silencer",
-    "SBO_0000598": "promoter",
     "SBO_0000599": "port",
     "SBO_0000600": "input port",
     "SBO_0000601": "output port",
@@ -696,6 +696,8 @@ _terms = {
     "SBO_0000691": "hybrid stochastic continuous-discrete non-spatial framework",
     "SBO_0000692": "resource balance framework",
     "SBO_0000693": "constraint-based framework",
+    "SBO_0000694": "optimization framework",
+    "SBO_0000695": "ligation",
 }
 
 pattern = r"^SBO_\d{7}$"
@@ -818,9 +820,7 @@ class SBO(str, Enum):
 
     # enzymatic rate law for irreversible non-modulated non-interacting unireactant enzymes
     SBO_0000028 = "SBO_0000028"
-    ENZYMATIC_RATE_LAW_FOR_IRREVERSIBLE_NON_MODULATED_NON_INTERACTING_UNIREACTANT_ENZYMES = (
-        "SBO_0000028"
-    )
+    ENZYMATIC_RATE_LAW_FOR_IRREVERSIBLE_NON_MODULATED_NON_INTERACTING_UNIREACTANT_ENZYMES = "SBO_0000028"
 
     # Henri-Michaelis-Menten rate law
     SBO_0000029 = "SBO_0000029"
@@ -896,9 +896,7 @@ class SBO(str, Enum):
 
     # mass action rate law for zeroth order irreversible reactions, continuous scheme
     SBO_0000047 = "SBO_0000047"
-    MASS_ACTION_RATE_LAW_FOR_ZEROTH_ORDER_IRREVERSIBLE_REACTIONS__CONTINUOUS_SCHEME = (
-        "SBO_0000047"
-    )
+    MASS_ACTION_RATE_LAW_FOR_ZEROTH_ORDER_IRREVERSIBLE_REACTIONS__CONTINUOUS_SCHEME = "SBO_0000047"
 
     # forward zeroth order rate constant, continuous case
     SBO_0000048 = "SBO_0000048"
@@ -906,33 +904,23 @@ class SBO(str, Enum):
 
     # mass action rate law for first order irreversible reactions, continuous scheme
     SBO_0000049 = "SBO_0000049"
-    MASS_ACTION_RATE_LAW_FOR_FIRST_ORDER_IRREVERSIBLE_REACTIONS__CONTINUOUS_SCHEME = (
-        "SBO_0000049"
-    )
+    MASS_ACTION_RATE_LAW_FOR_FIRST_ORDER_IRREVERSIBLE_REACTIONS__CONTINUOUS_SCHEME = "SBO_0000049"
 
     # mass action rate law for second order irreversible reactions, one reactant
     SBO_0000050 = "SBO_0000050"
-    MASS_ACTION_RATE_LAW_FOR_SECOND_ORDER_IRREVERSIBLE_REACTIONS__ONE_REACTANT = (
-        "SBO_0000050"
-    )
+    MASS_ACTION_RATE_LAW_FOR_SECOND_ORDER_IRREVERSIBLE_REACTIONS__ONE_REACTANT = "SBO_0000050"
 
     # mass action rate law for second order irreversible reactions, one reactant, continuous scheme
     SBO_0000052 = "SBO_0000052"
-    MASS_ACTION_RATE_LAW_FOR_SECOND_ORDER_IRREVERSIBLE_REACTIONS__ONE_REACTANT__CONTINUOUS_SCHEME = (
-        "SBO_0000052"
-    )
+    MASS_ACTION_RATE_LAW_FOR_SECOND_ORDER_IRREVERSIBLE_REACTIONS__ONE_REACTANT__CONTINUOUS_SCHEME = "SBO_0000052"
 
     # mass action rate law for second order irreversible reactions, two reactants
     SBO_0000053 = "SBO_0000053"
-    MASS_ACTION_RATE_LAW_FOR_SECOND_ORDER_IRREVERSIBLE_REACTIONS__TWO_REACTANTS = (
-        "SBO_0000053"
-    )
+    MASS_ACTION_RATE_LAW_FOR_SECOND_ORDER_IRREVERSIBLE_REACTIONS__TWO_REACTANTS = "SBO_0000053"
 
     # mass action rate law for second order irreversible reactions, two reactants, continuous scheme
     SBO_0000054 = "SBO_0000054"
-    MASS_ACTION_RATE_LAW_FOR_SECOND_ORDER_IRREVERSIBLE_REACTIONS__TWO_REACTANTS__CONTINUOUS_SCHEME = (
-        "SBO_0000054"
-    )
+    MASS_ACTION_RATE_LAW_FOR_SECOND_ORDER_IRREVERSIBLE_REACTIONS__TWO_REACTANTS__CONTINUOUS_SCHEME = "SBO_0000054"
 
     # mass action rate law for third order irreversible reactions
     SBO_0000055 = "SBO_0000055"
@@ -940,39 +928,27 @@ class SBO(str, Enum):
 
     # mass action rate law for third order irreversible reactions, one reactant
     SBO_0000056 = "SBO_0000056"
-    MASS_ACTION_RATE_LAW_FOR_THIRD_ORDER_IRREVERSIBLE_REACTIONS__ONE_REACTANT = (
-        "SBO_0000056"
-    )
+    MASS_ACTION_RATE_LAW_FOR_THIRD_ORDER_IRREVERSIBLE_REACTIONS__ONE_REACTANT = "SBO_0000056"
 
     # mass action rate law for third order irreversible reactions, one reactant, continuous scheme
     SBO_0000057 = "SBO_0000057"
-    MASS_ACTION_RATE_LAW_FOR_THIRD_ORDER_IRREVERSIBLE_REACTIONS__ONE_REACTANT__CONTINUOUS_SCHEME = (
-        "SBO_0000057"
-    )
+    MASS_ACTION_RATE_LAW_FOR_THIRD_ORDER_IRREVERSIBLE_REACTIONS__ONE_REACTANT__CONTINUOUS_SCHEME = "SBO_0000057"
 
     # mass action rate law for third order irreversible reactions, two reactants
     SBO_0000058 = "SBO_0000058"
-    MASS_ACTION_RATE_LAW_FOR_THIRD_ORDER_IRREVERSIBLE_REACTIONS__TWO_REACTANTS = (
-        "SBO_0000058"
-    )
+    MASS_ACTION_RATE_LAW_FOR_THIRD_ORDER_IRREVERSIBLE_REACTIONS__TWO_REACTANTS = "SBO_0000058"
 
     # mass action rate law for third order irreversible reactions, two reactants, continuous scheme
     SBO_0000059 = "SBO_0000059"
-    MASS_ACTION_RATE_LAW_FOR_THIRD_ORDER_IRREVERSIBLE_REACTIONS__TWO_REACTANTS__CONTINUOUS_SCHEME = (
-        "SBO_0000059"
-    )
+    MASS_ACTION_RATE_LAW_FOR_THIRD_ORDER_IRREVERSIBLE_REACTIONS__TWO_REACTANTS__CONTINUOUS_SCHEME = "SBO_0000059"
 
     # mass action rate law for third order irreversible reactions, three reactants
     SBO_0000060 = "SBO_0000060"
-    MASS_ACTION_RATE_LAW_FOR_THIRD_ORDER_IRREVERSIBLE_REACTIONS__THREE_REACTANTS = (
-        "SBO_0000060"
-    )
+    MASS_ACTION_RATE_LAW_FOR_THIRD_ORDER_IRREVERSIBLE_REACTIONS__THREE_REACTANTS = "SBO_0000060"
 
     # mass action rate law for third order irreversible reactions, three reactants, continuous scheme
     SBO_0000061 = "SBO_0000061"
-    MASS_ACTION_RATE_LAW_FOR_THIRD_ORDER_IRREVERSIBLE_REACTIONS__THREE_REACTANTS__CONTINUOUS_SCHEME = (
-        "SBO_0000061"
-    )
+    MASS_ACTION_RATE_LAW_FOR_THIRD_ORDER_IRREVERSIBLE_REACTIONS__THREE_REACTANTS__CONTINUOUS_SCHEME = "SBO_0000061"
 
     # continuous framework
     SBO_0000062 = "SBO_0000062"
@@ -1008,51 +984,35 @@ class SBO(str, Enum):
 
     # mass action rate law for zeroth order forward, first order reverse, reversible reactions, continuous scheme
     SBO_0000070 = "SBO_0000070"
-    MASS_ACTION_RATE_LAW_FOR_ZEROTH_ORDER_FORWARD__FIRST_ORDER_REVERSE__REVERSIBLE_REACTIONS__CONTINUOUS_SCHEME = (
-        "SBO_0000070"
-    )
+    MASS_ACTION_RATE_LAW_FOR_ZEROTH_ORDER_FORWARD__FIRST_ORDER_REVERSE__REVERSIBLE_REACTIONS__CONTINUOUS_SCHEME = "SBO_0000070"
 
     # mass action rate law for zeroth order forward, second order reverse, reversible reactions, continuous scheme
     SBO_0000071 = "SBO_0000071"
-    MASS_ACTION_RATE_LAW_FOR_ZEROTH_ORDER_FORWARD__SECOND_ORDER_REVERSE__REVERSIBLE_REACTIONS__CONTINUOUS_SCHEME = (
-        "SBO_0000071"
-    )
+    MASS_ACTION_RATE_LAW_FOR_ZEROTH_ORDER_FORWARD__SECOND_ORDER_REVERSE__REVERSIBLE_REACTIONS__CONTINUOUS_SCHEME = "SBO_0000071"
 
     # mass action rate law for zeroth order forward, second order reverse, reversible reactions, one product, continuous scheme
     SBO_0000072 = "SBO_0000072"
-    MASS_ACTION_RATE_LAW_FOR_ZEROTH_ORDER_FORWARD__SECOND_ORDER_REVERSE__REVERSIBLE_REACTIONS__ONE_PRODUCT__CONTINUOUS_SCHEME = (
-        "SBO_0000072"
-    )
+    MASS_ACTION_RATE_LAW_FOR_ZEROTH_ORDER_FORWARD__SECOND_ORDER_REVERSE__REVERSIBLE_REACTIONS__ONE_PRODUCT__CONTINUOUS_SCHEME = "SBO_0000072"
 
     # mass action rate law for zeroth order forward, second order reverse, reversible reactions, two products, continuous scheme
     SBO_0000073 = "SBO_0000073"
-    MASS_ACTION_RATE_LAW_FOR_ZEROTH_ORDER_FORWARD__SECOND_ORDER_REVERSE__REVERSIBLE_REACTIONS__TWO_PRODUCTS__CONTINUOUS_SCHEME = (
-        "SBO_0000073"
-    )
+    MASS_ACTION_RATE_LAW_FOR_ZEROTH_ORDER_FORWARD__SECOND_ORDER_REVERSE__REVERSIBLE_REACTIONS__TWO_PRODUCTS__CONTINUOUS_SCHEME = "SBO_0000073"
 
     # mass action rate law for zeroth order forward, third order reverse, reversible reactions, continuous scheme
     SBO_0000074 = "SBO_0000074"
-    MASS_ACTION_RATE_LAW_FOR_ZEROTH_ORDER_FORWARD__THIRD_ORDER_REVERSE__REVERSIBLE_REACTIONS__CONTINUOUS_SCHEME = (
-        "SBO_0000074"
-    )
+    MASS_ACTION_RATE_LAW_FOR_ZEROTH_ORDER_FORWARD__THIRD_ORDER_REVERSE__REVERSIBLE_REACTIONS__CONTINUOUS_SCHEME = "SBO_0000074"
 
     # mass action rate law for zeroth order forward, third order reverse, reversible reactions, one product, continuous scheme
     SBO_0000075 = "SBO_0000075"
-    MASS_ACTION_RATE_LAW_FOR_ZEROTH_ORDER_FORWARD__THIRD_ORDER_REVERSE__REVERSIBLE_REACTIONS__ONE_PRODUCT__CONTINUOUS_SCHEME = (
-        "SBO_0000075"
-    )
+    MASS_ACTION_RATE_LAW_FOR_ZEROTH_ORDER_FORWARD__THIRD_ORDER_REVERSE__REVERSIBLE_REACTIONS__ONE_PRODUCT__CONTINUOUS_SCHEME = "SBO_0000075"
 
     # mass action rate law for zeroth order forward, third order reverse, reversible reactions, two products, continuous scheme
     SBO_0000076 = "SBO_0000076"
-    MASS_ACTION_RATE_LAW_FOR_ZEROTH_ORDER_FORWARD__THIRD_ORDER_REVERSE__REVERSIBLE_REACTIONS__TWO_PRODUCTS__CONTINUOUS_SCHEME = (
-        "SBO_0000076"
-    )
+    MASS_ACTION_RATE_LAW_FOR_ZEROTH_ORDER_FORWARD__THIRD_ORDER_REVERSE__REVERSIBLE_REACTIONS__TWO_PRODUCTS__CONTINUOUS_SCHEME = "SBO_0000076"
 
     # mass action rate law for zeroth order forward, third order reverse, reversible reactions, three products, continuous scheme
     SBO_0000077 = "SBO_0000077"
-    MASS_ACTION_RATE_LAW_FOR_ZEROTH_ORDER_FORWARD__THIRD_ORDER_REVERSE__REVERSIBLE_REACTIONS__THREE_PRODUCTS__CONTINUOUS_SCHEME = (
-        "SBO_0000077"
-    )
+    MASS_ACTION_RATE_LAW_FOR_ZEROTH_ORDER_FORWARD__THIRD_ORDER_REVERSE__REVERSIBLE_REACTIONS__THREE_PRODUCTS__CONTINUOUS_SCHEME = "SBO_0000077"
 
     # mass action rate law for first order reversible reactions
     SBO_0000078 = "SBO_0000078"
@@ -1060,57 +1020,39 @@ class SBO(str, Enum):
 
     # mass action rate law for first order forward, zeroth order reverse, reversible reactions, continuous scheme
     SBO_0000079 = "SBO_0000079"
-    MASS_ACTION_RATE_LAW_FOR_FIRST_ORDER_FORWARD__ZEROTH_ORDER_REVERSE__REVERSIBLE_REACTIONS__CONTINUOUS_SCHEME = (
-        "SBO_0000079"
-    )
+    MASS_ACTION_RATE_LAW_FOR_FIRST_ORDER_FORWARD__ZEROTH_ORDER_REVERSE__REVERSIBLE_REACTIONS__CONTINUOUS_SCHEME = "SBO_0000079"
 
     # mass action rate law for first order forward, first order reverse, reversible reactions, continuous scheme
     SBO_0000080 = "SBO_0000080"
-    MASS_ACTION_RATE_LAW_FOR_FIRST_ORDER_FORWARD__FIRST_ORDER_REVERSE__REVERSIBLE_REACTIONS__CONTINUOUS_SCHEME = (
-        "SBO_0000080"
-    )
+    MASS_ACTION_RATE_LAW_FOR_FIRST_ORDER_FORWARD__FIRST_ORDER_REVERSE__REVERSIBLE_REACTIONS__CONTINUOUS_SCHEME = "SBO_0000080"
 
     # mass action rate law for first order forward, second order reverse, reversible reactions
     SBO_0000081 = "SBO_0000081"
-    MASS_ACTION_RATE_LAW_FOR_FIRST_ORDER_FORWARD__SECOND_ORDER_REVERSE__REVERSIBLE_REACTIONS = (
-        "SBO_0000081"
-    )
+    MASS_ACTION_RATE_LAW_FOR_FIRST_ORDER_FORWARD__SECOND_ORDER_REVERSE__REVERSIBLE_REACTIONS = "SBO_0000081"
 
     # mass action rate law for first order forward, second order reverse, reversible reactions, one product, continuous scheme
     SBO_0000082 = "SBO_0000082"
-    MASS_ACTION_RATE_LAW_FOR_FIRST_ORDER_FORWARD__SECOND_ORDER_REVERSE__REVERSIBLE_REACTIONS__ONE_PRODUCT__CONTINUOUS_SCHEME = (
-        "SBO_0000082"
-    )
+    MASS_ACTION_RATE_LAW_FOR_FIRST_ORDER_FORWARD__SECOND_ORDER_REVERSE__REVERSIBLE_REACTIONS__ONE_PRODUCT__CONTINUOUS_SCHEME = "SBO_0000082"
 
     # mass action rate law for first order forward, second order reverse, reversible reactions, two products, continuous scheme
     SBO_0000083 = "SBO_0000083"
-    MASS_ACTION_RATE_LAW_FOR_FIRST_ORDER_FORWARD__SECOND_ORDER_REVERSE__REVERSIBLE_REACTIONS__TWO_PRODUCTS__CONTINUOUS_SCHEME = (
-        "SBO_0000083"
-    )
+    MASS_ACTION_RATE_LAW_FOR_FIRST_ORDER_FORWARD__SECOND_ORDER_REVERSE__REVERSIBLE_REACTIONS__TWO_PRODUCTS__CONTINUOUS_SCHEME = "SBO_0000083"
 
     # mass action rate law for first order forward, third order reverse, reversible reactions
     SBO_0000084 = "SBO_0000084"
-    MASS_ACTION_RATE_LAW_FOR_FIRST_ORDER_FORWARD__THIRD_ORDER_REVERSE__REVERSIBLE_REACTIONS = (
-        "SBO_0000084"
-    )
+    MASS_ACTION_RATE_LAW_FOR_FIRST_ORDER_FORWARD__THIRD_ORDER_REVERSE__REVERSIBLE_REACTIONS = "SBO_0000084"
 
     # mass action rate law for first order forward, third order reverse, reversible reactions, one product, continuous scheme
     SBO_0000085 = "SBO_0000085"
-    MASS_ACTION_RATE_LAW_FOR_FIRST_ORDER_FORWARD__THIRD_ORDER_REVERSE__REVERSIBLE_REACTIONS__ONE_PRODUCT__CONTINUOUS_SCHEME = (
-        "SBO_0000085"
-    )
+    MASS_ACTION_RATE_LAW_FOR_FIRST_ORDER_FORWARD__THIRD_ORDER_REVERSE__REVERSIBLE_REACTIONS__ONE_PRODUCT__CONTINUOUS_SCHEME = "SBO_0000085"
 
     # mass action rate law for first order forward, third order reverse, reversible reactions, two products, continuous scheme
     SBO_0000086 = "SBO_0000086"
-    MASS_ACTION_RATE_LAW_FOR_FIRST_ORDER_FORWARD__THIRD_ORDER_REVERSE__REVERSIBLE_REACTIONS__TWO_PRODUCTS__CONTINUOUS_SCHEME = (
-        "SBO_0000086"
-    )
+    MASS_ACTION_RATE_LAW_FOR_FIRST_ORDER_FORWARD__THIRD_ORDER_REVERSE__REVERSIBLE_REACTIONS__TWO_PRODUCTS__CONTINUOUS_SCHEME = "SBO_0000086"
 
     # mass action rate law for first order forward, third order reverse, reversible reactions, three products, continuous scheme
     SBO_0000087 = "SBO_0000087"
-    MASS_ACTION_RATE_LAW_FOR_FIRST_ORDER_FORWARD__THIRD_ORDER_REVERSE__REVERSIBLE_REACTIONS__THREE_PRODUCTS__CONTINUOUS_SCHEME = (
-        "SBO_0000087"
-    )
+    MASS_ACTION_RATE_LAW_FOR_FIRST_ORDER_FORWARD__THIRD_ORDER_REVERSE__REVERSIBLE_REACTIONS__THREE_PRODUCTS__CONTINUOUS_SCHEME = "SBO_0000087"
 
     # mass action rate law for second order reversible reactions
     SBO_0000088 = "SBO_0000088"
@@ -1118,123 +1060,83 @@ class SBO(str, Enum):
 
     # mass action rate law for second order forward, reversible reactions, one reactant
     SBO_0000089 = "SBO_0000089"
-    MASS_ACTION_RATE_LAW_FOR_SECOND_ORDER_FORWARD__REVERSIBLE_REACTIONS__ONE_REACTANT = (
-        "SBO_0000089"
-    )
+    MASS_ACTION_RATE_LAW_FOR_SECOND_ORDER_FORWARD__REVERSIBLE_REACTIONS__ONE_REACTANT = "SBO_0000089"
 
     # mass action rate law for second order forward, zeroth order reverse, reversible reactions, one reactant, continuous scheme
     SBO_0000090 = "SBO_0000090"
-    MASS_ACTION_RATE_LAW_FOR_SECOND_ORDER_FORWARD__ZEROTH_ORDER_REVERSE__REVERSIBLE_REACTIONS__ONE_REACTANT__CONTINUOUS_SCHEME = (
-        "SBO_0000090"
-    )
+    MASS_ACTION_RATE_LAW_FOR_SECOND_ORDER_FORWARD__ZEROTH_ORDER_REVERSE__REVERSIBLE_REACTIONS__ONE_REACTANT__CONTINUOUS_SCHEME = "SBO_0000090"
 
     # mass action rate law for second order forward, first order reverse, reversible reactions, one reactant, continuous scheme
     SBO_0000091 = "SBO_0000091"
-    MASS_ACTION_RATE_LAW_FOR_SECOND_ORDER_FORWARD__FIRST_ORDER_REVERSE__REVERSIBLE_REACTIONS__ONE_REACTANT__CONTINUOUS_SCHEME = (
-        "SBO_0000091"
-    )
+    MASS_ACTION_RATE_LAW_FOR_SECOND_ORDER_FORWARD__FIRST_ORDER_REVERSE__REVERSIBLE_REACTIONS__ONE_REACTANT__CONTINUOUS_SCHEME = "SBO_0000091"
 
     # mass action rate law for second order forward, second order reverse, reversible reactions, one reactant
     SBO_0000092 = "SBO_0000092"
-    MASS_ACTION_RATE_LAW_FOR_SECOND_ORDER_FORWARD__SECOND_ORDER_REVERSE__REVERSIBLE_REACTIONS__ONE_REACTANT = (
-        "SBO_0000092"
-    )
+    MASS_ACTION_RATE_LAW_FOR_SECOND_ORDER_FORWARD__SECOND_ORDER_REVERSE__REVERSIBLE_REACTIONS__ONE_REACTANT = "SBO_0000092"
 
     # mass action rate law for second order forward, second order reverse, reversible reactions, one reactant, one product, continuous scheme
     SBO_0000093 = "SBO_0000093"
-    MASS_ACTION_RATE_LAW_FOR_SECOND_ORDER_FORWARD__SECOND_ORDER_REVERSE__REVERSIBLE_REACTIONS__ONE_REACTANT__ONE_PRODUCT__CONTINUOUS_SCHEME = (
-        "SBO_0000093"
-    )
+    MASS_ACTION_RATE_LAW_FOR_SECOND_ORDER_FORWARD__SECOND_ORDER_REVERSE__REVERSIBLE_REACTIONS__ONE_REACTANT__ONE_PRODUCT__CONTINUOUS_SCHEME = "SBO_0000093"
 
     # mass action rate law for second order forward, second order reverse, reversible reactions, two products, continuous scheme
     SBO_0000094 = "SBO_0000094"
-    MASS_ACTION_RATE_LAW_FOR_SECOND_ORDER_FORWARD__SECOND_ORDER_REVERSE__REVERSIBLE_REACTIONS__TWO_PRODUCTS__CONTINUOUS_SCHEME = (
-        "SBO_0000094"
-    )
+    MASS_ACTION_RATE_LAW_FOR_SECOND_ORDER_FORWARD__SECOND_ORDER_REVERSE__REVERSIBLE_REACTIONS__TWO_PRODUCTS__CONTINUOUS_SCHEME = "SBO_0000094"
 
     # mass action rate law for second order forward, third order reverse, reversible reactions, one reactant
     SBO_0000095 = "SBO_0000095"
-    MASS_ACTION_RATE_LAW_FOR_SECOND_ORDER_FORWARD__THIRD_ORDER_REVERSE__REVERSIBLE_REACTIONS__ONE_REACTANT = (
-        "SBO_0000095"
-    )
+    MASS_ACTION_RATE_LAW_FOR_SECOND_ORDER_FORWARD__THIRD_ORDER_REVERSE__REVERSIBLE_REACTIONS__ONE_REACTANT = "SBO_0000095"
 
     # mass action rate law for second order forward, third order reverse, reversible reactions, one reactant, one product, continuous scheme
     SBO_0000096 = "SBO_0000096"
-    MASS_ACTION_RATE_LAW_FOR_SECOND_ORDER_FORWARD__THIRD_ORDER_REVERSE__REVERSIBLE_REACTIONS__ONE_REACTANT__ONE_PRODUCT__CONTINUOUS_SCHEME = (
-        "SBO_0000096"
-    )
+    MASS_ACTION_RATE_LAW_FOR_SECOND_ORDER_FORWARD__THIRD_ORDER_REVERSE__REVERSIBLE_REACTIONS__ONE_REACTANT__ONE_PRODUCT__CONTINUOUS_SCHEME = "SBO_0000096"
 
     # mass action rate law for second order forward, third order reverse, reversible reactions, one reactant, two products, continuous scheme
     SBO_0000097 = "SBO_0000097"
-    MASS_ACTION_RATE_LAW_FOR_SECOND_ORDER_FORWARD__THIRD_ORDER_REVERSE__REVERSIBLE_REACTIONS__ONE_REACTANT__TWO_PRODUCTS__CONTINUOUS_SCHEME = (
-        "SBO_0000097"
-    )
+    MASS_ACTION_RATE_LAW_FOR_SECOND_ORDER_FORWARD__THIRD_ORDER_REVERSE__REVERSIBLE_REACTIONS__ONE_REACTANT__TWO_PRODUCTS__CONTINUOUS_SCHEME = "SBO_0000097"
 
     # mass action rate law for second order forward, third order reverse, reversible reactions, one reactant, three products, continuous scheme
     SBO_0000098 = "SBO_0000098"
-    MASS_ACTION_RATE_LAW_FOR_SECOND_ORDER_FORWARD__THIRD_ORDER_REVERSE__REVERSIBLE_REACTIONS__ONE_REACTANT__THREE_PRODUCTS__CONTINUOUS_SCHEME = (
-        "SBO_0000098"
-    )
+    MASS_ACTION_RATE_LAW_FOR_SECOND_ORDER_FORWARD__THIRD_ORDER_REVERSE__REVERSIBLE_REACTIONS__ONE_REACTANT__THREE_PRODUCTS__CONTINUOUS_SCHEME = "SBO_0000098"
 
     # mass action rate law for second order forward, reversible reactions, two reactants
     SBO_0000099 = "SBO_0000099"
-    MASS_ACTION_RATE_LAW_FOR_SECOND_ORDER_FORWARD__REVERSIBLE_REACTIONS__TWO_REACTANTS = (
-        "SBO_0000099"
-    )
+    MASS_ACTION_RATE_LAW_FOR_SECOND_ORDER_FORWARD__REVERSIBLE_REACTIONS__TWO_REACTANTS = "SBO_0000099"
 
     # mass action rate law for second order forward, zeroth order reverse, reversible reactions, two reactants, continuous scheme
     SBO_0000100 = "SBO_0000100"
-    MASS_ACTION_RATE_LAW_FOR_SECOND_ORDER_FORWARD__ZEROTH_ORDER_REVERSE__REVERSIBLE_REACTIONS__TWO_REACTANTS__CONTINUOUS_SCHEME = (
-        "SBO_0000100"
-    )
+    MASS_ACTION_RATE_LAW_FOR_SECOND_ORDER_FORWARD__ZEROTH_ORDER_REVERSE__REVERSIBLE_REACTIONS__TWO_REACTANTS__CONTINUOUS_SCHEME = "SBO_0000100"
 
     # mass action rate law for second order forward, first order reverse, reversible reactions, two reactants, continuous scheme
     SBO_0000101 = "SBO_0000101"
-    MASS_ACTION_RATE_LAW_FOR_SECOND_ORDER_FORWARD__FIRST_ORDER_REVERSE__REVERSIBLE_REACTIONS__TWO_REACTANTS__CONTINUOUS_SCHEME = (
-        "SBO_0000101"
-    )
+    MASS_ACTION_RATE_LAW_FOR_SECOND_ORDER_FORWARD__FIRST_ORDER_REVERSE__REVERSIBLE_REACTIONS__TWO_REACTANTS__CONTINUOUS_SCHEME = "SBO_0000101"
 
     # mass action rate law for second order forward, second order reverse, reversible reactions, two reactants
     SBO_0000102 = "SBO_0000102"
-    MASS_ACTION_RATE_LAW_FOR_SECOND_ORDER_FORWARD__SECOND_ORDER_REVERSE__REVERSIBLE_REACTIONS__TWO_REACTANTS = (
-        "SBO_0000102"
-    )
+    MASS_ACTION_RATE_LAW_FOR_SECOND_ORDER_FORWARD__SECOND_ORDER_REVERSE__REVERSIBLE_REACTIONS__TWO_REACTANTS = "SBO_0000102"
 
     # mass action rate law for second order forward, second order reverse, reversible reactions, two reactants, one product, continuous scheme
     SBO_0000103 = "SBO_0000103"
-    MASS_ACTION_RATE_LAW_FOR_SECOND_ORDER_FORWARD__SECOND_ORDER_REVERSE__REVERSIBLE_REACTIONS__TWO_REACTANTS__ONE_PRODUCT__CONTINUOUS_SCHEME = (
-        "SBO_0000103"
-    )
+    MASS_ACTION_RATE_LAW_FOR_SECOND_ORDER_FORWARD__SECOND_ORDER_REVERSE__REVERSIBLE_REACTIONS__TWO_REACTANTS__ONE_PRODUCT__CONTINUOUS_SCHEME = "SBO_0000103"
 
     # mass action rate law for second order forward, second order reverse, reversible reactions, two reactants, two products, continuous scheme
     SBO_0000104 = "SBO_0000104"
-    MASS_ACTION_RATE_LAW_FOR_SECOND_ORDER_FORWARD__SECOND_ORDER_REVERSE__REVERSIBLE_REACTIONS__TWO_REACTANTS__TWO_PRODUCTS__CONTINUOUS_SCHEME = (
-        "SBO_0000104"
-    )
+    MASS_ACTION_RATE_LAW_FOR_SECOND_ORDER_FORWARD__SECOND_ORDER_REVERSE__REVERSIBLE_REACTIONS__TWO_REACTANTS__TWO_PRODUCTS__CONTINUOUS_SCHEME = "SBO_0000104"
 
     # mass action rate law for second order forward, third order reverse, reversible reactions, two reactants
     SBO_0000105 = "SBO_0000105"
-    MASS_ACTION_RATE_LAW_FOR_SECOND_ORDER_FORWARD__THIRD_ORDER_REVERSE__REVERSIBLE_REACTIONS__TWO_REACTANTS = (
-        "SBO_0000105"
-    )
+    MASS_ACTION_RATE_LAW_FOR_SECOND_ORDER_FORWARD__THIRD_ORDER_REVERSE__REVERSIBLE_REACTIONS__TWO_REACTANTS = "SBO_0000105"
 
     # mass action rate law for second order forward, third order reverse, reversible reactions, two reactants, one product, continuous scheme
     SBO_0000106 = "SBO_0000106"
-    MASS_ACTION_RATE_LAW_FOR_SECOND_ORDER_FORWARD__THIRD_ORDER_REVERSE__REVERSIBLE_REACTIONS__TWO_REACTANTS__ONE_PRODUCT__CONTINUOUS_SCHEME = (
-        "SBO_0000106"
-    )
+    MASS_ACTION_RATE_LAW_FOR_SECOND_ORDER_FORWARD__THIRD_ORDER_REVERSE__REVERSIBLE_REACTIONS__TWO_REACTANTS__ONE_PRODUCT__CONTINUOUS_SCHEME = "SBO_0000106"
 
     # mass action rate law for second order forward, third order reverse, reversible reactions, two reactants, two products, continuous scheme
     SBO_0000107 = "SBO_0000107"
-    MASS_ACTION_RATE_LAW_FOR_SECOND_ORDER_FORWARD__THIRD_ORDER_REVERSE__REVERSIBLE_REACTIONS__TWO_REACTANTS__TWO_PRODUCTS__CONTINUOUS_SCHEME = (
-        "SBO_0000107"
-    )
+    MASS_ACTION_RATE_LAW_FOR_SECOND_ORDER_FORWARD__THIRD_ORDER_REVERSE__REVERSIBLE_REACTIONS__TWO_REACTANTS__TWO_PRODUCTS__CONTINUOUS_SCHEME = "SBO_0000107"
 
     # mass action rate law for second order forward, third order reverse, reversible reactions, two reactants, three products, continuous scheme
     SBO_0000108 = "SBO_0000108"
-    MASS_ACTION_RATE_LAW_FOR_SECOND_ORDER_FORWARD__THIRD_ORDER_REVERSE__REVERSIBLE_REACTIONS__TWO_REACTANTS__THREE_PRODUCTS__CONTINUOUS_SCHEME = (
-        "SBO_0000108"
-    )
+    MASS_ACTION_RATE_LAW_FOR_SECOND_ORDER_FORWARD__THIRD_ORDER_REVERSE__REVERSIBLE_REACTIONS__TWO_REACTANTS__THREE_PRODUCTS__CONTINUOUS_SCHEME = "SBO_0000108"
 
     # mass action rate law for third order reversible reactions
     SBO_0000109 = "SBO_0000109"
@@ -1242,225 +1144,151 @@ class SBO(str, Enum):
 
     # mass action rate law for third order forward, reversible reactions, two reactants
     SBO_0000110 = "SBO_0000110"
-    MASS_ACTION_RATE_LAW_FOR_THIRD_ORDER_FORWARD__REVERSIBLE_REACTIONS__TWO_REACTANTS = (
-        "SBO_0000110"
-    )
+    MASS_ACTION_RATE_LAW_FOR_THIRD_ORDER_FORWARD__REVERSIBLE_REACTIONS__TWO_REACTANTS = "SBO_0000110"
 
     # mass action rate law for third order forward, zeroth order reverse, reversible reactions, two reactants, continuous scheme
     SBO_0000111 = "SBO_0000111"
-    MASS_ACTION_RATE_LAW_FOR_THIRD_ORDER_FORWARD__ZEROTH_ORDER_REVERSE__REVERSIBLE_REACTIONS__TWO_REACTANTS__CONTINUOUS_SCHEME = (
-        "SBO_0000111"
-    )
+    MASS_ACTION_RATE_LAW_FOR_THIRD_ORDER_FORWARD__ZEROTH_ORDER_REVERSE__REVERSIBLE_REACTIONS__TWO_REACTANTS__CONTINUOUS_SCHEME = "SBO_0000111"
 
     # mass action rate law for third order forward, first order reverse, reversible reactions, two reactants, continuous scheme
     SBO_0000112 = "SBO_0000112"
-    MASS_ACTION_RATE_LAW_FOR_THIRD_ORDER_FORWARD__FIRST_ORDER_REVERSE__REVERSIBLE_REACTIONS__TWO_REACTANTS__CONTINUOUS_SCHEME = (
-        "SBO_0000112"
-    )
+    MASS_ACTION_RATE_LAW_FOR_THIRD_ORDER_FORWARD__FIRST_ORDER_REVERSE__REVERSIBLE_REACTIONS__TWO_REACTANTS__CONTINUOUS_SCHEME = "SBO_0000112"
 
     # mass action rate law for third order forward, second order reverse, reversible reactions, two reactants
     SBO_0000113 = "SBO_0000113"
-    MASS_ACTION_RATE_LAW_FOR_THIRD_ORDER_FORWARD__SECOND_ORDER_REVERSE__REVERSIBLE_REACTIONS__TWO_REACTANTS = (
-        "SBO_0000113"
-    )
+    MASS_ACTION_RATE_LAW_FOR_THIRD_ORDER_FORWARD__SECOND_ORDER_REVERSE__REVERSIBLE_REACTIONS__TWO_REACTANTS = "SBO_0000113"
 
     # mass action rate law for third order forward, second order reverse, reversible reactions, two reactants, one product, continuous scheme
     SBO_0000114 = "SBO_0000114"
-    MASS_ACTION_RATE_LAW_FOR_THIRD_ORDER_FORWARD__SECOND_ORDER_REVERSE__REVERSIBLE_REACTIONS__TWO_REACTANTS__ONE_PRODUCT__CONTINUOUS_SCHEME = (
-        "SBO_0000114"
-    )
+    MASS_ACTION_RATE_LAW_FOR_THIRD_ORDER_FORWARD__SECOND_ORDER_REVERSE__REVERSIBLE_REACTIONS__TWO_REACTANTS__ONE_PRODUCT__CONTINUOUS_SCHEME = "SBO_0000114"
 
     # mass action rate law for third order forward, second order reverse, reversible reactions, two reactants, two products, continuous scheme
     SBO_0000115 = "SBO_0000115"
-    MASS_ACTION_RATE_LAW_FOR_THIRD_ORDER_FORWARD__SECOND_ORDER_REVERSE__REVERSIBLE_REACTIONS__TWO_REACTANTS__TWO_PRODUCTS__CONTINUOUS_SCHEME = (
-        "SBO_0000115"
-    )
+    MASS_ACTION_RATE_LAW_FOR_THIRD_ORDER_FORWARD__SECOND_ORDER_REVERSE__REVERSIBLE_REACTIONS__TWO_REACTANTS__TWO_PRODUCTS__CONTINUOUS_SCHEME = "SBO_0000115"
 
     # mass action rate law for third order forward, third order reverse, reversible reactions, two reactants
     SBO_0000116 = "SBO_0000116"
-    MASS_ACTION_RATE_LAW_FOR_THIRD_ORDER_FORWARD__THIRD_ORDER_REVERSE__REVERSIBLE_REACTIONS__TWO_REACTANTS = (
-        "SBO_0000116"
-    )
+    MASS_ACTION_RATE_LAW_FOR_THIRD_ORDER_FORWARD__THIRD_ORDER_REVERSE__REVERSIBLE_REACTIONS__TWO_REACTANTS = "SBO_0000116"
 
     # mass action rate law for third order forward, third order reverse, reversible reactions, two reactants, one product, continuous scheme
     SBO_0000117 = "SBO_0000117"
-    MASS_ACTION_RATE_LAW_FOR_THIRD_ORDER_FORWARD__THIRD_ORDER_REVERSE__REVERSIBLE_REACTIONS__TWO_REACTANTS__ONE_PRODUCT__CONTINUOUS_SCHEME = (
-        "SBO_0000117"
-    )
+    MASS_ACTION_RATE_LAW_FOR_THIRD_ORDER_FORWARD__THIRD_ORDER_REVERSE__REVERSIBLE_REACTIONS__TWO_REACTANTS__ONE_PRODUCT__CONTINUOUS_SCHEME = "SBO_0000117"
 
     # mass action rate law for third order forward, third order reverse, reversible reactions, two reactants, two products, continuous scheme
     SBO_0000118 = "SBO_0000118"
-    MASS_ACTION_RATE_LAW_FOR_THIRD_ORDER_FORWARD__THIRD_ORDER_REVERSE__REVERSIBLE_REACTIONS__TWO_REACTANTS__TWO_PRODUCTS__CONTINUOUS_SCHEME = (
-        "SBO_0000118"
-    )
+    MASS_ACTION_RATE_LAW_FOR_THIRD_ORDER_FORWARD__THIRD_ORDER_REVERSE__REVERSIBLE_REACTIONS__TWO_REACTANTS__TWO_PRODUCTS__CONTINUOUS_SCHEME = "SBO_0000118"
 
     # mass action rate law for third order forward, third order reverse, reversible reactions, two reactants, three products, continuous scheme
     SBO_0000119 = "SBO_0000119"
-    MASS_ACTION_RATE_LAW_FOR_THIRD_ORDER_FORWARD__THIRD_ORDER_REVERSE__REVERSIBLE_REACTIONS__TWO_REACTANTS__THREE_PRODUCTS__CONTINUOUS_SCHEME = (
-        "SBO_0000119"
-    )
+    MASS_ACTION_RATE_LAW_FOR_THIRD_ORDER_FORWARD__THIRD_ORDER_REVERSE__REVERSIBLE_REACTIONS__TWO_REACTANTS__THREE_PRODUCTS__CONTINUOUS_SCHEME = "SBO_0000119"
 
     # mass action rate law for third order forward, reversible reactions, three reactants
     SBO_0000120 = "SBO_0000120"
-    MASS_ACTION_RATE_LAW_FOR_THIRD_ORDER_FORWARD__REVERSIBLE_REACTIONS__THREE_REACTANTS = (
-        "SBO_0000120"
-    )
+    MASS_ACTION_RATE_LAW_FOR_THIRD_ORDER_FORWARD__REVERSIBLE_REACTIONS__THREE_REACTANTS = "SBO_0000120"
 
     # mass action rate law for third order forward, zeroth order reverse, reversible reactions, three reactants, continuous scheme
     SBO_0000121 = "SBO_0000121"
-    MASS_ACTION_RATE_LAW_FOR_THIRD_ORDER_FORWARD__ZEROTH_ORDER_REVERSE__REVERSIBLE_REACTIONS__THREE_REACTANTS__CONTINUOUS_SCHEME = (
-        "SBO_0000121"
-    )
+    MASS_ACTION_RATE_LAW_FOR_THIRD_ORDER_FORWARD__ZEROTH_ORDER_REVERSE__REVERSIBLE_REACTIONS__THREE_REACTANTS__CONTINUOUS_SCHEME = "SBO_0000121"
 
     # mass action rate law for third order forward, first order reverse, reversible reactions, three reactants, continuous scheme
     SBO_0000122 = "SBO_0000122"
-    MASS_ACTION_RATE_LAW_FOR_THIRD_ORDER_FORWARD__FIRST_ORDER_REVERSE__REVERSIBLE_REACTIONS__THREE_REACTANTS__CONTINUOUS_SCHEME = (
-        "SBO_0000122"
-    )
+    MASS_ACTION_RATE_LAW_FOR_THIRD_ORDER_FORWARD__FIRST_ORDER_REVERSE__REVERSIBLE_REACTIONS__THREE_REACTANTS__CONTINUOUS_SCHEME = "SBO_0000122"
 
     # mass action rate law for third order forward, second order reverse, reversible reactions, three reactants
     SBO_0000123 = "SBO_0000123"
-    MASS_ACTION_RATE_LAW_FOR_THIRD_ORDER_FORWARD__SECOND_ORDER_REVERSE__REVERSIBLE_REACTIONS__THREE_REACTANTS = (
-        "SBO_0000123"
-    )
+    MASS_ACTION_RATE_LAW_FOR_THIRD_ORDER_FORWARD__SECOND_ORDER_REVERSE__REVERSIBLE_REACTIONS__THREE_REACTANTS = "SBO_0000123"
 
     # mass action rate law for third order forward, second order reverse, reversible reactions, three reactants, one product, continuous scheme
     SBO_0000124 = "SBO_0000124"
-    MASS_ACTION_RATE_LAW_FOR_THIRD_ORDER_FORWARD__SECOND_ORDER_REVERSE__REVERSIBLE_REACTIONS__THREE_REACTANTS__ONE_PRODUCT__CONTINUOUS_SCHEME = (
-        "SBO_0000124"
-    )
+    MASS_ACTION_RATE_LAW_FOR_THIRD_ORDER_FORWARD__SECOND_ORDER_REVERSE__REVERSIBLE_REACTIONS__THREE_REACTANTS__ONE_PRODUCT__CONTINUOUS_SCHEME = "SBO_0000124"
 
     # mass action rate law for third order forward, second order reverse, reversible reactions, three reactants, two products, continuous scheme
     SBO_0000125 = "SBO_0000125"
-    MASS_ACTION_RATE_LAW_FOR_THIRD_ORDER_FORWARD__SECOND_ORDER_REVERSE__REVERSIBLE_REACTIONS__THREE_REACTANTS__TWO_PRODUCTS__CONTINUOUS_SCHEME = (
-        "SBO_0000125"
-    )
+    MASS_ACTION_RATE_LAW_FOR_THIRD_ORDER_FORWARD__SECOND_ORDER_REVERSE__REVERSIBLE_REACTIONS__THREE_REACTANTS__TWO_PRODUCTS__CONTINUOUS_SCHEME = "SBO_0000125"
 
     # mass action rate law for third order forward, third order reverse, reversible reactions, three reactants
     SBO_0000126 = "SBO_0000126"
-    MASS_ACTION_RATE_LAW_FOR_THIRD_ORDER_FORWARD__THIRD_ORDER_REVERSE__REVERSIBLE_REACTIONS__THREE_REACTANTS = (
-        "SBO_0000126"
-    )
+    MASS_ACTION_RATE_LAW_FOR_THIRD_ORDER_FORWARD__THIRD_ORDER_REVERSE__REVERSIBLE_REACTIONS__THREE_REACTANTS = "SBO_0000126"
 
     # mass action rate law for third order forward, third order reverse, reversible reactions, three reactants, one product, continuous scheme
     SBO_0000127 = "SBO_0000127"
-    MASS_ACTION_RATE_LAW_FOR_THIRD_ORDER_FORWARD__THIRD_ORDER_REVERSE__REVERSIBLE_REACTIONS__THREE_REACTANTS__ONE_PRODUCT__CONTINUOUS_SCHEME = (
-        "SBO_0000127"
-    )
+    MASS_ACTION_RATE_LAW_FOR_THIRD_ORDER_FORWARD__THIRD_ORDER_REVERSE__REVERSIBLE_REACTIONS__THREE_REACTANTS__ONE_PRODUCT__CONTINUOUS_SCHEME = "SBO_0000127"
 
     # mass action rate law for third order forward, third order reverse, reversible reactions, three reactants, two products, continuous scheme
     SBO_0000128 = "SBO_0000128"
-    MASS_ACTION_RATE_LAW_FOR_THIRD_ORDER_FORWARD__THIRD_ORDER_REVERSE__REVERSIBLE_REACTIONS__THREE_REACTANTS__TWO_PRODUCTS__CONTINUOUS_SCHEME = (
-        "SBO_0000128"
-    )
+    MASS_ACTION_RATE_LAW_FOR_THIRD_ORDER_FORWARD__THIRD_ORDER_REVERSE__REVERSIBLE_REACTIONS__THREE_REACTANTS__TWO_PRODUCTS__CONTINUOUS_SCHEME = "SBO_0000128"
 
     # mass action rate law for third order forward, third order reverse, reversible reactions, three reactants, three products, continuous scheme
     SBO_0000129 = "SBO_0000129"
-    MASS_ACTION_RATE_LAW_FOR_THIRD_ORDER_FORWARD__THIRD_ORDER_REVERSE__REVERSIBLE_REACTIONS__THREE_REACTANTS__THREE_PRODUCTS__CONTINUOUS_SCHEME = (
-        "SBO_0000129"
-    )
+    MASS_ACTION_RATE_LAW_FOR_THIRD_ORDER_FORWARD__THIRD_ORDER_REVERSE__REVERSIBLE_REACTIONS__THREE_REACTANTS__THREE_PRODUCTS__CONTINUOUS_SCHEME = "SBO_0000129"
 
     # mass action rate law for third order forward, reversible reactions, one reactant
     SBO_0000130 = "SBO_0000130"
-    MASS_ACTION_RATE_LAW_FOR_THIRD_ORDER_FORWARD__REVERSIBLE_REACTIONS__ONE_REACTANT = (
-        "SBO_0000130"
-    )
+    MASS_ACTION_RATE_LAW_FOR_THIRD_ORDER_FORWARD__REVERSIBLE_REACTIONS__ONE_REACTANT = "SBO_0000130"
 
     # mass action rate law for third order forward, zeroth order reverse, reversible reactions, one reactant, continuous scheme
     SBO_0000131 = "SBO_0000131"
-    MASS_ACTION_RATE_LAW_FOR_THIRD_ORDER_FORWARD__ZEROTH_ORDER_REVERSE__REVERSIBLE_REACTIONS__ONE_REACTANT__CONTINUOUS_SCHEME = (
-        "SBO_0000131"
-    )
+    MASS_ACTION_RATE_LAW_FOR_THIRD_ORDER_FORWARD__ZEROTH_ORDER_REVERSE__REVERSIBLE_REACTIONS__ONE_REACTANT__CONTINUOUS_SCHEME = "SBO_0000131"
 
     # mass action rate law for third order forward, first order reverse, reversible reactions, one reactant, continuous scheme
     SBO_0000132 = "SBO_0000132"
-    MASS_ACTION_RATE_LAW_FOR_THIRD_ORDER_FORWARD__FIRST_ORDER_REVERSE__REVERSIBLE_REACTIONS__ONE_REACTANT__CONTINUOUS_SCHEME = (
-        "SBO_0000132"
-    )
+    MASS_ACTION_RATE_LAW_FOR_THIRD_ORDER_FORWARD__FIRST_ORDER_REVERSE__REVERSIBLE_REACTIONS__ONE_REACTANT__CONTINUOUS_SCHEME = "SBO_0000132"
 
     # mass action rate law for third order forward, second order reverse, reversible reactions, one reactant
     SBO_0000133 = "SBO_0000133"
-    MASS_ACTION_RATE_LAW_FOR_THIRD_ORDER_FORWARD__SECOND_ORDER_REVERSE__REVERSIBLE_REACTIONS__ONE_REACTANT = (
-        "SBO_0000133"
-    )
+    MASS_ACTION_RATE_LAW_FOR_THIRD_ORDER_FORWARD__SECOND_ORDER_REVERSE__REVERSIBLE_REACTIONS__ONE_REACTANT = "SBO_0000133"
 
     # mass action rate law for third order forward, second order reverse, reversible reactions, one reactant, one product, continuous scheme
     SBO_0000134 = "SBO_0000134"
-    MASS_ACTION_RATE_LAW_FOR_THIRD_ORDER_FORWARD__SECOND_ORDER_REVERSE__REVERSIBLE_REACTIONS__ONE_REACTANT__ONE_PRODUCT__CONTINUOUS_SCHEME = (
-        "SBO_0000134"
-    )
+    MASS_ACTION_RATE_LAW_FOR_THIRD_ORDER_FORWARD__SECOND_ORDER_REVERSE__REVERSIBLE_REACTIONS__ONE_REACTANT__ONE_PRODUCT__CONTINUOUS_SCHEME = "SBO_0000134"
 
     # mass action rate law for third order forward, second order reverse, reversible reactions, one reactant, two products, continuous scheme
     SBO_0000135 = "SBO_0000135"
-    MASS_ACTION_RATE_LAW_FOR_THIRD_ORDER_FORWARD__SECOND_ORDER_REVERSE__REVERSIBLE_REACTIONS__ONE_REACTANT__TWO_PRODUCTS__CONTINUOUS_SCHEME = (
-        "SBO_0000135"
-    )
+    MASS_ACTION_RATE_LAW_FOR_THIRD_ORDER_FORWARD__SECOND_ORDER_REVERSE__REVERSIBLE_REACTIONS__ONE_REACTANT__TWO_PRODUCTS__CONTINUOUS_SCHEME = "SBO_0000135"
 
     # mass action rate law for third order forward, third order reverse, reversible reactions, one reactant
     SBO_0000136 = "SBO_0000136"
-    MASS_ACTION_RATE_LAW_FOR_THIRD_ORDER_FORWARD__THIRD_ORDER_REVERSE__REVERSIBLE_REACTIONS__ONE_REACTANT = (
-        "SBO_0000136"
-    )
+    MASS_ACTION_RATE_LAW_FOR_THIRD_ORDER_FORWARD__THIRD_ORDER_REVERSE__REVERSIBLE_REACTIONS__ONE_REACTANT = "SBO_0000136"
 
     # mass action rate law for third order forward, third order reverse, reversible reactions, one reactant, one product, continuous scheme
     SBO_0000137 = "SBO_0000137"
-    MASS_ACTION_RATE_LAW_FOR_THIRD_ORDER_FORWARD__THIRD_ORDER_REVERSE__REVERSIBLE_REACTIONS__ONE_REACTANT__ONE_PRODUCT__CONTINUOUS_SCHEME = (
-        "SBO_0000137"
-    )
+    MASS_ACTION_RATE_LAW_FOR_THIRD_ORDER_FORWARD__THIRD_ORDER_REVERSE__REVERSIBLE_REACTIONS__ONE_REACTANT__ONE_PRODUCT__CONTINUOUS_SCHEME = "SBO_0000137"
 
     # mass action rate law for third order forward, third order reverse, reversible reactions, one reactant, two products, continuous scheme
     SBO_0000138 = "SBO_0000138"
-    MASS_ACTION_RATE_LAW_FOR_THIRD_ORDER_FORWARD__THIRD_ORDER_REVERSE__REVERSIBLE_REACTIONS__ONE_REACTANT__TWO_PRODUCTS__CONTINUOUS_SCHEME = (
-        "SBO_0000138"
-    )
+    MASS_ACTION_RATE_LAW_FOR_THIRD_ORDER_FORWARD__THIRD_ORDER_REVERSE__REVERSIBLE_REACTIONS__ONE_REACTANT__TWO_PRODUCTS__CONTINUOUS_SCHEME = "SBO_0000138"
 
     # mass action rate law for third order forward, third order reverse, reversible reactions, one reactant, three products, continuous scheme
     SBO_0000139 = "SBO_0000139"
-    MASS_ACTION_RATE_LAW_FOR_THIRD_ORDER_FORWARD__THIRD_ORDER_REVERSE__REVERSIBLE_REACTIONS__ONE_REACTANT__THREE_PRODUCTS__CONTINUOUS_SCHEME = (
-        "SBO_0000139"
-    )
+    MASS_ACTION_RATE_LAW_FOR_THIRD_ORDER_FORWARD__THIRD_ORDER_REVERSE__REVERSIBLE_REACTIONS__ONE_REACTANT__THREE_PRODUCTS__CONTINUOUS_SCHEME = "SBO_0000139"
 
     # mass action rate law for zeroth order irreversible reactions, discrete scheme
     SBO_0000140 = "SBO_0000140"
-    MASS_ACTION_RATE_LAW_FOR_ZEROTH_ORDER_IRREVERSIBLE_REACTIONS__DISCRETE_SCHEME = (
-        "SBO_0000140"
-    )
+    MASS_ACTION_RATE_LAW_FOR_ZEROTH_ORDER_IRREVERSIBLE_REACTIONS__DISCRETE_SCHEME = "SBO_0000140"
 
     # mass action rate law for first order irreversible reactions, discrete scheme
     SBO_0000141 = "SBO_0000141"
-    MASS_ACTION_RATE_LAW_FOR_FIRST_ORDER_IRREVERSIBLE_REACTIONS__DISCRETE_SCHEME = (
-        "SBO_0000141"
-    )
+    MASS_ACTION_RATE_LAW_FOR_FIRST_ORDER_IRREVERSIBLE_REACTIONS__DISCRETE_SCHEME = "SBO_0000141"
 
     # mass action rate law for second order irreversible reactions, one reactant, discrete scheme
     SBO_0000142 = "SBO_0000142"
-    MASS_ACTION_RATE_LAW_FOR_SECOND_ORDER_IRREVERSIBLE_REACTIONS__ONE_REACTANT__DISCRETE_SCHEME = (
-        "SBO_0000142"
-    )
+    MASS_ACTION_RATE_LAW_FOR_SECOND_ORDER_IRREVERSIBLE_REACTIONS__ONE_REACTANT__DISCRETE_SCHEME = "SBO_0000142"
 
     # mass action rate law for second order irreversible reactions, two reactants, discrete scheme
     SBO_0000143 = "SBO_0000143"
-    MASS_ACTION_RATE_LAW_FOR_SECOND_ORDER_IRREVERSIBLE_REACTIONS__TWO_REACTANTS__DISCRETE_SCHEME = (
-        "SBO_0000143"
-    )
+    MASS_ACTION_RATE_LAW_FOR_SECOND_ORDER_IRREVERSIBLE_REACTIONS__TWO_REACTANTS__DISCRETE_SCHEME = "SBO_0000143"
 
     # mass action rate law for third order irreversible reactions, one reactant, discrete scheme
     SBO_0000144 = "SBO_0000144"
-    MASS_ACTION_RATE_LAW_FOR_THIRD_ORDER_IRREVERSIBLE_REACTIONS__ONE_REACTANT__DISCRETE_SCHEME = (
-        "SBO_0000144"
-    )
+    MASS_ACTION_RATE_LAW_FOR_THIRD_ORDER_IRREVERSIBLE_REACTIONS__ONE_REACTANT__DISCRETE_SCHEME = "SBO_0000144"
 
     # mass action rate law for third order irreversible reactions, two reactants, discrete scheme
     SBO_0000145 = "SBO_0000145"
-    MASS_ACTION_RATE_LAW_FOR_THIRD_ORDER_IRREVERSIBLE_REACTIONS__TWO_REACTANTS__DISCRETE_SCHEME = (
-        "SBO_0000145"
-    )
+    MASS_ACTION_RATE_LAW_FOR_THIRD_ORDER_IRREVERSIBLE_REACTIONS__TWO_REACTANTS__DISCRETE_SCHEME = "SBO_0000145"
 
     # mass action rate law for third order irreversible reactions, three reactants, discrete scheme
     SBO_0000146 = "SBO_0000146"
-    MASS_ACTION_RATE_LAW_FOR_THIRD_ORDER_IRREVERSIBLE_REACTIONS__THREE_REACTANTS__DISCRETE_SCHEME = (
-        "SBO_0000146"
-    )
+    MASS_ACTION_RATE_LAW_FOR_THIRD_ORDER_IRREVERSIBLE_REACTIONS__THREE_REACTANTS__DISCRETE_SCHEME = "SBO_0000146"
 
     # thermodynamic temperature
     SBO_0000147 = "SBO_0000147"
@@ -1476,21 +1304,15 @@ class SBO(str, Enum):
 
     # enzymatic rate law for irreversible non-modulated non-interacting reactant enzymes
     SBO_0000150 = "SBO_0000150"
-    ENZYMATIC_RATE_LAW_FOR_IRREVERSIBLE_NON_MODULATED_NON_INTERACTING_REACTANT_ENZYMES = (
-        "SBO_0000150"
-    )
+    ENZYMATIC_RATE_LAW_FOR_IRREVERSIBLE_NON_MODULATED_NON_INTERACTING_REACTANT_ENZYMES = "SBO_0000150"
 
     # enzymatic rate law for irreversible non-modulated non-interacting bireactant enzymes
     SBO_0000151 = "SBO_0000151"
-    ENZYMATIC_RATE_LAW_FOR_IRREVERSIBLE_NON_MODULATED_NON_INTERACTING_BIREACTANT_ENZYMES = (
-        "SBO_0000151"
-    )
+    ENZYMATIC_RATE_LAW_FOR_IRREVERSIBLE_NON_MODULATED_NON_INTERACTING_BIREACTANT_ENZYMES = "SBO_0000151"
 
     # enzymatic rate law for irreversible non-modulated non-interacting trireactant enzymes
     SBO_0000152 = "SBO_0000152"
-    ENZYMATIC_RATE_LAW_FOR_IRREVERSIBLE_NON_MODULATED_NON_INTERACTING_TRIREACTANT_ENZYMES = (
-        "SBO_0000152"
-    )
+    ENZYMATIC_RATE_LAW_FOR_IRREVERSIBLE_NON_MODULATED_NON_INTERACTING_TRIREACTANT_ENZYMES = "SBO_0000152"
 
     # forward rate constant
     SBO_0000153 = "SBO_0000153"
@@ -1922,9 +1744,7 @@ class SBO(str, Enum):
 
     # enzymatic rate law for simple competitive inhibition of irreversible unireactant enzymes by one inhibitor
     SBO_0000260 = "SBO_0000260"
-    ENZYMATIC_RATE_LAW_FOR_SIMPLE_COMPETITIVE_INHIBITION_OF_IRREVERSIBLE_UNIREACTANT_ENZYMES_BY_ONE_INHIBITOR = (
-        "SBO_0000260"
-    )
+    ENZYMATIC_RATE_LAW_FOR_SIMPLE_COMPETITIVE_INHIBITION_OF_IRREVERSIBLE_UNIREACTANT_ENZYMES_BY_ONE_INHIBITOR = "SBO_0000260"
 
     # inhibitory constant
     SBO_0000261 = "SBO_0000261"
@@ -1932,9 +1752,7 @@ class SBO(str, Enum):
 
     # enzymatic rate law for simple uncompetitive inhibition of irreversible unireactant enzymes
     SBO_0000262 = "SBO_0000262"
-    ENZYMATIC_RATE_LAW_FOR_SIMPLE_UNCOMPETITIVE_INHIBITION_OF_IRREVERSIBLE_UNIREACTANT_ENZYMES = (
-        "SBO_0000262"
-    )
+    ENZYMATIC_RATE_LAW_FOR_SIMPLE_UNCOMPETITIVE_INHIBITION_OF_IRREVERSIBLE_UNIREACTANT_ENZYMES = "SBO_0000262"
 
     # relative equilibrium constant
     SBO_0000263 = "SBO_0000263"
@@ -1946,21 +1764,15 @@ class SBO(str, Enum):
 
     # enzymatic rate law for simple mixed-type inhibition of irreversible unireactant enzymes
     SBO_0000265 = "SBO_0000265"
-    ENZYMATIC_RATE_LAW_FOR_SIMPLE_MIXED_TYPE_INHIBITION_OF_IRREVERSIBLE_UNIREACTANT_ENZYMES = (
-        "SBO_0000265"
-    )
+    ENZYMATIC_RATE_LAW_FOR_SIMPLE_MIXED_TYPE_INHIBITION_OF_IRREVERSIBLE_UNIREACTANT_ENZYMES = "SBO_0000265"
 
     # enzymatic rate law for simple irreversible non-competitive inhibition of unireactant enzymes
     SBO_0000266 = "SBO_0000266"
-    ENZYMATIC_RATE_LAW_FOR_SIMPLE_IRREVERSIBLE_NON_COMPETITIVE_INHIBITION_OF_UNIREACTANT_ENZYMES = (
-        "SBO_0000266"
-    )
+    ENZYMATIC_RATE_LAW_FOR_SIMPLE_IRREVERSIBLE_NON_COMPETITIVE_INHIBITION_OF_UNIREACTANT_ENZYMES = "SBO_0000266"
 
     # enzymatic rate law for competitive inhibition of irreversible unireactant enzymes by one inhibitor
     SBO_0000267 = "SBO_0000267"
-    ENZYMATIC_RATE_LAW_FOR_COMPETITIVE_INHIBITION_OF_IRREVERSIBLE_UNIREACTANT_ENZYMES_BY_ONE_INHIBITOR = (
-        "SBO_0000267"
-    )
+    ENZYMATIC_RATE_LAW_FOR_COMPETITIVE_INHIBITION_OF_IRREVERSIBLE_UNIREACTANT_ENZYMES_BY_ONE_INHIBITOR = "SBO_0000267"
 
     # enzymatic rate law
     SBO_0000268 = "SBO_0000268"
@@ -1972,15 +1784,11 @@ class SBO(str, Enum):
 
     # enzymatic rate law for competitive inhibition of irreversible unireactant enzymes by exclusive inhibitors
     SBO_0000270 = "SBO_0000270"
-    ENZYMATIC_RATE_LAW_FOR_COMPETITIVE_INHIBITION_OF_IRREVERSIBLE_UNIREACTANT_ENZYMES_BY_EXCLUSIVE_INHIBITORS = (
-        "SBO_0000270"
-    )
+    ENZYMATIC_RATE_LAW_FOR_COMPETITIVE_INHIBITION_OF_IRREVERSIBLE_UNIREACTANT_ENZYMES_BY_EXCLUSIVE_INHIBITORS = "SBO_0000270"
 
     # enzymatic rate law for competitive inhibition of irreversible unireactant enzymes by two exclusive inhibitors
     SBO_0000271 = "SBO_0000271"
-    ENZYMATIC_RATE_LAW_FOR_COMPETITIVE_INHIBITION_OF_IRREVERSIBLE_UNIREACTANT_ENZYMES_BY_TWO_EXCLUSIVE_INHIBITORS = (
-        "SBO_0000271"
-    )
+    ENZYMATIC_RATE_LAW_FOR_COMPETITIVE_INHIBITION_OF_IRREVERSIBLE_UNIREACTANT_ENZYMES_BY_TWO_EXCLUSIVE_INHIBITORS = "SBO_0000271"
 
     # number of inhibitors
     SBO_0000272 = "SBO_0000272"
@@ -1988,33 +1796,23 @@ class SBO(str, Enum):
 
     # enzymatic rate law for competitive inhibition of irreversible unireactant enzymes by non-exclusive non-cooperative inhibitors
     SBO_0000273 = "SBO_0000273"
-    ENZYMATIC_RATE_LAW_FOR_COMPETITIVE_INHIBITION_OF_IRREVERSIBLE_UNIREACTANT_ENZYMES_BY_NON_EXCLUSIVE_NON_COOPERATIVE_INHIBITORS = (
-        "SBO_0000273"
-    )
+    ENZYMATIC_RATE_LAW_FOR_COMPETITIVE_INHIBITION_OF_IRREVERSIBLE_UNIREACTANT_ENZYMES_BY_NON_EXCLUSIVE_NON_COOPERATIVE_INHIBITORS = "SBO_0000273"
 
     # enzymatic rate law for simple competitive inhibition of irreversible unireactant enzymes by two non-exclusive, non-cooperative inhibitors
     SBO_0000274 = "SBO_0000274"
-    ENZYMATIC_RATE_LAW_FOR_SIMPLE_COMPETITIVE_INHIBITION_OF_IRREVERSIBLE_UNIREACTANT_ENZYMES_BY_TWO_NON_EXCLUSIVE__NON_COOPERATIVE_INHIBITORS = (
-        "SBO_0000274"
-    )
+    ENZYMATIC_RATE_LAW_FOR_SIMPLE_COMPETITIVE_INHIBITION_OF_IRREVERSIBLE_UNIREACTANT_ENZYMES_BY_TWO_NON_EXCLUSIVE__NON_COOPERATIVE_INHIBITORS = "SBO_0000274"
 
     # enzymatic rate law for mixed-type inhibition of irreversible enzymes by mutually exclusive inhibitors
     SBO_0000275 = "SBO_0000275"
-    ENZYMATIC_RATE_LAW_FOR_MIXED_TYPE_INHIBITION_OF_IRREVERSIBLE_ENZYMES_BY_MUTUALLY_EXCLUSIVE_INHIBITORS = (
-        "SBO_0000275"
-    )
+    ENZYMATIC_RATE_LAW_FOR_MIXED_TYPE_INHIBITION_OF_IRREVERSIBLE_ENZYMES_BY_MUTUALLY_EXCLUSIVE_INHIBITORS = "SBO_0000275"
 
     # enzymatic rate law for mixed-type inhibition of irreversible unireactant enzymes by two inhibitors
     SBO_0000276 = "SBO_0000276"
-    ENZYMATIC_RATE_LAW_FOR_MIXED_TYPE_INHIBITION_OF_IRREVERSIBLE_UNIREACTANT_ENZYMES_BY_TWO_INHIBITORS = (
-        "SBO_0000276"
-    )
+    ENZYMATIC_RATE_LAW_FOR_MIXED_TYPE_INHIBITION_OF_IRREVERSIBLE_UNIREACTANT_ENZYMES_BY_TWO_INHIBITORS = "SBO_0000276"
 
     # enzymatic rate law for non-competitive inhibition of irreversible unireactant enzymes by two exclusively binding inhibitors
     SBO_0000277 = "SBO_0000277"
-    ENZYMATIC_RATE_LAW_FOR_NON_COMPETITIVE_INHIBITION_OF_IRREVERSIBLE_UNIREACTANT_ENZYMES_BY_TWO_EXCLUSIVELY_BINDING_INHIBITORS = (
-        "SBO_0000277"
-    )
+    ENZYMATIC_RATE_LAW_FOR_NON_COMPETITIVE_INHIBITION_OF_IRREVERSIBLE_UNIREACTANT_ENZYMES_BY_TWO_EXCLUSIVELY_BINDING_INHIBITORS = "SBO_0000277"
 
     # messenger RNA
     SBO_0000278 = "SBO_0000278"
@@ -2276,6 +2074,10 @@ class SBO(str, Enum):
     SBO_0000342 = "SBO_0000342"
     MOLECULAR_OR_GENETIC_INTERACTION = "SBO_0000342"
 
+    # genetic interaction
+    SBO_0000343 = "SBO_0000343"
+    GENETIC_INTERACTION = "SBO_0000343"
+
     # molecular interaction
     SBO_0000344 = "SBO_0000344"
     MOLECULAR_INTERACTION = "SBO_0000344"
@@ -2410,15 +2212,11 @@ class SBO(str, Enum):
 
     # enzymatic rate law for inhibition of irreversible unireactant enzymes by competing substrates
     SBO_0000378 = "SBO_0000378"
-    ENZYMATIC_RATE_LAW_FOR_INHIBITION_OF_IRREVERSIBLE_UNIREACTANT_ENZYMES_BY_COMPETING_SUBSTRATES = (
-        "SBO_0000378"
-    )
+    ENZYMATIC_RATE_LAW_FOR_INHIBITION_OF_IRREVERSIBLE_UNIREACTANT_ENZYMES_BY_COMPETING_SUBSTRATES = "SBO_0000378"
 
     # enzymatic rate law for simple competitive inhibition of irreversible unireactant enzymes by two non-exclusive inhibitors
     SBO_0000379 = "SBO_0000379"
-    ENZYMATIC_RATE_LAW_FOR_SIMPLE_COMPETITIVE_INHIBITION_OF_IRREVERSIBLE_UNIREACTANT_ENZYMES_BY_TWO_NON_EXCLUSIVE_INHIBITORS = (
-        "SBO_0000379"
-    )
+    ENZYMATIC_RATE_LAW_FOR_SIMPLE_COMPETITIVE_INHIBITION_OF_IRREVERSIBLE_UNIREACTANT_ENZYMES_BY_TWO_NON_EXCLUSIVE_INHIBITORS = "SBO_0000379"
 
     # biochemical coefficient
     SBO_0000380 = "SBO_0000380"
@@ -2446,21 +2244,15 @@ class SBO(str, Enum):
 
     # enzymatic rate law for inhibition of irreversible unireactant enzymes by single competing substrate
     SBO_0000386 = "SBO_0000386"
-    ENZYMATIC_RATE_LAW_FOR_INHIBITION_OF_IRREVERSIBLE_UNIREACTANT_ENZYMES_BY_SINGLE_COMPETING_SUBSTRATE = (
-        "SBO_0000386"
-    )
+    ENZYMATIC_RATE_LAW_FOR_INHIBITION_OF_IRREVERSIBLE_UNIREACTANT_ENZYMES_BY_SINGLE_COMPETING_SUBSTRATE = "SBO_0000386"
 
     # enzymatic rate law for competitive inhibition of irreversible unireactant enzyme by product
     SBO_0000387 = "SBO_0000387"
-    ENZYMATIC_RATE_LAW_FOR_COMPETITIVE_INHIBITION_OF_IRREVERSIBLE_UNIREACTANT_ENZYME_BY_PRODUCT = (
-        "SBO_0000387"
-    )
+    ENZYMATIC_RATE_LAW_FOR_COMPETITIVE_INHIBITION_OF_IRREVERSIBLE_UNIREACTANT_ENZYME_BY_PRODUCT = "SBO_0000387"
 
     # enzymatic rate law for inhibition of irreversible unireactant enzymes by single competing substrate with product inhibition
     SBO_0000388 = "SBO_0000388"
-    ENZYMATIC_RATE_LAW_FOR_INHIBITION_OF_IRREVERSIBLE_UNIREACTANT_ENZYMES_BY_SINGLE_COMPETING_SUBSTRATE_WITH_PRODUCT_INHIBITION = (
-        "SBO_0000388"
-    )
+    ENZYMATIC_RATE_LAW_FOR_INHIBITION_OF_IRREVERSIBLE_UNIREACTANT_ENZYMES_BY_SINGLE_COMPETING_SUBSTRATE_WITH_PRODUCT_INHIBITION = "SBO_0000388"
 
     # switch value
     SBO_0000389 = "SBO_0000389"
@@ -2668,15 +2460,11 @@ class SBO(str, Enum):
 
     # enzymatic rate law for mixed-type inhibition of reversible enzymes by mutually exclusive inhibitors
     SBO_0000441 = "SBO_0000441"
-    ENZYMATIC_RATE_LAW_FOR_MIXED_TYPE_INHIBITION_OF_REVERSIBLE_ENZYMES_BY_MUTUALLY_EXCLUSIVE_INHIBITORS = (
-        "SBO_0000441"
-    )
+    ENZYMATIC_RATE_LAW_FOR_MIXED_TYPE_INHIBITION_OF_REVERSIBLE_ENZYMES_BY_MUTUALLY_EXCLUSIVE_INHIBITORS = "SBO_0000441"
 
     # enzymatic rate law for simple reversible non-competitive inhibition of unireactant enzymes
     SBO_0000442 = "SBO_0000442"
-    ENZYMATIC_RATE_LAW_FOR_SIMPLE_REVERSIBLE_NON_COMPETITIVE_INHIBITION_OF_UNIREACTANT_ENZYMES = (
-        "SBO_0000442"
-    )
+    ENZYMATIC_RATE_LAW_FOR_SIMPLE_REVERSIBLE_NON_COMPETITIVE_INHIBITION_OF_UNIREACTANT_ENZYMES = "SBO_0000442"
 
     # enzymatic rate law for reversible essential activation
     SBO_0000443 = "SBO_0000443"
@@ -2696,9 +2484,7 @@ class SBO(str, Enum):
 
     # enzymatic rate law for reversible catalytic activation with one activator
     SBO_0000447 = "SBO_0000447"
-    ENZYMATIC_RATE_LAW_FOR_REVERSIBLE_CATALYTIC_ACTIVATION_WITH_ONE_ACTIVATOR = (
-        "SBO_0000447"
-    )
+    ENZYMATIC_RATE_LAW_FOR_REVERSIBLE_CATALYTIC_ACTIVATION_WITH_ONE_ACTIVATOR = "SBO_0000447"
 
     # enzymatic rate law for reversible specific activation
     SBO_0000448 = "SBO_0000448"
@@ -2706,9 +2492,7 @@ class SBO(str, Enum):
 
     # enzymatic rate law for irreversible catalytic activation with one activator
     SBO_0000449 = "SBO_0000449"
-    ENZYMATIC_RATE_LAW_FOR_IRREVERSIBLE_CATALYTIC_ACTIVATION_WITH_ONE_ACTIVATOR = (
-        "SBO_0000449"
-    )
+    ENZYMATIC_RATE_LAW_FOR_IRREVERSIBLE_CATALYTIC_ACTIVATION_WITH_ONE_ACTIVATOR = "SBO_0000449"
 
     # enzymatic rate law for irreversible specific activation
     SBO_0000450 = "SBO_0000450"
@@ -2716,21 +2500,15 @@ class SBO(str, Enum):
 
     # enzymatic rate law for reversible reactions with competitive inhibition
     SBO_0000451 = "SBO_0000451"
-    ENZYMATIC_RATE_LAW_FOR_REVERSIBLE_REACTIONS_WITH_COMPETITIVE_INHIBITION = (
-        "SBO_0000451"
-    )
+    ENZYMATIC_RATE_LAW_FOR_REVERSIBLE_REACTIONS_WITH_COMPETITIVE_INHIBITION = "SBO_0000451"
 
     # enzymatic rate law for reversible competitive inhibition by one inhibitor
     SBO_0000452 = "SBO_0000452"
-    ENZYMATIC_RATE_LAW_FOR_REVERSIBLE_COMPETITIVE_INHIBITION_BY_ONE_INHIBITOR = (
-        "SBO_0000452"
-    )
+    ENZYMATIC_RATE_LAW_FOR_REVERSIBLE_COMPETITIVE_INHIBITION_BY_ONE_INHIBITOR = "SBO_0000452"
 
     # enzymatic rate law for reversible empirical allosteric inhibition by one inhibitor
     SBO_0000453 = "SBO_0000453"
-    ENZYMATIC_RATE_LAW_FOR_REVERSIBLE_EMPIRICAL_ALLOSTERIC_INHIBITION_BY_ONE_INHIBITOR = (
-        "SBO_0000453"
-    )
+    ENZYMATIC_RATE_LAW_FOR_REVERSIBLE_EMPIRICAL_ALLOSTERIC_INHIBITION_BY_ONE_INHIBITOR = "SBO_0000453"
 
     # enzymatic rate law for reversible substrate inhibition
     SBO_0000454 = "SBO_0000454"
@@ -2742,21 +2520,15 @@ class SBO(str, Enum):
 
     # enzymatic rate law for reversible unireactant enzyme with a single hyperbolic modulator
     SBO_0000456 = "SBO_0000456"
-    ENZYMATIC_RATE_LAW_FOR_REVERSIBLE_UNIREACTANT_ENZYME_WITH_A_SINGLE_HYPERBOLIC_MODULATOR = (
-        "SBO_0000456"
-    )
+    ENZYMATIC_RATE_LAW_FOR_REVERSIBLE_UNIREACTANT_ENZYME_WITH_A_SINGLE_HYPERBOLIC_MODULATOR = "SBO_0000456"
 
     # enzymatic rate law for irreversible unireactant enzyme with a single hyperbolic modulator
     SBO_0000457 = "SBO_0000457"
-    ENZYMATIC_RATE_LAW_FOR_IRREVERSIBLE_UNIREACTANT_ENZYME_WITH_A_SINGLE_HYPERBOLIC_MODULATOR = (
-        "SBO_0000457"
-    )
+    ENZYMATIC_RATE_LAW_FOR_IRREVERSIBLE_UNIREACTANT_ENZYME_WITH_A_SINGLE_HYPERBOLIC_MODULATOR = "SBO_0000457"
 
     # enzymatic rate law for simple uncompetitive inhibition of reversible unireactant enzymes
     SBO_0000458 = "SBO_0000458"
-    ENZYMATIC_RATE_LAW_FOR_SIMPLE_UNCOMPETITIVE_INHIBITION_OF_REVERSIBLE_UNIREACTANT_ENZYMES = (
-        "SBO_0000458"
-    )
+    ENZYMATIC_RATE_LAW_FOR_SIMPLE_UNCOMPETITIVE_INHIBITION_OF_REVERSIBLE_UNIREACTANT_ENZYMES = "SBO_0000458"
 
     # stimulator
     SBO_0000459 = "SBO_0000459"
@@ -2917,10 +2689,6 @@ class SBO(str, Enum):
     # relative activity
     SBO_0000498 = "SBO_0000498"
     RELATIVE_ACTIVITY = "SBO_0000498"
-
-    # genetic interaction
-    SBO_0000499 = "SBO_0000499"
-    GENETIC_INTERACTION = "SBO_0000499"
 
     # genetic suppression
     SBO_0000500 = "SBO_0000500"
@@ -3164,33 +2932,23 @@ class SBO(str, Enum):
 
     # mass action rate law for first order irreversible reactions, single essential stimulator, continuous scheme
     SBO_0000560 = "SBO_0000560"
-    MASS_ACTION_RATE_LAW_FOR_FIRST_ORDER_IRREVERSIBLE_REACTIONS__SINGLE_ESSENTIAL_STIMULATOR__CONTINUOUS_SCHEME = (
-        "SBO_0000560"
-    )
+    MASS_ACTION_RATE_LAW_FOR_FIRST_ORDER_IRREVERSIBLE_REACTIONS__SINGLE_ESSENTIAL_STIMULATOR__CONTINUOUS_SCHEME = "SBO_0000560"
 
     # mass action rate law for first order irreversible reactions, single essential stimulator, discrete scheme
     SBO_0000561 = "SBO_0000561"
-    MASS_ACTION_RATE_LAW_FOR_FIRST_ORDER_IRREVERSIBLE_REACTIONS__SINGLE_ESSENTIAL_STIMULATOR__DISCRETE_SCHEME = (
-        "SBO_0000561"
-    )
+    MASS_ACTION_RATE_LAW_FOR_FIRST_ORDER_IRREVERSIBLE_REACTIONS__SINGLE_ESSENTIAL_STIMULATOR__DISCRETE_SCHEME = "SBO_0000561"
 
     # mass action like rate law for second order irreversible reactions, one reactant, one essential stimulator
     SBO_0000562 = "SBO_0000562"
-    MASS_ACTION_LIKE_RATE_LAW_FOR_SECOND_ORDER_IRREVERSIBLE_REACTIONS__ONE_REACTANT__ONE_ESSENTIAL_STIMULATOR = (
-        "SBO_0000562"
-    )
+    MASS_ACTION_LIKE_RATE_LAW_FOR_SECOND_ORDER_IRREVERSIBLE_REACTIONS__ONE_REACTANT__ONE_ESSENTIAL_STIMULATOR = "SBO_0000562"
 
     # mass action like rate law for second order irreversible reactions, one reactant, one essential stimulator, continuous scheme
     SBO_0000563 = "SBO_0000563"
-    MASS_ACTION_LIKE_RATE_LAW_FOR_SECOND_ORDER_IRREVERSIBLE_REACTIONS__ONE_REACTANT__ONE_ESSENTIAL_STIMULATOR__CONTINUOUS_SCHEME = (
-        "SBO_0000563"
-    )
+    MASS_ACTION_LIKE_RATE_LAW_FOR_SECOND_ORDER_IRREVERSIBLE_REACTIONS__ONE_REACTANT__ONE_ESSENTIAL_STIMULATOR__CONTINUOUS_SCHEME = "SBO_0000563"
 
     # mass action like rate law for second order irreversible reactions, one reactant, one essential stimulator, discrete scheme
     SBO_0000564 = "SBO_0000564"
-    MASS_ACTION_LIKE_RATE_LAW_FOR_SECOND_ORDER_IRREVERSIBLE_REACTIONS__ONE_REACTANT__ONE_ESSENTIAL_STIMULATOR__DISCRETE_SCHEME = (
-        "SBO_0000564"
-    )
+    MASS_ACTION_LIKE_RATE_LAW_FOR_SECOND_ORDER_IRREVERSIBLE_REACTIONS__ONE_REACTANT__ONE_ESSENTIAL_STIMULATOR__DISCRETE_SCHEME = "SBO_0000564"
 
     # systems description constant
     SBO_0000565 = "SBO_0000565"
@@ -3244,7 +3002,7 @@ class SBO(str, Enum):
     SBO_0000577 = "SBO_0000577"
     ENTROPY_CHANGE = "SBO_0000577"
 
-    # standard entropy of reaction
+    # standard entropy of reaction 
     SBO_0000578 = "SBO_0000578"
     STANDARD_ENTROPY_OF_REACTION_ = "SBO_0000578"
 
@@ -3292,6 +3050,10 @@ class SBO(str, Enum):
     SBO_0000589 = "SBO_0000589"
     GENETIC_PRODUCTION = "SBO_0000589"
 
+    # promoter
+    SBO_0000590 = "SBO_0000590"
+    PROMOTER = "SBO_0000590"
+
     # petri net transition
     SBO_0000591 = "SBO_0000591"
     PETRI_NET_TRANSITION = "SBO_0000591"
@@ -3319,10 +3081,6 @@ class SBO(str, Enum):
     # silencer
     SBO_0000597 = "SBO_0000597"
     SILENCER = "SBO_0000597"
-
-    # promoter
-    SBO_0000598 = "SBO_0000598"
-    PROMOTER = "SBO_0000598"
 
     # port
     SBO_0000599 = "SBO_0000599"
@@ -3674,9 +3432,7 @@ class SBO(str, Enum):
 
     # hybrid flux balance-logical-deterministic continuous non-spatial framework
     SBO_0000686 = "SBO_0000686"
-    HYBRID_FLUX_BALANCE_LOGICAL_DETERMINISTIC_CONTINUOUS_NON_SPATIAL_FRAMEWORK = (
-        "SBO_0000686"
-    )
+    HYBRID_FLUX_BALANCE_LOGICAL_DETERMINISTIC_CONTINUOUS_NON_SPATIAL_FRAMEWORK = "SBO_0000686"
 
     # hybrid flux balance-logical non-spatial framework
     SBO_0000687 = "SBO_0000687"
@@ -3706,8 +3462,20 @@ class SBO(str, Enum):
     SBO_0000693 = "SBO_0000693"
     CONSTRAINT_BASED_FRAMEWORK = "SBO_0000693"
 
+    # optimization framework
+    SBO_0000694 = "SBO_0000694"
+    OPTIMIZATION_FRAMEWORK = "SBO_0000694"
+
+    # ligation
+    SBO_0000695 = "SBO_0000695"
+    LIGATION = "SBO_0000695"
+
+    # part of
+    part_of = "part_of"
+    PART_OF = "part_of"
+
     @staticmethod
-    def get_name(sbo: "SBO") -> Optional[str]:
+    def get_name(sbo: 'SBO') -> Optional[str]:
         """Get name for term.
 
         :returns: None if term does not exist in ontology.
@@ -3715,9 +3483,9 @@ class SBO(str, Enum):
         return _terms.get(sbo.value, None)
 
     @classmethod
-    def validate(cls, sbo: "SBOType") -> "SBO":
+    def validate(cls, sbo: 'SBOType') -> 'SBO':
         """Validate and normalize sbo."""
-        term: "SBO"
+        term: 'SBO'
         if isinstance(sbo, str):
             if not sbo.startswith("SBO"):
                 raise ValueError(sbo + " is not a SBO id.")
@@ -3726,13 +3494,12 @@ class SBO(str, Enum):
 
             term = getattr(cls, sbo)
 
-        elif isinstance(sbo, "SBO"):
+        elif isinstance(sbo, 'SBO'):
             term = sbo
         else:
             raise ValueError
 
         return term
-
 
 __all__ = [
     "SBO",

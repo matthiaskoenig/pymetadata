@@ -2,6 +2,7 @@
 
 See https://docs.google.com/document/d/1-UDgY5lQ6tv4mZILZzol-PvCoAYW8yr2Ydn1OxcHMjM/edit#
 """
+
 from typing import List, Optional
 
 from pydantic import BaseModel

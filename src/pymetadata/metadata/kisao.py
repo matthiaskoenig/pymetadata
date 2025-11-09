@@ -1,10 +1,10 @@
 """KISAO ontology."""
 
+from typing import Union, Optional
 from enum import Enum
-from typing import Optional, Union
 
 
-KISAOType = Union[str, "KISAO"]
+KISAOType = Union[str, 'KISAO']
 
 _terms = {
     "KISAO_0000000": "modelling and simulation algorithm",
@@ -217,10 +217,10 @@ _terms = {
     "KISAO_0000403": "homogeneousness of equation",
     "KISAO_0000404": "symmetricity of matrix",
     "KISAO_0000405": "type of differential equation",
-    "KISAO_0000407": "steady state method",
+    "KISAO_0000407": "steady state root-finding method",
     "KISAO_0000408": "Newton-type method",
     "KISAO_0000409": "ordinary Newton method",
-    "KISAO_0000410": "simlified Newton method",
+    "KISAO_0000410": "simplified Newton method",
     "KISAO_0000411": "Newton-like method",
     "KISAO_0000412": "inexact Newton method",
     "KISAO_0000413": "exact Newton method",
@@ -413,7 +413,7 @@ _terms = {
     "KISAO_0000627": "diagonal approximate Jacobian solver",
     "KISAO_0000628": "modelling and simulation algorithm parameter value",
     "KISAO_0000629": "null",
-    "KISAO_0000630": "root-finding method",
+    "KISAO_0000630": "general steady state method",
     "KISAO_0000631": "iterative root-finding method",
     "KISAO_0000632": "functional iteration root-finding method",
     "KISAO_0000633": "computational function",
@@ -477,6 +477,26 @@ _terms = {
     "KISAO_0000691": "metabolic system",
     "KISAO_0000692": "cellular system",
     "KISAO_0000693": "biochemical system",
+    "KISAO_0000694": "ODE solver",
+    "KISAO_0000695": "parameters for",
+    "KISAO_0000696": "steady state root-finding problem",
+    "KISAO_0000697": "SDE solver",
+    "KISAO_0000698": "particle coordinates",
+    "KISAO_0000699": "DAE Solver",
+    "KISAO_0000700": "logical network",
+    "KISAO_0000701": "boolean network",
+    "KISAO_0000702": "locally-monotone Boolean network",
+    "KISAO_0000703": "logical variable",
+    "KISAO_0000704": "Boolean variable",
+    "KISAO_0000705": "most permissive updating policy",
+    "KISAO_0000706": "Paulevé ASP-based fixed point identification",
+    "KISAO_0000707": "Paulevé ASP-based minimal trap space identification",
+    "KISAO_0000708": "logical model attractor identification method",
+    "KISAO_0000709": "Paulevé ASP-based most permissive attractor identification",
+    "KISAO_0000710": "trap space",
+    "KISAO_0000711": "stable state",
+    "KISAO_0000712": "minimal trap space",
+    "KISAO_0000713": "attractor",
     "KISAO_0000800": "systems property",
     "KISAO_0000801": "concentration control coefficient matrix (unscaled)",
     "KISAO_0000802": "control coefficient (scaled)",
@@ -1349,9 +1369,7 @@ class KISAO(str, Enum):
 
     # quasi-minimal residual variant of biconjugate gradient stabilized method
     KISAO_0000394 = "KISAO_0000394"
-    QUASI_MINIMAL_RESIDUAL_VARIANT_OF_BICONJUGATE_GRADIENT_STABILIZED_METHOD = (
-        "KISAO_0000394"
-    )
+    QUASI_MINIMAL_RESIDUAL_VARIANT_OF_BICONJUGATE_GRADIENT_STABILIZED_METHOD = "KISAO_0000394"
 
     # improved biconjugate gradient method
     KISAO_0000395 = "KISAO_0000395"
@@ -1385,9 +1403,9 @@ class KISAO(str, Enum):
     KISAO_0000405 = "KISAO_0000405"
     TYPE_OF_DIFFERENTIAL_EQUATION = "KISAO_0000405"
 
-    # steady state method
+    # steady state root-finding method
     KISAO_0000407 = "KISAO_0000407"
-    STEADY_STATE_METHOD = "KISAO_0000407"
+    STEADY_STATE_ROOT_FINDING_METHOD = "KISAO_0000407"
 
     # Newton-type method
     KISAO_0000408 = "KISAO_0000408"
@@ -1397,9 +1415,9 @@ class KISAO(str, Enum):
     KISAO_0000409 = "KISAO_0000409"
     ORDINARY_NEWTON_METHOD = "KISAO_0000409"
 
-    # simlified Newton method
+    # simplified Newton method
     KISAO_0000410 = "KISAO_0000410"
-    SIMLIFIED_NEWTON_METHOD = "KISAO_0000410"
+    SIMPLIFIED_NEWTON_METHOD = "KISAO_0000410"
 
     # Newton-like method
     KISAO_0000411 = "KISAO_0000411"
@@ -1767,9 +1785,7 @@ class KISAO(str, Enum):
 
     # parsimonious enzyme usage flux balance analysis (minimum sum of absolute fluxes)
     KISAO_0000528 = "KISAO_0000528"
-    PARSIMONIOUS_ENZYME_USAGE_FLUX_BALANCE_ANALYSIS__MINIMUM_SUM_OF_ABSOLUTE_FLUXES_ = (
-        "KISAO_0000528"
-    )
+    PARSIMONIOUS_ENZYME_USAGE_FLUX_BALANCE_ANALYSIS__MINIMUM_SUM_OF_ABSOLUTE_FLUXES_ = "KISAO_0000528"
 
     # parallelism
     KISAO_0000529 = "KISAO_0000529"
@@ -1869,9 +1885,7 @@ class KISAO(str, Enum):
 
     # parsimonius flux balance analysis (minimum number of active fluxes)
     KISAO_0000554 = "KISAO_0000554"
-    PARSIMONIUS_FLUX_BALANCE_ANALYSIS__MINIMUM_NUMBER_OF_ACTIVE_FLUXES_ = (
-        "KISAO_0000554"
-    )
+    PARSIMONIUS_FLUX_BALANCE_ANALYSIS__MINIMUM_NUMBER_OF_ACTIVE_FLUXES_ = "KISAO_0000554"
 
     # absolute quadrature tolerance
     KISAO_0000555 = "KISAO_0000555"
@@ -2107,9 +2121,7 @@ class KISAO(str, Enum):
 
     # stochastic simulation algorithm with normally-distributed next reaction times
     KISAO_0000613 = "KISAO_0000613"
-    STOCHASTIC_SIMULATION_ALGORITHM_WITH_NORMALLY_DISTRIBUTED_NEXT_REACTION_TIMES = (
-        "KISAO_0000613"
-    )
+    STOCHASTIC_SIMULATION_ALGORITHM_WITH_NORMALLY_DISTRIBUTED_NEXT_REACTION_TIMES = "KISAO_0000613"
 
     # implementation
     KISAO_0000614 = "KISAO_0000614"
@@ -2117,15 +2129,11 @@ class KISAO(str, Enum):
 
     # fully-implicit regular grid finite volume method with a variable time step
     KISAO_0000615 = "KISAO_0000615"
-    FULLY_IMPLICIT_REGULAR_GRID_FINITE_VOLUME_METHOD_WITH_A_VARIABLE_TIME_STEP = (
-        "KISAO_0000615"
-    )
+    FULLY_IMPLICIT_REGULAR_GRID_FINITE_VOLUME_METHOD_WITH_A_VARIABLE_TIME_STEP = "KISAO_0000615"
 
     # semi-implicit regular grid finite volume method with a fixed time step
     KISAO_0000616 = "KISAO_0000616"
-    SEMI_IMPLICIT_REGULAR_GRID_FINITE_VOLUME_METHOD_WITH_A_FIXED_TIME_STEP = (
-        "KISAO_0000616"
-    )
+    SEMI_IMPLICIT_REGULAR_GRID_FINITE_VOLUME_METHOD_WITH_A_FIXED_TIME_STEP = "KISAO_0000616"
 
     # IDA-CVODE hybrid method
     KISAO_0000617 = "KISAO_0000617"
@@ -2179,9 +2187,9 @@ class KISAO(str, Enum):
     KISAO_0000629 = "KISAO_0000629"
     NULL = "KISAO_0000629"
 
-    # root-finding method
+    # general steady state method
     KISAO_0000630 = "KISAO_0000630"
-    ROOT_FINDING_METHOD = "KISAO_0000630"
+    GENERAL_STEADY_STATE_METHOD = "KISAO_0000630"
 
     # iterative root-finding method
     KISAO_0000631 = "KISAO_0000631"
@@ -2435,6 +2443,86 @@ class KISAO(str, Enum):
     KISAO_0000693 = "KISAO_0000693"
     BIOCHEMICAL_SYSTEM = "KISAO_0000693"
 
+    # ODE solver
+    KISAO_0000694 = "KISAO_0000694"
+    ODE_SOLVER = "KISAO_0000694"
+
+    # parameters for
+    KISAO_0000695 = "KISAO_0000695"
+    PARAMETERS_FOR = "KISAO_0000695"
+
+    # steady state root-finding problem
+    KISAO_0000696 = "KISAO_0000696"
+    STEADY_STATE_ROOT_FINDING_PROBLEM = "KISAO_0000696"
+
+    # SDE solver
+    KISAO_0000697 = "KISAO_0000697"
+    SDE_SOLVER = "KISAO_0000697"
+
+    # particle coordinates
+    KISAO_0000698 = "KISAO_0000698"
+    PARTICLE_COORDINATES = "KISAO_0000698"
+
+    # DAE Solver
+    KISAO_0000699 = "KISAO_0000699"
+    DAE_SOLVER = "KISAO_0000699"
+
+    # logical network
+    KISAO_0000700 = "KISAO_0000700"
+    LOGICAL_NETWORK = "KISAO_0000700"
+
+    # boolean network
+    KISAO_0000701 = "KISAO_0000701"
+    BOOLEAN_NETWORK = "KISAO_0000701"
+
+    # locally-monotone Boolean network
+    KISAO_0000702 = "KISAO_0000702"
+    LOCALLY_MONOTONE_BOOLEAN_NETWORK = "KISAO_0000702"
+
+    # logical variable
+    KISAO_0000703 = "KISAO_0000703"
+    LOGICAL_VARIABLE = "KISAO_0000703"
+
+    # Boolean variable
+    KISAO_0000704 = "KISAO_0000704"
+    BOOLEAN_VARIABLE = "KISAO_0000704"
+
+    # most permissive updating policy
+    KISAO_0000705 = "KISAO_0000705"
+    MOST_PERMISSIVE_UPDATING_POLICY = "KISAO_0000705"
+
+    # Paulevé ASP-based fixed point identification
+    KISAO_0000706 = "KISAO_0000706"
+    PAULEVÉ_ASP_BASED_FIXED_POINT_IDENTIFICATION = "KISAO_0000706"
+
+    # Paulevé ASP-based minimal trap space identification
+    KISAO_0000707 = "KISAO_0000707"
+    PAULEVÉ_ASP_BASED_MINIMAL_TRAP_SPACE_IDENTIFICATION = "KISAO_0000707"
+
+    # logical model attractor identification method
+    KISAO_0000708 = "KISAO_0000708"
+    LOGICAL_MODEL_ATTRACTOR_IDENTIFICATION_METHOD = "KISAO_0000708"
+
+    # Paulevé ASP-based most permissive attractor identification
+    KISAO_0000709 = "KISAO_0000709"
+    PAULEVÉ_ASP_BASED_MOST_PERMISSIVE_ATTRACTOR_IDENTIFICATION = "KISAO_0000709"
+
+    # trap space
+    KISAO_0000710 = "KISAO_0000710"
+    TRAP_SPACE = "KISAO_0000710"
+
+    # stable state
+    KISAO_0000711 = "KISAO_0000711"
+    STABLE_STATE = "KISAO_0000711"
+
+    # minimal trap space
+    KISAO_0000712 = "KISAO_0000712"
+    MINIMAL_TRAP_SPACE = "KISAO_0000712"
+
+    # attractor
+    KISAO_0000713 = "KISAO_0000713"
+    ATTRACTOR = "KISAO_0000713"
+
     # systems property
     KISAO_0000800 = "KISAO_0000800"
     SYSTEMS_PROPERTY = "KISAO_0000800"
@@ -2668,7 +2756,7 @@ class KISAO(str, Enum):
     VARIANCE = "KISAO_0000859"
 
     @staticmethod
-    def get_name(kisao: "KISAO") -> Optional[str]:
+    def get_name(kisao: 'KISAO') -> Optional[str]:
         """Get name for term.
 
         :returns: None if term does not exist in ontology.
@@ -2676,9 +2764,9 @@ class KISAO(str, Enum):
         return _terms.get(kisao.value, None)
 
     @classmethod
-    def validate(cls, kisao: "KISAOType") -> "KISAO":
+    def validate(cls, kisao: 'KISAOType') -> 'KISAO':
         """Validate and normalize kisao."""
-        term: "KISAO"
+        term: 'KISAO'
         if isinstance(kisao, str):
             if not kisao.startswith("KISAO"):
                 raise ValueError(kisao + " is not a KISAO id.")
@@ -2687,13 +2775,12 @@ class KISAO(str, Enum):
 
             term = getattr(cls, kisao)
 
-        elif isinstance(kisao, "KISAO"):
+        elif isinstance(kisao, 'KISAO'):
             term = kisao
         else:
             raise ValueError
 
         return term
-
 
 __all__ = [
     "KISAO",

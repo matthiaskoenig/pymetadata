@@ -1,7 +1,0 @@
-include LICENSE
-include README.rst
-include src/pymetadata/py.typed
-
-recursive-include src/pymetadata/resources/templates *
-include src/pymetadata/resources/chebi_webservice_wsdl.xml
-include src/pymetadata/resources/identifiers_registry.json

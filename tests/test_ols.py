@@ -1,4 +1,5 @@
 """Testing OLS."""
+
 from pymetadata.core.annotation import BQB, RDFAnnotation, RDFAnnotationData
 
 
