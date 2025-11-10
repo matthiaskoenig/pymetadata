@@ -2,7 +2,7 @@
 
 Composite annotations are semantic annotations that are comprised of multiple annotation
 terms linked using  standard  qualifiers  (also  known  as  “relations”  or  “predicates”)
-to  indicate  the  meaning  of  anannotation.
+to  indicate  the  meaning  of  annotation.
 Composite annotations are used when a single knowledge resource term is not available to
 sufficiently define a model or data element.  For model-component annotations,
 composite annotations have two primary components:
