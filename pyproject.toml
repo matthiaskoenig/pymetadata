@@ -38,24 +38,24 @@ keywords = [
 ]
 dependencies = [
     "depinfo>=2.2.0",
-	"lxml>=5.3",
-	"rich>=13.9.4",
-	"requests>=2.32.3",
-	"pronto>=2.5.8",
-	"fastobo>=0.12.3",
-	"jinja2>=3.1.5",
-	"xmltodict>=0.14.2",
-	"pydantic>=2.10.4",
+	"lxml>=6.0.2",
+	"rich>=14.2.0",
+	"requests>=2.32.5",
+	"pronto>=2.7.2",
+	"fastobo>=0.14.1",
+	"jinja2>=3.1.6",
+	"xmltodict>=1.0.2",
+	"pydantic>=2.12.5",
 ]
 
 [project.optional-dependencies]
 dev = [
-    "bump-my-version>=1.2.4",
-	"ruff>=0.14.0",
-	"pre-commit>=4.0.1",
-	"mypy>=1.18.2",
-    "tox>=4.31.0",
-    "pytest>=8.4.2",
+    "bump-my-version>=1.2.6",
+	"ruff>=0.14.11",
+	"pre-commit>=4.5.1",
+	"mypy>=1.19.1",
+    "tox>=4.34.1",
+    "pytest>=9.0.2",
     "pytest-cov>=7.0.0",
 ]
 
