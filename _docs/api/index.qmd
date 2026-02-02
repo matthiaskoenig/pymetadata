@@ -1,0 +1,17 @@
+# Function reference {.doc .doc-index}
+
+## COMBINE archive
+
+Functionality related to COMBINE archive (OMEX).
+
+| | |
+| --- | --- |
+| [omex](omex.qmd#pymetadata.omex) | COMBINE Archive support. |
+
+## Metadata
+
+Functionality related to metadata and annotations.
+
+| | |
+| --- | --- |
+| [core.annotation](core.annotation.qmd#pymetadata.core.annotation) | Annotation. |

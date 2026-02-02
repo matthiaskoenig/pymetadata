@@ -1,0 +1,300 @@
+# omex { #pymetadata.omex }
+
+`omex`
+
+COMBINE Archive support.
+
+This module provides an abstraction around the COMBINE archive. Common operations
+such as archive creation, archive extraction, creating archives from entries or
+directories, working with the `manifest.xml` are implemented.
+
+When working with COMBINE archives these wrapper functions should be used.
+The current version has no support for metadata manipulation.
+
+Encrypted archives can be opened, but no support for encrypting archives yet.
+
+## Classes
+
+| Name | Description |
+| --- | --- |
+| [EntryFormat](#pymetadata.omex.EntryFormat) | Enum for common formats. |
+| [Manifest](#pymetadata.omex.Manifest) | COMBINE archive manifest. |
+| [ManifestEntry](#pymetadata.omex.ManifestEntry) | Entry of an OMEX file listed in the `manifest.xml`. |
+| [Omex](#pymetadata.omex.Omex) | Combine archive class. |
+
+### EntryFormat { #pymetadata.omex.EntryFormat }
+
+```python
+omex.EntryFormat()
+```
+
+Enum for common formats.
+
+### Manifest { #pymetadata.omex.Manifest }
+
+```python
+omex.Manifest(**data)
+```
+
+COMBINE archive manifest.
+
+A manifest is a list of ManifestEntries.
+
+#### Methods
+
+| Name | Description |
+| --- | --- |
+| [add_entry](#pymetadata.omex.Manifest.add_entry) | Add entry to manifest. |
+| [from_manifest](#pymetadata.omex.Manifest.from_manifest) | Create manifest from existing manifest.xml file. |
+| [remove_entry_for_location](#pymetadata.omex.Manifest.remove_entry_for_location) | Remove entry for given location. |
+| [to_manifest](#pymetadata.omex.Manifest.to_manifest) | Write manifest.xml. |
+| [to_manifest_xml](#pymetadata.omex.Manifest.to_manifest_xml) | Create xml of manifest. |
+
+##### add_entry { #pymetadata.omex.Manifest.add_entry }
+
+```python
+omex.Manifest.add_entry(entry)
+```
+
+Add entry to manifest.
+
+Does not check for duplication.
+
+##### from_manifest { #pymetadata.omex.Manifest.from_manifest }
+
+```python
+omex.Manifest.from_manifest(manifest_path)
+```
+
+Create manifest from existing manifest.xml file.
+
+##### remove_entry_for_location { #pymetadata.omex.Manifest.remove_entry_for_location }
+
+```python
+omex.Manifest.remove_entry_for_location(location)
+```
+
+Remove entry for given location.
+
+##### to_manifest { #pymetadata.omex.Manifest.to_manifest }
+
+```python
+omex.Manifest.to_manifest(manifest_path)
+```
+
+Write manifest.xml.
+
+##### to_manifest_xml { #pymetadata.omex.Manifest.to_manifest_xml }
+
+```python
+omex.Manifest.to_manifest_xml()
+```
+
+Create xml of manifest.
+
+### ManifestEntry { #pymetadata.omex.ManifestEntry }
+
+```python
+omex.ManifestEntry()
+```
+
+Entry of an OMEX file listed in the `manifest.xml`.
+
+This corresponds to a single file in the archive which is tracked in the
+manifest.xml.
+    location: location of the entry
+    format: full format string
+    master: master attribute
+
+#### Methods
+
+| Name | Description |
+| --- | --- |
+| [is_format](#pymetadata.omex.ManifestEntry.is_format) | Check if entry is of the given format_key. |
+| [is_sbgn](#pymetadata.omex.ManifestEntry.is_sbgn) | Check if entry is SBGN. |
+| [is_sbml](#pymetadata.omex.ManifestEntry.is_sbml) | Check if entry is SBML. |
+| [is_sedml](#pymetadata.omex.ManifestEntry.is_sedml) | Check if entry is SED-ML. |
+
+##### is_format { #pymetadata.omex.ManifestEntry.is_format }
+
+```python
+omex.ManifestEntry.is_format(format_key, format)
+```
+
+Check if entry is of the given format_key.
+
+##### is_sbgn { #pymetadata.omex.ManifestEntry.is_sbgn }
+
+```python
+omex.ManifestEntry.is_sbgn()
+```
+
+Check if entry is SBGN.
+
+##### is_sbml { #pymetadata.omex.ManifestEntry.is_sbml }
+
+```python
+omex.ManifestEntry.is_sbml()
+```
+
+Check if entry is SBML.
+
+##### is_sedml { #pymetadata.omex.ManifestEntry.is_sedml }
+
+```python
+omex.ManifestEntry.is_sedml()
+```
+
+Check if entry is SED-ML.
+
+### Omex { #pymetadata.omex.Omex }
+
+```python
+omex.Omex()
+```
+
+Combine archive class.
+
+#### Methods
+
+| Name | Description |
+| --- | --- |
+| [add_entry](#pymetadata.omex.Omex.add_entry) | Add a path to the combine archive. |
+| [entries_by_format](#pymetadata.omex.Omex.entries_by_format) | Get entries with given format in the archive. |
+| [from_directory](#pymetadata.omex.Omex.from_directory) | Create a COMBINE archive from a given directory. |
+| [from_omex](#pymetadata.omex.Omex.from_omex) | Read omex from given path. |
+| [get_path](#pymetadata.omex.Omex.get_path) | Get path for given location. |
+| [guess_format](#pymetadata.omex.Omex.guess_format) | Guess format string for given file. |
+| [is_omex](#pymetadata.omex.Omex.is_omex) | Check if path is an omex archive. |
+| [lookup_format](#pymetadata.omex.Omex.lookup_format) | Lookup format by format_key. |
+| [remove_entry_for_location](#pymetadata.omex.Omex.remove_entry_for_location) | Remove entry and corresponding entry_path. |
+| [to_directory](#pymetadata.omex.Omex.to_directory) | Extract combine archive to output directory. |
+| [to_omex](#pymetadata.omex.Omex.to_omex) | Write omex to path. |
+
+##### add_entry { #pymetadata.omex.Omex.add_entry }
+
+```python
+omex.Omex.add_entry(entry_path, entry)
+```
+
+Add a path to the combine archive.
+
+The corresponding ManifestEntry information is required.
+The entry is copied when getting added, i.e., changes to the location
+after adding an entry will not have any effect on the content in the
+archive!
+
+##### entries_by_format { #pymetadata.omex.Omex.entries_by_format }
+
+```python
+omex.Omex.entries_by_format(format_key)
+```
+
+Get entries with given format in the archive.
+
+##### from_directory { #pymetadata.omex.Omex.from_directory }
+
+```python
+omex.Omex.from_directory(directory)
+```
+
+Create a COMBINE archive from a given directory.
+
+The file types are inferred,
+in case of existing manifest or metadata information this should be reused.
+
+For all SED-ML files in the directory the master attribute is set to True.
+
+##### from_omex { #pymetadata.omex.Omex.from_omex }
+
+```python
+omex.Omex.from_omex(omex_path, password=None)
+```
+
+Read omex from given path.
+
+:param omex_path: path to omex archive
+:param password: password for encryption
+:return: Omex object
+
+##### get_path { #pymetadata.omex.Omex.get_path }
+
+```python
+omex.Omex.get_path(location)
+```
+
+Get path for given location.
+
+##### guess_format { #pymetadata.omex.Omex.guess_format }
+
+```python
+omex.Omex.guess_format(path)
+```
+
+Guess format string for given file.
+
+If string cannot be resolved '' is returned.
+
+##### is_omex { #pymetadata.omex.Omex.is_omex }
+
+```python
+omex.Omex.is_omex(omex_path)
+```
+
+Check if path is an omex archive.
+
+File must be a zip archive and contain a manifest.xml.
+
+##### lookup_format { #pymetadata.omex.Omex.lookup_format }
+
+```python
+omex.Omex.lookup_format(format_key)
+```
+
+Lookup format by format_key.
+
+##### remove_entry_for_location { #pymetadata.omex.Omex.remove_entry_for_location }
+
+```python
+omex.Omex.remove_entry_for_location(location)
+```
+
+Remove entry and corresponding entry_path.
+
+##### to_directory { #pymetadata.omex.Omex.to_directory }
+
+```python
+omex.Omex.to_directory(output_dir)
+```
+
+Extract combine archive to output directory.
+
+:param output_dir: output directory
+:return:
+
+##### to_omex { #pymetadata.omex.Omex.to_omex }
+
+```python
+omex.Omex.to_omex(
+    omex_path,
+    password=None,
+    compression=zipfile.ZIP_DEFLATED,
+    compresslevel=9,
+)
+```
+
+Write omex to path.
+
+By definition OMEX files should be zip deflated.
+
+The `compresslevel` parameter controls the compression level to use when
+writing files to the archive. When using `ZIP_STORED` or `ZIP_LZMA` it has no
+effect. When using `ZIP_DEFLATED` integers 0 through 9 are accepted
+(see zlib for more information). When using ZIP_BZIP2 integers 1 through 9
+are accepted (see bz2 for more information). The larger the value the better
+te compression
+
+:param omex_path:
+:param compression: compression algorithm
+:param compresslevel: level of compression
+:return:

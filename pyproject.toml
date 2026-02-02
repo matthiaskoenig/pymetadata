@@ -50,13 +50,14 @@ dependencies = [
 
 [project.optional-dependencies]
 dev = [
-    "bump-my-version>=1.2.6",
-	"ruff>=0.14.11",
-	"pre-commit>=4.5.1",
-	"mypy>=1.19.1",
-    "tox>=4.34.1",
-    "pytest>=9.0.2",
+    "bump-my-version>=1.2.4",
+	"ruff>=0.14.0",
+	"pre-commit>=4.0.1",
+	"mypy>=1.18.2",
+    "tox>=4.31.0",
+    "pytest>=8.4.2",
     "pytest-cov>=7.0.0",
+    "quartodoc>=0.11.1",
 ]
 
 [project_urls]

@@ -1,4 +1,4 @@
-![pymetadata logo](https://github.com/matthiaskoenig/pymetadata/raw/develop/docs/images/favicon/pymetadata-100x100-300dpi.png)
+![pymetadata logo](./_docs/images/favicon/pymetadata-100x100-300dpi.png)
 
 # pymetadata: python utilities for metadata and COMBINE archives
 [![GitHub Actions CI/CD Status](https://github.com/matthiaskoenig/pymetadata/workflows/CI-CD/badge.svg)](https://github.com/matthiaskoenig/pymetadata/actions/workflows/main.yml)
@@ -19,20 +19,7 @@ Features include among others
 
 If you have any questions or issues please [open an issue](https://github.com/matthiaskoenig/pymetadata/issues).
 
-# Documentation
-Documentation is still work in progress. For an example usage of the COMBINE archive
-see [omex_example.py](src/pymetadata/examples/omex_example.py).
-
-# How to cite
-[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.5308801.svg)](https://doi.org/10.5281/zenodo.5308801)
-
-
-# License
-- Source Code: [MIT](https://opensource.org/license/MIT)
-- Documentation: [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/)
-
-# Funding
-Matthias König (MK) was supported by the Federal Ministry of Education and Research (BMBF, Germany) within the research network Systems Medicine of the Liver (LiSyM, grant number 031L0054). MK is supported by the Federal Ministry of Education and Research (BMBF, Germany) within ATLAS by grant number 031L0304B and by the German Research Foundation (DFG) within the Research Unit Program FOR 5151 QuaLiPerF (Quantifying Liver Perfusion-Function Relationship in Complex Resection - A Systems Medicine Approach) by grant number 436883643 and by grant number 465194077 (Priority Programme SPP 2311, Subproject SimLivA).
+Documentation is available from https://matthiaskoenig.github.io/pymetadata.
 
 # Installation
 `pymetadata` is available from [pypi](https://pypi.python.org/pypi/pymetadata) and
@@ -56,4 +43,21 @@ import pymetadata
 pymetadata.CACHE_PATH = <cache_path>
 ```
 
-© 2021-2025 Matthias König
+
+# How to cite
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.5308801.svg)](https://doi.org/10.5281/zenodo.5308801)
+
+# License
+- Source Code: [MIT](https://opensource.org/license/MIT)
+- Documentation: [CC BY-SA 4.0](http://creativecommons.org/licenses/by-sa/4.0/)
+
+# Funding
+Matthias König is supported and by the German Research Foundation (DFG) within the Research Unit Programme FOR 5151
+"QuaLiPerF (Quantifying Liver Perfusion-Function Relationship in Complex Resection -
+A Systems Medicine Approach)" by grant number 436883643 and by grant number
+465194077 (Priority Programme SPP 2311, Subproject SimLivA).
+
+Matthias König was supported by the Federal Ministry of Education and Research (BMBF, Germany)
+within the research network Systems Medicine of the Liver (LiSyM, grant number 031L0054).
+
+© 2021-2026 Matthias König

@@ -1,0 +1,12 @@
+website:
+  sidebar:
+  - contents:
+    - api/index.qmd
+    - contents:
+      - api/omex.qmd
+      section: COMBINE archive
+    - contents:
+      - api/core.annotation.qmd
+      section: Metadata
+    id: api
+  - id: dummy-sidebar

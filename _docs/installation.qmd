@@ -1,0 +1,22 @@
+# Installation
+
+pymetadata is available from [pypi](https://pypi.python.org/pypi/pymetadata) and
+can be installed via
+
+```bash
+pip install pymetadata
+```
+
+## Cache path
+`pymetadata` caches some information for faster retrieval. The cache path is set to
+
+```python
+CACHE_PATH: Path = Path.home() / ".cache" / "pymetadata"
+```
+
+To use a custom cache path use
+
+```python
+import pymetadata
+pymetadata.CACHE_PATH = <cache_path>
+```

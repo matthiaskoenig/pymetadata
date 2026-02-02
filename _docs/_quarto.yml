@@ -1,0 +1,110 @@
+project:
+  type: website
+  output-dir: ../docs
+
+  render:
+    - "*.qmd"
+    - "*.md"
+    - "!tests/"
+    - "!release-notes/"
+    - "!src/"
+
+website:
+  title: "pymetadata"
+  "description": "Python utilities for working with metadata and COMBINE archives"
+  favicon: images/favicon/favicon.ico
+  site-url: https://matthiaskoenig.github.io/pymetadata
+  open-graph: true
+  page-navigation: true
+  bread-crumbs: true
+  repo-url: https://github.com/matthiaskoenig/pymetadata
+  repo-branch: develop
+  repo-subdir: _docs
+  repo-link-target: _blank
+  repo-actions: [ edit, source, issue ]
+
+
+  sidebar:
+    style: "docked"
+    type: "dark"
+    search: true
+    contents:
+       - index.qmd
+       - text: "Installation"
+         href: installation.qmd
+
+       - section: "API Reference"
+         contents:
+          - text: "Overview"
+            href: api/index.qmd
+
+          - text: "COMBINE archive"
+            href: api/omex.qmd
+          - text: "Annotations"
+            href: api/core.annotation.qmd
+
+       - section: "Contributing"
+         contents:
+          - href: development.qmd
+
+    tools:
+      - icon: github
+        menu:
+          - text: Source Code
+            href: https://github.com/matthiaskoenig/pymetadata
+          - text: Report a Bug
+            href: https://github.com/matthiaskoenig/pymetadata/issues
+
+  page-footer:
+    left: "Copyright 2019-2026, Matthias König, [https://livermetabolism.com](https://livermetabolism.com)"
+    right:
+      - icon: github
+        href: https://github.com/matthiaskoenig
+      - icon: linkedin
+        href: https://www.linkedin.com/in/matthias-koenig/
+      - icon: orcid
+        href: https://orcid.org/0000-0003-1725-179X
+
+format:
+  html:
+    theme:
+      light: flatly
+      dark: darkly
+    css:
+      - api/_styles-quartodoc.css
+    toc: true
+
+
+# tell quarto to read the generated sidebar
+metadata-files:
+  - api/_sidebar.yml
+
+quartodoc:
+  # the name used to import the package you want to create reference docs for
+  package: pymetadata
+  render_interlinks: true
+  parser: google  # google, sphinx, numpy
+
+  # write sidebar and style data
+  sidebar: api/_sidebar.yml
+  css: api/_styles-quartodoc.css
+  version: 0.5.10
+  dir: api
+
+  sections:
+    - title: COMBINE archive
+      desc: Functionality related to COMBINE archive (OMEX).
+      contents:
+        # the functions being documented in the package.
+        # you can refer to anything: class methods, modules, etc..
+        - name: omex
+    - title: Metadata
+      desc: Functionality related to metadata and annotations.
+      contents:
+        - name: core.annotation
+
+filters:
+  - interlinks
+
+interlinks:
+  sources: {}

@@ -1,0 +1,150 @@
+# core.annotation { #pymetadata.core.annotation }
+
+`core.annotation`
+
+Annotation.
+
+Core data structure to store annotations.
+
+## Classes
+
+| Name | Description |
+| --- | --- |
+| [ProviderType](#pymetadata.core.annotation.ProviderType) | Provider type. |
+| [RDFAnnotation](#pymetadata.core.annotation.RDFAnnotation) | RDFAnnotation class. |
+| [RDFAnnotationData](#pymetadata.core.annotation.RDFAnnotationData) | Annotation with resolved information. |
+
+### ProviderType { #pymetadata.core.annotation.ProviderType }
+
+```python
+core.annotation.ProviderType()
+```
+
+Provider type.
+
+### RDFAnnotation { #pymetadata.core.annotation.RDFAnnotation }
+
+```python
+core.annotation.RDFAnnotation(qualifier, resource, validate=True)
+```
+
+RDFAnnotation class.
+
+Basic storage of annotation information. This consists of the relation
+and the resource.
+The annotations can be attached to other objects thereby forming
+triples which can be converted to RDF.
+
+#### Resource can be either {.doc-section .doc-section-resource-can-be-either}
+
+- `http(s)://identifiers.org/collection/term`, i.e., a identifiers.org URI
+- `collection/term`, i.e., the combination of collection and term
+- `http(s)://arbitrary.url`, an arbitrary URL
+- urn:miriam:uniprot:P03023
+- https://bioregistry.io/chebi:15996 urls via the bioregistry provider
+
+#### Attributes
+
+| Name | Description |
+| --- | --- |
+| [resource_normalized](#pymetadata.core.annotation.RDFAnnotation.resource_normalized) | Normalize resource for given annotation. |
+
+#### Methods
+
+| Name | Description |
+| --- | --- |
+| [check_miriam_term](#pymetadata.core.annotation.RDFAnnotation.check_miriam_term) | Check that term follows id pattern for collection. |
+| [check_qualifier](#pymetadata.core.annotation.RDFAnnotation.check_qualifier) | Check that the qualifier is an allowed qualifier. |
+| [from_tuple](#pymetadata.core.annotation.RDFAnnotation.from_tuple) | Construct from tuple. |
+| [shorten_compact_term](#pymetadata.core.annotation.RDFAnnotation.shorten_compact_term) | Shorten the compact terms and return term. |
+| [to_dict](#pymetadata.core.annotation.RDFAnnotation.to_dict) | Convert to dict. |
+| [validate](#pymetadata.core.annotation.RDFAnnotation.validate) | Validate annotation. |
+
+##### check_miriam_term { #pymetadata.core.annotation.RDFAnnotation.check_miriam_term }
+
+```python
+core.annotation.RDFAnnotation.check_miriam_term()
+```
+
+Check that term follows id pattern for collection.
+
+Uses the Identifiers collection information.
+
+##### check_qualifier { #pymetadata.core.annotation.RDFAnnotation.check_qualifier }
+
+```python
+core.annotation.RDFAnnotation.check_qualifier(qualifier)
+```
+
+Check that the qualifier is an allowed qualifier.
+
+:param qualifier:
+:return:
+
+##### from_tuple { #pymetadata.core.annotation.RDFAnnotation.from_tuple }
+
+```python
+core.annotation.RDFAnnotation.from_tuple(t)
+```
+
+Construct from tuple.
+
+##### shorten_compact_term { #pymetadata.core.annotation.RDFAnnotation.shorten_compact_term }
+
+```python
+core.annotation.RDFAnnotation.shorten_compact_term(term, collection)
+```
+
+Shorten the compact terms and return term.
+
+If the namespace is not embedded in the term return the shortened term.
+
+##### to_dict { #pymetadata.core.annotation.RDFAnnotation.to_dict }
+
+```python
+core.annotation.RDFAnnotation.to_dict()
+```
+
+Convert to dict.
+
+##### validate { #pymetadata.core.annotation.RDFAnnotation.validate }
+
+```python
+core.annotation.RDFAnnotation.validate()
+```
+
+Validate annotation.
+
+### RDFAnnotationData { #pymetadata.core.annotation.RDFAnnotationData }
+
+```python
+core.annotation.RDFAnnotationData(annotation)
+```
+
+Annotation with resolved information.
+
+queries for the resource should happen here;
+this resolves additional information.
+
+#### Methods
+
+| Name | Description |
+| --- | --- |
+| [query_ols](#pymetadata.core.annotation.RDFAnnotationData.query_ols) | Query ontology lookup service. |
+| [to_dict](#pymetadata.core.annotation.RDFAnnotationData.to_dict) | Convert to dict. |
+
+##### query_ols { #pymetadata.core.annotation.RDFAnnotationData.query_ols }
+
+```python
+core.annotation.RDFAnnotationData.query_ols()
+```
+
+Query ontology lookup service.
+
+##### to_dict { #pymetadata.core.annotation.RDFAnnotationData.to_dict }
+
+```python
+core.annotation.RDFAnnotationData.to_dict()
+```
+
+Convert to dict.
