@@ -20,6 +20,7 @@ from enum import Enum
 from pathlib import Path
 from typing import Dict, List, Optional
 
+import requests
 import xmltodict
 from pydantic import BaseModel, PrivateAttr
 
@@ -510,7 +511,7 @@ class Omex:
 
     @staticmethod
     def from_omex(omex_path: Path, password: Optional[bytes] = None) -> "Omex":
-        """Read omex from given path.
+        """Read omex from path.
 
         :param omex_path: path to omex archive
         :param password: password for encryption
@@ -532,6 +533,22 @@ class Omex:
                 zf.extractall(tmp_dir, pwd=password)
 
             return Omex.from_directory(Path(tmp_dir))
+
+    @staticmethod
+    def from_url(omex_url: str, password: Optional[bytes] = None) -> "Omex":
+        """Read omex from url.
+
+        :param url: url to omex archive
+        :param password: password for encryption
+        :return: Omex object
+        """
+        with tempfile.NamedTemporaryFile(delete=False) as tmp:
+            r = requests.get(omex_url)
+            r.raise_for_status()
+            tmp.write(r.content)
+            tmp_path = Path(tmp.name)
+
+        return Omex.from_omex(tmp_path, password=password)
 
     @classmethod
     def from_directory(cls, directory: Path) -> "Omex":

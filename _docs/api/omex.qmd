@@ -162,7 +162,8 @@ Combine archive class.
 | [add_entry](#pymetadata.omex.Omex.add_entry) | Add a path to the combine archive. |
 | [entries_by_format](#pymetadata.omex.Omex.entries_by_format) | Get entries with given format in the archive. |
 | [from_directory](#pymetadata.omex.Omex.from_directory) | Create a COMBINE archive from a given directory. |
-| [from_omex](#pymetadata.omex.Omex.from_omex) | Read omex from given path. |
+| [from_omex](#pymetadata.omex.Omex.from_omex) | Read omex from path. |
+| [from_url](#pymetadata.omex.Omex.from_url) | Read omex from url. |
 | [get_path](#pymetadata.omex.Omex.get_path) | Get path for given location. |
 | [guess_format](#pymetadata.omex.Omex.guess_format) | Guess format string for given file. |
 | [is_omex](#pymetadata.omex.Omex.is_omex) | Check if path is an omex archive. |
@@ -211,9 +212,21 @@ For all SED-ML files in the directory the master attribute is set to True.
 omex.Omex.from_omex(omex_path, password=None)
 ```
 
-Read omex from given path.
+Read omex from path.
 
 :param omex_path: path to omex archive
+:param password: password for encryption
+:return: Omex object
+
+##### from_url { #pymetadata.omex.Omex.from_url }
+
+```python
+omex.Omex.from_url(omex_url, password=None)
+```
+
+Read omex from url.
+
+:param url: url to omex archive
 :param password: password for encryption
 :return: Omex object
 

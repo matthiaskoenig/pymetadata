@@ -1,0 +1,221 @@
+---
+title: "pymetadata"
+subtitle: "Python library for COMBINE archives and annotations"
+format: clean-revealjs
+author:
+  - name: Matthias König
+    orcid: 0000-0003-1725-179X
+    email: konigmatt@gmail.com<br /> https://livermetabolism.com
+    affiliations: Humboldt-Universität zu Berlin, Faculty of Life Science, Institute of Biology, ITB <br />University of Stuttgart, Institute of Structural Mechanics and Dynamics in Aerospace Engineering
+date: 2026-02-02
+title-slide-attributes:
+  data-notes: Some speaker notes
+bibliography: pymetadata.bib
+
+transition-speed: default
+width: 1050
+height: 700
+margin: 0.1
+# toc-title: Outline
+# toc: true
+slide-number: true
+chalkboard:
+    buttons: false
+preview-links: auto
+logo: images/pymetadata.png
+css: styles.css
+citation-location: document
+# footer: "Systems Medicine of Liver, https://livermetabolism.com"
+---
+
+
+## COMBINE archive (OMEX)^[@Bergmann2014b, @Bergmann2015a] ![](images/omex_logo.png){width="50px"}{.smaller}
+
+:::: {.columns}
+
+::: {.column width="50%"}
+- ***.omex**: Consists of a single ZIP-based file (with .omex extension) that bundles models, simulation descriptions, data files, and metadata needed to fully reproduce a study.
+- **Manifest**: Uses a manifest.xml file to catalog contents, including file locations and formats like SBML
+- **Sharing**: Enables sharing complete, reproducible simulation studies rather than scattered files.
+:::
+
+::: {.column width="50%"}
+![](images/omex_overview.png)
+:::
+
+::::
+
+
+## OMEX Metadata {.smaller}
+
+:::: {.columns}
+
+::: {.column width="50%"}
+
+- **FAIR**_ Metadata is crucial for FAIR^[@Wilkinson2016a] modelling workflows (findable, interoperable)
+- **Harmonization**: Important to harmonize semantic annotations efforts across standards and modeling domains^[@Neal2019b]
+- **Description** of models, model components and workflows (e.g. canagliflozin-model^[@Tereshchuk2026a, @Tereshchuk2026])
+![](images/annotation_resolved_small.png)
+:::
+
+::: {.column width="50%"}
+![](images/annotation_example.png)
+:::
+
+::::
+
+## pymetadata^[@pymetadata-v0.5.10] {.smaller}
+
+:::: {.columns}
+
+::: {.column width="50%"}
+- Supports reading, writing and display of COMBINE archive (OMEX)^[@Bergmann2014b, @Bergmann2015a]
+- Validation of metadata against identifiers.org^[@Bernal-Llinares2021] and MIRIAM^[@Laibe2007] registry
+- Normalization of metadata
+- Resolving metadata via ontology lookup service (OLS4)^[McLaughlin2025]
+- **new**: py3.10 - py3.14 support
+- **new**: documentation: <https://matthiaskoenig.github.io/pymetadata/>
+:::
+
+::: {.column width="50%"}
+![](images/github_screenshot.png)
+:::
+
+::::
+
+
+## 1. Create COMBINE archive {auto-animate="true"}
+<!-- omex_example.py -->
+```{.python .code-overflow-wrap}
+# Create archive from file
+omex = Omex()
+omex.add_entry(
+    entry_path=Path("results/testomex/models/omex_comp_flat.xml"),
+    entry=ManifestEntry(location="./model.xml",
+    format=EntryFormat.SBML, master=False),
+)
+omex.add_entry(
+    entry_path=Path("results/testomex/README.md"),
+    entry=ManifestEntry(
+        location="./README.md", format=EntryFormat.MARKDOWN, master=False
+    ),
+)
+omex.to_omex(Path("results/test_from_files.omex"))
+console.print(omex)
+```
+
+## 2. Load from URL
+
+```{.python .code-overflow-wrap}
+from pymetadata.console import console
+from pymetadata.omex import Omex
+
+omex_url = "https://github.com/matthiaskoenig/canagliflozin-model/releases/download/0.7.0/canagliflozin_model.omex"
+omex = Omex.from_url(omex_url)
+console.print(omex)
+```
+```{.python .code-overflow-wrap}
+[
+  ManifestEntry(location='.', format='http://identifiers.org/combine.specifications/omex', master=False),
+  ManifestEntry(location='./manifest.xml', format='http://identifiers.org/combine.specifications/omex-manifest', master=False),
+  ManifestEntry(location='./README.md', format='https://purl.org/NET/mediatypes/text/x-markdown', master=False),
+  ManifestEntry(location='./cc-by-sa-4.0.txt', format='https://purl.org/NET/mediatypes/text/plain', master=False),
+  ManifestEntry(location='./mit.txt', format='https://purl.org/NET/mediatypes/text/plain', master=False),
+  ManifestEntry(location='./models/canagliflozin_intestine.xml', format='http://identifiers.org/combine.specifications/sbml.level-3.version-2', master=False),
+  ...
+  ManifestEntry(location='./figures/canagliflozin_model.png', format='https://purl.org/NET/mediatypes/image/png', master=False)
+]
+```
+
+
+## 3. Working with SBO
+```{.python .code-overflow-wrap}
+# using SBO terms
+from pymetadata.console import console
+from pymetadata.metadata import SBO
+
+sbo_term1 = SBO.SIMPLE_CHEMICAL
+sbo_term2 = SBO.PROCESS
+
+for sbo in [sbo_term1, sbo_term2]:
+    console.print(sbo)
+```
+
+```bash
+SBO_0000247
+SBO_0000375
+```
+* enums for simple access to SBO
+
+## 4. Harmonizing annotations
+```{.python .code-overflow-wrap}
+from pymetadata.console import console
+from pymetadata.identifiers.miriam import BQB, BQM
+from pymetadata.core.annotation import RDFAnnotation
+
+for resource in [
+    "urn:miriam:chebi:CHEBI%3A33699",
+    "CHEBI:33699",
+    "chebi/CHEBI:33699",
+    "https://identifiers.org/chebi/CHEBI:33699",
+    "http://identifiers.org/CHEBI:33699",
+]:
+    a = RDFAnnotation(qualifier=BQB.IS, resource=resource)
+    console.print(a)
+```
+```bash
+RDFAnnotation(BQB.IS|chebi|CHEBI:33699|identifiers.org)
+RDFAnnotation(BQB.IS|chebi|CHEBI:33699|identifiers.org)
+RDFAnnotation(BQB.IS|chebi|CHEBI:33699|identifiers.org)
+RDFAnnotation(BQB.IS|chebi|CHEBI:33699|identifiers.org)
+RDFAnnotation(BQB.IS|chebi|CHEBI:33699|identifiers.org)
+```
+* normalizing multitude of patterns found in models and resources
+
+## 5. Validating annotations
+```{.python .code-overflow-wrap}
+from pymetadata.console import console
+from pymetadata.identifiers.miriam import BQB, BQM
+from pymetadata.core.annotation import RDFAnnotation
+
+for resource in [
+    "CHEB:33699",
+    "chebi/CHEBI:X33699",
+]:
+    a = RDFAnnotation(qualifier=BQB.IS, resource=resource)
+    console.print(a)
+```
+
+```{.python .code-overflow-wrap}
+ERROR    MIRIAM namespace `cheb` does not exist for `RDFAnnotation(BQB.IS|cheb|CHEB:33699|identifiers.org)`
+RDFAnnotation(BQB.IS|cheb|CHEB:33699|identifiers.org)
+
+ERROR    Term `CHEBI:X33699` did not match pattern `^CHEBI:\d+$` for collection `chebi`.
+RDFAnnotation(BQB.IS|chebi|CHEBI:X33699|identifiers.org)
+```
+* validation of namespaces and patterns
+
+## Want to know more
+::: {style="text-align: center; margin-top: 0.5em"}
+::: {.columns}
+::: {.column width="33%"}
+[![](images/pymetadata_large.png){.fixed-img}](https://matthiaskoenig.github.io/pymetadata)
+:::
+
+::: {.column width="33%"}
+[![](images/qr_livermetabolism.png){.fixed-img}](https://livermetabolism.com)
+:::
+::: {.column width="33%"}
+![](images/headshot.png){.fixed-img}
+:::
+
+:::
+:::
+
+::: {style="text-align: center; margin-top: 0.0em"}
+[pymetadata documentation](https://matthiaskoenig.github.io/pymetadata/){preview-link="true" style="text-align: center"}
+:::
+
+<!-- # References-->
+::: {#refs}
+:::

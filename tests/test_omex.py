@@ -213,3 +213,10 @@ def test_entries_by_format(data_directory: Path) -> None:
     assert sedml_entries[0].format.startswith(
         "http://identifiers.org/combine.specifications/sed-ml"
     )
+
+
+def test_omex_from_url() -> None:
+    """Read form url."""
+    url = "https://github.com/matthiaskoenig/canagliflozin-model/releases/download/0.7.0/canagliflozin_model.omex"
+    omex = Omex.from_url(url)
+    assert omex

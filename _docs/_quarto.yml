@@ -23,7 +23,6 @@ website:
   repo-link-target: _blank
   repo-actions: [ edit, source, issue ]
 
-
   sidebar:
     style: "docked"
     type: "dark"
