@@ -4,7 +4,6 @@ uv.lock
 *~
 .DS_Store
 .eggs/
-dist
 build
 .idea
 cover/
