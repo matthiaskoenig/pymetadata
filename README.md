@@ -23,6 +23,9 @@ Documentation is available from https://matthiaskoenig.github.io/pymetadata.
 
 A presentation from HARMONY2026 is available [here](https://matthiaskoenig.github.io/pymetadata/presentations/HARMONY2026/pymetadata.html).
 
+<iframe width="780" height="500" src="https://matthiaskoenig.github.io/pymetadata/presentations/HARMONY2026/pymetadata.html" title="Collaboration"></iframe>
+
+
 # Installation
 `pymetadata` is available from [pypi](https://pypi.python.org/pypi/pymetadata) and
 can be installed via
