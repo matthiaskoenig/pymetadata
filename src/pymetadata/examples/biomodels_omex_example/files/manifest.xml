@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<omexManifest xmlns="http://identifiers.org/combine.specifications/omex-manifest">
+	<content location="." format="https://identifiers.org/combine.specifications/omex" master="false"/>
+	<content location="./BioModelsMetadata_MODEL2402290004.csv" format="https://purl.org/NET/mediatypes/text/csv" master="false"/>
+	<content location="./EndoAcuteBZ1.m" format="https://purl.org/NET/mediatypes/application/x-matlab" master="false"/>
+	<content location="./EndoAcuteBZ2.m" format="https://purl.org/NET/mediatypes/application/x-matlab" master="false"/>
+	<content location="./EndoAcuteBZ3.m" format="https://purl.org/NET/mediatypes/application/x-matlab" master="false"/>
+	<content location="./EndoChronicBZ.m" format="https://purl.org/NET/mediatypes/application/x-matlab" master="false"/>
+	<content location="./EndoChronicRZ1.m" format="https://purl.org/NET/mediatypes/application/x-matlab" master="false"/>
+	<content location="./EndoChronicRZ2.m" format="https://purl.org/NET/mediatypes/application/x-matlab" master="false"/>
+	<content location="./EndoNZ.m" format="https://purl.org/NET/mediatypes/application/x-matlab" master="false"/>
+	<content location="./POM253.mat" format="https://purl.org/NET/mediatypes/application/x-matlab" master="false"/>
+	<content location="./PlotAPCaTTaAcuteAndChronic.m" format="https://purl.org/NET/mediatypes/application/x-matlab" master="false"/>
+	<content location="./Zhou2024_Updated-model.m" format="https://purl.org/NET/mediatypes/application/x-matlab" master="true"/>
+	<content location="./getCurrentsStructureCaMKSKJrelpKinetics.m" format="https://purl.org/NET/mediatypes/application/x-matlab" master="false"/>
+	<content location="./getStartingState.m" format="https://purl.org/NET/mediatypes/application/x-matlab" master="false"/>
+	<content location="./main.m" format="https://purl.org/NET/mediatypes/application/x-matlab" master="false"/>
+	<content location="./manifest.xml" format="https://identifiers.org/combine.specifications/omex-manifest" master="false"/>
+	<content location="./metadata.rdf" format="https://identifiers.org/combine.specifications/omex-metadata" master="false"/>
+	<content location="./modelRunnerCaMKSKJrelpKinetics1ms.m" format="https://purl.org/NET/mediatypes/application/x-matlab" master="false"/>
+	<content location="./model_ToRORd_LandCaMKSKJrelpKinetics.m" format="https://purl.org/NET/mediatypes/application/x-matlab" master="false"/>
+</omexManifest>

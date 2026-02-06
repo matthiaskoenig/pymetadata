@@ -1,0 +1,14 @@
+<rdf:RDF
+    xmlns:bqmodel="http://biomodels.net/model-qualifiers/#"
+    xmlns:dcterms="http://purl.org/dc/terms/"
+    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+    xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#"
+    xmlns:bqbiol="http://biomodels.net/biology-qualifiers/#" >
+  <rdf:Description rdf:about="https://www.ebi.ac.uk/biomodels/MODEL2402290004.4">
+    <dcterms:modified>2025-03-26T02:29:36.722Z</dcterms:modified>
+    <dcterms:creator>The BioModels Team &lt;biomodels-cura@ebi.ac.uk&gt;</dcterms:creator>
+    <dcterms:created>2025-03-26T02:29:36.551Z</dcterms:created>
+    <dcterms:provenance>This model was downloaded from BioModels (https://www.ebi.ac.uk/biomodels) on Wed Mar 26 02:29:36 GMT 2025</dcterms:provenance>
+    <dcterms:license>https://creativecommons.org/publicdomain/zero/1.0/</dcterms:license>
+  </rdf:Description>
+</rdf:RDF>
