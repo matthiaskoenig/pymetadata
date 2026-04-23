@@ -52,7 +52,9 @@ class OntologyFile:
     @property
     def path(self) -> Path:
         """Path of ontology file."""
-        return RESOURCES_DIR / "ontologies" / f"{self.id.lower()}.{self.format.value}.gz"
+        return (
+            RESOURCES_DIR / "ontologies" / f"{self.id.lower()}.{self.format.value}.gz"
+        )
 
     @property
     def filename(self) -> str:
@@ -227,7 +229,13 @@ def create_ontology_enum(ontology_id: str, pattern: str) -> None:
         raise ValueError(f"No Pronto Ontology for `{ontology_id}`")
 
     for term_id in ontology._ontology:
-        pronto_term = ontology._ontology[term_id]
+        try:
+            pronto_term = ontology._ontology.get_relationship(term_id)
+        except KeyError:
+            try:
+                pronto_term = ontology._ontology.get_term(term_id)
+            except KeyError:
+                pass
 
         pronto_name: Union[str, None, Any] = pronto_term.name
         if not isinstance(pronto_name, str):

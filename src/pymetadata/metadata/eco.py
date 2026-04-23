@@ -2243,6 +2243,21 @@ _terms = {
     "ECO_0008180": "specific MHC molecule based MHC restriction evidence used in automatic assertion",
     "ECO_0008181": "T cell type based MHC restriction evidence used in manual assertion",
     "ECO_0008182": "T cell type based MHC restriction evidence used in automatic assertion",
+    "ECO_0008183": "protein proximity labeling assay evidence",
+    "ECO_0008184": "proximity-dependent biotin identification evidence",
+    "ECO_0008185": "avidity evidence",
+    "ECO_0008186": "avidity-based extracellular interaction screening evidence",
+    "ECO_0008187": "single-molecule fluorescence resonance energy transfer evidence",
+    "ECO_0008188": "protein proximity labeling assay evidence used in manual assertion",
+    "ECO_0008189": "protein proximity labeling assay evidence used in automatic assertion",
+    "ECO_0008190": "proximity-dependent biotin identification evidence used in manual assertion",
+    "ECO_0008191": "proximity-dependent biotin identification evidence used in automatic assertion",
+    "ECO_0008192": "avidity evidence used in manual assertion",
+    "ECO_0008193": "avidity evidence used in automatic assertion",
+    "ECO_0008194": "avidity-based extracellular interaction screening evidence used in manual assertion",
+    "ECO_0008195": "avidity-based extracellular interaction screening evidence used in automatic assertion",
+    "ECO_0008196": "single-molecule fluorescence resonance energy transfer evidence used in manual assertion",
+    "ECO_0008197": "single-molecule fluorescence resonance energy transfer evidence used in automatic assertion",
 }
 
 pattern = r"^ECO_\d{7}$"
@@ -11934,6 +11949,72 @@ class ECO(str, Enum):
     T_CELL_TYPE_BASED_MHC_RESTRICTION_EVIDENCE_USED_IN_AUTOMATIC_ASSERTION = (
         "ECO_0008182"
     )
+
+    # protein proximity labeling assay evidence
+    ECO_0008183 = "ECO_0008183"
+    PROTEIN_PROXIMITY_LABELING_ASSAY_EVIDENCE = "ECO_0008183"
+
+    # proximity-dependent biotin identification evidence
+    ECO_0008184 = "ECO_0008184"
+    PROXIMITY_DEPENDENT_BIOTIN_IDENTIFICATION_EVIDENCE = "ECO_0008184"
+
+    # avidity evidence
+    ECO_0008185 = "ECO_0008185"
+    AVIDITY_EVIDENCE = "ECO_0008185"
+
+    # avidity-based extracellular interaction screening evidence
+    ECO_0008186 = "ECO_0008186"
+    AVIDITY_BASED_EXTRACELLULAR_INTERACTION_SCREENING_EVIDENCE = "ECO_0008186"
+
+    # single-molecule fluorescence resonance energy transfer evidence
+    ECO_0008187 = "ECO_0008187"
+    SINGLE_MOLECULE_FLUORESCENCE_RESONANCE_ENERGY_TRANSFER_EVIDENCE = "ECO_0008187"
+
+    # protein proximity labeling assay evidence used in manual assertion
+    ECO_0008188 = "ECO_0008188"
+    PROTEIN_PROXIMITY_LABELING_ASSAY_EVIDENCE_USED_IN_MANUAL_ASSERTION = "ECO_0008188"
+
+    # protein proximity labeling assay evidence used in automatic assertion
+    ECO_0008189 = "ECO_0008189"
+    PROTEIN_PROXIMITY_LABELING_ASSAY_EVIDENCE_USED_IN_AUTOMATIC_ASSERTION = (
+        "ECO_0008189"
+    )
+
+    # proximity-dependent biotin identification evidence used in manual assertion
+    ECO_0008190 = "ECO_0008190"
+    PROXIMITY_DEPENDENT_BIOTIN_IDENTIFICATION_EVIDENCE_USED_IN_MANUAL_ASSERTION = (
+        "ECO_0008190"
+    )
+
+    # proximity-dependent biotin identification evidence used in automatic assertion
+    ECO_0008191 = "ECO_0008191"
+    PROXIMITY_DEPENDENT_BIOTIN_IDENTIFICATION_EVIDENCE_USED_IN_AUTOMATIC_ASSERTION = (
+        "ECO_0008191"
+    )
+
+    # avidity evidence used in manual assertion
+    ECO_0008192 = "ECO_0008192"
+    AVIDITY_EVIDENCE_USED_IN_MANUAL_ASSERTION = "ECO_0008192"
+
+    # avidity evidence used in automatic assertion
+    ECO_0008193 = "ECO_0008193"
+    AVIDITY_EVIDENCE_USED_IN_AUTOMATIC_ASSERTION = "ECO_0008193"
+
+    # avidity-based extracellular interaction screening evidence used in manual assertion
+    ECO_0008194 = "ECO_0008194"
+    AVIDITY_BASED_EXTRACELLULAR_INTERACTION_SCREENING_EVIDENCE_USED_IN_MANUAL_ASSERTION = "ECO_0008194"
+
+    # avidity-based extracellular interaction screening evidence used in automatic assertion
+    ECO_0008195 = "ECO_0008195"
+    AVIDITY_BASED_EXTRACELLULAR_INTERACTION_SCREENING_EVIDENCE_USED_IN_AUTOMATIC_ASSERTION = "ECO_0008195"
+
+    # single-molecule fluorescence resonance energy transfer evidence used in manual assertion
+    ECO_0008196 = "ECO_0008196"
+    SINGLE_MOLECULE_FLUORESCENCE_RESONANCE_ENERGY_TRANSFER_EVIDENCE_USED_IN_MANUAL_ASSERTION = "ECO_0008196"
+
+    # single-molecule fluorescence resonance energy transfer evidence used in automatic assertion
+    ECO_0008197 = "ECO_0008197"
+    SINGLE_MOLECULE_FLUORESCENCE_RESONANCE_ENERGY_TRANSFER_EVIDENCE_USED_IN_AUTOMATIC_ASSERTION = "ECO_0008197"
 
     # DNA catabolic process, endonucleolytic
     GO_0000737 = "GO_0000737"
