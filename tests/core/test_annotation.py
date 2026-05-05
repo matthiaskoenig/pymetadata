@@ -146,6 +146,11 @@ rdf_annotation_data = [
     ),
     (
         BQB.IS,
+        "doi/10.5281/zenodo.17091694",
+        "RDFAnnotation(BQB.IS|doi|10.5281/zenodo.17091694|identifiers.org)",
+    ),
+    (
+        BQB.IS,
         "https://bioregistry.io/chebi:15996",
         "RDFAnnotation(BQB.IS|None|https://bioregistry.io/chebi:15996|bioregistry.io)",
     ),
