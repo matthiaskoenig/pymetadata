@@ -1,14 +1,18 @@
 """Downloading ontologies and generating the term enums.
 
-The enums of `pymetadata.ontologies` are generated from the ontology releases:
-`update_ontology_files` downloads the OWL files listed in `ontology_files`,
-`Ontology` reads them with pronto and `create_ontology_enum` renders one python
-module per ontology from `resources/templates/ontology_enum.pytemplate`.
+This module builds the enums of `pymetadata.ontologies`, it is internal tooling
+for maintainers and not part of the public API: everything here can change
+without notice, use the generated enums instead.
+
+The enums are generated from the ontology releases: `update_ontology_files`
+downloads the OWL files listed in `ontology_files`, `Ontology` reads them with
+pronto and `create_ontology_enum` renders one python module per ontology from
+`resources/templates/ontology_enum.pytemplate`.
 
 Running the module does all three steps for SBO, KISAO, PBPKO and ECO:
 
 ```bash
-python -m pymetadata.ontologies.ontology
+python -m pymetadata.ontologies._ontology_builder
 ```
 
 `pronto` and `jinja2` are optional dependencies, install them with

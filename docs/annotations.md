@@ -123,4 +123,4 @@ SBO.validate("SBO_0000247")  # SBO.SBO_0000247
 SBO.validate("SBO_9999999")  # raises AttributeError, the term does not exist
 ```
 
-The enums are generated with `pymetadata.ontologies.ontology`, which downloads the ontology in OWL format and renders a python module from it. See [Development](development.md#regenerating-the-ontology-enums) for how to update them to a newer ontology release.
+The enums are generated with the internal `pymetadata.ontologies._ontology_builder`, which downloads the ontology in OWL format and renders a python module from it. See [Development](development.md#regenerating-the-ontology-enums) for how to update them to a newer ontology release.

@@ -12,7 +12,7 @@ __version__ = "0.5.12"
 
 program_name: str = "pymetadata"
 RESOURCES_DIR: Path = Path(__file__).parent / "resources"
-#: the generated ontology enums, see `pymetadata.ontologies.ontology`
+#: the generated ontology enums, see `pymetadata.ontologies._ontology_builder`
 ENUM_DIR: Path = Path(__file__).parent / "ontologies"
 
 CACHE_USE: bool = False

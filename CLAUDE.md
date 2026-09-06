@@ -71,13 +71,14 @@ annotation with label/description/synonyms/xrefs by querying OLS.
 
 **Ontology enums are generated code.** `ontologies/sbo.py`, `kisao.py`,
 `eco.py`, `pbpko.py` are machine-generated (large; do not hand-edit). They come
-from `ontologies/ontology.py` (whose `pronto`/`jinja2` imports are lazy, they are
+from `ontologies/_ontology_builder.py` (internal, not part of the public API;
+its `pronto`/`jinja2` imports are lazy, they are
 the optional `ontology` extra): `update_ontology_files()` downloads OWL sources
 into `src/pymetadata/resources/ontologies/*.owl.gz` (gitignored, so they must be
 re-downloaded before regeneration), `Ontology` reads them with pronto, and
 `create_ontology_enum(id, pattern)` renders
 `resources/templates/ontology_enum.pytemplate` into `ENUM_DIR`, i.e.,
-`ontologies/<id>.py`. Running `python -m pymetadata.ontologies.ontology`
+`ontologies/<id>.py`. Running `python -m pymetadata.ontologies._ontology_builder`
 performs download + regeneration + import check, and needs
 `uv sync --extra ontology`. Each generated enum exposes `get_name()` and
 `validate()` accepting both `SBO_0000247` and `SBO:0000247` spellings; ids are

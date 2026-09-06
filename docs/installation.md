@@ -45,7 +45,7 @@ Regenerating the ontology enums reads OWL files and renders python modules from 
 pip install pymetadata[ontology]
 ```
 
-Without them `pymetadata.ontologies.ontology` can still be imported, but `Ontology` and `create_ontology_enum` raise an `ImportError` explaining what to install. See [Regenerating the ontology enums](development.md#regenerating-the-ontology-enums).
+Without them `pymetadata.ontologies._ontology_builder` can still be imported, but `Ontology` and `create_ontology_enum` raise an `ImportError` explaining what to install. See [Regenerating the ontology enums](development.md#regenerating-the-ontology-enums).
 
 For a development setup with the test and documentation tooling see [Development](development.md).
 

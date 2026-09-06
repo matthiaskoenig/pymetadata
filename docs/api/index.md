@@ -37,9 +37,8 @@ MIRIAM qualifiers and the identifiers.org registry.
 
 ## pymetadata.ontologies
 
-Ontology lookup service and generation of the enum modules.
+Ontology term enums (`SBO`, `KISAO`, `ECO`, `PBPKO`, see [Annotations](../annotations.md#ontology-enums)) and the ontology lookup service. The enums are built by the internal `_ontology_builder` module, see [Regenerating the ontology enums](../development.md#regenerating-the-ontology-enums).
 
 | module | description |
 | --- | --- |
 | [ontologies.ols](ontologies.ols.md) | Lookup of ontology terms in OLS |
-| [ontologies.ontology](ontologies.ontology.md) | Downloading ontologies and generating the enums |

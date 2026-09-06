@@ -107,11 +107,11 @@ The `documentation` workflow runs both steps, so the files are regenerated with 
 
 ## Regenerating the ontology enums { #regenerating-the-ontology-enums }
 
-`pymetadata.ontologies.sbo`, `kisao`, `eco` and `pbpko` are generated modules and should not be edited by hand. They are rendered from the ontology releases with
+`pymetadata.ontologies.sbo`, `kisao`, `eco` and `pbpko` are generated modules and should not be edited by hand. They are rendered from the ontology releases by `pymetadata.ontologies._ontology_builder`, which is internal tooling for maintainers rather than part of the public API, and therefore not in the API reference:
 
 ```bash
 uv sync --extra ontology
-python -m pymetadata.ontologies.ontology
+python -m pymetadata.ontologies._ontology_builder
 ```
 
 This needs the optional `ontology` dependencies (`pronto` and `jinja2`), which are not installed with the package because the generated enums work without them. The development environment (`--extra dev`) includes them.

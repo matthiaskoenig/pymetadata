@@ -39,7 +39,7 @@ unfixable = []
 dummy-variable-rgx = "^(_+|(_+[a-zA-Z0-9_]*[a-zA-Z0-9]+?))$"
 
 [lint.per-file-ignores]
-# generated from the ontologies, see `pymetadata.ontologies.ontology`
+# generated from the ontologies, see `pymetadata.ontologies._ontology_builder`
 "src/pymetadata/ontologies/sbo.py" = ["D", "UP", "PIE796", "RUF"]
 "src/pymetadata/ontologies/kisao.py" = ["D", "UP", "PIE796", "RUF"]
 "src/pymetadata/ontologies/eco.py" = ["D", "UP", "PIE796", "RUF"]

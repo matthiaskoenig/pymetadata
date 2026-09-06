@@ -39,7 +39,6 @@ nav = [
     ] },
     { "pymetadata.ontologies" = [
       { "ols" = "api/ontologies.ols.md" },
-      { "ontology" = "api/ontologies.ontology.md" },
     ] },
   ] },
   { "Contributing" = "development.md" },

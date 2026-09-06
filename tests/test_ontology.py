@@ -2,7 +2,13 @@
 
 import pytest
 
-from pymetadata.ontologies import PBPKO, SBO, PBPKOType, SBOType, ontology
+from pymetadata.ontologies import (
+    PBPKO,
+    SBO,
+    PBPKOType,
+    SBOType,
+    _ontology_builder,
+)
 
 
 @pytest.mark.parametrize(
@@ -16,7 +22,7 @@ from pymetadata.ontologies import PBPKO, SBO, PBPKOType, SBOType, ontology
 )
 def test_import_ontology(ontology_id: str) -> None:
     """Test import of ontology enum."""
-    ontology.try_ontology_import(ontology_id)
+    _ontology_builder.try_ontology_import(ontology_id)
 
 
 @pytest.mark.parametrize(
