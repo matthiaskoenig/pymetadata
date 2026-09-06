@@ -6,6 +6,9 @@ uv.lock
 .eggs/
 build
 dist/
+
+# rendered documentation (quarto output-dir)
+_site/
 .idea
 cover/
 .tox/

@@ -1,4 +1,4 @@
-![pymetadata logo](./_docs/images/favicon/pymetadata-100x100-300dpi.png)
+![pymetadata logo](./docs/images/favicon/pymetadata-100x100-300dpi.png)
 
 # pymetadata: python utilities for metadata and COMBINE archives
 [![GitHub Actions CI/CD Status](https://github.com/matthiaskoenig/pymetadata/workflows/CI-CD/badge.svg)](https://github.com/matthiaskoenig/pymetadata/actions/workflows/main.yml)
@@ -22,7 +22,7 @@ If you have any questions or issues please [open an issue](https://github.com/ma
 Documentation is available from https://matthiaskoenig.github.io/pymetadata.
 
 A presentation from HARMONY2026 is available [here](https://matthiaskoenig.github.io/pymetadata/presentations/HARMONY2026/pymetadata.html).
-[![](./_docs/images/HARMONY2026_slides.png)](https://matthiaskoenig.github.io/pymetadata/presentations/HARMONY2026/pymetadata.html)
+[![](./docs/images/HARMONY2026_slides.png)](https://matthiaskoenig.github.io/pymetadata/presentations/HARMONY2026/pymetadata.html)
 
 # Installation
 `pymetadata` is available from [pypi](https://pypi.python.org/pypi/pymetadata) and

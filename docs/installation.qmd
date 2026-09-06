@@ -1,0 +1,70 @@
+# Installation
+
+`pymetadata` requires python >= 3.11 and is available from
+[pypi](https://pypi.python.org/pypi/pymetadata):
+
+```bash
+pip install pymetadata
+```
+
+With [uv](https://docs.astral.sh/uv/):
+
+```bash
+uv add pymetadata
+```
+
+The package has no compiled dependencies, so the installation works the same on
+Linux, macOS and Windows. To install the current development version directly
+from GitHub use
+
+```bash
+pip install git+https://github.com/matthiaskoenig/pymetadata.git@develop
+```
+
+For a development setup with the test and documentation tooling see
+[Development](development.qmd).
+
+## Cache
+
+Some `pymetadata` features query web services: the
+[identifiers.org](https://identifiers.org) registry when annotations are
+validated, the [Ontology Lookup Service](https://www.ebi.ac.uk/ols4) when
+annotation information is resolved, and ChEBI and UniChem for substance cross
+references. Responses can be cached on disk so that repeated lookups of the same
+term do not hit the network again.
+
+Caching is controlled by two module level settings:
+
+```python
+import pymetadata
+
+pymetadata.CACHE_USE   # False by default
+pymetadata.CACHE_PATH  # ~/.cache/pymetadata by default
+```
+
+Both are read when a query is made, so they can be changed at any point after
+importing the package:
+
+```python
+from pathlib import Path
+import pymetadata
+
+pymetadata.CACHE_USE = True
+pymetadata.CACHE_PATH = Path("/tmp/pymetadata_cache")
+```
+
+The identifiers.org registry is cached independently of `CACHE_USE`. It is
+downloaded to `CACHE_PATH / "identifiers_registry.json"` and refreshed when the
+local copy is older than the cache duration (24 hours by default):
+
+```python
+from pymetadata.identifiers.registry import Registry
+
+registry = Registry(cache_duration=24, cache=True)
+namespace = registry.ns_dict["chebi"]
+print(namespace.pattern)
+# ^CHEBI:\d+$
+```
+
+Deleting `CACHE_PATH` is always safe; everything in it is re-downloaded on
+demand.

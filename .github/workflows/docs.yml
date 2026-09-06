@@ -1,0 +1,59 @@
+name: Documentation
+
+on:
+  push:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  # never cancel a running deployment, it would leave the site half published
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - name: Install uv and set the python version
+        uses: astral-sh/setup-uv@v10.0.1
+        with:
+          python-version: "3.13"
+          enable-cache: true
+      - name: Install quarto
+        uses: quarto-dev/quarto-actions/setup@v2
+      - name: Install dependencies
+        run: uv sync --extra dev
+      - name: Build the API reference from the docstrings
+        working-directory: docs
+        run: uv run quartodoc build
+      - name: Render the documentation
+        run: uv run quarto render docs
+      - name: Render the presentations
+        run: uv run quarto render presentations/HARMONY2026 --output-dir ../../_site/presentations/HARMONY2026
+      - name: Upload the site
+        uses: actions/upload-pages-artifact@v5
+        with:
+          path: _site
+
+  deploy:
+    needs: build
+    # only the default branch publishes to https://matthiaskoenig.github.io/pymetadata
+    if: github.ref == 'refs/heads/develop'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      pages: write     # deploy to GitHub Pages
+      id-token: write  # verify the deployment originates from this workflow
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v5
