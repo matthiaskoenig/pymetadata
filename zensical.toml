@@ -4,7 +4,7 @@ site_url = "https://matthiaskoenig.github.io/pymetadata/"
 site_description = "Python utilities for working with metadata and COMBINE archives"
 site_author = "Matthias König"
 
-copyright = "Copyright &copy; 2021-2026 Matthias König"
+copyright = 'Copyright &copy; 2021-2026 <a href="https://livermetabolism.com">Matthias König</a>'
 
 repo_url = "https://github.com/matthiaskoenig/pymetadata"
 repo_name = "matthiaskoenig/pymetadata"
