@@ -116,6 +116,8 @@ lazy `%s` formatting rather than f-strings (enforced by ruff `G`).
   pre-commit hook (`--extra dev`, so the hook syncs the dev environment it checks against).
 - Every module, class and function carries full type annotations and a google-style
   docstring.
-- `src/pymetadata/examples/` holds runnable usage examples plus test data
-  (`test.omex`, `biomodels_omex_example/`); test fixtures live in `tests/data/`.
+- `examples/` at the top level holds the runnable usage examples, they are not
+  part of the package: `examples/omex/` collects the COMBINE archive examples
+  together with the archives they use (`test.omex`, `biomodels_omex/`). Test
+  fixtures live in `tests/data/`.
 - Release notes go in `release-notes/` as part of a release commit.

@@ -3,7 +3,7 @@
 The archive is downloaded to a temporary file and read from there, so no local
 copy has to be managed.
 
-Run with `python -m pymetadata.examples.omex_from_url_example`.
+Run with `python examples/omex/omex_from_url.py`.
 """
 
 from pymetadata import log

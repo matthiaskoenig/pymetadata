@@ -142,11 +142,11 @@ omex.to_directory(Path("./unpacked"))  # extract, including the manifest.xml
 
 ## Examples
 
-Runnable examples ship with the package:
+Runnable examples are in [`examples/omex`](https://github.com/matthiaskoenig/pymetadata/tree/develop/examples/omex) of the repository:
 
 ```bash
-python -m pymetadata.examples.omex_example           # read, extract, create, write
-python -m pymetadata.examples.omex_from_url_example  # read an archive from a url
+python examples/omex/omex.py           # read, extract, create, write
+python examples/omex/omex_from_url.py  # read an archive from a url
 ```
 
 The full API, generated from the docstrings, is in the [API reference](api/omex.md).

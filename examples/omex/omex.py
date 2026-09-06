@@ -1,7 +1,7 @@
 """Reading, inspecting, creating and writing COMBINE archives.
 
-Run with `python -m pymetadata.examples.omex_example`. All output is written to
-a temporary directory.
+Run with `python examples/omex/omex.py`. All output is written to a temporary
+directory.
 """
 
 import tempfile
