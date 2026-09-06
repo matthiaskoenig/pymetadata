@@ -3,23 +3,38 @@
 # pymetadata: python utilities for metadata and COMBINE archives
 [![GitHub Actions CI/CD Status](https://github.com/matthiaskoenig/pymetadata/workflows/CI-CD/badge.svg)](https://github.com/matthiaskoenig/pymetadata/actions/workflows/main.yml) [![Documentation](https://img.shields.io/badge/docs-pymetadata-008080.svg)](https://matthiaskoenig.github.io/pymetadata) [![Version](https://img.shields.io/pypi/v/pymetadata.svg)](https://pypi.org/project/pymetadata/) [![Python Versions](https://img.shields.io/pypi/pyversions/pymetadata.svg)](https://pypi.org/project/pymetadata/) [![MIT License](https://img.shields.io/pypi/l/pymetadata.svg)](https://opensource.org/licenses/MIT) [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.5308801.svg)](https://doi.org/10.5281/zenodo.5308801)
 
-pymetadata is a collection of python utilities for working with metadata in the context of COMBINE standards with source code available from [https://github.com/matthiaskoenig/pymetadata](https://github.com/matthiaskoenig/pymetadata).
+pymetadata is a collection of python utilities for working with metadata in the context of COMBINE standards with documentation available from [https://matthiaskoenig.github.io/pymetadata](https://matthiaskoenig.github.io/pymetadata).
 
-Features include among others
+Features include
 
-- COMBINE archive version 1 support (OMEX)
+- COMBINE archive support (OMEX)
 - annotation classes and helpers
 - SBO, KISAO, ECO and PBPKO ontology enums
 
 If you have any questions or issues please [open an issue](https://github.com/matthiaskoenig/pymetadata/issues).
 
-Installation instructions, the user guide and the API reference are in the documentation: [https://matthiaskoenig.github.io/pymetadata](https://matthiaskoenig.github.io/pymetadata).
-
-The sources of the HARMONY2026 presentation are in [`presentations/HARMONY2026`](./presentations/HARMONY2026); render them with [quarto](https://quarto.org/).
-![](./docs/images/HARMONY2026_slides.png)
 
 # How to cite
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.5308801.svg)](https://doi.org/10.5281/zenodo.5308801)
+
+If you use `pymetadata` please cite the archived software on [Zenodo](https://doi.org/10.5281/zenodo.5308801):
+
+> König, M. (2026). *pymetadata are python utilities for working with metadata* (Version 0.5.12) [Computer software]. Zenodo. https://doi.org/10.5281/zenodo.19709022
+
+```bibtex
+@software{konig_pymetadata,
+  author    = {König, Matthias},
+  title     = {pymetadata are python utilities for working with metadata},
+  year      = {2026},
+  month     = apr,
+  version   = {0.5.12},
+  publisher = {Zenodo},
+  doi       = {10.5281/zenodo.19709022},
+  url       = {https://doi.org/10.5281/zenodo.19709022},
+}
+```
+
+Every release is archived with its own DOI. The entry above cites version 0.5.12; to cite all versions use the concept DOI [10.5281/zenodo.5308801](https://doi.org/10.5281/zenodo.5308801), which always resolves to the latest release. The citation metadata is also available as [`CITATION.cff`](./CITATION.cff) in the repository.
 
 # License
 - Source Code: [MIT](https://opensource.org/license/MIT)
@@ -30,4 +45,4 @@ Matthias König is supported and by the German Research Foundation (DFG) within 
 
 Matthias König was supported by the Federal Ministry of Education and Research (BMBF, Germany) within the research network Systems Medicine of the Liver (LiSyM, grant number 031L0054).
 
-© 2021-2026 Matthias König
+© 2021-2026 Matthias König, [https://livermetabolism.com](https://livermetabolism.com)

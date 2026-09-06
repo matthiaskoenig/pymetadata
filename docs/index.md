@@ -41,6 +41,25 @@ If you have any questions or issues please [open an issue](https://github.com/ma
 # How to cite
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.5308801.svg)](https://doi.org/10.5281/zenodo.5308801)
 
+If you use `pymetadata` please cite the archived software on [Zenodo](https://doi.org/10.5281/zenodo.5308801):
+
+> König, M. (2026). *pymetadata are python utilities for working with metadata* (Version 0.5.12) [Computer software]. Zenodo. https://doi.org/10.5281/zenodo.19709022
+
+```bibtex
+@software{konig_pymetadata,
+  author    = {König, Matthias},
+  title     = {pymetadata are python utilities for working with metadata},
+  year      = {2026},
+  month     = apr,
+  version   = {0.5.12},
+  publisher = {Zenodo},
+  doi       = {10.5281/zenodo.19709022},
+  url       = {https://doi.org/10.5281/zenodo.19709022},
+}
+```
+
+Every release is archived with its own DOI. The entry above cites version 0.5.12; to cite all versions use the concept DOI [10.5281/zenodo.5308801](https://doi.org/10.5281/zenodo.5308801), which always resolves to the latest release. The citation metadata is also available as [`CITATION.cff`](https://github.com/matthiaskoenig/pymetadata/blob/develop/CITATION.cff) in the repository.
+
 # License
 - Source Code: [MIT](https://opensource.org/license/MIT)
 - Documentation: [CC BY-SA 4.0](http://creativecommons.org/licenses/by-sa/4.0/)

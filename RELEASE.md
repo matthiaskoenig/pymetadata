@@ -11,6 +11,9 @@
 * bump version (`uvx bump-my-version bump [major|minor|patch]`)
 * `git push --tags` (triggers release)
 * `git push`
+* update the citation information after the Zenodo record of the release exists:
+  `date-released` in `CITATION.cff` and the version, date and version DOI in the
+  BibTeX of `README.md` and `docs/index.md`
 * test installation in virtualenv from pypi
 ```bash
 uv venv --python 3.14
