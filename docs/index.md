@@ -58,8 +58,6 @@ If you use `pymetadata` please cite the archived software on [Zenodo](https://do
 }
 ```
 
-Every release is archived with its own DOI. The entry above cites version 0.5.12; to cite all versions use the concept DOI [10.5281/zenodo.5308801](https://doi.org/10.5281/zenodo.5308801), which always resolves to the latest release. The citation metadata is also available as [`CITATION.cff`](https://github.com/matthiaskoenig/pymetadata/blob/develop/CITATION.cff) in the repository.
-
 # License
 - Source Code: [MIT](https://opensource.org/license/MIT)
 - Documentation: [CC BY-SA 4.0](http://creativecommons.org/licenses/by-sa/4.0/)
