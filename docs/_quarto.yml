@@ -1,0 +1,152 @@
+project:
+  type: website
+  output-dir: ../_site
+
+  render:
+    - "*.qmd"
+    - "*.md"
+    - "!tests/"
+    - "!release-notes/"
+    - "!src/"
+
+website:
+  title: "pymetadata"
+  "description": "Python utilities for working with metadata and COMBINE archives"
+  favicon: images/favicon/favicon.ico
+  site-url: https://matthiaskoenig.github.io/pymetadata
+  open-graph: true
+  page-navigation: true
+  bread-crumbs: true
+  repo-url: https://github.com/matthiaskoenig/pymetadata
+  repo-branch: develop
+  repo-subdir: docs
+  repo-link-target: _blank
+  repo-actions: [ edit, source, issue ]
+
+  sidebar:
+    style: "docked"
+    type: "dark"
+    search: true
+    contents:
+       - index.qmd
+       - text: "Installation"
+         href: installation.qmd
+
+       - section: "User guide"
+         contents:
+          - text: "COMBINE archives"
+            href: omex.qmd
+          - text: "Annotations"
+            href: annotations.qmd
+
+       - section: "API Reference"
+         contents:
+          - text: "Overview"
+            href: api/index.qmd
+
+          - text: "omex"
+            href: api/omex.qmd
+          - text: "core.annotation"
+            href: api/core.annotation.qmd
+          - text: "identifiers.miriam"
+            href: api/identifiers.miriam.qmd
+          - text: "core.xref"
+            href: api/core.xref.qmd
+          - text: "core.creator"
+            href: api/core.creator.qmd
+          - text: "ontologies.ontology"
+            href: api/ontologies.ontology.qmd
+          - text: "identifiers.registry"
+            href: api/identifiers.registry.qmd
+          - text: "ontologies.ols"
+            href: api/ontologies.ols.qmd
+          - text: "chebi"
+            href: api/chebi.qmd
+          - text: "unichem"
+            href: api/unichem.qmd
+          - text: "cache"
+            href: api/cache.qmd
+
+       - section: "Contributing"
+         contents:
+          - href: development.qmd
+
+    tools:
+      - icon: github
+        menu:
+          - text: Source Code
+            href: https://github.com/matthiaskoenig/pymetadata
+          - text: Report a Bug
+            href: https://github.com/matthiaskoenig/pymetadata/issues
+
+  page-footer:
+    left: "Copyright 2019-2026, Matthias König, [https://livermetabolism.com](https://livermetabolism.com)"
+    right:
+      - icon: github
+        href: https://github.com/matthiaskoenig
+      - icon: linkedin
+        href: https://www.linkedin.com/in/matthias-koenig/
+      - icon: orcid
+        href: https://orcid.org/0000-0003-1725-179X
+
+format:
+  html:
+    theme:
+      light: flatly
+      dark: darkly
+    css:
+      - api/_styles-quartodoc.css
+    toc: true
+
+
+# tell quarto to read the generated sidebar
+metadata-files:
+  - api/_sidebar.yml
+
+quartodoc:
+  # the name used to import the package you want to create reference docs for
+  package: pymetadata
+  render_interlinks: true
+  parser: google  # google, sphinx, numpy
+
+  # write sidebar and style data
+  sidebar: api/_sidebar.yml
+  css: api/_styles-quartodoc.css
+  version: 0.5.12
+  dir: api
+
+  sections:
+    - title: COMBINE archive
+      desc: Reading, creating and writing COMBINE archives (OMEX).
+      contents:
+        # the functions being documented in the package.
+        # you can refer to anything: class methods, modules, etc..
+        - name: omex
+    - title: Annotations
+      desc: MIRIAM annotations, qualifiers and the objects they resolve to.
+      contents:
+        - name: core.annotation
+        - name: identifiers.miriam
+        - name: core.xref
+        - name: core.creator
+    - title: Ontologies
+      desc: Ontology terms as enums and the generation of the enum modules.
+      contents:
+        - name: ontologies.ontology
+    - title: Registries and web services
+      desc: The identifiers.org registry and the queried web services.
+      contents:
+        - name: identifiers.registry
+        - name: ontologies.ols
+        - name: chebi
+        - name: unichem
+    - title: Utilities
+      desc: Caching of web service responses.
+      contents:
+        - name: cache
+
+filters:
+  - interlinks
+
+interlinks:
+  sources: {}

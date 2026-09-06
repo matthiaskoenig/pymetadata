@@ -1,7 +1,22 @@
-"""Module for working with chebi."""
+"""Substance information from ChEBI.
 
+Queries the ChEBI web service for the information stored for a term, such as the
+InChIKey, which can then be used to look up cross references with
+`pymetadata.unichem`.
+
+```python
+from pymetadata.chebi import ChebiQuery
+
+info = ChebiQuery.query("CHEBI:33699")
+```
+
+See <https://www.ebi.ac.uk/chebi/>.
+"""
+
+import contextlib
 from pathlib import Path
-from typing import Any, Dict, Optional
+from typing import Any
+
 import requests
 
 import pymetadata
@@ -13,16 +28,28 @@ logger = log.get_logger(__name__)
 
 
 class ChebiQuery:
-    """Class to query information from ChEBI."""
+    """Queries against the ChEBI web service.
+
+    Responses can be cached on disk, see `pymetadata.CACHE_USE`.
+    """
 
     @staticmethod
     def query(
-        chebi: str, cache: Optional[bool] = None, cache_path: Optional[Path] = None
-    ) -> Dict:
-        """Query additional ChEBI information."""
+        chebi: str, cache: bool | None = None, cache_path: Path | None = None
+    ) -> dict:
+        """Query the information stored for a ChEBI term.
 
+        Args:
+            chebi: ChEBI term, e.g., `CHEBI:33699`
+            cache: cache the response, defaults to `pymetadata.CACHE_USE`
+            cache_path: directory for cached responses, defaults to
+                `pymetadata.CACHE_PATH`
+
+        Returns:
+            The ChEBI information, empty if the term could not be resolved.
+        """
         if not chebi:
-            return dict()
+            return {}
         if cache is None:
             cache = pymetadata.CACHE_USE
         if cache_path is None:
@@ -34,12 +61,11 @@ class ChebiQuery:
             chebi_base_path.mkdir(parents=True)
 
         chebi_path = chebi_base_path / f"{chebi.replace(':', '%3A')}.json"
-        data: Dict[str, Any] = {}
+        data: dict[str, Any] = {}
         if cache:
-            try:
+            with contextlib.suppress(OSError):
+                # cache does not exist
                 data = read_json_cache(cache_path=chebi_path)
-            except IOError:
-                pass
 
         # fetch and cache data
         if not data:
@@ -50,7 +76,7 @@ class ChebiQuery:
                 result = response.json()
             else:
                 logger.error(f"CHEBI information could not be retrieved for: {chebi}")
-                return dict()
+                return {}
 
             result = result[chebi]["data"]
             chemical_data = result["chemical_data"]

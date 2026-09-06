@@ -1,2 +1,6 @@
 /.quarto/
 **/*.quarto_ipynb
+
+# rendered by the documentation build
+/pymetadata_files/
+/pymetadata.html

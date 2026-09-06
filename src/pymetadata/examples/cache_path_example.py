@@ -5,7 +5,6 @@ from pathlib import Path
 import pymetadata
 from pymetadata.chebi import ChebiQuery
 
-
 pymetadata.CACHE_PATH = Path.home() / ".cache" / "pymetadata"
 
 if __name__ == "__main__":

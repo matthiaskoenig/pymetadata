@@ -1,16 +1,23 @@
+"""Substance cross references from UniChem.
+
+UniChem maps a structure, identified by its InChIKey, to the entries of many
+chemistry databases, which gives cross references for a substance without
+having to query every database separately.
+
+```python
+from pymetadata.unichem import UnichemQuery
+
+query = UnichemQuery()
+xrefs = query.query_xrefs_for_inchikey("AAOVKJBEBIDNHE-UHFFFAOYSA-N")
+```
+
+See <https://www.ebi.ac.uk/unichem/info/webservices>.
 """
-Unichem metadata.
 
-Additional substance information based on inchikeys
-
-https://www.ebi.ac.uk/unichem/info/webservices#GetSrcCpdIdsFromKey
-https://www.ebi.ac.uk/unichem/rest/inchikey/AAOVKJBEBIDNHE-UHFFFAOYSA-N
-"""
-
-import urllib
+import urllib.parse
 from dataclasses import dataclass, field
 from pathlib import Path
-from typing import Dict, List, Optional
+from typing import ClassVar
 
 import requests
 
@@ -18,7 +25,6 @@ import pymetadata
 from pymetadata import log
 from pymetadata.cache import DataclassJSONEncoder, read_json_cache, write_json_cache
 from pymetadata.core.xref import CrossReference
-
 
 logger = log.get_logger(__name__)
 
@@ -56,12 +62,22 @@ class UnichemSource:
 
 
 class UnichemQuery:
-    """Query unichem."""
+    """Queries against the UniChem web service.
 
-    sources: Dict[int, UnichemSource] = {}
+    The sources of UniChem are retrieved once and shared by all instances.
+    Responses can be cached on disk, see `pymetadata.CACHE_USE`.
+    """
 
-    def __init__(self, cache_path: Optional[Path] = None, cache: Optional[bool] = None):
-        """Initialize UnichemQuery."""
+    sources: ClassVar[dict[int, UnichemSource]] = {}
+
+    def __init__(self, cache_path: Path | None = None, cache: bool | None = None):
+        """Initialize the query.
+
+        Args:
+            cache_path: directory for cached responses, defaults to
+                `pymetadata.CACHE_PATH`
+            cache: cache responses, defaults to `pymetadata.CACHE_USE`
+        """
         if cache_path is None:
             cache_path = pymetadata.CACHE_PATH
         if cache is None:
@@ -70,16 +86,21 @@ class UnichemQuery:
         self.cache_path: Path = cache_path
         self.cache: bool = cache
 
-        if not self.sources:
-            self.sources = self.get_sources()
+        # cache the sources on the class, an instance attribute would make
+        # every new query retrieve them again
+        if not UnichemQuery.sources:
+            UnichemQuery.sources = self.get_sources()
 
-    def get_sources(self) -> Dict[int, UnichemSource]:
-        """Retrieve or query the sources."""
+    def get_sources(self) -> dict[int, UnichemSource]:
+        """Get the databases known to UniChem, from the cache or the service.
 
-        sources: Dict[int, UnichemSource]
+        Returns:
+            The sources by their UniChem source id.
+        """
+        sources: dict[int, UnichemSource]
         unichem_sources_path = self.cache_path / "unichem_sources.json"
 
-        data: Dict
+        data: dict
         if self.cache and unichem_sources_path.exists():
             data = read_json_cache(unichem_sources_path)
             sources = {int(k): UnichemSource(**v) for k, v in data.items()}
@@ -89,9 +110,9 @@ class UnichemQuery:
             response = requests.get(url)
             data = response.json()
             if data["response"].lower() != "success":
-                raise IOError(f"Could not query UniChem sources: '{data}'")
+                raise OSError(f"Could not query UniChem sources: '{data}'")
 
-            sources_list: List[UnichemSource] = [
+            sources_list: list[UnichemSource] = [
                 UnichemSource(**v) for v in data["sources"]
             ]
             sources = {source.sourceID: source for source in sources_list}
@@ -106,9 +127,16 @@ class UnichemQuery:
 
         return sources
 
-    def query_xrefs_for_inchikey(self, inchikey: str) -> List[CrossReference]:
-        """Get the cross references for a given inchikey."""
+    def query_xrefs_for_inchikey(self, inchikey: str) -> list[CrossReference]:
+        """Get the cross references for a structure.
 
+        Args:
+            inchikey: InChIKey of the structure, e.g.,
+                `AAOVKJBEBIDNHE-UHFFFAOYSA-N`
+
+        Returns:
+            One cross reference per database which contains the structure.
+        """
         # cache files
         xref_base_path = self.cache_path / "unichem"
         if not xref_base_path.exists():
@@ -116,7 +144,7 @@ class UnichemQuery:
         xref_path = xref_base_path / f"{inchikey}.json"
 
         # retrieve or query data
-        data: Dict
+        data: dict
         if self.cache and xref_path.exists():
             data = read_json_cache(xref_path)
         else:
@@ -127,14 +155,14 @@ class UnichemQuery:
                 data=data, cache_path=xref_path, json_encoder=DataclassJSONEncoder
             )
 
-        xrefs: List[CrossReference] = []
+        xrefs: list[CrossReference] = []
         if data:
             if "error" in data:
                 logger.warning(f"No xrefs for inchikey: '{inchikey}'")
                 return []
 
             # process data
-            item: Dict[str, str]
+            item: dict[str, str]
             for item in data:
                 source_id: int = int(item["src_id"])
                 if source_id not in self.sources:

@@ -1,6 +1,7 @@
 """OMEX example for biomodels."""
 
 from pathlib import Path
+
 from pymetadata.console import console
 from pymetadata.omex import EntryFormat, ManifestEntry, Omex
 

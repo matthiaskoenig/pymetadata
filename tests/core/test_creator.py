@@ -5,7 +5,6 @@ from pymetadata.core.creator import Creator
 
 def test_creator_equality() -> None:
     """Test equality and hash."""
-
     c1 = Creator(
         familyName="König",
         givenName="Matthias",

@@ -220,3 +220,55 @@ def test_omex_from_url() -> None:
     url = "https://github.com/matthiaskoenig/canagliflozin-model/releases/download/0.7.0/canagliflozin_model.omex"
     omex = Omex.from_url(url)
     assert omex
+
+
+def test_omex_context_manager(data_directory: Path) -> None:
+    """Test that the archive can be used as a context manager."""
+    omex_path = data_directory / "omex" / SHOWCASE_OMEX
+    with Omex.from_omex(omex_path) as omex:
+        tmp_dir = omex._tmp_dir
+        assert tmp_dir.exists()
+        assert len(omex.manifest) > 0
+
+    # the temporary directory is removed when the context is left
+    assert not tmp_dir.exists()
+
+
+SINGLE_ENTRY_MANIFEST = """<?xml version="1.0" encoding="UTF-8"?>
+<omexManifest xmlns="http://identifiers.org/combine.specifications/omex-manifest">
+  <content location="." format="http://identifiers.org/combine.specifications/omex"/>
+</omexManifest>
+"""
+
+NO_NAMESPACE_MANIFEST = """<?xml version="1.0" encoding="UTF-8"?>
+<omexManifest>
+  <content location="." format="http://identifiers.org/combine.specifications/omex"/>
+  <content
+    location="./model.xml"
+    format="http://identifiers.org/combine.specifications/sbml"
+    master="true"/>
+</omexManifest>
+"""
+
+
+def test_manifest_single_content_entry(tmp_path: Path) -> None:
+    """Test manifest with a single content entry.
+
+    An archive with a single file is valid OMEX.
+    """
+    manifest_path = tmp_path / "manifest.xml"
+    manifest_path.write_text(SINGLE_ENTRY_MANIFEST)
+
+    manifest = Manifest.from_manifest(manifest_path)
+    assert len(manifest) == 1
+    assert "." in manifest
+
+
+def test_manifest_without_namespace(tmp_path: Path) -> None:
+    """Test manifest which does not declare the omex namespace."""
+    manifest_path = tmp_path / "manifest.xml"
+    manifest_path.write_text(NO_NAMESPACE_MANIFEST)
+
+    manifest = Manifest.from_manifest(manifest_path)
+    assert len(manifest) == 2
+    assert manifest["./model.xml"].master is True

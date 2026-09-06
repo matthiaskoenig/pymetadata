@@ -7,7 +7,7 @@ name = "pymetadata"
 dynamic = ["version"]
 description = "pymetadata are python utilities for working with metadata."
 readme = "README.md"
-requires-python = ">=3.10"
+requires-python = ">=3.11"
 authors = [
 	{name="Matthias König", email="konigmatt@googlemail.com"}
 ]
@@ -19,7 +19,6 @@ classifiers = [
 	"Intended Audience :: Science/Research",
 	"License :: OSI Approved :: MIT License",
 	"Operating System :: OS Independent",
-	"Programming Language :: Python :: 3.10",
 	"Programming Language :: Python :: 3.11",
 	"Programming Language :: Python :: 3.12",
     "Programming Language :: Python :: 3.13",
@@ -37,26 +36,27 @@ keywords = [
 	"annotation",
 ]
 dependencies = [
-    "depinfo>=2.2.0",
-	"lxml>=6.0.2",
 	"rich>=14.2.0",
 	"requests>=2.32.5",
-	"pronto>=2.7.2",
-	"fastobo>=0.14.1",
-	"jinja2>=3.1.6",
-	"xmltodict>=1.0.2",
 	"pydantic>=2.12.5",
 ]
 
 [project.optional-dependencies]
+# reading ontologies and generating the enum modules in `pymetadata.metadata`,
+# see `pymetadata.ontologies.ontology`. Not needed to use the generated enums.
+ontology = [
+    "pronto>=2.7.3",
+    "jinja2>=3.1.6",
+]
 dev = [
-    "bump-my-version>=1.2.4",
-	"ruff>=0.14.0",
-	"pre-commit>=4.0.1",
-	"mypy>=1.18.2",
-    "tox>=4.31.0",
-    "pytest>=8.4.2",
-    "pytest-cov>=7.0.0",
+    "pymetadata[ontology]",
+    "bump-my-version>=1.5.1",
+	"ruff>=0.16.6",
+	"pre-commit>=4.6.2",
+	"ty>=0.0.78",
+    "tox>=4.61.2",
+    "pytest>=9.1.1",
+    "pytest-cov>=7.1.0",
     "quartodoc>=0.11.1",
 ]
 
@@ -69,3 +69,15 @@ Download = "https://pypi.org/project/pymetadata"
 
 [tool.hatch.version]
 path = "./src/pymetadata/__init__.py"
+
+[tool.ty.environment]
+# first-party modules live in the src layout; the checked python version is
+# inferred from `project.requires-python` (i.e. the oldest supported version)
+root = ["./src"]
+
+[tool.ty.src]
+include = ["src", "tests"]
+
+[tool.ty.terminal]
+# warnings are failures: keep the codebase free of any diagnostic
+error-on-warning = true

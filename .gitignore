@@ -5,6 +5,10 @@ uv.lock
 .DS_Store
 .eggs/
 build
+dist/
+
+# rendered documentation (quarto output-dir)
+_site/
 .idea
 cover/
 .tox/
@@ -26,3 +30,6 @@ __pycache__
 
 # OWL ontologies
 *.owl.gz
+
+# output of the examples
+src/pymetadata/examples/results/

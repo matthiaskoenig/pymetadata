@@ -1,10 +1,9 @@
 """SBO ontology."""
 
-from typing import Union, Optional
 from enum import Enum
+from typing import Optional, Union
 
-
-SBOType = Union[str, 'SBO']
+SBOType = Union[str, "SBO"]
 
 _terms = {
     "SBO_0000000": "systems biology representation",
@@ -896,7 +895,9 @@ class SBO(str, Enum):
 
     # mass action rate law for zeroth order irreversible reactions, continuous scheme
     SBO_0000047 = "SBO_0000047"
-    MASS_ACTION_RATE_LAW_FOR_ZEROTH_ORDER_IRREVERSIBLE_REACTIONS__CONTINUOUS_SCHEME = "SBO_0000047"
+    MASS_ACTION_RATE_LAW_FOR_ZEROTH_ORDER_IRREVERSIBLE_REACTIONS__CONTINUOUS_SCHEME = (
+        "SBO_0000047"
+    )
 
     # forward zeroth order rate constant, continuous case
     SBO_0000048 = "SBO_0000048"
@@ -904,11 +905,15 @@ class SBO(str, Enum):
 
     # mass action rate law for first order irreversible reactions, continuous scheme
     SBO_0000049 = "SBO_0000049"
-    MASS_ACTION_RATE_LAW_FOR_FIRST_ORDER_IRREVERSIBLE_REACTIONS__CONTINUOUS_SCHEME = "SBO_0000049"
+    MASS_ACTION_RATE_LAW_FOR_FIRST_ORDER_IRREVERSIBLE_REACTIONS__CONTINUOUS_SCHEME = (
+        "SBO_0000049"
+    )
 
     # mass action rate law for second order irreversible reactions, one reactant
     SBO_0000050 = "SBO_0000050"
-    MASS_ACTION_RATE_LAW_FOR_SECOND_ORDER_IRREVERSIBLE_REACTIONS__ONE_REACTANT = "SBO_0000050"
+    MASS_ACTION_RATE_LAW_FOR_SECOND_ORDER_IRREVERSIBLE_REACTIONS__ONE_REACTANT = (
+        "SBO_0000050"
+    )
 
     # mass action rate law for second order irreversible reactions, one reactant, continuous scheme
     SBO_0000052 = "SBO_0000052"
@@ -916,7 +921,9 @@ class SBO(str, Enum):
 
     # mass action rate law for second order irreversible reactions, two reactants
     SBO_0000053 = "SBO_0000053"
-    MASS_ACTION_RATE_LAW_FOR_SECOND_ORDER_IRREVERSIBLE_REACTIONS__TWO_REACTANTS = "SBO_0000053"
+    MASS_ACTION_RATE_LAW_FOR_SECOND_ORDER_IRREVERSIBLE_REACTIONS__TWO_REACTANTS = (
+        "SBO_0000053"
+    )
 
     # mass action rate law for second order irreversible reactions, two reactants, continuous scheme
     SBO_0000054 = "SBO_0000054"
@@ -928,7 +935,9 @@ class SBO(str, Enum):
 
     # mass action rate law for third order irreversible reactions, one reactant
     SBO_0000056 = "SBO_0000056"
-    MASS_ACTION_RATE_LAW_FOR_THIRD_ORDER_IRREVERSIBLE_REACTIONS__ONE_REACTANT = "SBO_0000056"
+    MASS_ACTION_RATE_LAW_FOR_THIRD_ORDER_IRREVERSIBLE_REACTIONS__ONE_REACTANT = (
+        "SBO_0000056"
+    )
 
     # mass action rate law for third order irreversible reactions, one reactant, continuous scheme
     SBO_0000057 = "SBO_0000057"
@@ -936,7 +945,9 @@ class SBO(str, Enum):
 
     # mass action rate law for third order irreversible reactions, two reactants
     SBO_0000058 = "SBO_0000058"
-    MASS_ACTION_RATE_LAW_FOR_THIRD_ORDER_IRREVERSIBLE_REACTIONS__TWO_REACTANTS = "SBO_0000058"
+    MASS_ACTION_RATE_LAW_FOR_THIRD_ORDER_IRREVERSIBLE_REACTIONS__TWO_REACTANTS = (
+        "SBO_0000058"
+    )
 
     # mass action rate law for third order irreversible reactions, two reactants, continuous scheme
     SBO_0000059 = "SBO_0000059"
@@ -944,7 +955,9 @@ class SBO(str, Enum):
 
     # mass action rate law for third order irreversible reactions, three reactants
     SBO_0000060 = "SBO_0000060"
-    MASS_ACTION_RATE_LAW_FOR_THIRD_ORDER_IRREVERSIBLE_REACTIONS__THREE_REACTANTS = "SBO_0000060"
+    MASS_ACTION_RATE_LAW_FOR_THIRD_ORDER_IRREVERSIBLE_REACTIONS__THREE_REACTANTS = (
+        "SBO_0000060"
+    )
 
     # mass action rate law for third order irreversible reactions, three reactants, continuous scheme
     SBO_0000061 = "SBO_0000061"
@@ -1224,7 +1237,9 @@ class SBO(str, Enum):
 
     # mass action rate law for third order forward, reversible reactions, one reactant
     SBO_0000130 = "SBO_0000130"
-    MASS_ACTION_RATE_LAW_FOR_THIRD_ORDER_FORWARD__REVERSIBLE_REACTIONS__ONE_REACTANT = "SBO_0000130"
+    MASS_ACTION_RATE_LAW_FOR_THIRD_ORDER_FORWARD__REVERSIBLE_REACTIONS__ONE_REACTANT = (
+        "SBO_0000130"
+    )
 
     # mass action rate law for third order forward, zeroth order reverse, reversible reactions, one reactant, continuous scheme
     SBO_0000131 = "SBO_0000131"
@@ -1264,11 +1279,15 @@ class SBO(str, Enum):
 
     # mass action rate law for zeroth order irreversible reactions, discrete scheme
     SBO_0000140 = "SBO_0000140"
-    MASS_ACTION_RATE_LAW_FOR_ZEROTH_ORDER_IRREVERSIBLE_REACTIONS__DISCRETE_SCHEME = "SBO_0000140"
+    MASS_ACTION_RATE_LAW_FOR_ZEROTH_ORDER_IRREVERSIBLE_REACTIONS__DISCRETE_SCHEME = (
+        "SBO_0000140"
+    )
 
     # mass action rate law for first order irreversible reactions, discrete scheme
     SBO_0000141 = "SBO_0000141"
-    MASS_ACTION_RATE_LAW_FOR_FIRST_ORDER_IRREVERSIBLE_REACTIONS__DISCRETE_SCHEME = "SBO_0000141"
+    MASS_ACTION_RATE_LAW_FOR_FIRST_ORDER_IRREVERSIBLE_REACTIONS__DISCRETE_SCHEME = (
+        "SBO_0000141"
+    )
 
     # mass action rate law for second order irreversible reactions, one reactant, discrete scheme
     SBO_0000142 = "SBO_0000142"
@@ -2484,7 +2503,9 @@ class SBO(str, Enum):
 
     # enzymatic rate law for reversible catalytic activation with one activator
     SBO_0000447 = "SBO_0000447"
-    ENZYMATIC_RATE_LAW_FOR_REVERSIBLE_CATALYTIC_ACTIVATION_WITH_ONE_ACTIVATOR = "SBO_0000447"
+    ENZYMATIC_RATE_LAW_FOR_REVERSIBLE_CATALYTIC_ACTIVATION_WITH_ONE_ACTIVATOR = (
+        "SBO_0000447"
+    )
 
     # enzymatic rate law for reversible specific activation
     SBO_0000448 = "SBO_0000448"
@@ -2492,7 +2513,9 @@ class SBO(str, Enum):
 
     # enzymatic rate law for irreversible catalytic activation with one activator
     SBO_0000449 = "SBO_0000449"
-    ENZYMATIC_RATE_LAW_FOR_IRREVERSIBLE_CATALYTIC_ACTIVATION_WITH_ONE_ACTIVATOR = "SBO_0000449"
+    ENZYMATIC_RATE_LAW_FOR_IRREVERSIBLE_CATALYTIC_ACTIVATION_WITH_ONE_ACTIVATOR = (
+        "SBO_0000449"
+    )
 
     # enzymatic rate law for irreversible specific activation
     SBO_0000450 = "SBO_0000450"
@@ -2500,11 +2523,15 @@ class SBO(str, Enum):
 
     # enzymatic rate law for reversible reactions with competitive inhibition
     SBO_0000451 = "SBO_0000451"
-    ENZYMATIC_RATE_LAW_FOR_REVERSIBLE_REACTIONS_WITH_COMPETITIVE_INHIBITION = "SBO_0000451"
+    ENZYMATIC_RATE_LAW_FOR_REVERSIBLE_REACTIONS_WITH_COMPETITIVE_INHIBITION = (
+        "SBO_0000451"
+    )
 
     # enzymatic rate law for reversible competitive inhibition by one inhibitor
     SBO_0000452 = "SBO_0000452"
-    ENZYMATIC_RATE_LAW_FOR_REVERSIBLE_COMPETITIVE_INHIBITION_BY_ONE_INHIBITOR = "SBO_0000452"
+    ENZYMATIC_RATE_LAW_FOR_REVERSIBLE_COMPETITIVE_INHIBITION_BY_ONE_INHIBITOR = (
+        "SBO_0000452"
+    )
 
     # enzymatic rate law for reversible empirical allosteric inhibition by one inhibitor
     SBO_0000453 = "SBO_0000453"
@@ -3002,7 +3029,7 @@ class SBO(str, Enum):
     SBO_0000577 = "SBO_0000577"
     ENTROPY_CHANGE = "SBO_0000577"
 
-    # standard entropy of reaction 
+    # standard entropy of reaction
     SBO_0000578 = "SBO_0000578"
     STANDARD_ENTROPY_OF_REACTION_ = "SBO_0000578"
 
@@ -3432,7 +3459,9 @@ class SBO(str, Enum):
 
     # hybrid flux balance-logical-deterministic continuous non-spatial framework
     SBO_0000686 = "SBO_0000686"
-    HYBRID_FLUX_BALANCE_LOGICAL_DETERMINISTIC_CONTINUOUS_NON_SPATIAL_FRAMEWORK = "SBO_0000686"
+    HYBRID_FLUX_BALANCE_LOGICAL_DETERMINISTIC_CONTINUOUS_NON_SPATIAL_FRAMEWORK = (
+        "SBO_0000686"
+    )
 
     # hybrid flux balance-logical non-spatial framework
     SBO_0000687 = "SBO_0000687"
@@ -3475,17 +3504,28 @@ class SBO(str, Enum):
     PART_OF = "part_of"
 
     @staticmethod
-    def get_name(sbo: 'SBO') -> Optional[str]:
-        """Get name for term.
+    def get_name(sbo: "SBO") -> Optional[str]:
+        """Get the name of a term.
 
-        :returns: None if term does not exist in ontology.
+        Returns:
+            The name, or None if the term does not exist in the ontology.
         """
-        return _terms.get(sbo.value, None)
+        return _terms.get(sbo.value)
 
     @classmethod
-    def validate(cls, sbo: 'SBOType') -> 'SBO':
-        """Validate and normalize sbo."""
-        term: 'SBO'
+    def validate(cls, sbo: "SBOType") -> "SBO":
+        """Validate and normalize a SBO term.
+
+        Accepts an enum member, `SBO_0000000` and `SBO:0000000`.
+
+        Returns:
+            The corresponding enum member.
+
+        Raises:
+            ValueError: if the term does not belong to SBO
+            AttributeError: if the term does not exist in the ontology
+        """
+        term: "SBO"
         if isinstance(sbo, str):
             if not sbo.startswith("SBO"):
                 raise ValueError(sbo + " is not a SBO id.")
@@ -3494,12 +3534,13 @@ class SBO(str, Enum):
 
             term = getattr(cls, sbo)
 
-        elif isinstance(sbo, 'SBO'):
+        elif isinstance(sbo, SBO):
             term = sbo
         else:
             raise ValueError
 
         return term
+
 
 __all__ = [
     "SBO",

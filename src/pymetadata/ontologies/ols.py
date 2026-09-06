@@ -1,36 +1,54 @@
-"""Lookup of ontology information from the ontology lookup service (OLS).
+"""Lookup of ontology terms in the Ontology Lookup Service (OLS).
 
-This uses the EMBL-EBI Ontology Lookup Service
-https://www.ebi.ac.uk/ols4
+OLS resolves an ontology term to its label, description, synonyms and cross
+references. `RDFAnnotationData` uses it to fill in what an annotation actually
+refers to.
 
+```python
+from pymetadata.ontologies.ols import ONTOLOGIES, OLSQuery
+
+query = OLSQuery(ontologies=ONTOLOGIES)
+info = query.query_ols(ontology="chebi", term="CHEBI:33699")
+print(query.process_response(info)["label"])
+```
+
+`ONTOLOGIES` lists the ontologies used in most projects together with the IRI
+pattern needed to build the term IRI OLS expects.
+
+See <https://www.ebi.ac.uk/ols4>.
 """
 
+import contextlib
 import urllib.parse
 from dataclasses import dataclass, field
 from pathlib import Path
-from typing import Any, Dict, List, Optional
+from typing import Any
 
 import requests
 
 import pymetadata
 from pymetadata import log
 from pymetadata.cache import read_json_cache, write_json_cache
-from pymetadata.identifiers.registry import Registry
+from pymetadata.identifiers.registry import get_registry
 
-
-registry = Registry()
 logger = log.get_logger(__name__)
 
 
 @dataclass
 class OLSOntology:
-    """OLSOntology."""
+    """An ontology available in OLS.
+
+    Attributes:
+        name: lowercase ontology id, e.g., `chebi`
+        iri_pattern: pattern of the term IRI with the placeholder `{$Id}`,
+            defaults to the OBO purl of the ontology
+    """
 
     name: str
-    iri_pattern: Optional[str] = field(default=None)
+    iri_pattern: str | None = field(default=None)
 
     def __post_init__(self) -> None:
-        """Fix IRI patterns."""
+        """Set the default OBO purl pattern if no pattern was given."""
         if self.iri_pattern is None:
             self.iri_pattern = (
                 f"http://purl.obolibrary.org/obo/{self.name.upper()}" + "_{$Id}"
@@ -70,18 +88,33 @@ ONTOLOGIES = [
 
 
 class OLSQuery:
-    """Handling OLS queries."""
+    """Queries against the Ontology Lookup Service.
+
+    Responses can be cached on disk, see `pymetadata.CACHE_USE`.
+
+    Attributes:
+        ontologies: the queryable ontologies by name
+        cache_path: directory of the cached responses
+        cache: whether responses are cached
+    """
 
     url_term_query = "https://www.ebi.ac.uk/ols4/api/ontologies/{}/terms/{}"
 
     def __init__(
         self,
-        ontologies: List[OLSOntology],
-        cache_path: Optional[Path] = None,
-        cache: Optional[bool] = None,
+        ontologies: list[OLSOntology],
+        cache_path: Path | None = None,
+        cache: bool | None = None,
     ):
-        """Initialize OLSQuery."""
-        self.ontologies: Dict[str, OLSOntology] = {
+        """Initialize the query.
+
+        Args:
+            ontologies: ontologies which can be queried, e.g., `ONTOLOGIES`
+            cache_path: directory for cached responses, defaults to
+                `pymetadata.CACHE_PATH`
+            cache: cache responses, defaults to `pymetadata.CACHE_USE`
+        """
+        self.ontologies: dict[str, OLSOntology] = {
             ontology.name: ontology for ontology in ontologies
         }
         if not cache_path:
@@ -96,8 +129,16 @@ class OLSQuery:
             self.cache_path.mkdir(parents=True)
 
     def get_iri(self, ontology: str, term: str) -> str:
-        """Get IRI information."""
-        ols_ontology: Optional[OLSOntology] = self.ontologies.get(ontology, None)
+        """Build the term IRI which OLS expects.
+
+        Args:
+            ontology: ontology id, e.g., `chebi`
+            term: term of the ontology, e.g., `CHEBI:33699`
+
+        Returns:
+            The IRI of the term, or an empty string for an unknown ontology.
+        """
+        ols_ontology: OLSOntology | None = self.ontologies.get(ontology, None)
         # remove prefix if existing
         if term.startswith(ontology.upper()):
             term = term.replace(f"{ontology.upper()}:", "")
@@ -114,14 +155,23 @@ class OLSQuery:
 
         return iri
 
-    def query_ols(self, ontology: Optional[str], term: Optional[str]) -> Dict:
-        """Query the ontology lookup service."""
+    def query_ols(self, ontology: str | None, term: str | None) -> dict:
+        """Query OLS for a single term.
+
+        Args:
+            ontology: ontology id, e.g., `chebi`
+            term: term of the ontology, e.g., `CHEBI:33699`
+
+        Returns:
+            The OLS response, with `errors` and `warnings` describing problems
+            with the query.
+        """
         if not ontology:
             return {"errors": [], "warnings": ["No collection."]}
         if not term:
             return {"errors": [], "warnings": [f"No term: '{ontology}'"]}
 
-        namespace = registry.ns_dict.get(ontology)
+        namespace = get_registry().ns_dict.get(ontology)
         ols_pattern = None
         if namespace and namespace.resources:
             for ns_resource in namespace.resources:
@@ -144,13 +194,11 @@ class OLSQuery:
         urliri = urllib.parse.quote(iri, safe="")
         urliri = urllib.parse.quote(urliri, safe="")
         cache_path = self.cache_path / f"{urliri}.json"
-        data: Dict[str, Any] = {}
+        data: dict[str, Any] = {}
         if self.cache:
-            try:
-                data = read_json_cache(cache_path=cache_path)
-            except IOError:
+            with contextlib.suppress(OSError):
                 # cache does not exist
-                pass
+                data = read_json_cache(cache_path=cache_path)
 
         if not data:
             url = self.url_term_query.format(ontology, urliri)
@@ -170,28 +218,33 @@ class OLSQuery:
                         f"Error in OLS query <{ontology}|{term}> at {url}: {data}"
                     )
                     logger.error(error_msg)
-                    data = {
+                    return {
                         "errors": [error_msg],
                         "warnings": [],
                     }
-                    return data
-                else:
-                    data["errors"] = []
-                    data["warnings"] = []
-                    if self.cache:
-                        write_json_cache(data=data, cache_path=cache_path)  # type: ignore
+                data["errors"] = []
+                data["warnings"] = []
+                if self.cache:
+                    write_json_cache(data=data, cache_path=cache_path)
 
         return data
 
-    def process_response(self, term: Dict) -> Dict[str, Any]:
-        """Process the response dictionary."""
+    def process_response(self, term: dict) -> dict[str, Any]:
+        """Reduce an OLS response to the information used for annotations.
+
+        Args:
+            term: OLS response from `query_ols`
+
+        Returns:
+            Dictionary with `label`, `description`, `synonyms` and `xrefs`.
+        """
         data = {
             "errors": term["errors"],
             "warnings": term["warnings"],
         }
 
-        label = term.get("label", None)
-        description = term.get("description", None)
+        label = term.get("label")
+        description = term.get("description")
         # fallback description
         if description is None:
             annotation = term.get("annotation")
