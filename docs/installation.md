@@ -75,7 +75,7 @@ pymetadata.CACHE_PATH = Path("/tmp/pymetadata_cache")
 The identifiers.org registry is cached independently of `CACHE_USE`. It is downloaded to `CACHE_PATH / "identifiers_registry.json"` and refreshed when the local copy is older than the cache duration (24 hours by default):
 
 ```python
-from pymetadata.identifiers.registry import Registry
+from pymetadata.webservices.registry import Registry
 
 registry = Registry(cache_duration=24, cache=True)
 namespace = registry.ns_dict["chebi"]

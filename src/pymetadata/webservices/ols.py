@@ -5,7 +5,7 @@ references. `RDFAnnotationData` uses it to fill in what an annotation actually
 refers to.
 
 ```python
-from pymetadata.ontologies.ols import ONTOLOGIES, OLSQuery
+from pymetadata.webservices.ols import ONTOLOGIES, OLSQuery
 
 query = OLSQuery(ontologies=ONTOLOGIES)
 info = query.query_ols(ontology="chebi", term="CHEBI:33699")
@@ -27,8 +27,8 @@ from typing import Any
 import pymetadata
 from pymetadata import log
 from pymetadata.cache import read_json_cache, write_json_cache
-from pymetadata.identifiers.registry import get_registry
-from pymetadata.webservice import get_session
+from pymetadata.webservices.registry import get_registry
+from pymetadata.webservices.webservice import get_session
 
 logger = log.get_logger(__name__)
 

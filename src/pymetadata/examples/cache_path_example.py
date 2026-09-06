@@ -3,7 +3,7 @@
 from pathlib import Path
 
 import pymetadata
-from pymetadata.chebi import ChebiQuery
+from pymetadata.webservices.chebi import ChebiQuery
 
 pymetadata.CACHE_PATH = Path.home() / ".cache" / "pymetadata"
 

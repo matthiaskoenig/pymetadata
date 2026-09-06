@@ -7,7 +7,7 @@ qualifiers (`BQB`) relate an element to a biological entity, model qualifiers
 
 ```python
 from pymetadata.core.annotation import RDFAnnotation
-from pymetadata.identifiers.miriam import BQB
+from pymetadata.core.miriam import BQB
 
 RDFAnnotation(qualifier=BQB.IS, resource="CHEBI:17234")
 ```

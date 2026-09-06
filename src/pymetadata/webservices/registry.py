@@ -10,7 +10,7 @@ The registry is downloaded once and cached in
 older than the cache duration.
 
 ```python
-from pymetadata.identifiers.registry import Registry
+from pymetadata.webservices.registry import Registry
 
 registry = Registry()
 namespace = registry.ns_dict["chebi"]
@@ -34,7 +34,7 @@ import pymetadata
 from pymetadata import log
 from pymetadata.cache import DataclassJSONEncoder, read_json_cache, write_json_cache
 from pymetadata.console import console
-from pymetadata.webservice import get_session
+from pymetadata.webservices.webservice import get_session
 
 logger = log.get_logger(__name__)
 

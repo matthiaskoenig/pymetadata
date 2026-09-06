@@ -2,10 +2,10 @@
 
 Queries the ChEBI web service for the information stored for a term, such as the
 InChIKey, which can then be used to look up cross references with
-`pymetadata.unichem`.
+`pymetadata.webservices.unichem`.
 
 ```python
-from pymetadata.chebi import ChebiQuery
+from pymetadata.webservices.chebi import ChebiQuery
 
 info = ChebiQuery.query("CHEBI:33699")
 ```
@@ -21,7 +21,7 @@ import pymetadata
 from pymetadata import log
 from pymetadata.cache import DataclassJSONEncoder, read_json_cache, write_json_cache
 from pymetadata.console import console
-from pymetadata.webservice import get_session
+from pymetadata.webservices.webservice import get_session
 
 logger = log.get_logger(__name__)
 

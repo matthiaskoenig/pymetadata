@@ -3,7 +3,7 @@
 from pymetadata import log
 from pymetadata.console import console
 from pymetadata.core.annotation import RDFAnnotation
-from pymetadata.identifiers.miriam import BQB
+from pymetadata.core.miriam import BQB
 
 log.enable_rich_logging()
 

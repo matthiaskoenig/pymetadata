@@ -3,7 +3,7 @@
 import pytest
 
 from pymetadata.core.annotation import RDFAnnotation
-from pymetadata.identifiers.miriam import BQB, BQM
+from pymetadata.core.miriam import BQB, BQM
 
 rdf_annotation_data = [
     (

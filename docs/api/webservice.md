@@ -1,3 +1,0 @@
-# webservice
-
-::: pymetadata.webservice

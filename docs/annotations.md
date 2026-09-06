@@ -12,7 +12,7 @@ Together they form a statement: *this species **is** the chemical entity CHEBI:1
 Biological qualifiers (`BQB`) relate an element to a biological entity, model qualifiers (`BQM`) describe the model itself:
 
 ```python
-from pymetadata.identifiers.miriam import BQB, BQM
+from pymetadata.core.miriam import BQB, BQM
 
 BQB.IS  # the element is the annotated entity
 BQB.IS_VERSION_OF  # the element is a version of the entity
@@ -29,7 +29,7 @@ Choosing the right qualifier matters: `BQB.IS` on a species that is only *one fo
 
 ```python
 from pymetadata.core.annotation import RDFAnnotation
-from pymetadata.identifiers.miriam import BQB
+from pymetadata.core.miriam import BQB
 
 for resource in [
     "CHEBI:33699",  # compact identifier
@@ -71,7 +71,7 @@ Constructing it resolves the cross references: for every provider the identifier
 
 ```python
 from pymetadata.core.annotation import RDFAnnotation, RDFAnnotationData
-from pymetadata.identifiers.miriam import BQB
+from pymetadata.core.miriam import BQB
 
 annotation = RDFAnnotation(qualifier=BQB.IS, resource="chebi/CHEBI:33699")
 data = RDFAnnotationData(annotation)

@@ -62,11 +62,11 @@ draft pydantic sketch of the COMBINE archive v2 metadata, not wired into `omex.p
 `oven/` holds unfinished work which is deliberately undocumented and untested.
 
 **`core/annotation.py` — RDF/MIRIAM annotations.** `RDFAnnotation` parses a
-qualifier (`BQB`/`BQM` from `identifiers/miriam.py`) plus a resource given as an
+qualifier (`BQB`/`BQM` from `core/miriam.py`) plus a resource given as an
 identifiers.org URL (classic or compact), a bioregistry.io URL, a `urn:miriam:*` URN,
 a `collection/term` shorthand, or an arbitrary URL, and normalizes it into
 `collection` + `term`. Validation checks the term against the identifiers.org
-registry pattern (`identifiers/registry.py`). `RDFAnnotationData` enriches an
+registry pattern (`webservices/registry.py`). `RDFAnnotationData` enriches an
 annotation with label/description/synonyms/xrefs by querying OLS.
 
 **Ontology enums are generated code.** `ontologies/sbo.py`, `kisao.py`,
@@ -85,11 +85,13 @@ performs download + regeneration + import check, and needs
 stored with underscores. `ontologies/__init__.py` re-exports `SBO`, `KISAO`,
 `ECO`, `PBPKO` and their `<ONTOLOGY>Type` aliases through a module `__getattr__`,
 so the ~1 MB of generated code is only imported when a term is used and
-`pymetadata.ontologies.ols` stays cheap (the `pymetadata.metadata` package was
+`pymetadata.webservices.ols` stays cheap (the `pymetadata.metadata` package was
 removed in 0.6.0).
 
-**Web services + caching.** `ontologies/ols.py` (EBI OLS4), `identifiers/registry.py`
-(identifiers.org), `chebi.py`, `unichem.py` all hit remote APIs and share the JSON
+**Web services + caching.** The `webservices/` package holds everything which
+hits a remote API: `ols.py` (EBI OLS4), `registry.py` (identifiers.org),
+`chebi.py` and `unichem.py`, all going through the shared, retrying session of
+`webservices/webservice.py`. They share the JSON
 cache helpers in `cache.py`, gated by the module-level globals
 `pymetadata.CACHE_USE` (default `False`) and `pymetadata.CACHE_PATH`
 (`~/.cache/pymetadata`). These are read at call time, so consumers override them by

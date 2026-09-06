@@ -2,7 +2,7 @@
 
 import requests
 
-from pymetadata.webservice import (
+from pymetadata.webservices.webservice import (
     BACKOFF_FACTOR,
     RETRIES,
     RETRY_STATUS_CODES,

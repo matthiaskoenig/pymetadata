@@ -1,6 +1,6 @@
 """Test identifiers.org registry."""
 
-from pymetadata.identifiers.registry import Registry
+from pymetadata.webservices.registry import Registry
 
 
 def test_registry() -> None:

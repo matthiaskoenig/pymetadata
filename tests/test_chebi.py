@@ -4,7 +4,7 @@ from pathlib import Path
 
 import pytest
 
-from pymetadata.chebi import ChebiQuery
+from pymetadata.webservices.chebi import ChebiQuery
 
 
 @pytest.mark.parametrize(

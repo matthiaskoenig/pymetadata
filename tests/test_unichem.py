@@ -5,7 +5,7 @@ from typing import Any
 
 import requests
 
-from pymetadata.unichem import UnichemQuery, UnichemSource
+from pymetadata.webservices.unichem import UnichemQuery, UnichemSource
 
 
 def test_get_sources(tmp_path: Path) -> None:
@@ -74,7 +74,7 @@ def test_query_xrefs_server_error(tmp_path: Path, monkeypatch: Any) -> None:
             raise requests.exceptions.JSONDecodeError("Expecting value", html_error, 0)
 
     monkeypatch.setattr(
-        "pymetadata.unichem.get_session",
+        "pymetadata.webservices.unichem.get_session",
         lambda: type("S", (), {"get": lambda self, url, **kw: FakeResponse()})(),
     )
 

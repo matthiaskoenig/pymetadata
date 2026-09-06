@@ -7,7 +7,7 @@ which retries these responses with an exponential backoff and applies a default
 timeout, so that a single hiccup of a service does not fail the query.
 
 ```python
-from pymetadata.webservice import get_session
+from pymetadata.webservices.webservice import get_session
 
 response = get_session().get("https://www.ebi.ac.uk/unichem/rest/inchikey/...")
 if response.status_code == 200:

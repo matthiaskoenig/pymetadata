@@ -10,7 +10,7 @@ to via the Ontology Lookup Service.
 
 ```python
 from pymetadata.core.annotation import RDFAnnotation
-from pymetadata.identifiers.miriam import BQB
+from pymetadata.core.miriam import BQB
 
 annotation = RDFAnnotation(qualifier=BQB.IS, resource="chebi/CHEBI:33699")
 print(annotation.resource_normalized)  # https://identifiers.org/CHEBI:33699
@@ -27,10 +27,10 @@ from typing import Any, ClassVar, Final
 import requests
 
 from pymetadata import log
+from pymetadata.core.miriam import BQB, BQM
 from pymetadata.core.xref import CrossReference, is_url
-from pymetadata.identifiers.miriam import BQB, BQM
-from pymetadata.identifiers.registry import Namespace, get_registry
-from pymetadata.ontologies.ols import ONTOLOGIES, OLSQuery
+from pymetadata.webservices.ols import ONTOLOGIES, OLSQuery
+from pymetadata.webservices.registry import Namespace, get_registry
 
 _OLS_QUERY: OLSQuery | None = None
 

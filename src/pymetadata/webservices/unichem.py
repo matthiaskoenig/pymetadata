@@ -5,7 +5,7 @@ chemistry databases, which gives cross references for a substance without
 having to query every database separately.
 
 ```python
-from pymetadata.unichem import UnichemQuery
+from pymetadata.webservices.unichem import UnichemQuery
 
 query = UnichemQuery()
 xrefs = query.query_xrefs_for_inchikey("AAOVKJBEBIDNHE-UHFFFAOYSA-N")
@@ -23,7 +23,7 @@ import pymetadata
 from pymetadata import log
 from pymetadata.cache import DataclassJSONEncoder, read_json_cache, write_json_cache
 from pymetadata.core.xref import CrossReference
-from pymetadata.webservice import get_session
+from pymetadata.webservices.webservice import get_session
 
 logger = log.get_logger(__name__)
 
