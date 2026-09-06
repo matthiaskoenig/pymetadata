@@ -5,11 +5,11 @@ This file provides guidance when working with code in this repository.
 ## Project
 
 `pymetadata` is a python library for metadata in the context of COMBINE standards:
-COMBINE archives (OMEX), MIRIAM/RDF annotations, and ontology enums (SBO, KISAO, PBPKO).
+COMBINE archives (OMEX), MIRIAM/RDF annotations, and ontology terms (SBO, KISAO, PBPKO).
 Pure library, no CLI entry points. Requires python >= 3.11, packaged with hatchling
 (version is read from `src/pymetadata/__init__.py`). Runtime dependencies are
 `rich`, `requests` and `pydantic`; `pronto` is the optional `ontology` extra,
-needed only to regenerate the enums.
+needed only to regenerate the ontology modules.
 
 ## Commands
 
@@ -69,23 +69,31 @@ a `collection/term` shorthand, or an arbitrary URL, and normalizes it into
 registry pattern (`webservices/registry.py`). `RDFAnnotationData` enriches an
 annotation with label/description/synonyms/xrefs by querying OLS.
 
-**Ontology enums are generated code.** `ontologies/sbo.py`, `kisao.py`,
-`eco.py`, `pbpko.py` are machine-generated (large; do not hand-edit). They come
-from `ontologies/_ontology_builder.py` (internal, not part of the public API;
-its `pronto` import is lazy, it is the
-optional `ontology` extra): `update_ontology_files()` downloads OWL sources
-into `src/pymetadata/resources/ontologies/*.owl.gz` (gitignored, so they must be
+**Ontologies are generated code.** `ontologies/sbo.py`, `kisao.py`, `pbpko.py`
+are machine-generated (large; do not hand-edit). Each is a class of
+`OntologyTerm` attributes (`ontologies/term.py`), not an enum: a term is a `str`
+subclass carrying `label`, `definition`, `synonyms`, `deprecated`, `curie` and
+`url`, and every term is declared twice, under its id and under its name, with
+its definition as attribute docstring so editors show it on completion. The
+class body only declares the attributes, `OntologyTerm._register` creates the
+terms and sets them. `OntologyMeta` provides the enum-like `len()`, iteration,
+`in`, `SBO["SBO_0000247"]` and `SBO("SBO:0000247")`; `get_name()`, `get_term()`
+and `validate()` accept both `SBO_0000247` and `SBO:0000247` spellings.
+Generation comes from `ontologies/_ontology_builder.py` (internal, not part of
+the public API; its `pronto` import is lazy, it is the optional `ontology`
+extra): `update_ontology_files()` downloads OWL sources into
+`src/pymetadata/resources/ontologies/*.owl.gz` (gitignored, so they must be
 re-downloaded before regeneration), `Ontology` reads them with pronto, and
-`create_ontology_enum(id, pattern)` writes the module into `ENUM_DIR`, i.e.,
-`ontologies/<id>.py` (plain python string building, no template engine). Running `python -m pymetadata.ontologies._ontology_builder`
-performs download + regeneration + import check, and needs
-`uv sync --extra ontology`. Each generated enum exposes `get_name()` and
-`validate()` accepting both `SBO_0000247` and `SBO:0000247` spellings; ids are
-stored with underscores. `ontologies/__init__.py` re-exports `SBO`, `KISAO`,
-`PBPKO` and their `<ONTOLOGY>Type` aliases through a module `__getattr__`,
-so the ~1 MB of generated code is only imported when a term is used and
-`pymetadata.webservices.ols` stays cheap (the `pymetadata.metadata` package was
-removed in 0.6.0).
+`create_ontology_module(id, pattern)` writes the module into `ONTOLOGY_DIR`,
+i.e., `ontologies/<id>.py` (plain python string building, no template engine).
+The definition of a term comes from the definition, the comment or the
+annotations, since SBO uses `rdfs:comment` and KISAO `skos:definition`. Running
+`python -m pymetadata.ontologies._ontology_builder` performs download +
+regeneration + import check, and needs `uv sync --extra ontology`.
+`ontologies/__init__.py` re-exports `SBO`, `KISAO`, `PBPKO` and their
+`<ONTOLOGY>Type` aliases through a module `__getattr__`, so the generated code
+is only imported when a term is used and `pymetadata.webservices.ols` stays
+cheap (the `pymetadata.metadata` package was removed in 0.6.0).
 
 **Web services + caching.** The `webservices/` package holds everything which
 hits a remote API: `ols.py` (EBI OLS4), `registry.py` (identifiers.org),

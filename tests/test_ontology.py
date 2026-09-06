@@ -1,6 +1,7 @@
 """Test ontology."""
 
 import json
+import pickle
 
 import pytest
 
@@ -108,6 +109,7 @@ def test_get_term() -> None:
     term = PBPKO.get_term("PBPKO:00008")
 
     assert isinstance(term, OntologyTerm)
+    assert isinstance(term, PBPKO)
     assert term.id == "PBPKO_00008"
     assert term.label == "bodyweight"
     assert term.definition is not None
@@ -123,3 +125,41 @@ def test_term_is_str() -> None:
     """Test that a term still behaves like its id."""
     assert SBO.SIMPLE_CHEMICAL == "SBO_0000247"
     assert json.dumps({"sbo": SBO.SIMPLE_CHEMICAL}) == '{"sbo": "SBO_0000247"}'
+
+
+def test_term_lookup() -> None:
+    """Test that an ontology can be looked up like the enum it replaces."""
+    assert SBO["SBO_0000247"] is SBO.SIMPLE_CHEMICAL
+    assert SBO["SBO:0000247"] is SBO.SIMPLE_CHEMICAL
+    assert SBO("SBO:0000247") is SBO.SIMPLE_CHEMICAL
+    assert "SBO_0000247" in SBO
+    assert "SBO_9999999" not in SBO
+
+
+def test_term_iteration() -> None:
+    """Test that the terms of an ontology can be iterated and counted."""
+    terms = list(KISAO)
+
+    assert len(terms) == len(KISAO)
+    assert KISAO.CVODE in terms
+
+
+def test_term_identity() -> None:
+    """Test that the id and the name give the same term."""
+    assert SBO.SIMPLE_CHEMICAL is SBO.SBO_0000247
+    assert isinstance(SBO.SIMPLE_CHEMICAL, SBO)
+    assert isinstance(SBO.SIMPLE_CHEMICAL, str)
+
+
+def test_term_pickle() -> None:
+    """Test that a term survives a roundtrip through pickle."""
+    assert pickle.loads(pickle.dumps(SBO.SIMPLE_CHEMICAL)) is SBO.SIMPLE_CHEMICAL
+
+
+def test_term_unknown() -> None:
+    """Test the errors for terms which do not exist."""
+    with pytest.raises(AttributeError):
+        SBO.validate("SBO_9999999")
+
+    with pytest.raises(ValueError, match="not a SBO id"):
+        SBO.validate("KISAO_0000019")

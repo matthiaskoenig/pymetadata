@@ -39,13 +39,13 @@ log.enable_rich_logging()
 
 ## Optional dependencies
 
-Regenerating the ontology enums reads OWL files and renders python modules from a template, which needs `pronto` and `jinja2`. These are optional, because the enums in `pymetadata.ontologies` are shipped with the package and using them requires nothing extra:
+Regenerating the ontologies reads OWL files and writes python modules, which needs `pronto`. These are optional, because the enums in `pymetadata.ontologies` are shipped with the package and using them requires nothing extra:
 
 ```bash
 pip install pymetadata[ontology]
 ```
 
-Without them `pymetadata.ontologies._ontology_builder` can still be imported, but `Ontology` and `create_ontology_enum` raise an `ImportError` explaining what to install. See [Regenerating the ontology enums](development.md#regenerating-the-ontology-enums).
+Without it `pymetadata.ontologies._ontology_builder` can still be imported, but `Ontology` raises an `ImportError` explaining what to install. See [Regenerating the ontologies](development.md#regenerating-the-ontologies).
 
 For a development setup with the test and documentation tooling see [Development](development.md).
 

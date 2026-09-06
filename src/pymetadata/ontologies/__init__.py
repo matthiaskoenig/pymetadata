@@ -1,10 +1,10 @@
-"""Ontologies: term enums, lookup and generation.
+"""Ontologies: terms, lookup and generation.
 
-The ontologies are shipped as enums generated from the ontology releases, so
-terms can be used with autocompletion and are checked at runtime instead of
-being passed around as strings.
+The ontologies are shipped as classes generated from the ontology releases, so a
+term is completed by the editor, checked at runtime and carries what the
+ontology says about it instead of being an opaque string.
 
-| enum | ontology |
+| ontology | terms |
 | --- | --- |
 | `SBO` | Systems Biology Ontology, roles of model components |
 | `KISAO` | Kinetic Simulation Algorithm Ontology, simulation algorithms |
@@ -22,17 +22,18 @@ SBO.validate("SBO:0000247")        # SBO.SBO_0000247
 SBO.get_name(SBO.SIMPLE_CHEMICAL)  # 'simple chemical'
 ```
 
-A member carries the information of the ontology release, see `OntologyTerm`:
+A term is a `str`, i.e., the identifier, with the information of the ontology
+release on it, see `OntologyTerm`:
 
 ```python
-SBO.SIMPLE_CHEMICAL.label       # 'simple chemical'
-SBO.SIMPLE_CHEMICAL.definition  # 'Simple, non-repetitive chemical entity.'
-SBO.SIMPLE_CHEMICAL.curie       # 'SBO:0000247'
-SBO.SIMPLE_CHEMICAL.term        # the complete OntologyTerm
+SBO.SIMPLE_CHEMICAL == "SBO_0000247"  # True
+SBO.SIMPLE_CHEMICAL.label             # 'simple chemical'
+SBO.SIMPLE_CHEMICAL.definition        # 'Simple, non-repetitive chemical entity.'
+SBO.SIMPLE_CHEMICAL.curie             # 'SBO:0000247'
 ```
 
 The `<ONTOLOGY>Type` aliases are `str | <ONTOLOGY>` and are the type to accept
-in a signature which takes either an enum member or the term as a string.
+in a signature which takes either a term or the identifier as a string.
 
 The generated modules are large, so they are imported on first access instead of
 with the package: looking up a term in OLS (`pymetadata.webservices.ols`) does
@@ -43,7 +44,7 @@ and should never be edited by hand.
 import importlib
 from typing import TYPE_CHECKING, Any
 
-from pymetadata.ontologies.term import OntologyEnum, OntologyTerm, TermData
+from pymetadata.ontologies.term import OntologyMeta, OntologyTerm, TermData
 
 if TYPE_CHECKING:
     from .kisao import KISAO, KISAOType
@@ -55,15 +56,15 @@ __all__ = [
     "PBPKO",
     "SBO",
     "KISAOType",
-    "OntologyEnum",
+    "OntologyMeta",
     "OntologyTerm",
     "PBPKOType",
     "SBOType",
     "TermData",
 ]
 
-#: module of the generated enums, keyed by the name they are exported under
-_ENUM_MODULES: dict[str, str] = {
+#: module of the generated ontologies, keyed by the name they are exported under
+_TERM_MODULES: dict[str, str] = {
     "KISAO": "kisao",
     "KISAOType": "kisao",
     "PBPKO": "pbpko",
@@ -74,18 +75,18 @@ _ENUM_MODULES: dict[str, str] = {
 
 
 def __getattr__(name: str) -> Any:
-    """Import a generated enum module on first access.
+    """Import a generated ontology module on first access.
 
     Args:
-        name: name of an enum or of one of the type aliases
+        name: name of an ontology or of one of the type aliases
 
     Returns:
-        The enum or type alias.
+        The ontology or type alias.
 
     Raises:
         AttributeError: if the package has no such attribute
     """
-    module_name = _ENUM_MODULES.get(name)
+    module_name = _TERM_MODULES.get(name)
     if module_name is None:
         raise AttributeError(f"module '{__name__}' has no attribute '{name}'")
 
@@ -96,7 +97,7 @@ def __getattr__(name: str) -> Any:
 
 
 def __dir__() -> list[str]:
-    """List the attributes of the package, including the enums not yet imported.
+    """List the attributes of the package, including ontologies not yet imported.
 
     Returns:
         The attribute names.

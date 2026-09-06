@@ -91,9 +91,9 @@ print(data.synonyms)  # mRNA, ...
 
 Both steps require network access. Enable the cache (`pymetadata.CACHE_USE = True`) when resolving many annotations, so repeated terms are not queried again.
 
-## Ontology enums { #ontology-enums }
+## Ontology terms { #ontology-terms }
 
-Ontology terms are usually passed around as strings, which means typos surface at runtime or not at all. `pymetadata` ships three ontologies as python enums generated from the ontology releases themselves:
+Ontology terms are usually passed around as strings, which means typos surface at runtime or not at all, and nothing tells you what a term means. `pymetadata` ships three ontologies as python classes generated from the ontology releases themselves:
 
 | enum | ontology | terms |
 | --- | --- | --- |
@@ -122,9 +122,9 @@ SBO.validate("SBO_0000247")  # SBO.SBO_0000247
 SBO.validate("SBO_9999999")  # raises AttributeError, the term does not exist
 ```
 
-### Term information { #term-information }
+### What a term knows { #term-information }
 
-A member is not only the identifier, it carries what the ontology release says about the term. This is the information which otherwise has to be looked up in [OLS](https://www.ebi.ac.uk/ols4), and it is available offline:
+A term is the identifier, i.e., a `str`, and carries what the ontology release says about it. This is the information which otherwise has to be looked up in [OLS](https://www.ebi.ac.uk/ols4), and it is available offline. Since every term is a documented attribute of its ontology, an editor completes `SBO.` and shows the definition of the term it suggests:
 
 ```python
 term = SBO.SIMPLE_CHEMICAL
@@ -141,15 +141,20 @@ repr(term)
 # <SBO.SBO_0000247: 'simple chemical'>
 ```
 
-`term.term` returns the complete record as an [`OntologyTerm`](api/ontologies.term.md), and `get_term` does the same for a term given as a string:
+`get_term` resolves a term given as a string, and the ontology behaves like the enum it replaces, i.e., it can be iterated, asked for its length and indexed:
 
 ```python
 from pymetadata.ontologies import KISAO
 
-KISAO.get_term("KISAO:0000019")
-# OntologyTerm(id='KISAO_0000019', label='CVODE', definition='The CVODE is a package written in C ...', synonyms=('VODE', 'VODEPK', 'code value ordinary differential equation solver'), deprecated=False)
+KISAO.get_term("KISAO:0000019").synonyms
+# ('VODE', 'VODEPK', 'code value ordinary differential equation solver')
+
+len(KISAO)  # number of terms
+KISAO["KISAO_0000019"]  # lookup by identifier
+"KISAO:0000019" in KISAO  # True
+[term for term in KISAO if term.deprecated]
 ```
 
-Note that the member name is the identifier, so `term.name` is `'SBO_0000247'` and the name in the ontology is `term.label`. A term stays a string, i.e., `SBO.SIMPLE_CHEMICAL == "SBO_0000247"` and serializing it gives the identifier.
+A term stays a string, i.e., `SBO.SIMPLE_CHEMICAL == "SBO_0000247"` is true and serializing a term gives the identifier, so terms can be passed wherever the identifier is expected. The name in the ontology is `label`, `name` is the identifier.
 
-The enums are generated with the internal `pymetadata.ontologies._ontology_builder`, which downloads the ontology in OWL format and writes a python module from it. See [Development](development.md#regenerating-the-ontology-enums) for how to update them to a newer ontology release.
+The ontologies are generated with the internal `pymetadata.ontologies._ontology_builder`, which downloads the ontology in OWL format and writes a python module from it. See [Development](development.md#regenerating-the-ontologies) for how to update them to a newer ontology release.

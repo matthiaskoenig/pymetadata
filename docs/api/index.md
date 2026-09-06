@@ -38,7 +38,7 @@ The services queried for the information which does not ship with the package. T
 
 ## pymetadata.ontologies
 
-The ontology terms of SBO, KISAO and PBPKO as generated enums, see [Annotations](../annotations.md#ontology-enums). The generated modules list one member per ontology term and are not part of the reference, the behaviour of the enums is in `term`.
+The ontology terms of SBO, KISAO and PBPKO, see [Annotations](../annotations.md#ontology-terms). The generated modules declare one attribute per ontology term and are not part of the reference, the behaviour of a term is in `term`.
 
 | module | description |
 | --- | --- |

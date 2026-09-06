@@ -1,14 +1,14 @@
-"""Downloading ontologies and generating the term enums.
+"""Downloading ontologies and generating the term modules.
 
 This module builds the enums of `pymetadata.ontologies`, it is internal tooling
 for maintainers and not part of the public API: everything here can change
 without notice, use the generated enums instead.
 
-The enums are generated from the ontology releases: `update_ontology_files`
+The ontologies are generated from their releases: `update_ontology_files`
 downloads the OWL files listed in `ontology_files`, `Ontology` reads them with
-pronto and `create_ontology_enum` writes one python module per ontology, with
-the terms as members and their label, definition, synonyms and deprecation as
-data.
+pronto and `create_ontology_module` writes one python module per ontology: a
+class with one attribute per term, documented with the definition of the term,
+and the information registered on the class.
 
 Running the module does all three steps for the packaged ontologies, i.e., SBO,
 KISAO and PBPKO:
@@ -22,7 +22,7 @@ python -m pymetadata.ontologies._ontology_builder
 generate the modules, not to use the generated enums.
 
 Adding an ontology means adding an `OntologyFile` to `ontology_files` and a
-`create_ontology_enum` call with the id pattern of the ontology. The downloaded
+`ontology_patterns` entry with the id pattern of the ontology. The downloaded
 OWL files are not part of the repository, and the generated modules should never
 be edited by hand.
 """
@@ -41,8 +41,7 @@ from typing import TYPE_CHECKING
 
 import requests
 
-from pymetadata import ENUM_DIR, RESOURCES_DIR, log
-from pymetadata.ontologies.term import TermData
+from pymetadata import ONTOLOGY_DIR, RESOURCES_DIR, log
 
 if TYPE_CHECKING:
     from pronto.ontology import Ontology as ProntoOntology
@@ -50,6 +49,14 @@ if TYPE_CHECKING:
     from pronto.term import Term as ProntoTerm
 
 logger = log.get_logger(__name__)
+
+#: information collected for one term, i.e.
+#: `(label, definition, synonyms, deprecated)`
+TermInfo = tuple[str, str | None, tuple[str, ...], bool]
+
+#: quoting of the generated modules
+DOUBLE_QUOTE = chr(34)
+TRIPLE_QUOTE = DOUBLE_QUOTE * 3
 
 _ONTOLOGY_EXTRA_MSG = (
     "Reading ontologies requires the optional `ontology` dependencies. Install "
@@ -301,7 +308,7 @@ def _annotation_literals(
     return literals
 
 
-def _term_data(pronto_term: "ProntoTerm | ProntoRelationship") -> TermData:
+def _term_data(pronto_term: "ProntoTerm | ProntoRelationship") -> TermInfo:
     """Collect the information of a term of the ontology.
 
     The definition is taken from the definition of the term, its comment or the
@@ -339,8 +346,32 @@ def _term_data(pronto_term: "ProntoTerm | ProntoRelationship") -> TermData:
     return (label, definition, synonyms, bool(pronto_term.obsolete))
 
 
-def _render_module(ontology_id: str, pattern: str, terms: dict[str, TermData]) -> str:
+def _docstring(label: str, definition: str | None, deprecated: bool) -> str:
+    """Render the docstring of a term, which is what an editor shows.
+
+    Double quotes and backslashes are replaced, they would terminate or escape
+    the docstring of the generated declaration.
+
+    Args:
+        label: name of the term in the ontology
+        definition: definition of the term
+        deprecated: the term is obsolete
+
+    Returns:
+        The documentation of the term.
+    """
+    text = f"{label}." if not definition else f"{label}: {definition}"
+    if deprecated:
+        text = f"[obsolete] {text}"
+    return text.replace("\\", " ").replace(DOUBLE_QUOTE, "'").strip()
+
+
+def _render_module(ontology_id: str, pattern: str, terms: dict[str, TermInfo]) -> str:
     r"""Render the python module of an ontology.
+
+    The class body declares every term with its documentation, so that editors
+    complete the terms and show what they mean; the information itself is
+    registered below the class.
 
     Args:
         ontology_id: id of the ontology, e.g., `SBO`
@@ -350,48 +381,54 @@ def _render_module(ontology_id: str, pattern: str, terms: dict[str, TermData]) -
     Returns:
         The source of the module.
     """
-    members: list[str] = []
+    declarations: list[str] = []
     data: list[str] = []
     var_names: set[str] = set()
 
-    for term_id, term_data in terms.items():
-        label = term_data[0]
-        members.append(f"    # {label}")
-        members.append(f'    {term_id} = "{term_id}"')
+    for term_id, (label, definition, synonyms, deprecated) in terms.items():
+        docstring = _docstring(label, definition, deprecated)
 
+        names = [term_id]
         var_name = re.sub(r"\W|^(?=\d)", "_", label).upper()
         if var_name != term_id and var_name not in var_names:
             var_names.add(var_name)
-            members.append(f'    {var_name} = "{term_id}"')
-        members.append("")
+            names.append(var_name)
 
-        data.append(f"    {term_id!r}: {term_data!r},")
+        for name in names:
+            declarations.append(f'    {name}: "{ontology_id}"')
+            declarations.append(f"    {TRIPLE_QUOTE}{docstring}{TRIPLE_QUOTE}")
+            declarations.append("")
+
+        data.append(
+            f"    ({term_id!r}, {tuple(names)!r}, {label!r}, "
+            f"{definition!r}, {synonyms!r}, {deprecated!r}),"
+        )
 
     return "\n".join(
         [
-            f'"""{ontology_id} ontology.',
+            f"{TRIPLE_QUOTE}{ontology_id} ontology.",
             "",
             "Generated from the ontology release by",
             "`pymetadata.ontologies._ontology_builder`, do not edit.",
-            '"""',
+            TRIPLE_QUOTE,
             "",
-            "from pymetadata.ontologies.term import OntologyEnum, TermData",
+            "from pymetadata.ontologies.term import OntologyTerm, TermData",
             "",
             f'pattern = r"{pattern}"',
             "",
             "",
-            f"class {ontology_id}(OntologyEnum):",
-            f'    """{ontology_id} ontology."""',
+            f"class {ontology_id}(OntologyTerm):",
+            f"    {TRIPLE_QUOTE}{ontology_id} ontology.{TRIPLE_QUOTE}",
             "",
-            *members,
+            *declarations,
             f"{ontology_id}Type = str | {ontology_id}",
             "",
-            "#: information of every term, assigned to the enum below",
-            "_terms: dict[str, TermData] = {",
+            "#: information of every term, registered on the class below",
+            "_terms: list[TermData] = [",
             *data,
-            "}",
+            "]",
             "",
-            f"{ontology_id}._terms = _terms",
+            f"{ontology_id}._register(_terms)",
             "",
             "__all__ = [",
             f'    "{ontology_id}",',
@@ -402,10 +439,10 @@ def _render_module(ontology_id: str, pattern: str, terms: dict[str, TermData]) -
     )
 
 
-def create_ontology_enum(ontology_id: str, pattern: str) -> None:
+def create_ontology_module(ontology_id: str, pattern: str) -> None:
     r"""Generate the python enum module for an ontology.
 
-    The module is written to `ENUM_DIR`, i.e.,
+    The module is written to `ONTOLOGY_DIR`, i.e.,
     `pymetadata/ontologies/<ontology_id>.py`; run `ruff format` on it
     afterwards, the rendered output is not formatted.
 
@@ -418,7 +455,7 @@ def create_ontology_enum(ontology_id: str, pattern: str) -> None:
     """
     logger.info("Create enum: `%s`", ontology_id)
 
-    terms: dict[str, TermData] = {}
+    terms: dict[str, TermInfo] = {}
     ontology: Ontology = Ontology(ontology_id=ontology_id)
     pronto_ontology = ontology.get_pronto_ontology()
     if not pronto_ontology:
@@ -453,7 +490,7 @@ def create_ontology_enum(ontology_id: str, pattern: str) -> None:
 
     terms = {term_id: terms[term_id] for term_id in sorted(terms)}
 
-    path_module = ENUM_DIR / f"{ontology_id.lower()}.py"
+    path_module = ONTOLOGY_DIR / f"{ontology_id.lower()}.py"
     logger.info("Write module: `%s`", path_module)
     with open(path_module, "w") as f_py:
         f_py.write(_render_module(ontology_id, pattern, terms))
@@ -483,7 +520,7 @@ if __name__ == "__main__":
     update_ontology_files(list(ontology_patterns))
 
     for oid, id_pattern in ontology_patterns.items():
-        create_ontology_enum(oid, id_pattern)
+        create_ontology_module(oid, id_pattern)
 
     for oid in ontology_patterns:
         try_ontology_import(oid)

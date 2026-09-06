@@ -105,7 +105,7 @@ uv run python scripts/llms_txt.py
 
 The `documentation` workflow runs both steps, so the files are regenerated with every push. `docs/robots.txt` points crawlers at the sitemap and at these files. Zensical will provide agent context files itself at some point, then this script can go.
 
-## Regenerating the ontology enums { #regenerating-the-ontology-enums }
+## Regenerating the ontologies { #regenerating-the-ontologies }
 
 `pymetadata.ontologies.sbo`, `kisao` and `pbpko` are generated modules and should not be edited by hand. They are rendered from the ontology releases by `pymetadata.ontologies._ontology_builder`, which is internal tooling for maintainers rather than part of the public API, and therefore not in the API reference:
 
@@ -116,7 +116,7 @@ python -m pymetadata.ontologies._ontology_builder
 
 This needs the optional `ontology` dependency (`pronto`), which is not installed with the package because the generated enums work without it. The development environment (`--extra dev`) includes them.
 
-It downloads the OWL files of the packaged ontologies, stores them gzipped under `src/pymetadata/resources/ontologies/` (not part of the repository), and writes one python module per ontology: the terms as enum members plus their label, definition, synonyms and deprecation, with the behaviour coming from `OntologyEnum` in `pymetadata.ontologies.term`. The modules are written with plain python string building, there is no template engine. Adding an ontology means adding an `OntologyFile` entry and an entry to `ontology_patterns` with the id pattern of the ontology.
+It downloads the OWL files of the packaged ontologies, stores them gzipped under `src/pymetadata/resources/ontologies/` (not part of the repository), and writes one python module per ontology: a class with one attribute per term, documented with the definition of the term so that editors show it, plus the information registered on the class; the behaviour comes from `OntologyTerm` in `pymetadata.ontologies.term`. The modules are written with plain python string building, there is no template engine. Adding an ontology means adding an `OntologyFile` entry and an entry to `ontology_patterns` with the id pattern of the ontology.
 
 Run `ruff format` afterwards, since the rendered modules are not formatted.
 
@@ -124,7 +124,7 @@ Run `ruff format` afterwards, since the rendered modules are not formatted.
 
 A release is made from `develop`:
 
-1. update the ontology enums, see [Regenerating the ontology enums](#regenerating-the-ontology-enums), and commit the changes
+1. update the ontology enums, see [Regenerating the ontologies](#regenerating-the-ontologies), and commit the changes
 2. write the release notes for the version in `release-notes/`
 3. make sure everything passes: `tox run-parallel`, `ruff check`, `tox r -e ty`
 4. check the version bump: `uvx bump-my-version bump [major|minor|patch] --dry-run -vv`

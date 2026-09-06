@@ -17,7 +17,7 @@ Computational models in systems biology are rarely a single file. A study typica
 
 - **[COMBINE archives](omex.md)** — read and write OMEX archives, work with the `manifest.xml`, create archives from directories or single files, and read archives directly from a URL.
 - **[Annotations](annotations.md)** — MIRIAM qualifiers (`BQB`, `BQM`), normalization of resources to identifiers.org compact identifiers, validation against the identifiers.org registry, and lookup of labels, descriptions, synonyms and cross references via OLS.
-- **[Ontologies](annotations.md#ontology-enums)** — SBO, KISAO and PBPKO are shipped as python enums, so ontology terms can be used with autocompletion and are checked at runtime instead of being passed as strings. Every term carries its label, definition and synonyms.
+- **[Ontologies](annotations.md#ontology-terms)** — SBO, KISAO and PBPKO are shipped as python classes of terms, so a term is completed by the editor, checked at runtime and carries its label, definition and synonyms.
 
 ## Quickstart
 
@@ -47,7 +47,7 @@ with Omex.from_omex(Path("archive.omex")) as omex:
         # ./model.xml /tmp/tmpb0m1xyz/model.xml
 ```
 
-Annotate a model element with a MIRIAM qualifier and use ontology terms as enums:
+Annotate a model element with a MIRIAM qualifier and use ontology terms instead of strings:
 
 ```python
 from pymetadata.core.annotation import RDFAnnotation
@@ -58,9 +58,9 @@ annotation = RDFAnnotation(qualifier=BQB.IS, resource="CHEBI:17234")
 print(annotation.resource_normalized)
 # https://identifiers.org/CHEBI:17234
 
-# ontology terms as enums instead of strings
-print(SBO.SIMPLE_CHEMICAL, SBO.get_name(SBO.SIMPLE_CHEMICAL))
-# SBO.SBO_0000247 simple chemical
+# a term is its identifier and knows what it means
+print(SBO.SIMPLE_CHEMICAL, SBO.SIMPLE_CHEMICAL.label)
+# SBO_0000247 simple chemical
 ```
 
 If you have any questions or issues please [open an issue](https://github.com/matthiaskoenig/pymetadata/issues).
