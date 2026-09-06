@@ -178,7 +178,7 @@ python -m pymetadata.examples.omex_from_url_example  # read an archive from a ur
 ```
 
 The full API, generated from the docstrings, is in the
-[API reference](api/omex.qmd).
+[API reference](api/omex.md).
 
 ## References
 

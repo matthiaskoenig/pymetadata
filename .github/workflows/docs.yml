@@ -15,31 +15,28 @@ concurrency:
 jobs:
   build:
     runs-on: ubuntu-latest
-    timeout-minutes: 20
+    timeout-minutes: 15
     steps:
       - uses: actions/checkout@v7
         with:
           persist-credentials: false
+      - name: Configure GitHub Pages
+        uses: actions/configure-pages@v6
       - name: Install uv and set the python version
         uses: astral-sh/setup-uv@v10.0.1
         with:
           python-version: "3.13"
           enable-cache: true
-      - name: Install quarto
-        uses: quarto-dev/quarto-actions/setup@v2
       - name: Install dependencies
         run: uv sync --extra dev
-      - name: Build the API reference from the docstrings
-        working-directory: docs
-        run: uv run quartodoc build
-      - name: Render the documentation
-        run: uv run quarto render docs
-      - name: Render the presentations
-        run: uv run quarto render presentations/HARMONY2026 --output-dir ../../_site/presentations/HARMONY2026
+      - name: Build the documentation
+        # the API reference is rendered from the docstrings by mkdocstrings,
+        # so the package has to be importable
+        run: uv run zensical build --clean
       - name: Upload the site
         uses: actions/upload-pages-artifact@v5
         with:
-          path: _site
+          path: site
 
   deploy:
     needs: build

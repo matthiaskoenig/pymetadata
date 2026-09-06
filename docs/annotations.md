@@ -81,7 +81,7 @@ annotation.check_miriam_term() # term against the registry pattern only
 
 A term such as `chebi/CHEBI:X33699` fails, because the CHEBI pattern is
 `^CHEBI:\d+$`. The registry is downloaded once and cached, see
-[Installation](installation.qmd#cache).
+[Installation](installation.md#cache).
 
 ## Resolving additional information
 
@@ -119,7 +119,7 @@ Both steps require network access. Enable the cache
 (`pymetadata.CACHE_USE = True`) when resolving many annotations, so repeated
 terms are not queried again.
 
-## Ontology enums {#ontology-enums}
+## Ontology enums { #ontology-enums }
 
 Ontology terms are usually passed around as strings, which means typos surface
 at runtime or not at all. `pymetadata` ships four ontologies as python enums
@@ -157,5 +157,5 @@ SBO.validate("SBO_9999999")  # raises AttributeError, the term does not exist
 
 The enums are generated with `pymetadata.ontologies.ontology`, which downloads
 the ontology in OWL format and renders a python module from it. See
-[Development](development.qmd#regenerating-the-ontology-enums) for how to update
+[Development](development.md#regenerating-the-ontology-enums) for how to update
 them to a newer ontology release.

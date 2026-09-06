@@ -57,7 +57,8 @@ dev = [
     "tox>=4.61.2",
     "pytest>=9.1.1",
     "pytest-cov>=7.1.0",
-    "quartodoc>=0.11.1",
+    "zensical>=0.0.59",
+    "mkdocstrings-python>=1.11.1",
 ]
 
 [project_urls]

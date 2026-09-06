@@ -21,8 +21,10 @@ If you have any questions or issues please [open an issue](https://github.com/ma
 
 Documentation is available from https://matthiaskoenig.github.io/pymetadata.
 
-A presentation from HARMONY2026 is available [here](https://matthiaskoenig.github.io/pymetadata/presentations/HARMONY2026/pymetadata.html).
-[![](./docs/images/HARMONY2026_slides.png)](https://matthiaskoenig.github.io/pymetadata/presentations/HARMONY2026/pymetadata.html)
+The sources of the HARMONY2026 presentation are in
+[`presentations/HARMONY2026`](./presentations/HARMONY2026); render them with
+[quarto](https://quarto.org/).
+![](./docs/images/HARMONY2026_slides.png)
 
 # Installation
 `pymetadata` is available from [pypi](https://pypi.python.org/pypi/pymetadata) and

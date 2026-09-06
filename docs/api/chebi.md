@@ -1,0 +1,3 @@
+# chebi
+
+::: pymetadata.chebi

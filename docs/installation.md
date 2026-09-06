@@ -57,10 +57,10 @@ pip install pymetadata[ontology]
 Without them `pymetadata.ontologies.ontology` can still be imported, but
 `Ontology` and `create_ontology_enum` raise an `ImportError` explaining what to
 install. See
-[Regenerating the ontology enums](development.qmd#regenerating-the-ontology-enums).
+[Regenerating the ontology enums](development.md#regenerating-the-ontology-enums).
 
 For a development setup with the test and documentation tooling see
-[Development](development.qmd).
+[Development](development.md).
 
 ## Cache
 

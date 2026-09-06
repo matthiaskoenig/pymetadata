@@ -77,35 +77,41 @@ comment.
 
 ## Documentation
 
-The documentation is written in [quarto](https://quarto.org/); the sources are
-in `docs/` and the API reference is generated from the docstrings with
-[quartodoc](https://machow.github.io/quartodoc/). Nothing rendered is committed:
-the site is built by the `Documentation` workflow on every push and published to
+The documentation is built with [Zensical](https://zensical.org/), the static
+site generator of the Material for MkDocs authors. The sources are markdown
+files in `docs/`, the site is configured in `zensical.toml` in the repository
+root. Nothing rendered is committed: the site is built by the `Documentation`
+workflow on every push and published to
 [matthiaskoenig.github.io/pymetadata](https://matthiaskoenig.github.io/pymetadata)
 from the `develop` branch.
 
-To build the documentation locally, first generate the API reference, then
-render the site into `_site/`:
+Build the site into `site/`:
 
 ```bash
-cd docs
-quartodoc build
-cd ..
-quarto render docs
+uv run zensical build --clean
 ```
 
-For writing, the live preview rebuilds on save:
+For writing, the preview rebuilds on save:
 
 ```bash
-cd docs
-quartodoc build --watch
-quarto preview
+uv run zensical serve
 ```
 
-Because the API reference is generated, docstrings are the place to document
-functions and classes; the `.qmd` files provide the narrative around them.
+The API reference is rendered from the docstrings by
+[mkdocstrings](https://mkdocstrings.github.io/); a page in `docs/api/` only
+contains the module directive:
 
-## Regenerating the ontology enums {#regenerating-the-ontology-enums}
+```markdown
+# omex
+
+::: pymetadata.omex
+```
+
+Docstrings are therefore the place to document functions and classes, the
+markdown files provide the narrative around them. Adding a module to the
+reference means adding such a page and an entry to `nav` in `zensical.toml`.
+
+## Regenerating the ontology enums { #regenerating-the-ontology-enums }
 
 `pymetadata.metadata.sbo`, `kisao`, `eco` and `pbpko` are generated modules and
 should not be edited by hand. They are rendered from the ontology releases with

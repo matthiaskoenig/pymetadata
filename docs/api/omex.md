@@ -1,0 +1,3 @@
+# omex
+
+::: pymetadata.omex

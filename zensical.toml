@@ -1,0 +1,146 @@
+[project]
+site_name = "pymetadata"
+site_url = "https://matthiaskoenig.github.io/pymetadata/"
+site_description = "Python utilities for working with metadata and COMBINE archives"
+site_author = "Matthias König"
+
+copyright = "Copyright &copy; 2021-2026 Matthias König"
+
+repo_url = "https://github.com/matthiaskoenig/pymetadata"
+repo_name = "matthiaskoenig/pymetadata"
+edit_uri = "edit/develop/docs/"
+
+nav = [
+  { "Home" = "index.md" },
+  { "Installation" = "installation.md" },
+  { "User guide" = [
+    { "COMBINE archives" = "omex.md" },
+    { "Annotations" = "annotations.md" },
+  ] },
+  { "API reference" = [
+    { "Overview" = "api/index.md" },
+    { "pymetadata" = [
+      { "cache" = "api/cache.md" },
+      { "chebi" = "api/chebi.md" },
+      { "console" = "api/console.md" },
+      { "log" = "api/log.md" },
+      { "omex" = "api/omex.md" },
+      { "unichem" = "api/unichem.md" },
+      { "webservice" = "api/webservice.md" },
+    ] },
+    { "pymetadata.core" = [
+      { "annotation" = "api/core.annotation.md" },
+      { "creator" = "api/core.creator.md" },
+      { "xref" = "api/core.xref.md" },
+    ] },
+    { "pymetadata.identifiers" = [
+      { "miriam" = "api/identifiers.miriam.md" },
+      { "registry" = "api/identifiers.registry.md" },
+    ] },
+    { "pymetadata.ontologies" = [
+      { "ols" = "api/ontologies.ols.md" },
+      { "ontology" = "api/ontologies.ontology.md" },
+    ] },
+  ] },
+  { "Contributing" = "development.md" },
+]
+
+[project.theme]
+language = "en"
+favicon = "images/favicon/favicon.ico"
+logo = "images/favicon/pymetadata-100x100-300dpi.png"
+features = [
+  "content.action.edit",
+  "content.code.annotate",
+  "content.code.copy",
+  "content.tooltips",
+  "navigation.footer",
+  "navigation.indexes",
+  "navigation.instant",
+  "navigation.instant.prefetch",
+  "navigation.sections",
+  "navigation.top",
+  "navigation.tracking",
+  "search.highlight",
+  "search.suggest",
+  "toc.follow",
+]
+
+[[project.theme.palette]]
+media = "(prefers-color-scheme)"
+toggle.icon = "lucide/sun-moon"
+toggle.name = "Switch to light mode"
+
+[[project.theme.palette]]
+media = "(prefers-color-scheme: light)"
+scheme = "default"
+primary = "teal"
+accent = "teal"
+toggle.icon = "lucide/sun"
+toggle.name = "Switch to dark mode"
+
+[[project.theme.palette]]
+media = "(prefers-color-scheme: dark)"
+scheme = "slate"
+primary = "teal"
+accent = "teal"
+toggle.icon = "lucide/moon"
+toggle.name = "Switch to system preference"
+
+[[project.extra.social]]
+icon = "fontawesome/brands/github"
+link = "https://github.com/matthiaskoenig/pymetadata"
+
+[[project.extra.social]]
+icon = "fontawesome/brands/python"
+link = "https://pypi.org/project/pymetadata/"
+
+# API reference is rendered from the docstrings, see the `docs/api` pages
+[project.plugins.mkdocstrings.config]
+default_handler = "python"
+
+[project.plugins.mkdocstrings.config.handlers.python]
+paths = ["src"]
+
+[project.plugins.mkdocstrings.config.handlers.python.options]
+docstring_style = "google"
+docstring_section_style = "table"
+show_source = false
+# the page provides the heading, see the `docs/api` pages
+show_root_heading = false
+show_root_toc_entry = false
+show_root_full_path = false
+show_symbol_type_heading = true
+show_symbol_type_toc = true
+members_order = "source"
+separate_signature = true
+signature_crossrefs = true
+merge_init_into_class = true
+filters = ["!^_"]
+
+[project.markdown_extensions]
+abbr = {}
+admonition = {}
+attr_list = {}
+def_list = {}
+footnotes = {}
+md_in_html = {}
+tables = {}
+toc.permalink = true
+pymdownx.betterem = {}
+pymdownx.caret = {}
+pymdownx.details = {}
+pymdownx.emoji.emoji_generator = "zensical.extensions.emoji.to_svg"
+pymdownx.emoji.emoji_index = "zensical.extensions.emoji.twemoji"
+pymdownx.highlight.anchor_linenums = true
+pymdownx.highlight.line_spans = "__span"
+pymdownx.highlight.pygments_lang_class = true
+pymdownx.inlinehilite = {}
+pymdownx.keys = {}
+pymdownx.magiclink = {}
+pymdownx.mark = {}
+pymdownx.smartsymbols = {}
+pymdownx.superfences = {}
+pymdownx.tabbed.alternate_style = true
+pymdownx.tasklist.custom_checkbox = true
+pymdownx.tilde = {}

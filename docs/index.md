@@ -25,7 +25,7 @@ format it is in as an identifiers.org URI
 ([Bergmann et al. 2014](https://doi.org/10.1186/s12859-014-0369-z),
 [Bergmann et al. 2015](https://doi.org/10.2390/biecoll-jib-2015-261)).
 `pymetadata` reads, writes and validates these archives, see
-[COMBINE archives](omex.qmd).
+[COMBINE archives](omex.md).
 
 **How do you say what the parts of a model mean?** A species named `glc` is
 meaningless to a machine. MIRIAM annotations attach a qualifier
@@ -34,18 +34,18 @@ element, e.g., "this species **is** [CHEBI:17234](https://identifiers.org/CHEBI:
 `pymetadata` parses, normalizes and validates these annotations against the
 [identifiers.org](https://identifiers.org) registry and resolves additional
 information from the [Ontology Lookup Service](https://www.ebi.ac.uk/ols4),
-see [Annotations](annotations.qmd).
+see [Annotations](annotations.md).
 
 ## Features
 
-- **[COMBINE archives](omex.qmd)** — read and write OMEX archives, work with the
+- **[COMBINE archives](omex.md)** — read and write OMEX archives, work with the
   `manifest.xml`, create archives from directories or single files, and read
   archives directly from a URL.
-- **[Annotations](annotations.qmd)** — MIRIAM qualifiers (`BQB`, `BQM`),
+- **[Annotations](annotations.md)** — MIRIAM qualifiers (`BQB`, `BQM`),
   normalization of resources to identifiers.org compact identifiers, validation
   against the identifiers.org registry, and lookup of labels, descriptions,
   synonyms and cross references via OLS.
-- **[Ontologies](annotations.qmd#ontology-enums)** — SBO, KISAO, ECO and PBPKO
+- **[Ontologies](annotations.md#ontology-enums)** — SBO, KISAO, ECO and PBPKO
   are shipped as python enums, so ontology terms can be used with
   autocompletion and are checked at runtime instead of being passed as strings.
 
