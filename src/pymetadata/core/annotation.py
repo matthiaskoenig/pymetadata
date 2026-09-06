@@ -1,6 +1,21 @@
-"""Annotation.
+"""MIRIAM annotations.
 
-Core data structure to store annotations.
+An annotation combines a qualifier (`BQB`, `BQM`) with a resource pointing at a
+database entry, forming the statement *this element **is** CHEBI:17234*.
+
+`RDFAnnotation` parses the notations found in the wild, normalizes them to
+identifiers.org compact identifiers and validates them against the
+identifiers.org registry. `RDFAnnotationData` resolves what an identifier refers
+to via the Ontology Lookup Service.
+
+```python
+from pymetadata.core.annotation import RDFAnnotation
+from pymetadata.identifiers.miriam import BQB
+
+annotation = RDFAnnotation(qualifier=BQB.IS, resource="chebi/CHEBI:33699")
+print(annotation.resource_normalized)  # https://identifiers.org/CHEBI:33699
+print(annotation.validate())
+```
 """
 
 import re
@@ -37,7 +52,11 @@ logger = log.get_logger(__name__)
 
 
 class ProviderType(str, Enum):
-    """Provider type."""
+    """Resolver a resource was written for.
+
+    `IDENTIFIERS_ORG` and `BIOREGISTRY_IO` resources can be normalized and
+    validated, `NONE` marks an arbitrary url which is kept as it is.
+    """
 
     IDENTIFIERS_ORG = "identifiers.org"
     BIOREGISTRY_IO = "bioregistry.io"
@@ -68,7 +87,21 @@ class RDFAnnotation:
     def __init__(
         self, qualifier: Union[BQB, BQM], resource: str, validate: bool = True
     ):
-        """Initialize RDFAnnotation."""
+        """Parse a resource into collection and term.
+
+        Args:
+            qualifier: MIRIAM qualifier of the annotation
+            resource: the annotated resource, as an identifiers.org url
+                (`https://identifiers.org/CHEBI:33699`), a bioregistry.io url,
+                a compact identifier (`CHEBI:33699`), a collection and term
+                (`chebi/CHEBI:33699`), a MIRIAM urn
+                (`urn:miriam:chebi:CHEBI%3A33699`) or an arbitrary url
+            validate: log warnings and errors for an invalid annotation
+
+        Raises:
+            ValueError: if the qualifier or the resource is missing, or if the
+                resource is not a string
+        """
         self.qualifier: Union[BQB, BQM] = qualifier
         self.collection: Optional[str] = None
         self.term: Optional[str] = None
@@ -188,7 +221,7 @@ class RDFAnnotation:
 
     @staticmethod
     def from_tuple(t: Tuple[Union[BQB, BQM], str]) -> "RDFAnnotation":
-        """Construct from tuple."""
+        """Create an annotation from a `(qualifier, resource)` tuple."""
         qualifier, resource = t[0], t[1]
         return RDFAnnotation(qualifier=qualifier, resource=resource)
 
@@ -221,7 +254,7 @@ class RDFAnnotation:
         return f"RDFAnnotation({self.qualifier}|{self.collection}|{self.term}|{self.provider.value})"
 
     def to_dict(self) -> Dict:
-        """Convert to dict."""
+        """Convert the annotation to a dictionary."""
         return {
             "qualifier": self.qualifier.value,
             "collection": self.collection,
@@ -263,10 +296,13 @@ class RDFAnnotation:
 
     @staticmethod
     def check_qualifier(qualifier: Union[BQB, BQM]) -> bool:
-        """Check that the qualifier is an allowed qualifier.
+        """Check that the qualifier is a MIRIAM qualifier.
 
-        :param qualifier:
-        :return:
+        Args:
+            qualifier: qualifier to check
+
+        Returns:
+            True if the qualifier is a `BQB` or `BQM` term.
         """
         if not isinstance(qualifier, (BQB, BQM)):
             supported_qualifiers = [e.value for e in BQB] + [e.value for e in BQM]
@@ -279,7 +315,12 @@ class RDFAnnotation:
         return True
 
     def validate(self) -> bool:
-        """Validate annotation."""
+        """Validate qualifier and term of the annotation.
+
+        Returns:
+            True if the qualifier is a MIRIAM qualifier and the term matches the
+            pattern of its collection.
+        """
         valid_qualifier: bool = False
         if self.qualifier:
             valid_qualifier = self.check_qualifier(self.qualifier)
@@ -291,14 +332,36 @@ class RDFAnnotation:
 
 
 class RDFAnnotationData(RDFAnnotation):
-    """Annotation with resolved information.
+    """An annotation with the information behind the identifier resolved.
 
-    queries for the resource should happen here;
-    this resolves additional information.
+    Constructing the object resolves the cross references: for every provider
+    the identifiers.org registry lists for the collection, the url pattern is
+    filled in with the term. `query_ols` then adds label, description and
+    synonyms from the Ontology Lookup Service, and replaces `xrefs` with the
+    cross references reported by OLS.
+
+    Attributes:
+        url: url of the first provider of the collection
+        label: name of the term
+        description: definition of the term
+        synonyms: synonyms of the term
+        xrefs: cross references of the term
+        warnings: problems which do not invalidate the annotation
+        errors: problems which do
+
+    Example:
+        ```python
+        data = RDFAnnotationData(RDFAnnotation(BQB.IS, "chebi/CHEBI:33699"))
+        data.query_ols()
+        print(data.label)
+        ```
+
+    Raises:
+        ValueError: if the collection of the annotation is not in the registry
     """
 
     def __init__(self, annotation: RDFAnnotation):
-        """Initialize RDFAnnotationData."""
+        """Resolve the cross references of the annotation."""
         self.resource = annotation.resource
         self.qualifier = annotation.qualifier
         self.collection = annotation.collection
@@ -365,11 +428,11 @@ class RDFAnnotationData(RDFAnnotation):
         self.query_ols()
 
     def __repr__(self) -> str:
-        """Get representation string."""
+        """Get the string representation of the resolved annotation."""
         return f"RDFAnnotationData({self.collection}|{self.term}|{self.label}|{self.description}|{self.synonyms}|{self.xrefs})"
 
     def to_dict(self) -> Dict[str, Any]:
-        """Convert to dict."""
+        """Convert the annotation to a dictionary."""
 
         return {
             "resource": self.resource,
@@ -387,7 +450,15 @@ class RDFAnnotationData(RDFAnnotation):
         }
 
     def query_ols(self) -> Dict:
-        """Query ontology lookup service."""
+        """Resolve the term in the Ontology Lookup Service.
+
+        Fills in `label`, `description` and `synonyms`, and replaces `xrefs`
+        with the cross references reported by OLS. Requires network access;
+        errors are collected in `errors` instead of raising.
+
+        Returns:
+            The processed OLS response.
+        """
         try:
             d = OLS_QUERY.query_ols(ontology=self.collection, term=self.term)
         except requests.HTTPError as err:

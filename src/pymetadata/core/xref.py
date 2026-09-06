@@ -1,4 +1,9 @@
-"""Module for crossreferences (xref)."""
+"""Cross references to database entries.
+
+A cross reference points at one database entry for a term, e.g., the ChEBI web
+page for `CHEBI:33699`. `RDFAnnotationData` creates one cross reference per
+provider registered for a collection in the identifiers.org registry.
+"""
 
 import re
 from dataclasses import dataclass
@@ -22,7 +27,14 @@ url_regex = re.compile(
 
 
 def is_url(url: str) -> bool:
-    """Check if string is valid url."""
+    """Check if a string is a valid http(s) or ftp url.
+
+    Args:
+        url: string to check
+
+    Returns:
+        True if the string is a valid url.
+    """
     try:
         result = urlparse(url)
         if not all([result.scheme, result.netloc]):
@@ -37,24 +49,34 @@ def is_url(url: str) -> bool:
 
 @dataclass()
 class CrossReference:
-    """Handling database cross references."""
+    """A database cross reference.
+
+    Attributes:
+        name: name of the resource, e.g., `ChEBI`
+        accession: term in the resource, e.g., `CHEBI:33699`
+        url: url of the entry in the resource
+    """
 
     name: str
     accession: str
     url: str
 
     def __post_init__(self) -> None:
-        """Validate."""
+        """Validate the cross reference after construction."""
         self.validate()
 
     def to_dict(self) -> Dict:
-        """Convert to dict."""
+        """Convert the cross reference to a dictionary."""
         return self.__dict__
 
     def validate(self, warnings: bool = True) -> bool:
-        """Validate the cross reference.
+        """Check that the cross reference has a valid url.
 
-        :return:
+        Args:
+            warnings: log a warning for an invalid url
+
+        Returns:
+            True if the url is valid.
         """
         if not is_url(self.url):
             if warnings:

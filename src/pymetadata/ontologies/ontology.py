@@ -1,9 +1,20 @@
-"""Ontology support.
+"""Downloading ontologies and generating the term enums.
 
-This file allows to download the ontologies for local use.
-Special ontologies are provided as enums.
+The enums in `pymetadata.metadata` are generated from the ontology releases:
+`update_ontology_files` downloads the OWL files listed in `ontology_files`,
+`Ontology` reads them with pronto and `create_ontology_enum` renders one python
+module per ontology from `resources/templates/ontology_enum.pytemplate`.
 
-Uses the OWL links provided on OLS4 to download the ontologies.
+Running the module does all three steps for SBO, KISAO, PBPKO and ECO:
+
+```bash
+python -m pymetadata.ontologies.ontology
+```
+
+Adding an ontology means adding an `OntologyFile` to `ontology_files` and a
+`create_ontology_enum` call with the id pattern of the ontology. The downloaded
+OWL files are not part of the repository, and the generated modules should never
+be edited by hand.
 """
 
 import gzip
@@ -33,7 +44,7 @@ logger = log.get_logger(__name__)
 
 
 class OntologyFormat(str, Enum):
-    """Formats for ontologies."""
+    """Serialization format of an ontology file."""
 
     OBO = "obo"
     OWL = "owl"
@@ -41,7 +52,16 @@ class OntologyFormat(str, Enum):
 
 @dataclass
 class OntologyFile:
-    """Definition file for ontology."""
+    """An ontology which can be downloaded and turned into an enum.
+
+    Attributes:
+        id: uppercase ontology id, e.g., `SBO`
+        name: name of the ontology
+        format: format of the source file
+        source: url the ontology is downloaded from
+        bioportal: ontology is available on BioPortal
+        ols: ontology is available on OLS
+    """
 
     id: str
     name: str
@@ -52,17 +72,17 @@ class OntologyFile:
 
     @property
     def path(self) -> Path:
-        """Path of ontology file."""
+        """Path of the local, gzipped copy of the ontology."""
         return (
             RESOURCES_DIR / "ontologies" / f"{self.id.lower()}.{self.format.value}.gz"
         )
 
     @property
     def filename(self) -> str:
-        """Filename of ontology file.
+        """Get the path of the local ontology copy as a string.
 
-        :return: ontology filename
-        :rtype: str
+        Returns:
+            Path of the gzipped ontology file.
         """
         name = str(self.path)
         console.print(name)
@@ -152,7 +172,11 @@ ontology_files: Dict[str, OntologyFile] = {
 
 
 def update_ontology_file(ofile: OntologyFile) -> None:
-    """Download latest versions of ontologies."""
+    """Download one ontology and store it gzipped in the resources.
+
+    Args:
+        ofile: ontology to download
+    """
 
     oid = ofile.id
 
@@ -176,19 +200,23 @@ def update_ontology_file(ofile: OntologyFile) -> None:
 
 
 def update_ontology_files() -> None:
-    """Download latest ontology files."""
+    """Download the current release of every ontology in `ontology_files`."""
     with ThreadPoolExecutor(max_workers=4) as pool:
         for ofile in ontology_files.values():
             pool.submit(update_ontology_file, ofile)
 
 
 class Ontology:
-    """Ontology."""
+    """An ontology read from its local OWL file with pronto."""
 
     _ontology: Optional[ProntoOntology] = None
 
     def __init__(self, ontology_id: str):
-        """Construct ontology."""
+        """Read the ontology from the local file.
+
+        Args:
+            ontology_id: id of an ontology in `ontology_files`, e.g., `SBO`
+        """
         ontology_file = ontology_files[ontology_id]
         logger.info(f"Read ontology: `{ontology_id}`")
 
@@ -199,16 +227,27 @@ class Ontology:
             self.__class__._ontology = pronto.Ontology(ontology_file.filename)
 
     def get_pronto_ontology(self) -> Optional[ProntoOntology]:
-        """Get a proto object for the ontology.
+        """Get the underlying pronto ontology.
 
-        :return: `pronto.Ontology`: pronto object for the ontology
-        :rtype: [type]
+        Returns:
+            The pronto ontology, or None if no ontology was read.
         """
         return self._ontology
 
 
 def create_ontology_enum(ontology_id: str, pattern: str) -> None:
-    """Create enum of the ontology."""
+    r"""Generate the python enum module for an ontology.
+
+    The module is written to `pymetadata/metadata/<ontology_id>.py`; run
+    `ruff format` on it afterwards, the rendered output is not formatted.
+
+    Args:
+        ontology_id: id of an ontology in `ontology_files`, e.g., `SBO`
+        pattern: regular expression the term ids match, e.g., `^SBO_\d{7}$`
+
+    Raises:
+        ValueError: if the ontology could not be read
+    """
 
     logger.info(f"Create enum: `{ontology_id}`")
 
@@ -292,7 +331,14 @@ def create_ontology_enum(ontology_id: str, pattern: str) -> None:
 
 
 def try_ontology_import(ontology_id: str) -> None:
-    """Try import of created module."""
+    """Check that the generated module for an ontology can be imported.
+
+    Args:
+        ontology_id: id of an ontology in `ontology_files`, e.g., `SBO`
+
+    Raises:
+        ModuleNotFoundError: if the module was not generated
+    """
     # try to import
     importlib.import_module(f"pymetadata.metadata.{ontology_id.lower()}")
 

@@ -1,8 +1,21 @@
-"""Lookup of ontology information from the ontology lookup service (OLS).
+"""Lookup of ontology terms in the Ontology Lookup Service (OLS).
 
-This uses the EMBL-EBI Ontology Lookup Service
-https://www.ebi.ac.uk/ols4
+OLS resolves an ontology term to its label, description, synonyms and cross
+references. `RDFAnnotationData` uses it to fill in what an annotation actually
+refers to.
 
+```python
+from pymetadata.ontologies.ols import ONTOLOGIES, OLSQuery
+
+query = OLSQuery(ontologies=ONTOLOGIES)
+info = query.query_ols(ontology="chebi", term="CHEBI:33699")
+print(query.process_response(info)["label"])
+```
+
+`ONTOLOGIES` lists the ontologies used in most projects together with the IRI
+pattern needed to build the term IRI OLS expects.
+
+See <https://www.ebi.ac.uk/ols4>.
 """
 
 import urllib.parse
@@ -24,13 +37,19 @@ logger = log.get_logger(__name__)
 
 @dataclass
 class OLSOntology:
-    """OLSOntology."""
+    """An ontology available in OLS.
+
+    Attributes:
+        name: lowercase ontology id, e.g., `chebi`
+        iri_pattern: pattern of the term IRI with the placeholder `{$Id}`,
+            defaults to the OBO purl of the ontology
+    """
 
     name: str
     iri_pattern: Optional[str] = field(default=None)
 
     def __post_init__(self) -> None:
-        """Fix IRI patterns."""
+        """Set the default OBO purl pattern if no pattern was given."""
         if self.iri_pattern is None:
             self.iri_pattern = (
                 f"http://purl.obolibrary.org/obo/{self.name.upper()}" + "_{$Id}"
@@ -70,7 +89,15 @@ ONTOLOGIES = [
 
 
 class OLSQuery:
-    """Handling OLS queries."""
+    """Queries against the Ontology Lookup Service.
+
+    Responses can be cached on disk, see `pymetadata.CACHE_USE`.
+
+    Attributes:
+        ontologies: the queryable ontologies by name
+        cache_path: directory of the cached responses
+        cache: whether responses are cached
+    """
 
     url_term_query = "https://www.ebi.ac.uk/ols4/api/ontologies/{}/terms/{}"
 
@@ -80,7 +107,14 @@ class OLSQuery:
         cache_path: Optional[Path] = None,
         cache: Optional[bool] = None,
     ):
-        """Initialize OLSQuery."""
+        """Initialize the query.
+
+        Args:
+            ontologies: ontologies which can be queried, e.g., `ONTOLOGIES`
+            cache_path: directory for cached responses, defaults to
+                `pymetadata.CACHE_PATH`
+            cache: cache responses, defaults to `pymetadata.CACHE_USE`
+        """
         self.ontologies: Dict[str, OLSOntology] = {
             ontology.name: ontology for ontology in ontologies
         }
@@ -96,7 +130,15 @@ class OLSQuery:
             self.cache_path.mkdir(parents=True)
 
     def get_iri(self, ontology: str, term: str) -> str:
-        """Get IRI information."""
+        """Build the term IRI which OLS expects.
+
+        Args:
+            ontology: ontology id, e.g., `chebi`
+            term: term of the ontology, e.g., `CHEBI:33699`
+
+        Returns:
+            The IRI of the term, or an empty string for an unknown ontology.
+        """
         ols_ontology: Optional[OLSOntology] = self.ontologies.get(ontology, None)
         # remove prefix if existing
         if term.startswith(ontology.upper()):
@@ -115,7 +157,16 @@ class OLSQuery:
         return iri
 
     def query_ols(self, ontology: Optional[str], term: Optional[str]) -> Dict:
-        """Query the ontology lookup service."""
+        """Query OLS for a single term.
+
+        Args:
+            ontology: ontology id, e.g., `chebi`
+            term: term of the ontology, e.g., `CHEBI:33699`
+
+        Returns:
+            The OLS response, with `errors` and `warnings` describing problems
+            with the query.
+        """
         if not ontology:
             return {"errors": [], "warnings": ["No collection."]}
         if not term:
@@ -184,7 +235,14 @@ class OLSQuery:
         return data
 
     def process_response(self, term: Dict) -> Dict[str, Any]:
-        """Process the response dictionary."""
+        """Reduce an OLS response to the information used for annotations.
+
+        Args:
+            term: OLS response from `query_ols`
+
+        Returns:
+            Dictionary with `label`, `description`, `synonyms` and `xrefs`.
+        """
         data = {
             "errors": term["errors"],
             "warnings": term["warnings"],

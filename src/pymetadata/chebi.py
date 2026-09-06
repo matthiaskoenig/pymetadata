@@ -1,4 +1,17 @@
-"""Module for working with chebi."""
+"""Substance information from ChEBI.
+
+Queries the ChEBI web service for the information stored for a term, such as the
+InChIKey, which can then be used to look up cross references with
+`pymetadata.unichem`.
+
+```python
+from pymetadata.chebi import ChebiQuery
+
+info = ChebiQuery.query("CHEBI:33699")
+```
+
+See <https://www.ebi.ac.uk/chebi/>.
+"""
 
 from pathlib import Path
 from typing import Any, Dict, Optional
@@ -13,13 +26,26 @@ logger = log.get_logger(__name__)
 
 
 class ChebiQuery:
-    """Class to query information from ChEBI."""
+    """Queries against the ChEBI web service.
+
+    Responses can be cached on disk, see `pymetadata.CACHE_USE`.
+    """
 
     @staticmethod
     def query(
         chebi: str, cache: Optional[bool] = None, cache_path: Optional[Path] = None
     ) -> Dict:
-        """Query additional ChEBI information."""
+        """Query the information stored for a ChEBI term.
+
+        Args:
+            chebi: ChEBI term, e.g., `CHEBI:33699`
+            cache: cache the response, defaults to `pymetadata.CACHE_USE`
+            cache_path: directory for cached responses, defaults to
+                `pymetadata.CACHE_PATH`
+
+        Returns:
+            The ChEBI information, empty if the term could not be resolved.
+        """
 
         if not chebi:
             return dict()

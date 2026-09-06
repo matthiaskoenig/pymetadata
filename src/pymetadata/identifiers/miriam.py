@@ -1,4 +1,21 @@
-"""Module for working with MIRIAM qualifiers."""
+"""MIRIAM qualifiers.
+
+A MIRIAM annotation combines a qualifier, saying how an element relates to
+something else, with a resource pointing at a database entry. Biological
+qualifiers (`BQB`) relate an element to a biological entity, model qualifiers
+(`BQM`) describe the model itself.
+
+```python
+from pymetadata.core.annotation import RDFAnnotation
+from pymetadata.identifiers.miriam import BQB
+
+RDFAnnotation(qualifier=BQB.IS, resource="CHEBI:17234")
+```
+
+Choosing the qualifier matters: `BQB.IS` states that the element *is* the
+annotated entity, whereas `BQB.IS_VERSION_OF` is the weaker claim that it is one
+form of it.
+"""
 
 from enum import Enum
 
@@ -14,7 +31,11 @@ __all__ = [
 
 
 class BQM(Enum):
-    """MIRIAM model qualifier."""
+    """MIRIAM model qualifier, relating a model to a resource.
+
+    Use `BQM.IS_DESCRIBED_BY` to link a model to the publication describing it,
+    and `BQM.IS_DERIVED_FROM` to link it to the model it was built from.
+    """
 
     IS = "BQM_IS"
     IS_DESCRIBED_BY = "BQM_IS_DESCRIBED_BY"
@@ -25,7 +46,13 @@ class BQM(Enum):
 
 
 class BQB(Enum):
-    """MIRIAM biological qualifier."""
+    """MIRIAM biological qualifier, relating an element to a biological entity.
+
+    The most common are `BQB.IS` (the element is the entity),
+    `BQB.IS_VERSION_OF` (the element is one form of the entity),
+    `BQB.IS_PART_OF` (the element is part of the entity) and `BQB.HAS_TAXON`
+    (the entity occurs in the given taxon).
+    """
 
     IS = "BQB_IS"
     HAS_PART = "BQB_HAS_PART"

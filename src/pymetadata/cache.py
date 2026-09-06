@@ -1,4 +1,10 @@
-"""Caching of information."""
+"""Caching of web service responses.
+
+Queries to identifiers.org, OLS, ChEBI and UniChem can be cached on disk so that
+repeated lookups of the same term do not hit the network again. Caching is off
+by default and controlled by `pymetadata.CACHE_USE` and `pymetadata.CACHE_PATH`,
+which are read at query time.
+"""
 
 import json
 from json.encoder import JSONEncoder
@@ -12,18 +18,24 @@ logger = log.get_logger(__name__)
 
 
 class DataclassJSONEncoder(JSONEncoder):
-    """JSON serialization of dataclasses."""
+    """JSON encoder which serializes dataclasses via their `__dict__`."""
 
     def default(self, o: Any) -> Any:
-        """Serialize to JSON."""
+        """Serialize an object which json cannot serialize itself."""
         return o.__dict__
 
 
 def read_json_cache(cache_path: Path) -> Dict:
-    """Read JSON cache file.
+    """Read a JSON cache file.
 
-    :param cache_path:
-    :return: Dictionary with content or None if cache file does not exist.
+    Args:
+        cache_path: path of the cache file
+
+    Returns:
+        The cached content.
+
+    Raises:
+        IOError: if the cache file does not exist
     """
     if cache_path.exists():
         with open(cache_path) as fp:
@@ -36,12 +48,15 @@ def read_json_cache(cache_path: Path) -> Dict:
 def write_json_cache(
     data: Dict, cache_path: Path, json_encoder: Optional[Type[JSONEncoder]] = None
 ) -> None:
-    """Write JSON cache file.
+    """Write a JSON cache file.
 
-    :param data: data to serialize
-    :param cache_path: path for the cache file
-    :param json_encoder: optional JSON encoder
-    :return:
+    Missing parent directories are created.
+
+    Args:
+        data: data to serialize
+        cache_path: path of the cache file
+        json_encoder: encoder for objects json cannot serialize, e.g.
+            `DataclassJSONEncoder` for dataclasses
     """
     cache_path.parent.mkdir(parents=True, exist_ok=True)
     with open(cache_path, "w") as fp:

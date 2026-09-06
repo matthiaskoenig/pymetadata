@@ -1,8 +1,24 @@
-"""
-Helper tools to work with identifiers registry.
+r"""The identifiers.org registry.
 
-https://identifiers.org/
-https://docs.identifiers.org/articles/api.html
+The registry defines, for every collection (`chebi`, `uniprot`, `taxonomy`, ...),
+the pattern a valid term matches and the providers which resolve a term to a
+web page. `pymetadata` uses it to validate annotations and to build cross
+references.
+
+The registry is downloaded once and cached in
+`CACHE_PATH / "identifiers_registry.json"`, and refreshed when the local copy is
+older than the cache duration.
+
+```python
+from pymetadata.identifiers.registry import Registry
+
+registry = Registry()
+namespace = registry.ns_dict["chebi"]
+print(namespace.pattern)  # ^CHEBI:\d+$
+```
+
+See <https://identifiers.org/> and
+<https://docs.identifiers.org/articles/api.html>.
 """
 
 from __future__ import annotations
@@ -26,7 +42,12 @@ logger = log.get_logger(__name__)
 
 @dataclass
 class Resource:
-    """Resource."""
+    """A provider which resolves terms of a collection.
+
+    A collection can have several providers; `urlPattern` contains the
+    placeholder `{$id}` which is replaced by the term to build the url of an
+    entry.
+    """
 
     id: Optional[int]
     providerCode: str
@@ -49,7 +70,7 @@ class Resource:
 
     @classmethod
     def from_dict(cls, d: Dict[str, Any]) -> Resource:
-        """Handle additional keyword arguments."""
+        """Create a resource from a registry response, ignoring unknown keys."""
         return cls(
             **{k: v for k, v in d.items() if k in inspect.signature(cls).parameters}
         )
@@ -57,7 +78,16 @@ class Resource:
 
 @dataclass
 class Namespace:
-    """Namespace."""
+    """A collection of the identifiers.org registry.
+
+    Attributes:
+        prefix: prefix of the collection, e.g., `chebi`
+        name: name of the collection
+        pattern: regular expression a valid term matches
+        namespaceEmbeddedInLui: whether the prefix is part of the term itself,
+            as for `CHEBI:33699` and `GO:0005829`
+        resources: providers which resolve terms of this collection
+    """
 
     id: Optional[str]
     prefix: Optional[str]
@@ -75,7 +105,7 @@ class Namespace:
 
     @classmethod
     def from_dict(cls, d: Dict[str, Any]) -> Namespace:
-        """Handle additional keyword arguments."""
+        """Create a namespace from a registry response, ignoring unknown keys."""
         return cls(
             **{k: v for k, v in d.items() if k in inspect.signature(cls).parameters}
         )
@@ -89,9 +119,11 @@ class Namespace:
 
 
 class Registry:
-    """Managing the available annotation information.
+    """The identifiers.org registry, cached on disk.
 
-    Registry of meta information.
+    Attributes:
+        ns_dict: namespaces of the registry by prefix
+        registry_path: path of the cached registry
     """
 
     URL = "https://registry.api.identifiers.org/resolutionApi/getResolverDataset"
@@ -101,11 +133,11 @@ class Registry:
         cache_duration: int = 24,
         cache: bool = True,
     ):
-        """Initialize registry.
+        """Load the registry, updating the cached copy if it is outdated.
 
-        :param cache_path: Path of cached identifiers.org path
-        :param cache_duration: Duration of caching in hours.
-        :param cache: boolean flag to stop caching
+        Args:
+            cache_duration: maximum age of the cached registry in hours
+            cache: use the cached registry; if False the registry is downloaded
         """
         self.registry_path = pymetadata.CACHE_PATH / "identifiers_registry.json"
 
@@ -126,7 +158,11 @@ class Registry:
         )
 
     def update(self) -> Dict[str, Namespace]:
-        """Update registry."""
+        """Download the registry and return the namespaces.
+
+        Returns:
+            Namespaces of the registry by prefix.
+        """
         Registry.update_registry(registry_path=self.registry_path)
         return Registry.load_registry(registry_path=self.registry_path)
 
@@ -134,7 +170,16 @@ class Registry:
     def update_registry(
         registry_path: Optional[Path] = None,
     ) -> Dict[str, Namespace]:
-        """Update registry from identifiers.org webservice."""
+        """Download the registry from the identifiers.org web service.
+
+        Namespaces without a prefix are skipped.
+
+        Args:
+            registry_path: path to cache the registry in, not cached if None
+
+        Returns:
+            Namespaces of the registry by prefix.
+        """
         logger.info(f"Update registry from '{Registry.URL}'")
         response = requests.get(Registry.URL)
         namespaces = response.json()["payload"]["namespaces"]
@@ -158,7 +203,14 @@ class Registry:
 
     @staticmethod
     def load_registry(registry_path: Path) -> Dict[str, Namespace]:
-        """Load namespaces with resources from path."""
+        """Load the registry from the cached file, downloading it if missing.
+
+        Args:
+            registry_path: path of the cached registry
+
+        Returns:
+            Namespaces of the registry by prefix.
+        """
         if not registry_path.exists():
             Registry.update_registry(registry_path=registry_path)
 

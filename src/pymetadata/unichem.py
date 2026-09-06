@@ -1,10 +1,17 @@
-"""
-Unichem metadata.
+"""Substance cross references from UniChem.
 
-Additional substance information based on inchikeys
+UniChem maps a structure, identified by its InChIKey, to the entries of many
+chemistry databases, which gives cross references for a substance without
+having to query every database separately.
 
-https://www.ebi.ac.uk/unichem/info/webservices#GetSrcCpdIdsFromKey
-https://www.ebi.ac.uk/unichem/rest/inchikey/AAOVKJBEBIDNHE-UHFFFAOYSA-N
+```python
+from pymetadata.unichem import UnichemQuery
+
+query = UnichemQuery()
+xrefs = query.query_xrefs_for_inchikey("AAOVKJBEBIDNHE-UHFFFAOYSA-N")
+```
+
+See <https://www.ebi.ac.uk/unichem/info/webservices>.
 """
 
 import urllib.parse
@@ -56,12 +63,22 @@ class UnichemSource:
 
 
 class UnichemQuery:
-    """Query unichem."""
+    """Queries against the UniChem web service.
+
+    The sources of UniChem are retrieved once and shared by all instances.
+    Responses can be cached on disk, see `pymetadata.CACHE_USE`.
+    """
 
     sources: Dict[int, UnichemSource] = {}
 
     def __init__(self, cache_path: Optional[Path] = None, cache: Optional[bool] = None):
-        """Initialize UnichemQuery."""
+        """Initialize the query.
+
+        Args:
+            cache_path: directory for cached responses, defaults to
+                `pymetadata.CACHE_PATH`
+            cache: cache responses, defaults to `pymetadata.CACHE_USE`
+        """
         if cache_path is None:
             cache_path = pymetadata.CACHE_PATH
         if cache is None:
@@ -74,7 +91,11 @@ class UnichemQuery:
             self.sources = self.get_sources()
 
     def get_sources(self) -> Dict[int, UnichemSource]:
-        """Retrieve or query the sources."""
+        """Get the databases known to UniChem, from the cache or the service.
+
+        Returns:
+            The sources by their UniChem source id.
+        """
 
         sources: Dict[int, UnichemSource]
         unichem_sources_path = self.cache_path / "unichem_sources.json"
@@ -107,7 +128,15 @@ class UnichemQuery:
         return sources
 
     def query_xrefs_for_inchikey(self, inchikey: str) -> List[CrossReference]:
-        """Get the cross references for a given inchikey."""
+        """Get the cross references for a structure.
+
+        Args:
+            inchikey: InChIKey of the structure, e.g.,
+                `AAOVKJBEBIDNHE-UHFFFAOYSA-N`
+
+        Returns:
+            One cross reference per database which contains the structure.
+        """
 
         # cache files
         xref_base_path = self.cache_path / "unichem"
