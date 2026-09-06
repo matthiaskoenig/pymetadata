@@ -59,6 +59,7 @@ import os
 import pprint
 import shutil
 import tempfile
+import xml.etree.ElementTree as ET
 import zipfile
 from enum import Enum
 from pathlib import Path
@@ -66,7 +67,6 @@ from types import TracebackType
 from typing import Any
 
 import requests
-import xmltodict
 from pydantic import BaseModel, PrivateAttr
 
 from pymetadata import log
@@ -468,16 +468,12 @@ class Manifest(BaseModel):
         Returns:
             Manifest with the entries listed in the file.
         """
-        with open(manifest_path) as f_manifest:
-            xml = f_manifest.read()
-            d = xmltodict.parse(xml)
-
-            # attributes have @ prefix
-            entries = []
-            for e in d["omexManifest"]["content"]:
-                entries.append({k.replace("@", ""): v for (k, v) in e.items()})
-
-            return Manifest(entries=entries)
+        tree = ET.parse(manifest_path)
+        # `{*}` matches the manifest namespace and a missing namespace
+        entries = [
+            dict(content.attrib) for content in tree.getroot().findall("{*}content")
+        ]
+        return Manifest(entries=entries)
 
     def to_manifest_xml(self) -> str:
         """Serialize the manifest to `manifest.xml` content.

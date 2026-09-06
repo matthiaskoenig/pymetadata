@@ -232,3 +232,43 @@ def test_omex_context_manager(data_directory: Path) -> None:
 
     # the temporary directory is removed when the context is left
     assert not tmp_dir.exists()
+
+
+SINGLE_ENTRY_MANIFEST = """<?xml version="1.0" encoding="UTF-8"?>
+<omexManifest xmlns="http://identifiers.org/combine.specifications/omex-manifest">
+  <content location="." format="http://identifiers.org/combine.specifications/omex"/>
+</omexManifest>
+"""
+
+NO_NAMESPACE_MANIFEST = """<?xml version="1.0" encoding="UTF-8"?>
+<omexManifest>
+  <content location="." format="http://identifiers.org/combine.specifications/omex"/>
+  <content
+    location="./model.xml"
+    format="http://identifiers.org/combine.specifications/sbml"
+    master="true"/>
+</omexManifest>
+"""
+
+
+def test_manifest_single_content_entry(tmp_path: Path) -> None:
+    """Test manifest with a single content entry.
+
+    An archive with a single file is valid OMEX.
+    """
+    manifest_path = tmp_path / "manifest.xml"
+    manifest_path.write_text(SINGLE_ENTRY_MANIFEST)
+
+    manifest = Manifest.from_manifest(manifest_path)
+    assert len(manifest) == 1
+    assert "." in manifest
+
+
+def test_manifest_without_namespace(tmp_path: Path) -> None:
+    """Test manifest which does not declare the omex namespace."""
+    manifest_path = tmp_path / "manifest.xml"
+    manifest_path.write_text(NO_NAMESPACE_MANIFEST)
+
+    manifest = Manifest.from_manifest(manifest_path)
+    assert len(manifest) == 2
+    assert manifest["./model.xml"].master is True
