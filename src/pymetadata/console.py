@@ -1,4 +1,16 @@
-"""Rich console for logging."""
+"""Shared rich console.
+
+All output of the package goes through this console, which is also used by the
+logging handler in `pymetadata.log`. It records what is printed, so the output
+of a script can be exported afterwards.
+
+```python
+from pymetadata.console import console
+
+console.print(omex)
+console.rule("Section", style="white")
+```
+"""
 
 from rich import pretty
 from rich.console import Console

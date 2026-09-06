@@ -44,28 +44,45 @@ website:
           - text: "Overview"
             href: api/index.qmd
 
-          - text: "omex"
-            href: api/omex.qmd
-          - text: "core.annotation"
-            href: api/core.annotation.qmd
-          - text: "identifiers.miriam"
-            href: api/identifiers.miriam.qmd
-          - text: "core.xref"
-            href: api/core.xref.qmd
-          - text: "core.creator"
-            href: api/core.creator.qmd
-          - text: "ontologies.ontology"
-            href: api/ontologies.ontology.qmd
-          - text: "identifiers.registry"
-            href: api/identifiers.registry.qmd
-          - text: "ontologies.ols"
-            href: api/ontologies.ols.qmd
-          - text: "chebi"
-            href: api/chebi.qmd
-          - text: "unichem"
-            href: api/unichem.qmd
-          - text: "cache"
-            href: api/cache.qmd
+          - section: "pymetadata"
+            contents:
+              - text: "cache"
+                href: api/cache.qmd
+              - text: "chebi"
+                href: api/chebi.qmd
+              - text: "console"
+                href: api/console.qmd
+              - text: "log"
+                href: api/log.qmd
+              - text: "omex"
+                href: api/omex.qmd
+              - text: "unichem"
+                href: api/unichem.qmd
+              - text: "webservice"
+                href: api/webservice.qmd
+
+          - section: "pymetadata.core"
+            contents:
+              - text: "annotation"
+                href: api/core.annotation.qmd
+              - text: "creator"
+                href: api/core.creator.qmd
+              - text: "xref"
+                href: api/core.xref.qmd
+
+          - section: "pymetadata.identifiers"
+            contents:
+              - text: "miriam"
+                href: api/identifiers.miriam.qmd
+              - text: "registry"
+                href: api/identifiers.registry.qmd
+
+          - section: "pymetadata.ontologies"
+            contents:
+              - text: "ols"
+                href: api/ontologies.ols.qmd
+              - text: "ontology"
+                href: api/ontologies.ontology.qmd
 
        - section: "Contributing"
          contents:
@@ -116,34 +133,37 @@ quartodoc:
   dir: api
 
   sections:
-    - title: COMBINE archive
-      desc: Reading, creating and writing COMBINE archives (OMEX).
-      contents:
-        # the functions being documented in the package.
-        # you can refer to anything: class methods, modules, etc..
-        - name: omex
-    - title: Annotations
-      desc: MIRIAM annotations, qualifiers and the objects they resolve to.
-      contents:
-        - name: core.annotation
-        - name: identifiers.miriam
-        - name: core.xref
-        - name: core.creator
-    - title: Ontologies
-      desc: Ontology terms as enums and the generation of the enum modules.
-      contents:
-        - name: ontologies.ontology
-    - title: Registries and web services
-      desc: The identifiers.org registry and the queried web services.
-      contents:
-        - name: identifiers.registry
-        - name: ontologies.ols
-        - name: chebi
-        - name: unichem
-    - title: Utilities
-      desc: Caching of web service responses.
+    - title: pymetadata
+      desc: |
+        Top level modules. The ontology terms of SBO, KISAO, ECO and PBPKO are
+        generated enums, see [Annotations](../annotations.qmd#ontology-enums).
       contents:
         - name: cache
+        - name: chebi
+        - name: console
+        - name: log
+        - name: omex
+        - name: unichem
+        - name: webservice
+
+    - subtitle: pymetadata.core
+      desc: Core data structures for annotations, creators and cross references.
+      contents:
+        - name: core.annotation
+        - name: core.creator
+        - name: core.xref
+
+    - subtitle: pymetadata.identifiers
+      desc: MIRIAM qualifiers and the identifiers.org registry.
+      contents:
+        - name: identifiers.miriam
+        - name: identifiers.registry
+
+    - subtitle: pymetadata.ontologies
+      desc: Ontology lookup service and generation of the enum modules.
+      contents:
+        - name: ontologies.ols
+        - name: ontologies.ontology
 
 filters:
   - interlinks
