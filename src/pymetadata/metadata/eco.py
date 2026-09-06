@@ -365,7 +365,7 @@ _terms = {
     "ECO_0001055": "immunohistochemistry evidence",
     "ECO_0001056": "obsolete induced mutation evidence",
     "ECO_0001057": "in vitro acetylation assay evidence",
-    "ECO_0001058": "in vitro cleavage assay evidence",
+    "ECO_0001058": "in vitro protein cleavage assay evidence",
     "ECO_0001059": "in vitro deubiquitination assay evidence",
     "ECO_0001060": "in vitro deacetylation assay evidence",
     "ECO_0001061": "in vitro defarnesylation assay evidence",
@@ -382,7 +382,7 @@ _terms = {
     "ECO_0001072": "in vitro translation assay evidence",
     "ECO_0001073": "in vitro ubiquitination assay evidence",
     "ECO_0001074": "in vivo acetylation assay evidence",
-    "ECO_0001075": "in vivo cleavage assay evidence",
+    "ECO_0001075": "in vivo protein cleavage assay evidence",
     "ECO_0001076": "in vivo deacetylation assay evidence",
     "ECO_0001077": "in vivo defarnesylation assay evidence",
     "ECO_0001078": "in vivo demethylation assay evidence",
@@ -494,7 +494,7 @@ _terms = {
     "ECO_0001188": "immunodepletion evidence used in manual assertion",
     "ECO_0001189": "immunohistochemistry evidence used in manual assertion",
     "ECO_0001190": "in vitro acetylation assay evidence used in manual assertion",
-    "ECO_0001191": "in vitro cleavage assay evidence used in manual assertion",
+    "ECO_0001191": "in vitro protein cleavage assay evidence used in manual assertion",
     "ECO_0001192": "in vitro deacetylation assay evidence used in manual assertion",
     "ECO_0001193": "in vitro defarnesylation assay evidence used in manual assertion",
     "ECO_0001194": "in vitro demethylation assay evidence used in manual assertion",
@@ -511,7 +511,7 @@ _terms = {
     "ECO_0001205": "in vitro translation assay evidence used in manual assertion",
     "ECO_0001206": "in vitro ubiquitination assay evidence used in manual assertion",
     "ECO_0001207": "in vivo acetylation assay evidence used in manual assertion",
-    "ECO_0001208": "in vivo cleavage assay evidence used in manual assertion",
+    "ECO_0001208": "in vivo protein cleavage assay evidence used in manual assertion",
     "ECO_0001209": "in vivo deacetylation assay evidence used in manual assertion",
     "ECO_0001210": "in vivo defarnesylation assay evidence used in manual assertion",
     "ECO_0001211": "in vivo demethylation assay evidence used in manual assertion",
@@ -580,7 +580,7 @@ _terms = {
     "ECO_0001533": "localization evidence",
     "ECO_0001534": "nucleic acid localization evidence",
     "ECO_0001546": "acetylation assay evidence",
-    "ECO_0001547": "cleavage assay evidence",
+    "ECO_0001547": "protein cleavage assay evidence",
     "ECO_0001548": "deacetylation assay evidence",
     "ECO_0001549": "defarnesylation assay evidence",
     "ECO_0001550": "demethylation assay evidence",
@@ -1232,6 +1232,9 @@ _terms = {
     "ECO_0006405": "experimentally evolved mutant phenotypic evidence used in automatic assertion",
     "ECO_0006406": "experimentally evolved mutant phenotypic evidence used in manual assertion",
     "ECO_0006407": "single-cell RNA-sequencing evidence used in automatic assertion",
+    "ECO_0006408": "combinatorial intrinsic disorder prediction and experimental evidence",
+    "ECO_0006409": "combinatorial intrinsic disorder prediction and experimental evidence used in automatic assertion",
+    "ECO_0006410": "combinatorial intrinsic disorder prediction and experimental evidence used in manual assertion",
     "ECO_0007000": "high throughput mutant phenotypic evidence",
     "ECO_0007001": "high throughput mutant phenotypic evidence used in manual assertion",
     "ECO_0007002": "high throughput genetic interaction phenotypic evidence",
@@ -1610,7 +1613,7 @@ _terms = {
     "ECO_0007391": "immunodepletion evidence used in automatic assertion",
     "ECO_0007392": "immunohistochemistry evidence used in automatic assertion",
     "ECO_0007393": "in vitro acetylation assay evidence used in automatic assertion",
-    "ECO_0007394": "in vitro cleavage assay evidence used in automatic assertion",
+    "ECO_0007394": "in vitro protein cleavage assay evidence used in automatic assertion",
     "ECO_0007395": "in vitro deacetylation assay evidence used in automatic assertion",
     "ECO_0007396": "in vitro defarnesylation assay evidence used in automatic assertion",
     "ECO_0007397": "in vitro demethylation assay evidence used in automatic assertion",
@@ -1627,7 +1630,7 @@ _terms = {
     "ECO_0007408": "in vitro translation assay evidence used in automatic assertion",
     "ECO_0007409": "in vitro ubiquitination assay evidence used in automatic assertion",
     "ECO_0007410": "in vivo acetylation assay evidence used in automatic assertion",
-    "ECO_0007411": "in vivo cleavage assay evidence used in automatic assertion",
+    "ECO_0007411": "in vivo protein cleavage assay evidence used in automatic assertion",
     "ECO_0007412": "in vivo deacetylation assay evidence used in automatic assertion",
     "ECO_0007413": "in vivo defarnesylation assay evidence used in automatic assertion",
     "ECO_0007414": "in vivo demethylation assay evidence used in automatic assertion",
@@ -1904,7 +1907,7 @@ _terms = {
     "ECO_0007688": "gel electrophoresis evidence used in manual assertion",
     "ECO_0007689": "sodium dodecyl sulfate polyacrylamide gel electrophoresis evidence used in manual assertion",
     "ECO_0007690": "ex vivo assay evidence used in manual assertion",
-    "ECO_0007691": "cleavage assay evidence used in manual assertion",
+    "ECO_0007691": "protein cleavage assay evidence used in manual assertion",
     "ECO_0007692": "deacetylation assay evidence used in manual assertion",
     "ECO_0007693": "transcription assay evidence used in manual assertion",
     "ECO_0007694": "phosphatase assay evidence used in manual assertion",
@@ -1992,7 +1995,7 @@ _terms = {
     "ECO_0007779": "disk diffusion test evidence used in automatic assertion",
     "ECO_0007780": "chemotaxis assay evidence used in automatic assertion",
     "ECO_0007781": "cytotoxicity assay evidence used in automatic assertion",
-    "ECO_0007782": "cleavage assay evidence used in automatic assertion",
+    "ECO_0007782": "protein cleavage assay evidence used in automatic assertion",
     "ECO_0007783": "methylation assay evidence used in automatic assertion",
     "ECO_0007784": "obsolete protein assay evidence used in automatic assertion",
     "ECO_0007785": "protein inhibition evidence used in automatic assertion",
@@ -3912,9 +3915,9 @@ class ECO(str, Enum):
     ECO_0001057 = "ECO_0001057"
     IN_VITRO_ACETYLATION_ASSAY_EVIDENCE = "ECO_0001057"
 
-    # in vitro cleavage assay evidence
+    # in vitro protein cleavage assay evidence
     ECO_0001058 = "ECO_0001058"
-    IN_VITRO_CLEAVAGE_ASSAY_EVIDENCE = "ECO_0001058"
+    IN_VITRO_PROTEIN_CLEAVAGE_ASSAY_EVIDENCE = "ECO_0001058"
 
     # in vitro deubiquitination assay evidence
     ECO_0001059 = "ECO_0001059"
@@ -3980,9 +3983,9 @@ class ECO(str, Enum):
     ECO_0001074 = "ECO_0001074"
     IN_VIVO_ACETYLATION_ASSAY_EVIDENCE = "ECO_0001074"
 
-    # in vivo cleavage assay evidence
+    # in vivo protein cleavage assay evidence
     ECO_0001075 = "ECO_0001075"
-    IN_VIVO_CLEAVAGE_ASSAY_EVIDENCE = "ECO_0001075"
+    IN_VIVO_PROTEIN_CLEAVAGE_ASSAY_EVIDENCE = "ECO_0001075"
 
     # in vivo deacetylation assay evidence
     ECO_0001076 = "ECO_0001076"
@@ -4444,9 +4447,9 @@ class ECO(str, Enum):
     ECO_0001190 = "ECO_0001190"
     IN_VITRO_ACETYLATION_ASSAY_EVIDENCE_USED_IN_MANUAL_ASSERTION = "ECO_0001190"
 
-    # in vitro cleavage assay evidence used in manual assertion
+    # in vitro protein cleavage assay evidence used in manual assertion
     ECO_0001191 = "ECO_0001191"
-    IN_VITRO_CLEAVAGE_ASSAY_EVIDENCE_USED_IN_MANUAL_ASSERTION = "ECO_0001191"
+    IN_VITRO_PROTEIN_CLEAVAGE_ASSAY_EVIDENCE_USED_IN_MANUAL_ASSERTION = "ECO_0001191"
 
     # in vitro deacetylation assay evidence used in manual assertion
     ECO_0001192 = "ECO_0001192"
@@ -4514,9 +4517,9 @@ class ECO(str, Enum):
     ECO_0001207 = "ECO_0001207"
     IN_VIVO_ACETYLATION_ASSAY_EVIDENCE_USED_IN_MANUAL_ASSERTION = "ECO_0001207"
 
-    # in vivo cleavage assay evidence used in manual assertion
+    # in vivo protein cleavage assay evidence used in manual assertion
     ECO_0001208 = "ECO_0001208"
-    IN_VIVO_CLEAVAGE_ASSAY_EVIDENCE_USED_IN_MANUAL_ASSERTION = "ECO_0001208"
+    IN_VIVO_PROTEIN_CLEAVAGE_ASSAY_EVIDENCE_USED_IN_MANUAL_ASSERTION = "ECO_0001208"
 
     # in vivo deacetylation assay evidence used in manual assertion
     ECO_0001209 = "ECO_0001209"
@@ -4800,9 +4803,9 @@ class ECO(str, Enum):
     ECO_0001546 = "ECO_0001546"
     ACETYLATION_ASSAY_EVIDENCE = "ECO_0001546"
 
-    # cleavage assay evidence
+    # protein cleavage assay evidence
     ECO_0001547 = "ECO_0001547"
-    CLEAVAGE_ASSAY_EVIDENCE = "ECO_0001547"
+    PROTEIN_CLEAVAGE_ASSAY_EVIDENCE = "ECO_0001547"
 
     # deacetylation assay evidence
     ECO_0001548 = "ECO_0001548"
@@ -7592,6 +7595,20 @@ class ECO(str, Enum):
     ECO_0006407 = "ECO_0006407"
     SINGLE_CELL_RNA_SEQUENCING_EVIDENCE_USED_IN_AUTOMATIC_ASSERTION = "ECO_0006407"
 
+    # combinatorial intrinsic disorder prediction and experimental evidence
+    ECO_0006408 = "ECO_0006408"
+    COMBINATORIAL_INTRINSIC_DISORDER_PREDICTION_AND_EXPERIMENTAL_EVIDENCE = (
+        "ECO_0006408"
+    )
+
+    # combinatorial intrinsic disorder prediction and experimental evidence used in automatic assertion
+    ECO_0006409 = "ECO_0006409"
+    COMBINATORIAL_INTRINSIC_DISORDER_PREDICTION_AND_EXPERIMENTAL_EVIDENCE_USED_IN_AUTOMATIC_ASSERTION = "ECO_0006409"
+
+    # combinatorial intrinsic disorder prediction and experimental evidence used in manual assertion
+    ECO_0006410 = "ECO_0006410"
+    COMBINATORIAL_INTRINSIC_DISORDER_PREDICTION_AND_EXPERIMENTAL_EVIDENCE_USED_IN_MANUAL_ASSERTION = "ECO_0006410"
+
     # high throughput mutant phenotypic evidence
     ECO_0007000 = "ECO_0007000"
     HIGH_THROUGHPUT_MUTANT_PHENOTYPIC_EVIDENCE = "ECO_0007000"
@@ -9242,9 +9259,9 @@ class ECO(str, Enum):
     ECO_0007393 = "ECO_0007393"
     IN_VITRO_ACETYLATION_ASSAY_EVIDENCE_USED_IN_AUTOMATIC_ASSERTION = "ECO_0007393"
 
-    # in vitro cleavage assay evidence used in automatic assertion
+    # in vitro protein cleavage assay evidence used in automatic assertion
     ECO_0007394 = "ECO_0007394"
-    IN_VITRO_CLEAVAGE_ASSAY_EVIDENCE_USED_IN_AUTOMATIC_ASSERTION = "ECO_0007394"
+    IN_VITRO_PROTEIN_CLEAVAGE_ASSAY_EVIDENCE_USED_IN_AUTOMATIC_ASSERTION = "ECO_0007394"
 
     # in vitro deacetylation assay evidence used in automatic assertion
     ECO_0007395 = "ECO_0007395"
@@ -9312,9 +9329,9 @@ class ECO(str, Enum):
     ECO_0007410 = "ECO_0007410"
     IN_VIVO_ACETYLATION_ASSAY_EVIDENCE_USED_IN_AUTOMATIC_ASSERTION = "ECO_0007410"
 
-    # in vivo cleavage assay evidence used in automatic assertion
+    # in vivo protein cleavage assay evidence used in automatic assertion
     ECO_0007411 = "ECO_0007411"
-    IN_VIVO_CLEAVAGE_ASSAY_EVIDENCE_USED_IN_AUTOMATIC_ASSERTION = "ECO_0007411"
+    IN_VIVO_PROTEIN_CLEAVAGE_ASSAY_EVIDENCE_USED_IN_AUTOMATIC_ASSERTION = "ECO_0007411"
 
     # in vivo deacetylation assay evidence used in automatic assertion
     ECO_0007412 = "ECO_0007412"
@@ -10520,9 +10537,9 @@ class ECO(str, Enum):
     ECO_0007690 = "ECO_0007690"
     EX_VIVO_ASSAY_EVIDENCE_USED_IN_MANUAL_ASSERTION = "ECO_0007690"
 
-    # cleavage assay evidence used in manual assertion
+    # protein cleavage assay evidence used in manual assertion
     ECO_0007691 = "ECO_0007691"
-    CLEAVAGE_ASSAY_EVIDENCE_USED_IN_MANUAL_ASSERTION = "ECO_0007691"
+    PROTEIN_CLEAVAGE_ASSAY_EVIDENCE_USED_IN_MANUAL_ASSERTION = "ECO_0007691"
 
     # deacetylation assay evidence used in manual assertion
     ECO_0007692 = "ECO_0007692"
@@ -10888,9 +10905,9 @@ class ECO(str, Enum):
     ECO_0007781 = "ECO_0007781"
     CYTOTOXICITY_ASSAY_EVIDENCE_USED_IN_AUTOMATIC_ASSERTION = "ECO_0007781"
 
-    # cleavage assay evidence used in automatic assertion
+    # protein cleavage assay evidence used in automatic assertion
     ECO_0007782 = "ECO_0007782"
-    CLEAVAGE_ASSAY_EVIDENCE_USED_IN_AUTOMATIC_ASSERTION = "ECO_0007782"
+    PROTEIN_CLEAVAGE_ASSAY_EVIDENCE_USED_IN_AUTOMATIC_ASSERTION = "ECO_0007782"
 
     # methylation assay evidence used in automatic assertion
     ECO_0007783 = "ECO_0007783"

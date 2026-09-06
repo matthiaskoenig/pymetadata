@@ -135,14 +135,14 @@ _ontology_files: List[OntologyFile] = [
         bioportal=True,
         ols=True,
     ),
-    #     OntologyFile(
-    #     "NCBITAXON",
-    #     name="NCBI organismal classification",
-    #     format=OntologyFormat.OWL,
-    #     source=OLS_BASE_URL + "ncbitaxon",
-    #     bioportal=False,
-    #     ols=True,
-    # ),
+    OntologyFile(
+        "PBPKO",
+        name="PBPK (Physiologically Based Pharmacokinetic) Ontology",
+        format=OntologyFormat.OWL,
+        source="http://purl.obolibrary.org/obo/pbpko.owl",
+        bioportal=True,
+        ols=True,
+    ),
 ]
 
 
@@ -312,11 +312,10 @@ if __name__ == "__main__":
     # convert to python module
     create_ontology_enum("SBO", r"^SBO_\d{7}$")
     create_ontology_enum("KISAO", r"^KISAO_\d{7}$")
+    create_ontology_enum("PBPKO", r"^PBPKO_\d{5}$")
     create_ontology_enum("ECO", r"^ECO_\d{7}$")
 
     try_ontology_import("SBO")
     try_ontology_import("KISAO")
+    try_ontology_import("PBPKO")
     try_ontology_import("ECO")
-
-    # for ontology_id in ontology_files:
-    #     create_ontology_enum(ontology_id)
