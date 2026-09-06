@@ -57,7 +57,7 @@ To check whether a file is a COMBINE archive at all, use `Omex.is_omex(path)`.
 The manifest behaves like a mapping keyed by location:
 
 ```python
-print(len(omex.manifest))            # number of entries
+print(len(omex.manifest))  # number of entries
 print("./model.xml" in omex.manifest)
 entry = omex.manifest["./model.xml"]
 print(entry.format, entry.master)
@@ -116,7 +116,7 @@ from pathlib import Path
 from pymetadata.omex import Omex
 
 Omex.guess_format(Path("model.xml"))  # from the file suffix and content
-Omex.lookup_format("sbml")            # from a format key
+Omex.lookup_format("sbml")  # from a format key
 ```
 
 `guess_format` looks at the start of `.xml` files to tell SBML, SED-ML, CellML and COPASI apart, so an `.xml` file is not classified as plain XML when it is in fact a model. For every other file the suffix decides.
@@ -134,8 +134,8 @@ with Omex.from_omex(Path("archive.omex")) as omex:
 ## Writing back out
 
 ```python
-omex.to_omex(Path("archive.omex"))    # write a COMBINE archive
-omex.to_directory(Path("./unpacked")) # extract, including the manifest.xml
+omex.to_omex(Path("archive.omex"))  # write a COMBINE archive
+omex.to_directory(Path("./unpacked"))  # extract, including the manifest.xml
 ```
 
 `to_directory` writes the `manifest.xml` next to the files, so the result is a valid input for `Omex.from_directory` again.

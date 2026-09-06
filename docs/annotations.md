@@ -14,10 +14,10 @@ Biological qualifiers (`BQB`) relate an element to a biological entity, model qu
 ```python
 from pymetadata.identifiers.miriam import BQB, BQM
 
-BQB.IS               # the element is the annotated entity
-BQB.IS_VERSION_OF    # the element is a version of the entity
-BQB.IS_PART_OF       # the element is part of the entity
-BQB.HAS_TAXON        # the entity occurs in the given taxon
+BQB.IS  # the element is the annotated entity
+BQB.IS_VERSION_OF  # the element is a version of the entity
+BQB.IS_PART_OF  # the element is part of the entity
+BQB.HAS_TAXON  # the entity occurs in the given taxon
 BQM.IS_DESCRIBED_BY  # the model is described by the resource, e.g., a publication
 ```
 
@@ -32,11 +32,11 @@ from pymetadata.core.annotation import RDFAnnotation
 from pymetadata.identifiers.miriam import BQB
 
 for resource in [
-    "CHEBI:33699",                                # compact identifier
-    "chebi/CHEBI:33699",                          # collection and term
-    "https://identifiers.org/CHEBI:33699",        # identifiers.org URL
-    "http://identifiers.org/chebi/CHEBI:33699",   # legacy identifiers.org URL
-    "urn:miriam:chebi:CHEBI%3A33699",             # deprecated MIRIAM URN
+    "CHEBI:33699",  # compact identifier
+    "chebi/CHEBI:33699",  # collection and term
+    "https://identifiers.org/CHEBI:33699",  # identifiers.org URL
+    "http://identifiers.org/chebi/CHEBI:33699",  # legacy identifiers.org URL
+    "urn:miriam:chebi:CHEBI%3A33699",  # deprecated MIRIAM URN
 ]:
     annotation = RDFAnnotation(qualifier=BQB.IS, resource=resource)
     print(annotation.resource_normalized)
@@ -57,8 +57,8 @@ Validation answers two questions: is the qualifier a real MIRIAM qualifier, and 
 
 ```python
 annotation = RDFAnnotation(qualifier=BQB.IS, resource="chebi/CHEBI:33699")
-annotation.validate()          # qualifier and term
-annotation.check_miriam_term() # term against the registry pattern only
+annotation.validate()  # qualifier and term
+annotation.check_miriam_term()  # term against the registry pattern only
 ```
 
 A term such as `chebi/CHEBI:X33699` fails, because the CHEBI pattern is `^CHEBI:\d+$`. The registry is downloaded once and cached, see [Installation](installation.md#cache).
@@ -75,7 +75,7 @@ from pymetadata.identifiers.miriam import BQB
 
 annotation = RDFAnnotation(qualifier=BQB.IS, resource="chebi/CHEBI:33699")
 data = RDFAnnotationData(annotation)
-print(data.url)    # url of the first provider
+print(data.url)  # url of the first provider
 print(data.xrefs)  # one entry per identifiers.org provider
 ```
 
@@ -84,9 +84,9 @@ print(data.xrefs)  # one entry per identifiers.org provider
 ```python
 data.query_ols()
 
-print(data.label)        # messenger RNA
+print(data.label)  # messenger RNA
 print(data.description)  # An RNA molecule that transfers the coding information ...
-print(data.synonyms)     # mRNA, ...
+print(data.synonyms)  # mRNA, ...
 ```
 
 Both steps require network access. Enable the cache (`pymetadata.CACHE_USE = True`) when resolving many annotations, so repeated terms are not queried again.
@@ -107,8 +107,8 @@ Every term is available under both its identifier and its name:
 ```python
 from pymetadata.metadata import SBO, PBPKO
 
-SBO.SBO_0000247        # by id
-SBO.SIMPLE_CHEMICAL    # by name
+SBO.SBO_0000247  # by id
+SBO.SIMPLE_CHEMICAL  # by name
 PBPKO.BODYWEIGHT
 
 SBO.get_name(SBO.SIMPLE_CHEMICAL)

@@ -70,7 +70,7 @@ The configuration lives in `[tool.ty]` in `pyproject.toml`. Warnings are treated
 
 ## Documentation
 
-The documentation is built with [Zensical](https://zensical.org/), the static site generator of the Material for MkDocs authors. The sources are markdown files in `docs/`, the site is configured in `zensical.toml` in the repository root. Nothing rendered is committed: the site is built by the `Documentation` workflow on every push and published to [matthiaskoenig.github.io/pymetadata](https://matthiaskoenig.github.io/pymetadata) from the `develop` branch.
+The documentation is built with [Zensical](https://zensical.org/), the static site generator of the Material for MkDocs authors. The sources are markdown files in `docs/`, the site is configured in `zensical.toml` in the repository root. Nothing rendered is committed: the site is built by the `documentation` workflow on every push and published to [matthiaskoenig.github.io/pymetadata](https://matthiaskoenig.github.io/pymetadata) from the `develop` branch.
 
 Build the site into `site/`:
 
@@ -103,7 +103,7 @@ uv run zensical build --clean
 uv run python scripts/llms_txt.py
 ```
 
-The `Documentation` workflow runs both steps, so the files are regenerated with every push. `docs/robots.txt` points crawlers at the sitemap and at these files. Zensical will provide agent context files itself at some point, then this script can go.
+The `documentation` workflow runs both steps, so the files are regenerated with every push. `docs/robots.txt` points crawlers at the sitemap and at these files. Zensical will provide agent context files itself at some point, then this script can go.
 
 ## Regenerating the ontology enums { #regenerating-the-ontology-enums }
 

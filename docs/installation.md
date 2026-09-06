@@ -58,7 +58,7 @@ Caching is controlled by two module level settings:
 ```python
 import pymetadata
 
-pymetadata.CACHE_USE   # False by default
+pymetadata.CACHE_USE  # False by default
 pymetadata.CACHE_PATH  # ~/.cache/pymetadata by default
 ```
 

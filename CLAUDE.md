@@ -46,7 +46,7 @@ API reference is rendered from the docstrings by mkdocstrings; a page in
 `docs/api/` is just `::: pymetadata.<module>`, so nothing is generated into the
 repository. `scripts/llms_txt.py` runs after the build and writes the agent
 facing files (`llms.txt`, `llms-full.txt` and the markdown of every page) into
-`site/`. The `Documentation` workflow runs both and publishes the site from
+`site/`. The `documentation` workflow runs both and publishes the site from
 `develop`.
 
 ## Architecture
