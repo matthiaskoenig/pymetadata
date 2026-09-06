@@ -7,6 +7,7 @@ from pymetadata.webservice import (
     RETRIES,
     RETRY_STATUS_CODES,
     TIMEOUT,
+    _TimeoutHTTPAdapter,
     get_session,
 )
 
@@ -20,6 +21,7 @@ def test_session_is_shared() -> None:
 def test_session_retries_transient_responses() -> None:
     """Test that the transient server responses are retried."""
     adapter = get_session().get_adapter("https://www.ebi.ac.uk")
+    assert isinstance(adapter, _TimeoutHTTPAdapter)
     retries = adapter.max_retries
 
     assert retries.total == RETRIES
@@ -34,4 +36,5 @@ def test_session_retries_transient_responses() -> None:
 def test_session_has_timeout() -> None:
     """Test that a default timeout is applied."""
     adapter = get_session().get_adapter("https://www.ebi.ac.uk")
+    assert isinstance(adapter, _TimeoutHTTPAdapter)
     assert adapter.timeout == TIMEOUT
