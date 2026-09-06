@@ -1,7 +1,7 @@
 ![](images/favicon/pymetadata-100x100-300dpi.png)
 
 # pymetadata: python utilities for metadata and COMBINE archives
-[![GitHub Actions CI/CD Status](https://github.com/matthiaskoenig/pymetadata/workflows/CI-CD/badge.svg)](https://github.com/matthiaskoenig/pymetadata/actions/workflows/main.yml) [![Version](https://img.shields.io/pypi/v/pymetadata.svg)](https://pypi.org/project/pymetadata/) [![Python Versions](https://img.shields.io/pypi/pyversions/pymetadata.svg)](https://pypi.org/project/pymetadata/) [![MIT License](https://img.shields.io/pypi/l/pymetadata.svg)](https://opensource.org/licenses/MIT) [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.5308801.svg)](https://doi.org/10.5281/zenodo.5308801)
+[![GitHub Actions CI/CD Status](https://github.com/matthiaskoenig/pymetadata/workflows/CI-CD/badge.svg)](https://github.com/matthiaskoenig/pymetadata/actions/workflows/main.yml) [![Documentation](https://img.shields.io/badge/docs-pymetadata-008080.svg)](https://matthiaskoenig.github.io/pymetadata) [![Version](https://img.shields.io/pypi/v/pymetadata.svg)](https://pypi.org/project/pymetadata/) [![Python Versions](https://img.shields.io/pypi/pyversions/pymetadata.svg)](https://pypi.org/project/pymetadata/) [![MIT License](https://img.shields.io/pypi/l/pymetadata.svg)](https://opensource.org/licenses/MIT) [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.5308801.svg)](https://doi.org/10.5281/zenodo.5308801)
 
 `pymetadata` is a collection of python utilities for working with metadata in the context of [COMBINE](https://co.mbine.org/) standards. The source code is available from [https://github.com/matthiaskoenig/pymetadata](https://github.com/matthiaskoenig/pymetadata).
 
@@ -21,12 +21,39 @@ Computational models in systems biology are rarely a single file. A study typica
 
 ## Quickstart
 
+Create a COMBINE archive from a model file, then read it back and resolve an entry to a file:
+
+```python
+from pathlib import Path
+from pymetadata.omex import EntryFormat, ManifestEntry, Omex
+
+# create an archive
+omex = Omex()
+omex.add_entry(
+    entry_path=Path("model.xml"),
+    entry=ManifestEntry(
+        location="./model.xml", format=EntryFormat.SBML_L3V2, master=True
+    ),
+)
+omex.to_omex(Path("archive.omex"))
+
+# read an archive; the context manager removes the temporary directory
+with Omex.from_omex(Path("archive.omex")) as omex:
+    print(omex.manifest["./model.xml"].format)
+    # http://identifiers.org/combine.specifications/sbml.level-3.version-2
+
+    for entry in omex.entries_by_format("sbml"):
+        print(entry.location, omex.get_path(entry.location))
+        # ./model.xml /tmp/tmpb0m1xyz/model.xml
+```
+
+Annotate a model element with a MIRIAM qualifier and use ontology terms as enums:
+
 ```python
 from pymetadata.core.annotation import RDFAnnotation
 from pymetadata.identifiers.miriam import BQB
 from pymetadata.metadata import SBO
 
-# annotate with a MIRIAM qualifier and a resource
 annotation = RDFAnnotation(qualifier=BQB.IS, resource="CHEBI:17234")
 print(annotation.resource_normalized)
 # https://identifiers.org/CHEBI:17234
