@@ -189,3 +189,46 @@ def test_check_bioregistry() -> None:
         qualifier=BQB.IS, resource="https://bioregistry.io/CHEBI:000012"
     )
     assert not rdf_annotation.check_miriam_term()
+
+
+resource_normalized_data = [
+    # namespace not embedded in the LUI: compact identifier `prefix:accession`
+    # with the prefix from the identifiers.org registry (see #71)
+    ("NCIT:C180619", "https://identifiers.org/ncit:C180619"),
+    ("ncit:C180619", "https://identifiers.org/ncit:C180619"),
+    ("ncit/C180619", "https://identifiers.org/ncit:C180619"),
+    ("https://identifiers.org/NCIT:C180619", "https://identifiers.org/ncit:C180619"),
+    ("https://identifiers.org/ncit/C180619", "https://identifiers.org/ncit:C180619"),
+    ("http://identifiers.org/ncit/C180619", "https://identifiers.org/ncit:C180619"),
+    ("taxonomy/9606", "https://identifiers.org/taxonomy:9606"),
+    ("http://identifiers.org/taxonomy/9606", "https://identifiers.org/taxonomy:9606"),
+    ("urn:miriam:uniprot:P03023", "https://identifiers.org/uniprot:P03023"),
+    ("hmdb/HMDB0000122", "https://identifiers.org/hmdb:HMDB0000122"),
+    (
+        "doi/10.5281/zenodo.17091694",
+        "https://identifiers.org/doi:10.5281/zenodo.17091694",
+    ),
+    (
+        "https://identifiers.org/DOI:10.1016/j.jtbi.2004.04.039",
+        "https://identifiers.org/doi:10.1016/j.jtbi.2004.04.039",
+    ),
+    # namespace embedded in the LUI: prefix is part of the term, unchanged
+    ("GO:0005829", "https://identifiers.org/GO:0005829"),
+    ("https://identifiers.org/go/GO:0005829", "https://identifiers.org/GO:0005829"),
+    ("urn:miriam:chebi:CHEBI%3A33699", "https://identifiers.org/CHEBI:33699"),
+    (
+        "http://identifiers.org/biomodels.sbo/SBO:0000247",
+        "https://identifiers.org/SBO:0000247",
+    ),
+    ("bto/BTO:0000089", "https://identifiers.org/BTO:0000089"),
+    # no identifiers.org collection: resource is returned unchanged
+    ("https://en.wikipedia.org/wiki/Cytosol", "https://en.wikipedia.org/wiki/Cytosol"),
+    ("https://bioregistry.io/chebi:15996", "https://bioregistry.io/chebi:15996"),
+]
+
+
+@pytest.mark.parametrize("resource,expected", resource_normalized_data)
+def test_resource_normalized(resource: str, expected: str) -> None:
+    """Test normalization to identifiers.org compact identifiers."""
+    a = RDFAnnotation(qualifier=BQB.IS, resource=resource)
+    assert a.resource_normalized == expected

@@ -196,7 +196,11 @@ class RDFAnnotation:
     def resource_normalized(self) -> Optional[str]:
         """Normalize resource for given annotation.
 
-        This is the correct usage.
+        This is the correct usage. Resources are normalized to identifiers.org
+        compact identifiers of the form
+        `https://identifiers.org/<prefix>:<accession>`. If the namespace is
+        embedded in the LUI the prefix is already part of the term, otherwise
+        the prefix of the identifiers.org registry is prepended.
         """
         if not self.term:
             return None
@@ -208,7 +212,7 @@ class RDFAnnotation:
                     if namespace.namespaceEmbeddedInLui:
                         return f"{IDENTIFIERS_ORG_PREFIX}/{self.term}"
                     else:
-                        return f"{IDENTIFIERS_ORG_PREFIX}/{self.collection}/{self.term}"
+                        return f"{IDENTIFIERS_ORG_PREFIX}/{self.collection}:{self.term}"
 
         return self.term
 
