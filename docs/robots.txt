@@ -1,0 +1,9 @@
+# The documentation is available as markdown for agents and language models:
+#   https://matthiaskoenig.github.io/pymetadata/llms.txt      index of all pages
+#   https://matthiaskoenig.github.io/pymetadata/llms-full.txt the complete documentation
+# Every page is served as markdown next to its html, e.g. /omex.md for /omex/.
+
+User-agent: *
+Allow: /
+
+Sitemap: https://matthiaskoenig.github.io/pymetadata/sitemap.xml

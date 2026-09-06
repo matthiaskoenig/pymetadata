@@ -94,6 +94,17 @@ The API reference is rendered from the docstrings by [mkdocstrings](https://mkdo
 
 Docstrings are therefore the place to document functions and classes, the markdown files provide the narrative around them. Adding a module to the reference means adding such a page and an entry to `nav` in `zensical.toml`.
 
+### Files for agents { #files-for-agents }
+
+Agents and language models read markdown, not rendered html. `scripts/llms_txt.py` writes the files of the [llms.txt convention](https://llmstxt.org/) into the built site, i.e., [llms.txt](https://matthiaskoenig.github.io/pymetadata/llms.txt) as an annotated index of all pages, [llms-full.txt](https://matthiaskoenig.github.io/pymetadata/llms-full.txt) with the complete documentation in a single file, and the markdown of every page next to its html (`/omex.md` for `/omex/`). The markdown of the API reference is generated from the docstrings with `inspect`, since the pages themselves only contain the mkdocstrings directive.
+
+```bash
+uv run zensical build --clean
+uv run python scripts/llms_txt.py
+```
+
+The `Documentation` workflow runs both steps, so the files are regenerated with every push. `docs/robots.txt` points crawlers at the sitemap and at these files. Zensical will provide agent context files itself at some point, then this script can go.
+
 ## Regenerating the ontology enums { #regenerating-the-ontology-enums }
 
 `pymetadata.metadata.sbo`, `kisao`, `eco` and `pbpko` are generated modules and should not be edited by hand. They are rendered from the ontology releases with
@@ -111,4 +122,19 @@ Run `ruff format` afterwards, since the rendered modules are not formatted.
 
 ## Release
 
-The release process is described in `RELEASE.md`. In short: update the release notes in `release-notes/`, make sure the tests, linter and type checker pass, bump the version with `bump-my-version` and push the tag, which triggers the release workflow publishing to PyPI.
+A release is made from `develop`:
+
+1. update the ontology enums, see [Regenerating the ontology enums](#regenerating-the-ontology-enums), and commit the changes
+2. write the release notes for the version in `release-notes/`
+3. make sure everything passes: `tox run-parallel`, `ruff check`, `tox r -e ty`
+4. check the version bump: `uvx bump-my-version bump [major|minor|patch] --dry-run -vv`
+5. bump the version: `uvx bump-my-version bump [major|minor|patch]`, which updates `src/pymetadata/__init__.py` and `CITATION.cff`, commits and tags
+6. `git push --tags`, which triggers the release workflow publishing to [pypi](https://pypi.org/project/pymetadata/), followed by `git push`
+7. test the installation from pypi in a fresh environment:
+
+    ```bash
+    uv venv --python 3.14
+    uv pip install pymetadata
+    ```
+
+8. once Zenodo has archived the release, update the citation information: `date-released` in `CITATION.cff` and the version, date and version DOI in the BibTeX of `README.md` and `docs/index.md`

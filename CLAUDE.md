@@ -34,17 +34,20 @@ tox -e ty                       # ty type check (config in [tool.ty] in pyprojec
 uvx ty check                    # same check, straight from the working tree
 ```
 
-Release steps are in `RELEASE.md`; version bumps go through
-`uvx bump-my-version bump [major|minor|patch]` (updates
-`src/pymetadata/__init__.py`), and pushing the tag triggers the PyPI release
-workflow.
+Release steps are in `docs/development.md` (there is no separate `RELEASE.md`);
+version bumps go through `uvx bump-my-version bump [major|minor|patch]` (updates
+`src/pymetadata/__init__.py` and `CITATION.cff`), and pushing the tag triggers
+the PyPI release workflow.
 
 Documentation is [Zensical](https://zensical.org/): markdown sources in `docs/`,
 configured in `zensical.toml`, built into the gitignored `site/`
 (`uv run zensical build --clean`, `uv run zensical serve` for the preview). The
 API reference is rendered from the docstrings by mkdocstrings; a page in
 `docs/api/` is just `::: pymetadata.<module>`, so nothing is generated into the
-repository. The `Documentation` workflow publishes the site from `develop`.
+repository. `scripts/llms_txt.py` runs after the build and writes the agent
+facing files (`llms.txt`, `llms-full.txt` and the markdown of every page) into
+`site/`. The `Documentation` workflow runs both and publishes the site from
+`develop`.
 
 ## Architecture
 
