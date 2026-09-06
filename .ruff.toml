@@ -39,11 +39,11 @@ unfixable = []
 dummy-variable-rgx = "^(_+|(_+[a-zA-Z0-9_]*[a-zA-Z0-9]+?))$"
 
 [lint.per-file-ignores]
-# generated from the ontologies, see `pymetadata.ontologies._ontology_builder`
-"src/pymetadata/ontologies/sbo.py" = ["D", "UP", "PIE796", "RUF"]
-"src/pymetadata/ontologies/kisao.py" = ["D", "UP", "PIE796", "RUF"]
-"src/pymetadata/ontologies/eco.py" = ["D", "UP", "PIE796", "RUF"]
-"src/pymetadata/ontologies/pbpko.py" = ["D", "UP", "PIE796", "RUF"]
+# generated from the ontologies, see `pymetadata.ontologies._ontology_builder`;
+# every term is a member twice, under its id and under its name
+"src/pymetadata/ontologies/sbo.py" = ["PIE796"]
+"src/pymetadata/ontologies/kisao.py" = ["PIE796"]
+"src/pymetadata/ontologies/pbpko.py" = ["PIE796"]
 # several suffixes deliberately map to the same media type
 "src/pymetadata/omex.py" = ["PIE796"]
 

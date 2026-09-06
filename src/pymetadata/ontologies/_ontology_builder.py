@@ -6,17 +6,19 @@ without notice, use the generated enums instead.
 
 The enums are generated from the ontology releases: `update_ontology_files`
 downloads the OWL files listed in `ontology_files`, `Ontology` reads them with
-pronto and `create_ontology_enum` renders one python module per ontology from
-`resources/templates/ontology_enum.pytemplate`.
+pronto and `create_ontology_enum` writes one python module per ontology, with
+the terms as members and their label, definition, synonyms and deprecation as
+data.
 
-Running the module does all three steps for SBO, KISAO, PBPKO and ECO:
+Running the module does all three steps for the packaged ontologies, i.e., SBO,
+KISAO and PBPKO:
 
 ```bash
 python -m pymetadata.ontologies._ontology_builder
 ```
 
-`pronto` and `jinja2` are optional dependencies, install them with
-`pip install pymetadata[ontology]`. They are only needed to read ontologies and
+`pronto` is an optional dependency, install it with
+`pip install pymetadata[ontology]`. It is only needed to read the ontologies and
 generate the modules, not to use the generated enums.
 
 Adding an ontology means adding an `OntologyFile` to `ontology_files` and a
@@ -35,11 +37,12 @@ from concurrent.futures import ThreadPoolExecutor
 from dataclasses import dataclass
 from enum import Enum
 from pathlib import Path
-from typing import TYPE_CHECKING, Any
+from typing import TYPE_CHECKING
 
 import requests
 
 from pymetadata import ENUM_DIR, RESOURCES_DIR, log
+from pymetadata.ontologies.term import TermData
 
 if TYPE_CHECKING:
     from pronto.ontology import Ontology as ProntoOntology
@@ -49,9 +52,8 @@ if TYPE_CHECKING:
 logger = log.get_logger(__name__)
 
 _ONTOLOGY_EXTRA_MSG = (
-    "Reading ontologies and generating the enum modules requires the optional "
-    "`ontology` dependencies. Install them with "
-    "`pip install pymetadata[ontology]` or `uv sync --extra ontology`."
+    "Reading ontologies requires the optional `ontology` dependencies. Install "
+    "them with `pip install pymetadata[ontology]` or `uv sync --extra ontology`."
 )
 
 
@@ -208,11 +210,17 @@ def update_ontology_file(ofile: OntologyFile) -> None:
                 shutil.copyfileobj(f_in, f_out)
 
 
-def update_ontology_files() -> None:
-    """Download the current release of every ontology in `ontology_files`."""
+def update_ontology_files(ontology_ids: list[str] | None = None) -> None:
+    """Download the current release of ontologies.
+
+    Args:
+        ontology_ids: ids of the ontologies to download, all of
+            `ontology_files` if none are given
+    """
+    ids = ontology_ids if ontology_ids is not None else list(ontology_files)
     with ThreadPoolExecutor(max_workers=4) as pool:
-        for ofile in ontology_files.values():
-            pool.submit(update_ontology_file, ofile)
+        for oid in ids:
+            pool.submit(update_ontology_file, ontology_files[oid])
 
 
 class Ontology:
@@ -257,11 +265,149 @@ class Ontology:
         return self._ontology
 
 
+#: annotation properties which carry the definition of a term; the ontologies
+#: use different ones, e.g., SBO the `rdfs:comment` and KISAO `skos:definition`
+_DEFINITION_PROPERTIES: tuple[str, ...] = (
+    "http://www.w3.org/2004/02/skos/core#definition",
+    "http://purl.obolibrary.org/obo/IAO_0000115",
+    "http://www.w3.org/2000/01/rdf-schema#comment",
+)
+
+#: annotation properties which carry alternative names of a term
+_SYNONYM_PROPERTIES: tuple[str, ...] = (
+    "http://www.w3.org/2004/02/skos/core#altLabel",
+    "http://www.geneontology.org/formats/oboInOwl#hasExactSynonym",
+    "http://www.geneontology.org/formats/oboInOwl#hasRelatedSynonym",
+)
+
+
+def _annotation_literals(
+    pronto_term: "ProntoTerm | ProntoRelationship", properties: tuple[str, ...]
+) -> list[str]:
+    """Collect the literals of the given annotation properties of a term.
+
+    Args:
+        pronto_term: term or relationship read with pronto
+        properties: annotation properties to collect, e.g., `skos:definition`
+
+    Returns:
+        The literals in the order of the annotations.
+    """
+    literals: list[str] = []
+    for annotation in pronto_term.annotations:
+        literal = getattr(annotation, "literal", None)
+        if literal and str(annotation.property) in properties:
+            literals.append(str(literal))
+    return literals
+
+
+def _term_data(pronto_term: "ProntoTerm | ProntoRelationship") -> TermData:
+    """Collect the information of a term of the ontology.
+
+    The definition is taken from the definition of the term, its comment or the
+    annotations, whichever the ontology provides.
+
+    Args:
+        pronto_term: term or relationship read with pronto
+
+    Returns:
+        The label, definition, synonyms and deprecation of the term.
+    """
+    definition: str | None = None
+    for candidate in (
+        pronto_term.definition,
+        pronto_term.comment,
+        *_annotation_literals(pronto_term, _DEFINITION_PROPERTIES),
+    ):
+        if candidate:
+            definition = " ".join(str(candidate).split())
+            break
+
+    label = str(pronto_term.name)
+    synonyms = tuple(
+        sorted(
+            {
+                synonym
+                for synonym in (
+                    *(s.description for s in pronto_term.synonyms),
+                    *_annotation_literals(pronto_term, _SYNONYM_PROPERTIES),
+                )
+                if synonym and synonym != label
+            }
+        )
+    )
+    return (label, definition, synonyms, bool(pronto_term.obsolete))
+
+
+def _render_module(ontology_id: str, pattern: str, terms: dict[str, TermData]) -> str:
+    r"""Render the python module of an ontology.
+
+    Args:
+        ontology_id: id of the ontology, e.g., `SBO`
+        pattern: regular expression the term ids match, e.g., `^SBO_\d{7}$`
+        terms: information of every term, keyed by id
+
+    Returns:
+        The source of the module.
+    """
+    members: list[str] = []
+    data: list[str] = []
+    var_names: set[str] = set()
+
+    for term_id, term_data in terms.items():
+        label = term_data[0]
+        members.append(f"    # {label}")
+        members.append(f'    {term_id} = "{term_id}"')
+
+        var_name = re.sub(r"\W|^(?=\d)", "_", label).upper()
+        if var_name != term_id and var_name not in var_names:
+            var_names.add(var_name)
+            members.append(f'    {var_name} = "{term_id}"')
+        members.append("")
+
+        data.append(f"    {term_id!r}: {term_data!r},")
+
+    return "\n".join(
+        [
+            f'"""{ontology_id} ontology.',
+            "",
+            "Generated from the ontology release by",
+            "`pymetadata.ontologies._ontology_builder`, do not edit.",
+            '"""',
+            "",
+            "from pymetadata.ontologies.term import OntologyEnum, TermData",
+            "",
+            f'pattern = r"{pattern}"',
+            "",
+            "",
+            f"class {ontology_id}(OntologyEnum):",
+            f'    """{ontology_id} ontology."""',
+            "",
+            *members,
+            f"{ontology_id}Type = str | {ontology_id}",
+            "",
+            "#: information of every term, assigned to the enum below",
+            "_terms: dict[str, TermData] = {",
+            *data,
+            "}",
+            "",
+            f"{ontology_id}._terms = _terms",
+            "",
+            "__all__ = [",
+            f'    "{ontology_id}",',
+            f'    "{ontology_id}Type",',
+            "]",
+            "",
+        ]
+    )
+
+
 def create_ontology_enum(ontology_id: str, pattern: str) -> None:
     r"""Generate the python enum module for an ontology.
 
-    The module is written to `pymetadata/ontologies/<ontology_id>.py`; run
-    `ruff format` on it afterwards, the rendered output is not formatted.
+    The module is written to `ENUM_DIR`, i.e.,
+    `pymetadata/ontologies/<ontology_id>.py`; run `ruff format` on it
+    afterwards, the rendered output is not formatted.
 
     Args:
         ontology_id: id of an ontology in `ontology_files`, e.g., `SBO`
@@ -270,90 +416,47 @@ def create_ontology_enum(ontology_id: str, pattern: str) -> None:
     Raises:
         ValueError: if the ontology could not be read
     """
-    try:
-        from jinja2 import Template
-    except ImportError as err:  # pragma: no cover - depends on the install
-        raise ImportError(_ONTOLOGY_EXTRA_MSG) from err
-
     logger.info("Create enum: `%s`", ontology_id)
 
-    def name_to_variable(name: str) -> str | None:
-        """Clean string to python variable name."""
-        if name is None:
-            return None
-        name = re.sub(r"\W|^(?=\d)", "_", name)
-        return name.upper()
-
-    # load ontology
-    terms: dict[str, dict] = {}
+    terms: dict[str, TermData] = {}
     ontology: Ontology = Ontology(ontology_id=ontology_id)
-
-    names = set()
-    pronto_term: ProntoTerm | ProntoRelationship
-
-    if not ontology._ontology:
+    pronto_ontology = ontology.get_pronto_ontology()
+    if not pronto_ontology:
         raise ValueError(f"No Pronto Ontology for `{ontology_id}`")
 
-    for term_id in ontology._ontology:
+    pronto_term: ProntoTerm | ProntoRelationship
+    for term_id in pronto_ontology:
         try:
-            pronto_term = ontology._ontology.get_relationship(term_id)
+            pronto_term = pronto_ontology.get_relationship(term_id)
         except KeyError:
             try:
-                pronto_term = ontology._ontology.get_term(term_id)
+                pronto_term = pronto_ontology.get_term(term_id)
             except KeyError:
                 # neither relationship nor term; without `continue` the entry of
                 # the previous iteration would be processed a second time
                 logger.warning("Term could not be resolved: `%s`", term_id)
                 continue
 
-        pronto_name: str | Any | None = pronto_term.name
-        if not isinstance(pronto_name, str):
+        if not isinstance(pronto_term.name, str):
             logger.warning("Pronto name is none: `%s`", pronto_term)
             continue
 
-        var_name: str | None = name_to_variable(pronto_name)
-        if var_name in names:
-            logger.error("Duplicate name in ontology: `%s`", var_name)
-            continue
-        names.add(var_name)
-        term_id = pronto_term.id
         # fix the ids
+        term_id = pronto_term.id
         if ontology_id == "KISAO":
             term_id = term_id.replace("http://www.biomodels.net/kisao/KISAO#", "")
         if ontology_id == "SBO":
             term_id = term_id.replace("http://biomodels.net/SBO/", "")
+        term_id = term_id.replace(":", "_")
 
-        if ":" in term_id:
-            term_id = term_id.replace(":", "_")
+        terms[term_id] = _term_data(pronto_term)
 
-        terms[term_id] = {
-            "id": term_id,
-            "var_name": var_name,
-            "name": pronto_name.replace('"', "'"),
-            "definition": pronto_term.definition,
-        }
-    terms_sorted = {}
-    for key in sorted(terms.keys()):
-        terms_sorted[key] = terms[key]
+    terms = {term_id: terms[term_id] for term_id in sorted(terms)}
 
-    with open(RESOURCES_DIR / "templates" / "ontology_enum.pytemplate") as f_template:
-        template = Template(
-            f_template.read(),
-            trim_blocks=True,
-            lstrip_blocks=True,
-        )
-
-        context = {
-            "ontology_id": ontology_id,
-            "terms": terms_sorted,
-            "pattern": pattern,
-        }
-        module_str = template.render(**context)
-        # print(module_str)
-        path_module = ENUM_DIR / f"{ontology_id.lower()}.py"
-        print(path_module)
-        with open(path_module, "w") as f_py:
-            f_py.write(module_str)
+    path_module = ENUM_DIR / f"{ontology_id.lower()}.py"
+    logger.info("Write module: `%s`", path_module)
+    with open(path_module, "w") as f_py:
+        f_py.write(_render_module(ontology_id, pattern, terms))
 
 
 def try_ontology_import(ontology_id: str) -> None:
@@ -370,24 +473,17 @@ def try_ontology_import(ontology_id: str) -> None:
 
 
 if __name__ == "__main__":
-    # download latest versions
-    update_ontology_files()
+    #: the packaged ontologies with the pattern their term ids match
+    ontology_patterns: dict[str, str] = {
+        "SBO": r"^SBO_\d{7}$",
+        "KISAO": r"^KISAO_\d{7}$",
+        "PBPKO": r"^PBPKO_\d{5}$",
+    }
 
-    # test loading of OWL files
-    # ofile: OntologyFile
-    # for oid, ofile in ontology_files.items():
-    #     console.rule(style="white")
-    #     ontology = Ontology(ontology_id=oid)
-    #     console.print(ontology)
-    # ontology = Ontology(ontology_id="CHEBI")
+    update_ontology_files(list(ontology_patterns))
 
-    # convert to python module
-    create_ontology_enum("SBO", r"^SBO_\d{7}$")
-    create_ontology_enum("KISAO", r"^KISAO_\d{7}$")
-    create_ontology_enum("PBPKO", r"^PBPKO_\d{5}$")
-    create_ontology_enum("ECO", r"^ECO_\d{7}$")
+    for oid, id_pattern in ontology_patterns.items():
+        create_ontology_enum(oid, id_pattern)
 
-    try_ontology_import("SBO")
-    try_ontology_import("KISAO")
-    try_ontology_import("PBPKO")
-    try_ontology_import("ECO")
+    for oid in ontology_patterns:
+        try_ontology_import(oid)

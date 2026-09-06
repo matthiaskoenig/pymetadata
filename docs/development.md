@@ -107,16 +107,16 @@ The `documentation` workflow runs both steps, so the files are regenerated with 
 
 ## Regenerating the ontology enums { #regenerating-the-ontology-enums }
 
-`pymetadata.ontologies.sbo`, `kisao`, `eco` and `pbpko` are generated modules and should not be edited by hand. They are rendered from the ontology releases by `pymetadata.ontologies._ontology_builder`, which is internal tooling for maintainers rather than part of the public API, and therefore not in the API reference:
+`pymetadata.ontologies.sbo`, `kisao` and `pbpko` are generated modules and should not be edited by hand. They are rendered from the ontology releases by `pymetadata.ontologies._ontology_builder`, which is internal tooling for maintainers rather than part of the public API, and therefore not in the API reference:
 
 ```bash
 uv sync --extra ontology
 python -m pymetadata.ontologies._ontology_builder
 ```
 
-This needs the optional `ontology` dependencies (`pronto` and `jinja2`), which are not installed with the package because the generated enums work without them. The development environment (`--extra dev`) includes them.
+This needs the optional `ontology` dependency (`pronto`), which is not installed with the package because the generated enums work without it. The development environment (`--extra dev`) includes them.
 
-It downloads the OWL files listed in `ontology_files`, stores them gzipped under `src/pymetadata/resources/ontologies/` (not part of the repository), and renders one python module per ontology from `resources/templates/ontology_enum.pytemplate`. Adding an ontology means adding an `OntologyFile` entry and a `create_ontology_enum` call with the id pattern of the ontology.
+It downloads the OWL files of the packaged ontologies, stores them gzipped under `src/pymetadata/resources/ontologies/` (not part of the repository), and writes one python module per ontology: the terms as enum members plus their label, definition, synonyms and deprecation, with the behaviour coming from `OntologyEnum` in `pymetadata.ontologies.term`. The modules are written with plain python string building, there is no template engine. Adding an ontology means adding an `OntologyFile` entry and an entry to `ontology_patterns` with the id pattern of the ontology.
 
 Run `ruff format` afterwards, since the rendered modules are not formatted.
 

@@ -9,7 +9,7 @@ Features include
 
 - COMBINE archive support (OMEX)
 - annotation classes and helpers
-- SBO, KISAO, ECO and PBPKO ontology enums
+- SBO, KISAO and PBPKO ontology enums with label, definition and synonyms
 
 If you have any questions or issues please [open an issue](https://github.com/matthiaskoenig/pymetadata/issues).
 

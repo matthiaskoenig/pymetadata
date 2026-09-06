@@ -31,6 +31,9 @@ nav = [
       { "miriam" = "api/core.miriam.md" },
       { "xref" = "api/core.xref.md" },
     ] },
+    { "pymetadata.ontologies" = [
+      { "term" = "api/ontologies.term.md" },
+    ] },
     { "pymetadata.webservices" = [
       { "chebi" = "api/webservices.chebi.md" },
       { "ols" = "api/webservices.ols.md" },

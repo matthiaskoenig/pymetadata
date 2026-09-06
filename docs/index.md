@@ -17,7 +17,7 @@ Computational models in systems biology are rarely a single file. A study typica
 
 - **[COMBINE archives](omex.md)** — read and write OMEX archives, work with the `manifest.xml`, create archives from directories or single files, and read archives directly from a URL.
 - **[Annotations](annotations.md)** — MIRIAM qualifiers (`BQB`, `BQM`), normalization of resources to identifiers.org compact identifiers, validation against the identifiers.org registry, and lookup of labels, descriptions, synonyms and cross references via OLS.
-- **[Ontologies](annotations.md#ontology-enums)** — SBO, KISAO, ECO and PBPKO are shipped as python enums, so ontology terms can be used with autocompletion and are checked at runtime instead of being passed as strings.
+- **[Ontologies](annotations.md#ontology-enums)** — SBO, KISAO and PBPKO are shipped as python enums, so ontology terms can be used with autocompletion and are checked at runtime instead of being passed as strings. Every term carries its label, definition and synonyms.
 
 ## Quickstart
 

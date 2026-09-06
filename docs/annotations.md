@@ -93,13 +93,12 @@ Both steps require network access. Enable the cache (`pymetadata.CACHE_USE = Tru
 
 ## Ontology enums { #ontology-enums }
 
-Ontology terms are usually passed around as strings, which means typos surface at runtime or not at all. `pymetadata` ships four ontologies as python enums generated from the ontology releases themselves:
+Ontology terms are usually passed around as strings, which means typos surface at runtime or not at all. `pymetadata` ships three ontologies as python enums generated from the ontology releases themselves:
 
 | enum | ontology | terms |
 | --- | --- | --- |
 | `SBO` | Systems Biology Ontology | roles of model components |
 | `KISAO` | Kinetic Simulation Algorithm Ontology | simulation algorithms and their parameters |
-| `ECO` | Evidence & Conclusion Ontology | evidence types |
 | `PBPKO` | PBPK Ontology | physiologically based pharmacokinetic modeling |
 
 Every term is available under both its identifier and its name:
@@ -123,4 +122,34 @@ SBO.validate("SBO_0000247")  # SBO.SBO_0000247
 SBO.validate("SBO_9999999")  # raises AttributeError, the term does not exist
 ```
 
-The enums are generated with the internal `pymetadata.ontologies._ontology_builder`, which downloads the ontology in OWL format and renders a python module from it. See [Development](development.md#regenerating-the-ontology-enums) for how to update them to a newer ontology release.
+### Term information { #term-information }
+
+A member is not only the identifier, it carries what the ontology release says about the term. This is the information which otherwise has to be looked up in [OLS](https://www.ebi.ac.uk/ols4), and it is available offline:
+
+```python
+term = SBO.SIMPLE_CHEMICAL
+
+term.value  # 'SBO_0000247', the enum is a str subclass
+term.label  # 'simple chemical'
+term.definition  # 'Simple, non-repetitive chemical entity.'
+term.synonyms  # ()
+term.deprecated  # False, the term is not obsolete
+term.curie  # 'SBO:0000247'
+term.url  # 'https://identifiers.org/SBO:0000247'
+
+repr(term)
+# <SBO.SBO_0000247: 'simple chemical'>
+```
+
+`term.term` returns the complete record as an [`OntologyTerm`](api/ontologies.term.md), and `get_term` does the same for a term given as a string:
+
+```python
+from pymetadata.ontologies import KISAO
+
+KISAO.get_term("KISAO:0000019")
+# OntologyTerm(id='KISAO_0000019', label='CVODE', definition='The CVODE is a package written in C ...', synonyms=('VODE', 'VODEPK', 'code value ordinary differential equation solver'), deprecated=False)
+```
+
+Note that the member name is the identifier, so `term.name` is `'SBO_0000247'` and the name in the ontology is `term.label`. A term stays a string, i.e., `SBO.SIMPLE_CHEMICAL == "SBO_0000247"` and serializing it gives the identifier.
+
+The enums are generated with the internal `pymetadata.ontologies._ontology_builder`, which downloads the ontology in OWL format and writes a python module from it. See [Development](development.md#regenerating-the-ontology-enums) for how to update them to a newer ontology release.
