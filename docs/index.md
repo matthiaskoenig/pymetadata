@@ -52,7 +52,7 @@ Annotate a model element with a MIRIAM qualifier and use ontology terms as enums
 ```python
 from pymetadata.core.annotation import RDFAnnotation
 from pymetadata.identifiers.miriam import BQB
-from pymetadata.metadata import SBO
+from pymetadata.ontologies import SBO
 
 annotation = RDFAnnotation(qualifier=BQB.IS, resource="CHEBI:17234")
 print(annotation.resource_normalized)

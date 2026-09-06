@@ -2,8 +2,7 @@
 
 import pytest
 
-from pymetadata.metadata import PBPKO, SBO, PBPKOType, SBOType
-from pymetadata.ontologies import ontology
+from pymetadata.ontologies import PBPKO, SBO, PBPKOType, SBOType, ontology
 
 
 @pytest.mark.parametrize(

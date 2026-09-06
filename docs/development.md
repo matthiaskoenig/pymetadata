@@ -107,7 +107,7 @@ The `documentation` workflow runs both steps, so the files are regenerated with 
 
 ## Regenerating the ontology enums { #regenerating-the-ontology-enums }
 
-`pymetadata.metadata.sbo`, `kisao`, `eco` and `pbpko` are generated modules and should not be edited by hand. They are rendered from the ontology releases with
+`pymetadata.ontologies.sbo`, `kisao`, `eco` and `pbpko` are generated modules and should not be edited by hand. They are rendered from the ontology releases with
 
 ```bash
 uv sync --extra ontology

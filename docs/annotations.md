@@ -105,7 +105,7 @@ Ontology terms are usually passed around as strings, which means typos surface a
 Every term is available under both its identifier and its name:
 
 ```python
-from pymetadata.metadata import SBO, PBPKO
+from pymetadata.ontologies import SBO, PBPKO
 
 SBO.SBO_0000247  # by id
 SBO.SIMPLE_CHEMICAL  # by name

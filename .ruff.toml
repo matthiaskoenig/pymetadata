@@ -40,10 +40,10 @@ dummy-variable-rgx = "^(_+|(_+[a-zA-Z0-9_]*[a-zA-Z0-9]+?))$"
 
 [lint.per-file-ignores]
 # generated from the ontologies, see `pymetadata.ontologies.ontology`
-"src/pymetadata/metadata/sbo.py" = ["D", "UP", "PIE796", "RUF"]
-"src/pymetadata/metadata/kisao.py" = ["D", "UP", "PIE796", "RUF"]
-"src/pymetadata/metadata/eco.py" = ["D", "UP", "PIE796", "RUF"]
-"src/pymetadata/metadata/pbpko.py" = ["D", "UP", "PIE796", "RUF"]
+"src/pymetadata/ontologies/sbo.py" = ["D", "UP", "PIE796", "RUF"]
+"src/pymetadata/ontologies/kisao.py" = ["D", "UP", "PIE796", "RUF"]
+"src/pymetadata/ontologies/eco.py" = ["D", "UP", "PIE796", "RUF"]
+"src/pymetadata/ontologies/pbpko.py" = ["D", "UP", "PIE796", "RUF"]
 # several suffixes deliberately map to the same media type
 "src/pymetadata/omex.py" = ["PIE796"]
 

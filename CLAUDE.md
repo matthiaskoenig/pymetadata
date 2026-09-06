@@ -69,19 +69,23 @@ a `collection/term` shorthand, or an arbitrary URL, and normalizes it into
 registry pattern (`identifiers/registry.py`). `RDFAnnotationData` enriches an
 annotation with label/description/synonyms/xrefs by querying OLS.
 
-**Ontology enums are generated code.** `metadata/sbo.py`, `kisao.py`, `eco.py`,
-`pbpko.py` are
-machine-generated (large; do not hand-edit). They come from
-`ontologies/ontology.py` (whose `pronto`/`jinja2` imports are lazy, they are the
-optional `ontology` extra): `update_ontology_files()` downloads OWL sources into
-`src/pymetadata/resources/ontologies/*.owl.gz` (gitignored, so they must be
+**Ontology enums are generated code.** `ontologies/sbo.py`, `kisao.py`,
+`eco.py`, `pbpko.py` are machine-generated (large; do not hand-edit). They come
+from `ontologies/ontology.py` (whose `pronto`/`jinja2` imports are lazy, they are
+the optional `ontology` extra): `update_ontology_files()` downloads OWL sources
+into `src/pymetadata/resources/ontologies/*.owl.gz` (gitignored, so they must be
 re-downloaded before regeneration), `Ontology` reads them with pronto, and
 `create_ontology_enum(id, pattern)` renders
-`resources/templates/ontology_enum.pytemplate` into `metadata/<id>.py`. Running
-`python -m pymetadata.ontologies.ontology` performs download + regeneration +
-import check, and needs `uv sync --extra ontology`. Each generated enum exposes
-`get_name()` and `validate()` accepting both `SBO_0000247` and `SBO:0000247`
-spellings; ids are stored with underscores.
+`resources/templates/ontology_enum.pytemplate` into `ENUM_DIR`, i.e.,
+`ontologies/<id>.py`. Running `python -m pymetadata.ontologies.ontology`
+performs download + regeneration + import check, and needs
+`uv sync --extra ontology`. Each generated enum exposes `get_name()` and
+`validate()` accepting both `SBO_0000247` and `SBO:0000247` spellings; ids are
+stored with underscores. `ontologies/__init__.py` re-exports `SBO`, `KISAO`,
+`ECO`, `PBPKO` and their `<ONTOLOGY>Type` aliases through a module `__getattr__`,
+so the ~1 MB of generated code is only imported when a term is used and
+`pymetadata.ontologies.ols` stays cheap (the `pymetadata.metadata` package was
+removed in 0.6.0).
 
 **Web services + caching.** `ontologies/ols.py` (EBI OLS4), `identifiers/registry.py`
 (identifiers.org), `chebi.py`, `unichem.py` all hit remote APIs and share the JSON

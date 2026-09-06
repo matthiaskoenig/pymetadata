@@ -42,7 +42,7 @@ dependencies = [
 ]
 
 [project.optional-dependencies]
-# reading ontologies and generating the enum modules in `pymetadata.metadata`,
+# reading ontologies and generating the enum modules in `pymetadata.ontologies`,
 # see `pymetadata.ontologies.ontology`. Not needed to use the generated enums.
 ontology = [
     "pronto>=2.7.3",

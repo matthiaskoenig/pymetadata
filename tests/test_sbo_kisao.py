@@ -2,8 +2,8 @@
 
 import pytest
 
-from pymetadata.metadata.kisao import KISAO
-from pymetadata.metadata.sbo import SBO
+from pymetadata.ontologies.kisao import KISAO
+from pymetadata.ontologies.sbo import SBO
 
 
 @pytest.mark.parametrize(

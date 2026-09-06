@@ -1,6 +1,6 @@
 """Downloading ontologies and generating the term enums.
 
-The enums in `pymetadata.metadata` are generated from the ontology releases:
+The enums of `pymetadata.ontologies` are generated from the ontology releases:
 `update_ontology_files` downloads the OWL files listed in `ontology_files`,
 `Ontology` reads them with pronto and `create_ontology_enum` renders one python
 module per ontology from `resources/templates/ontology_enum.pytemplate`.
@@ -256,7 +256,7 @@ class Ontology:
 def create_ontology_enum(ontology_id: str, pattern: str) -> None:
     r"""Generate the python enum module for an ontology.
 
-    The module is written to `pymetadata/metadata/<ontology_id>.py`; run
+    The module is written to `pymetadata/ontologies/<ontology_id>.py`; run
     `ruff format` on it afterwards, the rendered output is not formatted.
 
     Args:
@@ -362,7 +362,7 @@ def try_ontology_import(ontology_id: str) -> None:
         ModuleNotFoundError: if the module was not generated
     """
     # try to import
-    importlib.import_module(f"pymetadata.metadata.{ontology_id.lower()}")
+    importlib.import_module(f"pymetadata.ontologies.{ontology_id.lower()}")
 
 
 if __name__ == "__main__":
