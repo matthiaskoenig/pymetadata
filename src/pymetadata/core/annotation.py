@@ -4,7 +4,7 @@ Core data structure to store annotations.
 """
 
 import re
-import urllib
+import urllib.parse
 from enum import Enum
 from pprint import pprint
 from typing import Any, Dict, Final, List, Optional, Tuple, Union
@@ -353,7 +353,7 @@ class RDFAnnotationData(RDFAnnotation):
                 _xref = CrossReference(
                     name=ns_resource.name, accession=self.term, url=url
                 )
-                valid = _xref.validate() and is_url(self.url)  # type: ignore
+                valid = _xref.validate() and is_url(self.url)
                 if valid:
                     self.xrefs.append(_xref)
 

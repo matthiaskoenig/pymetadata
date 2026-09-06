@@ -28,7 +28,7 @@ def read_json_cache(cache_path: Path) -> Dict:
     if cache_path.exists():
         with open(cache_path) as fp:
             logger.debug(f"Read cache: {cache_path}")
-            return json.load(fp)  # type: ignore
+            return json.load(fp)
 
     raise IOError(f"Cache path does not exist: '{cache_path}'")
 

@@ -19,6 +19,7 @@ from pathlib import Path
 from typing import Any, Dict, List, Optional, Union
 
 import pronto
+import pronto.utils.warnings
 import requests
 from jinja2 import Template
 from pronto.ontology import Ontology as ProntoOntology

@@ -139,9 +139,12 @@ class Registry:
         response = requests.get(Registry.URL)
         namespaces = response.json()["payload"]["namespaces"]
 
-        ns_dict = {}
+        ns_dict: Dict[str, Namespace] = {}
         for _, data in enumerate(namespaces):
             ns = Namespace.from_dict(data)
+            if ns.prefix is None:
+                logger.warning(f"Namespace without prefix is ignored: '{ns}'")
+                continue
             ns_dict[ns.prefix] = ns
 
         if registry_path is not None:
@@ -151,7 +154,7 @@ class Registry:
                 json_encoder=DataclassJSONEncoder,
             )
 
-        return ns_dict  # type: ignore
+        return ns_dict
 
     @staticmethod
     def load_registry(registry_path: Path) -> Dict[str, Namespace]:

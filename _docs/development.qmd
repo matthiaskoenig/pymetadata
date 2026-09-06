@@ -16,6 +16,16 @@ pre-commit install
 pre-commit run
 ```
 
+## Type checking
+Type checking is performed with [ty](https://docs.astral.sh/ty/):
+```bash
+tox r -e ty
+```
+Or directly in the working tree:
+```bash
+uvx ty check
+```
+
 ## Testing
 Testing is performed with pytest and tox:
 

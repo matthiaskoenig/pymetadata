@@ -46,7 +46,7 @@ class {{ontology_id}}(str, Enum):
 
             term = getattr(cls, {{ontology_id.lower()}})
 
-        elif isinstance({{ontology_id.lower()}}, '{{ontology_id}}'):
+        elif isinstance({{ontology_id.lower()}}, {{ontology_id}}):
             term = {{ontology_id.lower()}}
         else:
             raise ValueError

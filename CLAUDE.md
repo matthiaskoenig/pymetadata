@@ -23,12 +23,13 @@ pytest                          # all tests
 pytest tests/test_omex.py       # single file
 pytest tests/test_omex.py::test_entry_from_dict   # single test
 tox r -e py314                  # single tox env (py3.11-3.14 available)
-tox run-parallel                # full matrix + mypy
+tox run-parallel                # full matrix + ty
 
 # lint / format / types
 ruff check
 ruff format
-tox -e mypy                     # mypy over src/pymetadata and tests, config in tox.ini
+tox -e ty                       # ty type check (config in [tool.ty] in pyproject.toml)
+uvx ty check                    # same check, straight from the working tree
 ```
 
 Release steps are in `RELEASE.md`; version bumps go through
@@ -82,8 +83,13 @@ shared output/logging; modules use these rather than bare `print`/`logging`.
 
 ## Conventions
 
-- Full type annotations are required (`disallow_untyped_defs`, `disallow_incomplete_defs`,
-  `warn_return_any`); every module, class and function carries a google-style docstring.
+- Type checking is done with [ty](https://docs.astral.sh/ty/) (mypy was removed in #69).
+  `[tool.ty.terminal] error-on-warning = true` means warnings fail the check, so the tree
+  must stay at zero diagnostics; the checked python version is inferred from
+  `project.requires-python`. Suppress a diagnostic with a rule-specific
+  `# ty: ignore[rule-name]`, never a blanket `# type: ignore`.
+- Every module, class and function carries full type annotations and a google-style
+  docstring.
 - `src/pymetadata/examples/` holds runnable usage examples plus test data
   (`test.omex`, `biomodels_omex_example/`); test fixtures live in `tests/data/`.
 - Release notes go in `release-notes/` as part of a release commit.

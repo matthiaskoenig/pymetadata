@@ -7,7 +7,7 @@ https://www.ebi.ac.uk/unichem/info/webservices#GetSrcCpdIdsFromKey
 https://www.ebi.ac.uk/unichem/rest/inchikey/AAOVKJBEBIDNHE-UHFFFAOYSA-N
 """
 
-import urllib
+import urllib.parse
 from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Dict, List, Optional

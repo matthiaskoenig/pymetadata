@@ -52,7 +52,7 @@ dev = [
     "bump-my-version>=1.2.4",
 	"ruff>=0.14.0",
 	"pre-commit>=4.0.1",
-	"mypy>=1.18.2",
+	"ty>=0.0.78",
     "tox>=4.31.0",
     "pytest>=8.4.2",
     "pytest-cov>=7.0.0",
@@ -68,3 +68,15 @@ Download = "https://pypi.org/project/pymetadata"
 
 [tool.hatch.version]
 path = "./src/pymetadata/__init__.py"
+
+[tool.ty.environment]
+# first-party modules live in the src layout; the checked python version is
+# inferred from `project.requires-python` (i.e. the oldest supported version)
+root = ["./src"]
+
+[tool.ty.src]
+include = ["src", "tests"]
+
+[tool.ty.terminal]
+# warnings are failures: keep the codebase free of any diagnostic
+error-on-warning = true

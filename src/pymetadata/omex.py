@@ -18,7 +18,8 @@ import tempfile
 import zipfile
 from enum import Enum
 from pathlib import Path
-from typing import Dict, List, Optional
+from types import TracebackType
+from typing import Any, Dict, List, Optional, Type
 
 import requests
 import xmltodict
@@ -355,7 +356,7 @@ class Manifest(BaseModel):
         ),
     ]
 
-    def __init__(self, **data) -> None:  # type: ignore
+    def __init__(self, **data: Any) -> None:
         """Initialize Manifest."""
         super().__init__(**data)
         for e in self.entries:
@@ -468,7 +469,12 @@ class Omex:
         self.manifest: Manifest = Manifest()
         self._tmp_dir: Path = Path(tempfile.mkdtemp())
 
-    def __exit__(self, exc_type, exc_value, traceback):  # type: ignore
+    def __exit__(
+        self,
+        exc_type: Optional[Type[BaseException]],
+        exc_value: Optional[BaseException],
+        traceback: Optional[TracebackType],
+    ) -> None:
         """Cleanup on exit."""
         shutil.rmtree(self._tmp_dir)
 

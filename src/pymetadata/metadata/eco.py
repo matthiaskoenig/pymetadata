@@ -16472,7 +16472,7 @@ class ECO(str, Enum):
 
             term = getattr(cls, eco)
 
-        elif isinstance(eco, "ECO"):
+        elif isinstance(eco, ECO):
             term = eco
         else:
             raise ValueError

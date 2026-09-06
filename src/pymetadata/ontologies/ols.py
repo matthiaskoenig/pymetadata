@@ -179,7 +179,7 @@ class OLSQuery:
                     data["errors"] = []
                     data["warnings"] = []
                     if self.cache:
-                        write_json_cache(data=data, cache_path=cache_path)  # type: ignore
+                        write_json_cache(data=data, cache_path=cache_path)
 
         return data
 
