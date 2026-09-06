@@ -87,7 +87,8 @@ shared output/logging; modules use these rather than bare `print`/`logging`.
   `[tool.ty.terminal] error-on-warning = true` means warnings fail the check, so the tree
   must stay at zero diagnostics; the checked python version is inferred from
   `project.requires-python`. Suppress a diagnostic with a rule-specific
-  `# ty: ignore[rule-name]`, never a blanket `# type: ignore`.
+  `# ty: ignore[rule-name]`, never a blanket `# type: ignore`. ty also runs as a
+  pre-commit hook (`--extra dev`, so the hook syncs the dev environment it checks against).
 - Every module, class and function carries full type annotations and a google-style
   docstring.
 - `src/pymetadata/examples/` holds runnable usage examples plus test data
