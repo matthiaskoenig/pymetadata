@@ -1,8 +1,6 @@
 # Development
 
-Contributions are welcome. The repository is
-[matthiaskoenig/pymetadata](https://github.com/matthiaskoenig/pymetadata);
-development happens on the `develop` branch.
+Contributions are welcome. The repository is [matthiaskoenig/pymetadata](https://github.com/matthiaskoenig/pymetadata); development happens on the `develop` branch.
 
 ## Setup development environment
 
@@ -22,8 +20,7 @@ pre-commit install
 pre-commit run
 ```
 
-The pre-commit hooks run the linter, the formatter and the type checker, i.e.,
-the same checks that run in continuous integration.
+The pre-commit hooks run the linter, the formatter and the type checker, i.e., the same checks that run in continuous integration.
 
 ## Testing
 
@@ -46,8 +43,7 @@ pytest tests/test_omex.py                         # a single module
 pytest tests/test_omex.py::test_entry_from_dict   # a single test
 ```
 
-Some tests query web services (identifiers.org, OLS, ChEBI, UniChem) and
-therefore require network access.
+Some tests query web services (identifiers.org, OLS, ChEBI, UniChem) and therefore require network access.
 
 ## Linting and formatting
 
@@ -70,20 +66,11 @@ Or directly in the working tree:
 uvx ty check
 ```
 
-The configuration lives in `[tool.ty]` in `pyproject.toml`. Warnings are treated
-as errors, so the codebase is kept free of diagnostics. Suppress an unavoidable
-diagnostic with a rule specific `# ty: ignore[rule-name]` rather than a blanket
-comment.
+The configuration lives in `[tool.ty]` in `pyproject.toml`. Warnings are treated as errors, so the codebase is kept free of diagnostics. Suppress an unavoidable diagnostic with a rule specific `# ty: ignore[rule-name]` rather than a blanket comment.
 
 ## Documentation
 
-The documentation is built with [Zensical](https://zensical.org/), the static
-site generator of the Material for MkDocs authors. The sources are markdown
-files in `docs/`, the site is configured in `zensical.toml` in the repository
-root. Nothing rendered is committed: the site is built by the `Documentation`
-workflow on every push and published to
-[matthiaskoenig.github.io/pymetadata](https://matthiaskoenig.github.io/pymetadata)
-from the `develop` branch.
+The documentation is built with [Zensical](https://zensical.org/), the static site generator of the Material for MkDocs authors. The sources are markdown files in `docs/`, the site is configured in `zensical.toml` in the repository root. Nothing rendered is committed: the site is built by the `Documentation` workflow on every push and published to [matthiaskoenig.github.io/pymetadata](https://matthiaskoenig.github.io/pymetadata) from the `develop` branch.
 
 Build the site into `site/`:
 
@@ -97,9 +84,7 @@ For writing, the preview rebuilds on save:
 uv run zensical serve
 ```
 
-The API reference is rendered from the docstrings by
-[mkdocstrings](https://mkdocstrings.github.io/); a page in `docs/api/` only
-contains the module directive:
+The API reference is rendered from the docstrings by [mkdocstrings](https://mkdocstrings.github.io/); a page in `docs/api/` only contains the module directive:
 
 ```markdown
 # omex
@@ -107,36 +92,23 @@ contains the module directive:
 ::: pymetadata.omex
 ```
 
-Docstrings are therefore the place to document functions and classes, the
-markdown files provide the narrative around them. Adding a module to the
-reference means adding such a page and an entry to `nav` in `zensical.toml`.
+Docstrings are therefore the place to document functions and classes, the markdown files provide the narrative around them. Adding a module to the reference means adding such a page and an entry to `nav` in `zensical.toml`.
 
 ## Regenerating the ontology enums { #regenerating-the-ontology-enums }
 
-`pymetadata.metadata.sbo`, `kisao`, `eco` and `pbpko` are generated modules and
-should not be edited by hand. They are rendered from the ontology releases with
+`pymetadata.metadata.sbo`, `kisao`, `eco` and `pbpko` are generated modules and should not be edited by hand. They are rendered from the ontology releases with
 
 ```bash
 uv sync --extra ontology
 python -m pymetadata.ontologies.ontology
 ```
 
-This needs the optional `ontology` dependencies (`pronto` and `jinja2`), which
-are not installed with the package because the generated enums work without
-them. The development environment (`--extra dev`) includes them.
+This needs the optional `ontology` dependencies (`pronto` and `jinja2`), which are not installed with the package because the generated enums work without them. The development environment (`--extra dev`) includes them.
 
-It downloads the OWL files listed in `ontology_files`, stores them gzipped
-under `src/pymetadata/resources/ontologies/` (not part of the repository), and
-renders one python module per ontology from
-`resources/templates/ontology_enum.pytemplate`. Adding an ontology means adding
-an `OntologyFile` entry and a `create_ontology_enum` call with the id pattern of
-the ontology.
+It downloads the OWL files listed in `ontology_files`, stores them gzipped under `src/pymetadata/resources/ontologies/` (not part of the repository), and renders one python module per ontology from `resources/templates/ontology_enum.pytemplate`. Adding an ontology means adding an `OntologyFile` entry and a `create_ontology_enum` call with the id pattern of the ontology.
 
 Run `ruff format` afterwards, since the rendered modules are not formatted.
 
 ## Release
 
-The release process is described in `RELEASE.md`. In short: update the release
-notes in `release-notes/`, make sure the tests, linter and type checker pass,
-bump the version with `bump-my-version` and push the tag, which triggers the
-release workflow publishing to PyPI.
+The release process is described in `RELEASE.md`. In short: update the release notes in `release-notes/`, make sure the tests, linter and type checker pass, bump the version with `bump-my-version` and push the tag, which triggers the release workflow publishing to PyPI.

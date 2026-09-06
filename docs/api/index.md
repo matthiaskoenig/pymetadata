@@ -4,8 +4,7 @@ The API reference is generated from the docstrings of the package.
 
 ## pymetadata
 
-Top level modules. The ontology terms of SBO, KISAO, ECO and PBPKO are generated
-enums, see [Annotations](../annotations.md#ontology-enums).
+Top level modules. The ontology terms of SBO, KISAO, ECO and PBPKO are generated enums, see [Annotations](../annotations.md#ontology-enums).
 
 | module | description |
 | --- | --- |
