@@ -30,3 +30,6 @@ __pycache__
 
 # OWL ontologies
 *.owl.gz
+
+# output of the examples
+src/pymetadata/examples/results/

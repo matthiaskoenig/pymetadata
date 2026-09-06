@@ -146,6 +146,18 @@ Omex.lookup_format("sbml")            # from a format key
 and COPASI apart, so an `.xml` file is not classified as plain XML when it is in
 fact a model. For every other file the suffix decides.
 
+## Cleaning up
+
+Reading an archive extracts it into a temporary directory. Using the archive as
+a context manager removes that directory when the block is left, which matters
+when many archives are processed in one run:
+
+```python
+with Omex.from_omex(Path("archive.omex")) as omex:
+    model_path = omex.get_path("./model.xml")
+    ...
+```
+
 ## Writing back out
 
 ```python
@@ -155,3 +167,41 @@ omex.to_directory(Path("./unpacked")) # extract, including the manifest.xml
 
 `to_directory` writes the `manifest.xml` next to the files, so the result is a
 valid input for `Omex.from_directory` again.
+
+## Examples
+
+Runnable examples ship with the package:
+
+```bash
+python -m pymetadata.examples.omex_example           # read, extract, create, write
+python -m pymetadata.examples.omex_from_url_example  # read an archive from a url
+```
+
+The full API, generated from the docstrings, is in the
+[API reference](api/omex.qmd).
+
+## References
+
+The COMBINE archive and the OMEX format are described in:
+
+> Bergmann FT, Adams R, Moodie S, Cooper J, Glont M, Golebiewski M, Hucka M,
+> Laibe C, Miller AK, Nickerson DP, Olivier BG, Rodriguez N, Sauro HM, Scharm M,
+> Soiland-Reyes S, Waltemath D, Yvon F, Le Novère N.
+> **COMBINE archive and OMEX format: one file to share all information to
+> reproduce a modeling project.**
+> *BMC Bioinformatics.* 2014 Dec 14;15(1):369.
+> doi: [10.1186/s12859-014-0369-z](https://doi.org/10.1186/s12859-014-0369-z),
+> PMID: [25494900](https://pubmed.ncbi.nlm.nih.gov/25494900/)
+
+> Bergmann FT, Rodriguez N, Le Novère N.
+> **COMBINE Archive Specification Version 1.**
+> *J Integr Bioinform.* 2015 Sep 4;12(2):261.
+> doi: [10.2390/biecoll-jib-2015-261](https://doi.org/10.2390/biecoll-jib-2015-261),
+> PMID: [26528559](https://pubmed.ncbi.nlm.nih.gov/26528559/)
+
+Further resources:
+
+- [COMBINE archive](https://combinearchive.org/) — specifications and tooling
+- [COMBINE](https://co.mbine.org/) — the standards this archive format ties together
+- [identifiers.org combine.specifications](https://registry.identifiers.org/registry/combine.specifications)
+  — the format URIs used in the manifest

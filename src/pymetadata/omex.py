@@ -1,14 +1,58 @@
-"""
-COMBINE Archive support.
+"""COMBINE archive (OMEX) support.
 
-This module provides an abstraction around the COMBINE archive. Common operations
-such as archive creation, archive extraction, creating archives from entries or
-directories, working with the `manifest.xml` are implemented.
+A COMBINE archive is a single file which bundles everything belonging to a
+modeling project: models (SBML, CellML), simulation experiments (SED-ML), data,
+figures and documentation. It is a ZIP container with a `manifest.xml` at its
+root listing every file together with its format, given as an identifiers.org
+URI rather than guessed from the file suffix.
 
-When working with COMBINE archives these wrapper functions should be used.
-The current version has no support for metadata manipulation.
+This module provides three classes:
 
-Encrypted archives can be opened, but no support for encrypting archives yet.
+- `Omex`: the archive; reading, writing and access to its files
+- `Manifest`: the entries of the archive, i.e., the `manifest.xml`
+- `ManifestEntry`: a single file with `location`, `format` and `master`
+
+Example:
+    Read an existing archive and list the SBML models it contains:
+
+    ```python
+    from pathlib import Path
+    from pymetadata.omex import Omex
+
+    omex = Omex.from_omex(Path("archive.omex"))
+    for entry in omex.entries_by_format("sbml"):
+        print(entry.location, omex.get_path(entry.location))
+    ```
+
+    Create an archive from single files:
+
+    ```python
+    from pymetadata.omex import EntryFormat, ManifestEntry, Omex
+
+    omex = Omex()
+    omex.add_entry(
+        entry_path=Path("model.xml"),
+        entry=ManifestEntry(
+            location="./model.xml", format=EntryFormat.SBML_L3V2, master=True
+        ),
+    )
+    omex.to_omex(Path("archive.omex"))
+    ```
+
+Encrypted archives can be read by passing a password; writing encrypted archives
+is not supported. Manipulation of OMEX metadata is not supported.
+
+References:
+    Bergmann FT, Adams R, Moodie S, Cooper J, Glont M, Golebiewski M, Hucka M,
+    Laibe C, Miller AK, Nickerson DP, Olivier BG, Rodriguez N, Sauro HM,
+    Scharm M, Soiland-Reyes S, Waltemath D, Yvon F, Le Novere N.
+    COMBINE archive and OMEX format: one file to share all information to
+    reproduce a modeling project. BMC Bioinformatics. 2014;15(1):369.
+    https://doi.org/10.1186/s12859-014-0369-z
+
+    Bergmann FT, Rodriguez N, Le Novere N. COMBINE Archive Specification
+    Version 1. J Integr Bioinform. 2015;12(2):261.
+    https://doi.org/10.2390/biecoll-jib-2015-261
 """
 
 import os
@@ -39,7 +83,14 @@ PURL_PREFIX = "https://purl.org/NET/mediatypes/"
 
 
 class EntryFormat(str, Enum):
-    """Enum for common formats."""
+    """Format URIs used in the `manifest.xml`.
+
+    COMBINE specifications (SBML, SED-ML, CellML, SBGN, BioPAX, OMEX metadata,
+    FROG results) are identified by `http://identifiers.org/combine.specifications/*`
+    URIs, all other files by their media type via `https://purl.org/NET/mediatypes/*`.
+    Where a specification is versioned, both the generic and the level and
+    version specific term exist, e.g., `SBML` and `SBML_L3V2`.
+    """
 
     OMEX = IDENTIFIERS_PREFIX + "omex"
     OMEX_MANIFEST = IDENTIFIERS_PREFIX + "omex-manifest"
@@ -287,13 +338,21 @@ class EntryFormat(str, Enum):
 
 
 class ManifestEntry(BaseModel):
-    """Entry of an OMEX file listed in the `manifest.xml`.
+    """A single file of the archive, as listed in the `manifest.xml`.
 
-    This corresponds to a single file in the archive which is tracked in the
-    manifest.xml.
-        location: location of the entry
-        format: full format string
-        master: master attribute
+    Attributes:
+        location: location of the file in the archive, relative and starting
+            with `./`, e.g., `./models/model.xml`
+        format: format URI of the file, see `EntryFormat`
+        master: marks the entry a tool should open first, e.g., the SED-ML file
+            of a simulation study
+
+    Example:
+        ```python
+        entry = ManifestEntry(
+            location="./model.xml", format=EntryFormat.SBML_L3V2, master=True
+        )
+        ```
     """
 
     location: str
@@ -307,7 +366,16 @@ class ManifestEntry(BaseModel):
 
     @staticmethod
     def is_format(format_key: str, format: str) -> bool:
-        """Check if entry is of the given format_key."""
+        """Check if a format URI matches a format key.
+
+        Args:
+            format_key: `sbml`, `sedml` or `sbgn`, which match all level and
+                version variants, or the name of an `EntryFormat`
+            format: format URI to check
+
+        Returns:
+            True if the format matches the key.
+        """
         # FIXME: use regular expressions
         if format_key == "sbml":
             return ("identifiers.org/combine.specifications/sbml" in format) or (
@@ -342,9 +410,21 @@ class ManifestEntry(BaseModel):
 
 
 class Manifest(BaseModel):
-    """COMBINE archive manifest.
+    """Content of the `manifest.xml`, i.e., the entries of an archive.
 
-    A manifest is a list of ManifestEntries.
+    The manifest behaves like a mapping keyed by location and always contains
+    the two entries required by the specification: the archive itself (`.`) and
+    the manifest (`./manifest.xml`).
+
+    Attributes:
+        entries: the manifest entries
+
+    Example:
+        ```python
+        print(len(omex.manifest))
+        print("./model.xml" in omex.manifest)
+        entry = omex.manifest["./model.xml"]
+        ```
     """
 
     _entries_dict: Dict[str, ManifestEntry] = PrivateAttr()
@@ -381,7 +461,14 @@ class Manifest(BaseModel):
 
     @classmethod
     def from_manifest(cls, manifest_path: Path) -> "Manifest":
-        """Create manifest from existing manifest.xml file."""
+        """Read a manifest from a `manifest.xml` file.
+
+        Args:
+            manifest_path: path of the `manifest.xml`
+
+        Returns:
+            Manifest with the entries listed in the file.
+        """
         with open(manifest_path, "r") as f_manifest:
             xml = f_manifest.read()
             d = xmltodict.parse(xml)
@@ -394,7 +481,11 @@ class Manifest(BaseModel):
             return Manifest(**{"entries": entries})
 
     def to_manifest_xml(self) -> str:
-        """Create xml of manifest."""
+        """Serialize the manifest to `manifest.xml` content.
+
+        Returns:
+            The XML of the manifest as a string.
+        """
 
         def content_line(e: ManifestEntry) -> str:
             if e.master:
@@ -414,15 +505,24 @@ class Manifest(BaseModel):
         return "\n".join(lines)
 
     def to_manifest(self, manifest_path: Path) -> None:
-        """Write manifest.xml."""
+        """Write the manifest to a `manifest.xml` file.
+
+        Args:
+            manifest_path: path of the file to write
+        """
         with open(manifest_path, "w") as f_manifest:
             xml = self.to_manifest_xml()
             f_manifest.write(xml)
 
     def add_entry(self, entry: ManifestEntry) -> None:
-        """Add entry to manifest.
+        """Add an entry to the manifest.
 
-        Does not check for duplication.
+        The location is normalized to a relative path starting with `./`.
+        Duplicated locations are not checked, use `Omex.add_entry` to add
+        a file together with its entry.
+
+        Args:
+            entry: entry to add
         """
         entry.location = self._check_and_normalize_location(entry.location)
         self.entries.append(entry)
@@ -462,12 +562,41 @@ class Manifest(BaseModel):
 
 
 class Omex:
-    """Combine archive class."""
+    """COMBINE archive (OMEX), version 1.
+
+    The content of the archive is kept in a temporary directory, `manifest`
+    holds the corresponding entries. Use the `from_*` constructors to read an
+    archive and the `to_*` methods to write one:
+
+    | read | write |
+    | --- | --- |
+    | `Omex.from_omex` from an omex file | `Omex.to_omex` to an omex file |
+    | `Omex.from_url` from a url | `Omex.to_directory` to a directory |
+    | `Omex.from_directory` from a directory | |
+
+    An empty archive is filled with `Omex.add_entry`.
+
+    Attributes:
+        manifest: entries of the archive, i.e., the content of the `manifest.xml`
+
+    Example:
+        Using the archive as a context manager removes the temporary
+        directory when the block is left:
+
+        ```python
+        with Omex.from_omex(Path("archive.omex")) as omex:
+            print(omex)
+        ```
+    """
 
     def __init__(self) -> None:
-        """Create COMBINE Archive Version 1."""
+        """Create an empty COMBINE archive."""
         self.manifest: Manifest = Manifest()
         self._tmp_dir: Path = Path(tempfile.mkdtemp())
+
+    def __enter__(self) -> "Omex":
+        """Enter the context manager."""
+        return self
 
     def __exit__(
         self,
@@ -475,15 +604,26 @@ class Omex:
         exc_value: Optional[BaseException],
         traceback: Optional[TracebackType],
     ) -> None:
-        """Cleanup on exit."""
-        shutil.rmtree(self._tmp_dir)
+        """Remove the temporary directory with the archive content."""
+        shutil.rmtree(self._tmp_dir, ignore_errors=True)
 
     def __str__(self) -> str:
         """Get contents of archive string."""
         return pprint.pformat(self.manifest.entries, indent=4, compact=True)
 
     def get_path(self, location: str) -> Path:
-        """Get path for given location."""
+        """Get the path of an entry in the extracted archive.
+
+        Args:
+            location: location of the entry, e.g., `./model.xml`
+
+        Returns:
+            Path of the file in the temporary directory of the archive, which
+            can be passed on to a reader such as libsbml.
+
+        Raises:
+            KeyError: if no entry exists for the location
+        """
         # check that entry exists (raises KeyError)
         _ = self.manifest[location]
         return self._tmp_dir / location
@@ -504,9 +644,18 @@ class Omex:
 
     @staticmethod
     def is_omex(omex_path: Path) -> bool:
-        """Check if path is an omex archive.
+        """Check if the path is a COMBINE archive.
 
-        File must be a zip archive and contain a manifest.xml.
+        The file must be a zip archive containing a `manifest.xml`.
+
+        Args:
+            omex_path: path to check
+
+        Returns:
+            True if the path is a COMBINE archive.
+
+        Raises:
+            ValueError: if the path does not exist or is not a file
         """
         omex_path = Omex._check_omex_path(omex_path)
 
@@ -525,11 +674,25 @@ class Omex:
 
     @staticmethod
     def from_omex(omex_path: Path, password: Optional[bytes] = None) -> "Omex":
-        """Read omex from path.
+        """Read a COMBINE archive from a path.
 
-        :param omex_path: path to omex archive
-        :param password: password for encryption
-        :return: Omex object
+        The archive is extracted into a temporary directory; the entries are
+        taken from the `manifest.xml` of the archive.
+
+        Args:
+            omex_path: path of the omex file
+            password: password of an encrypted archive
+
+        Returns:
+            Omex with the content of the archive.
+
+        Raises:
+            ValueError: if the path does not exist or is not a file
+
+        Example:
+            ```python
+            omex = Omex.from_omex(Path("archive.omex"))
+            ```
         """
         omex_path = Omex._check_omex_path(omex_path)
 
@@ -550,11 +713,27 @@ class Omex:
 
     @staticmethod
     def from_url(omex_url: str, password: Optional[bytes] = None) -> "Omex":
-        """Read omex from url.
+        """Read a COMBINE archive from a url.
 
-        :param url: url to omex archive
-        :param password: password for encryption
-        :return: Omex object
+        The archive is downloaded to a temporary file and read from there.
+
+        Args:
+            omex_url: url of the omex file
+            password: password of an encrypted archive
+
+        Returns:
+            Omex with the content of the archive.
+
+        Raises:
+            requests.HTTPError: if the archive could not be downloaded
+
+        Example:
+            ```python
+            omex = Omex.from_url(
+                "https://github.com/matthiaskoenig/canagliflozin-model/"
+                "releases/download/0.7.0/canagliflozin_model.omex"
+            )
+            ```
         """
         with tempfile.NamedTemporaryFile(delete=False) as tmp:
             r = requests.get(omex_url)
@@ -566,12 +745,27 @@ class Omex:
 
     @classmethod
     def from_directory(cls, directory: Path) -> "Omex":
-        """Create a COMBINE archive from a given directory.
+        """Create a COMBINE archive from a directory.
 
-        The file types are inferred,
-        in case of existing manifest or metadata information this should be reused.
+        If the directory contains a `manifest.xml`, the entries listed there are
+        reused. The format of every other file is inferred with
+        `Omex.guess_format`; SED-ML files added this way get `master=True`,
+        as they are the entry point of a simulation study.
 
-        For all SED-ML files in the directory the master attribute is set to True.
+        Args:
+            directory: directory with the content of the archive
+
+        Returns:
+            Omex with one entry per file in the directory.
+
+        Raises:
+            ValueError: if the directory does not exist or is not a directory
+
+        Example:
+            ```python
+            omex = Omex.from_directory(Path("./study"))
+            omex.to_omex(Path("study.omex"))
+            ```
         """
         if isinstance(directory, str):
             logger.warning(f"'directory' should be 'Path': '{directory}'")
@@ -639,12 +833,30 @@ class Omex:
         return omex
 
     def add_entry(self, entry_path: Path, entry: ManifestEntry) -> None:
-        """Add a path to the combine archive.
+        """Add a file to the archive.
 
-        The corresponding ManifestEntry information is required.
-        The entry is copied when getting added, i.e., changes to the location
-        after adding an entry will not have any effect on the content in the
-        archive!
+        The file is copied into the archive, i.e., later changes to the source
+        file do not affect the content of the archive. Adding a second entry for
+        an existing location replaces the first one and logs a warning.
+
+        Args:
+            entry_path: path of the file to add
+            entry: manifest entry describing location, format and master flag
+
+        Raises:
+            ValueError: if `entry_path` does not exist or is not a file
+
+        Example:
+            ```python
+            omex.add_entry(
+                entry_path=Path("model.xml"),
+                entry=ManifestEntry(
+                    location="./model.xml",
+                    format=EntryFormat.SBML_L3V2,
+                    master=True,
+                ),
+            )
+            ```
         """
         if isinstance(entry_path, str):
             logger.warning(f"'entry_path' should be 'Path': '{entry_path}'")
@@ -674,7 +886,14 @@ class Omex:
         self.manifest.add_entry(entry)
 
     def remove_entry_for_location(self, location: str) -> Optional[ManifestEntry]:
-        """Remove entry and corresponding entry_path."""
+        """Remove an entry and the corresponding file from the archive.
+
+        Args:
+            location: location of the entry, e.g., `./model.xml`
+
+        Returns:
+            The removed entry, or None if no entry exists for the location.
+        """
         entry = self.manifest.remove_entry_for_location(location)
         if entry:
             destination = self._tmp_dir / entry.location
@@ -688,21 +907,23 @@ class Omex:
         compression: int = zipfile.ZIP_DEFLATED,
         compresslevel: int = 9,
     ) -> None:
-        """Write omex to path.
+        """Write the archive to an omex file.
 
-        By definition OMEX files should be zip deflated.
+        The `manifest.xml` is generated from the entries of the archive. By
+        definition OMEX files are zip deflated.
 
-        The `compresslevel` parameter controls the compression level to use when
-        writing files to the archive. When using `ZIP_STORED` or `ZIP_LZMA` it has no
-        effect. When using `ZIP_DEFLATED` integers 0 through 9 are accepted
-        (see zlib for more information). When using ZIP_BZIP2 integers 1 through 9
-        are accepted (see bz2 for more information). The larger the value the better
-        te compression
+        Args:
+            omex_path: path of the omex file to write
+            password: unused, encrypted archives cannot be written yet
+            compression: zipfile compression algorithm
+            compresslevel: level of compression. Has no effect for `ZIP_STORED`
+                and `ZIP_LZMA`; 0-9 for `ZIP_DEFLATED` (see zlib) and 1-9 for
+                `ZIP_BZIP2` (see bz2). Larger values compress better.
 
-        :param omex_path:
-        :param compression: compression algorithm
-        :param compresslevel: level of compression
-        :return:
+        Example:
+            ```python
+            omex.to_omex(Path("archive.omex"))
+            ```
         """
         if isinstance(omex_path, str):
             logger.warning(f"'omex_path' should be 'Path': '{omex_path}'")
@@ -728,10 +949,18 @@ class Omex:
                         zf.write(filename=str(f), arcname=e.location)
 
     def to_directory(self, output_dir: Path) -> None:
-        """Extract combine archive to output directory.
+        """Extract the archive to a directory.
 
-        :param output_dir: output directory
-        :return:
+        The `manifest.xml` is written next to the files, so the result can be
+        read back with `Omex.from_directory`.
+
+        Args:
+            output_dir: directory to write to, created if it does not exist
+
+        Example:
+            ```python
+            omex.to_directory(Path("./unpacked"))
+            ```
         """
 
         if isinstance(output_dir, str):
@@ -756,7 +985,21 @@ class Omex:
         self.manifest.to_manifest(manifest_path=output_dir / "manifest.xml")
 
     def entries_by_format(self, format_key: str) -> List[ManifestEntry]:
-        """Get entries with given format in the archive."""
+        """Get all entries of a given format.
+
+        Args:
+            format_key: `sbml`, `sedml` or `sbgn`, which match all level and
+                version variants, or the name of an `EntryFormat`
+
+        Returns:
+            List of matching entries, empty if the archive contains none.
+
+        Example:
+            ```python
+            for entry in omex.entries_by_format("sbml"):
+                print(entry.location)
+            ```
+        """
 
         entries: List[ManifestEntry] = []
         for entry in self.manifest.entries:
@@ -767,7 +1010,15 @@ class Omex:
 
     @staticmethod
     def lookup_format(format_key: str) -> str:
-        """Lookup format by format_key."""
+        """Look up the format URI for a format key.
+
+        Args:
+            format_key: name of an `EntryFormat`, e.g., `sbml` or `csv`
+
+        Returns:
+            The format URI, or the URI for an unknown media type if the key
+            cannot be resolved.
+        """
         if hasattr(EntryFormat, format_key.upper()):
             return str(getattr(EntryFormat, format_key.upper()).value)
 
@@ -776,9 +1027,17 @@ class Omex:
 
     @staticmethod
     def guess_format(path: Path) -> str:
-        """Guess format string for given file.
+        """Guess the format URI of a file.
 
-        If string cannot be resolved '' is returned.
+        The start of `.xml` files is inspected to tell SBML, SED-ML, CellML and
+        COPASI apart; for every other file the suffix decides.
+
+        Args:
+            path: path of the file
+
+        Returns:
+            The format URI, or the URI for an unknown media type if the format
+            cannot be determined.
         """
 
         extension = path.suffix[1:] if path.suffix else ""

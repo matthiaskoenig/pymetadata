@@ -220,3 +220,15 @@ def test_omex_from_url() -> None:
     url = "https://github.com/matthiaskoenig/canagliflozin-model/releases/download/0.7.0/canagliflozin_model.omex"
     omex = Omex.from_url(url)
     assert omex
+
+
+def test_omex_context_manager(data_directory: Path) -> None:
+    """Test that the archive can be used as a context manager."""
+    omex_path = data_directory / "omex" / SHOWCASE_OMEX
+    with Omex.from_omex(omex_path) as omex:
+        tmp_dir = omex._tmp_dir
+        assert tmp_dir.exists()
+        assert len(omex.manifest) > 0
+
+    # the temporary directory is removed when the context is left
+    assert not tmp_dir.exists()

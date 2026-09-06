@@ -18,10 +18,14 @@ typically consists of one or more models (SBML, CellML), simulation experiments
 (SED-ML), figures, data files and a description of what the whole thing is
 about. Two problems follow from this:
 
-**How do you ship such a study as one unit?** The COMBINE archive (OMEX) answers
-this. It is a ZIP container with a `manifest.xml` listing every file and, for
-each file, the format it is in as an identifiers.org URI. `pymetadata` reads,
-writes and validates these archives, see [COMBINE archives](omex.qmd).
+**How do you ship such a study as one unit?** The
+[COMBINE archive](https://combinearchive.org/) (OMEX) answers this. It is a ZIP
+container with a `manifest.xml` listing every file and, for each file, the
+format it is in as an identifiers.org URI
+([Bergmann et al. 2014](https://doi.org/10.1186/s12859-014-0369-z),
+[Bergmann et al. 2015](https://doi.org/10.2390/biecoll-jib-2015-261)).
+`pymetadata` reads, writes and validates these archives, see
+[COMBINE archives](omex.qmd).
 
 **How do you say what the parts of a model mean?** A species named `glc` is
 meaningless to a machine. MIRIAM annotations attach a qualifier
