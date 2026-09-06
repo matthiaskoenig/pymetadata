@@ -21,6 +21,22 @@ from GitHub use
 pip install git+https://github.com/matthiaskoenig/pymetadata.git@develop
 ```
 
+## Optional dependencies
+
+Regenerating the ontology enums reads OWL files and renders python modules from
+a template, which needs `pronto` and `jinja2`. These are optional, because the
+enums in `pymetadata.metadata` are shipped with the package and using them
+requires nothing extra:
+
+```bash
+pip install pymetadata[ontology]
+```
+
+Without them `pymetadata.ontologies.ontology` can still be imported, but
+`Ontology` and `create_ontology_enum` raise an `ImportError` explaining what to
+install. See
+[Regenerating the ontology enums](development.qmd#regenerating-the-ontology-enums).
+
 For a development setup with the test and documentation tooling see
 [Development](development.qmd).
 

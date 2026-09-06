@@ -5,9 +5,11 @@ This file provides guidance when working with code in this repository.
 ## Project
 
 `pymetadata` is a python library for metadata in the context of COMBINE standards:
-COMBINE archives (OMEX), MIRIAM/RDF annotations, and ontology enums (SBO, KISAO, ECO).
+COMBINE archives (OMEX), MIRIAM/RDF annotations, and ontology enums (SBO, KISAO, ECO, PBPKO).
 Pure library, no CLI entry points. Requires python >= 3.11, packaged with hatchling
-(version is read from `src/pymetadata/__init__.py`).
+(version is read from `src/pymetadata/__init__.py`). Runtime dependencies are
+`rich`, `requests` and `pydantic`; `pronto` and `jinja2` are the optional
+`ontology` extra, needed only to regenerate the enums.
 
 ## Commands
 
@@ -58,16 +60,19 @@ a `collection/term` shorthand, or an arbitrary URL, and normalizes it into
 registry pattern (`identifiers/registry.py`). `RDFAnnotationData` enriches an
 annotation with label/description/synonyms/xrefs by querying OLS.
 
-**Ontology enums are generated code.** `metadata/sbo.py`, `kisao.py`, `eco.py` are
+**Ontology enums are generated code.** `metadata/sbo.py`, `kisao.py`, `eco.py`,
+`pbpko.py` are
 machine-generated (large; do not hand-edit). They come from
-`ontologies/ontology.py`: `update_ontology_files()` downloads OWL sources into
+`ontologies/ontology.py` (whose `pronto`/`jinja2` imports are lazy, they are the
+optional `ontology` extra): `update_ontology_files()` downloads OWL sources into
 `src/pymetadata/resources/ontologies/*.owl.gz` (gitignored, so they must be
 re-downloaded before regeneration), `Ontology` reads them with pronto, and
 `create_ontology_enum(id, pattern)` renders
 `resources/templates/ontology_enum.pytemplate` into `metadata/<id>.py`. Running
-`python -m pymetadata.ontologies.ontology` performs download + regeneration + import
-check. Each generated enum exposes `get_name()` and `validate()` accepting both
-`SBO_0000247` and `SBO:0000247` spellings; ids are stored with underscores.
+`python -m pymetadata.ontologies.ontology` performs download + regeneration +
+import check, and needs `uv sync --extra ontology`. Each generated enum exposes
+`get_name()` and `validate()` accepting both `SBO_0000247` and `SBO:0000247`
+spellings; ids are stored with underscores.
 
 **Web services + caching.** `ontologies/ols.py` (EBI OLS4), `identifiers/registry.py`
 (identifiers.org), `chebi.py`, `unichem.py` all hit remote APIs and share the JSON

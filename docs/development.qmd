@@ -111,10 +111,15 @@ functions and classes; the `.qmd` files provide the narrative around them.
 should not be edited by hand. They are rendered from the ontology releases with
 
 ```bash
+uv sync --extra ontology
 python -m pymetadata.ontologies.ontology
 ```
 
-This downloads the OWL files listed in `ontology_files`, stores them gzipped
+This needs the optional `ontology` dependencies (`pronto` and `jinja2`), which
+are not installed with the package because the generated enums work without
+them. The development environment (`--extra dev`) includes them.
+
+It downloads the OWL files listed in `ontology_files`, stores them gzipped
 under `src/pymetadata/resources/ontologies/` (not part of the repository), and
 renders one python module per ontology from
 `resources/templates/ontology_enum.pytemplate`. Adding an ontology means adding

@@ -38,13 +38,18 @@ keywords = [
 dependencies = [
 	"rich>=14.2.0",
 	"requests>=2.32.5",
-	"pronto>=2.7.3",
-	"jinja2>=3.1.6",
 	"pydantic>=2.12.5",
 ]
 
 [project.optional-dependencies]
+# reading ontologies and generating the enum modules in `pymetadata.metadata`,
+# see `pymetadata.ontologies.ontology`. Not needed to use the generated enums.
+ontology = [
+    "pronto>=2.7.3",
+    "jinja2>=3.1.6",
+]
 dev = [
+    "pymetadata[ontology]",
     "bump-my-version>=1.5.1",
 	"ruff>=0.16.6",
 	"pre-commit>=4.6.2",

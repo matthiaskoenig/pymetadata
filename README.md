@@ -32,6 +32,12 @@ can be installed via
 pip install pymetadata
 ```
 
+Regenerating the ontology enums requires the optional `ontology` dependencies:
+
+```bash
+pip install pymetadata[ontology]
+```
+
 # Cache path
 `pymetadata` caches some information for faster retrieval. The cache path is set to
 

@@ -1,7 +1,8 @@
 # Release information
 
 ## make release
-* update ontologies via `ontology.update_ontology_files()`
+* update ontologies via `python -m pymetadata.ontologies.ontology`
+  (needs the optional `ontology` dependencies, `uv sync --extra ontology`)
 * update release notes in `release-notes` with commit
 * make sure all tests run (`tox -p`)
 * check formating and linting (`ruff check`)

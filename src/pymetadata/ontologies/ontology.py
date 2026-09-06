@@ -11,6 +11,10 @@ Running the module does all three steps for SBO, KISAO, PBPKO and ECO:
 python -m pymetadata.ontologies.ontology
 ```
 
+`pronto` and `jinja2` are optional dependencies, install them with
+`pip install pymetadata[ontology]`. They are only needed to read ontologies and
+generate the modules, not to use the generated enums.
+
 Adding an ontology means adding an `OntologyFile` to `ontology_files` and a
 `create_ontology_enum` call with the id pattern of the ontology. The downloaded
 OWL files are not part of the repository, and the generated modules should never
@@ -27,20 +31,25 @@ from concurrent.futures import ThreadPoolExecutor
 from dataclasses import dataclass
 from enum import Enum
 from pathlib import Path
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
-import pronto
-import pronto.utils.warnings
 import requests
-from jinja2 import Template
-from pronto.ontology import Ontology as ProntoOntology
-from pronto.relationship import Relationship as ProntoRelationship
-from pronto.term import Term as ProntoTerm
 
 from pymetadata import ENUM_DIR, RESOURCES_DIR, log
 from pymetadata.console import console
 
+if TYPE_CHECKING:
+    from pronto.ontology import Ontology as ProntoOntology
+    from pronto.relationship import Relationship as ProntoRelationship
+    from pronto.term import Term as ProntoTerm
+
 logger = log.get_logger(__name__)
+
+_ONTOLOGY_EXTRA_MSG = (
+    "Reading ontologies and generating the enum modules requires the optional "
+    "`ontology` dependencies. Install them with "
+    "`pip install pymetadata[ontology]` or `uv sync --extra ontology`."
+)
 
 
 class OntologyFormat(str, Enum):
@@ -218,6 +227,12 @@ class Ontology:
         Args:
             ontology_id: id of an ontology in `ontology_files`, e.g., `SBO`
         """
+        try:
+            import pronto
+            import pronto.utils.warnings
+        except ImportError as err:  # pragma: no cover - depends on the install
+            raise ImportError(_ONTOLOGY_EXTRA_MSG) from err
+
         ontology_file = ontology_files[ontology_id]
         logger.info(f"Read ontology: `{ontology_id}`")
         self.ontology_id = ontology_id
@@ -232,7 +247,7 @@ class Ontology:
                 ontology_file.filename
             )
 
-    def get_pronto_ontology(self) -> ProntoOntology | None:
+    def get_pronto_ontology(self) -> "ProntoOntology | None":
         """Get the underlying pronto ontology.
 
         Returns:
@@ -254,6 +269,11 @@ def create_ontology_enum(ontology_id: str, pattern: str) -> None:
     Raises:
         ValueError: if the ontology could not be read
     """
+    try:
+        from jinja2 import Template
+    except ImportError as err:  # pragma: no cover - depends on the install
+        raise ImportError(_ONTOLOGY_EXTRA_MSG) from err
+
     logger.info(f"Create enum: `{ontology_id}`")
 
     def name_to_variable(name: str) -> str | None:
