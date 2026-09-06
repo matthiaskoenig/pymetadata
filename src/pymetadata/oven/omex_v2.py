@@ -1,4 +1,7 @@
-"""COMBINE archive version 2.
+"""COMBINE archive version 2, draft.
+
+A sketch of the version 2 metadata, not wired into `pymetadata.omex` and not
+part of the public API, see `pymetadata.oven`.
 
 See https://docs.google.com/document/d/1-UDgY5lQ6tv4mZILZzol-PvCoAYW8yr2Ydn1OxcHMjM/edit#
 """

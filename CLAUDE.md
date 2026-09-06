@@ -49,8 +49,9 @@ plus a `Manifest` of `ManifestEntry` pydantic models; archives are created/read 
 `to_directory`. `EntryFormat` is a large enum mapping formats to
 `http://identifiers.org/combine.specifications/*` or `https://purl.org/NET/mediatypes/*`
 URIs; `guess_format`/`lookup_format` resolve a file suffix to such a URI. Manifest
-locations are normalized to `./`-prefixed relative paths. `omex_v2.py` is only a
-draft pydantic sketch of the COMBINE archive v2 metadata, not wired into `omex.py`.
+locations are normalized to `./`-prefixed relative paths. `oven/omex_v2.py` is only a
+draft pydantic sketch of the COMBINE archive v2 metadata, not wired into `omex.py`;
+`oven/` holds unfinished work which is deliberately undocumented and untested.
 
 **`core/annotation.py` — RDF/MIRIAM annotations.** `RDFAnnotation` parses a
 qualifier (`BQB`/`BQM` from `identifiers/miriam.py`) plus a resource given as an
