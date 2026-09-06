@@ -22,18 +22,30 @@ import re
 import urllib.parse
 from enum import Enum
 from pprint import pprint
-from typing import Any, Dict, Final, List, Optional, Tuple, Union
+from typing import Any, ClassVar, Final
 
 import requests
 
 from pymetadata import log
 from pymetadata.core.xref import CrossReference, is_url
 from pymetadata.identifiers.miriam import BQB, BQM
-from pymetadata.identifiers.registry import REGISTRY, Namespace
+from pymetadata.identifiers.registry import Namespace, get_registry
 from pymetadata.ontologies.ols import ONTOLOGIES, OLSQuery
 
+_OLS_QUERY: OLSQuery | None = None
 
-OLS_QUERY = OLSQuery(ontologies=ONTOLOGIES)
+
+def get_ols_query() -> OLSQuery:
+    """Get the shared OLS query object, created on first use.
+
+    Returns:
+        The shared `OLSQuery` for the ontologies in `ONTOLOGIES`.
+    """
+    global _OLS_QUERY
+    if _OLS_QUERY is None:
+        _OLS_QUERY = OLSQuery(ontologies=ONTOLOGIES)
+    return _OLS_QUERY
+
 
 IDENTIFIERS_ORG_PREFIX: Final = "https://identifiers.org"
 IDENTIFIERS_ORG_PATTERN_COMPACT: Final = re.compile(
@@ -79,14 +91,12 @@ class RDFAnnotation:
         - https://bioregistry.io/chebi:15996 urls via the bioregistry provider
     """
 
-    replaced_collections: Dict[str, str] = {
+    replaced_collections: ClassVar[dict[str, str]] = {
         "obo.go": "go",
         "biomodels.sbo": "sbo",
     }
 
-    def __init__(
-        self, qualifier: Union[BQB, BQM], resource: str, validate: bool = True
-    ):
+    def __init__(self, qualifier: BQB | BQM, resource: str, validate: bool = True):
         """Parse a resource into collection and term.
 
         Args:
@@ -102,9 +112,9 @@ class RDFAnnotation:
             ValueError: if the qualifier or the resource is missing, or if the
                 resource is not a string
         """
-        self.qualifier: Union[BQB, BQM] = qualifier
-        self.collection: Optional[str] = None
-        self.term: Optional[str] = None
+        self.qualifier: BQB | BQM = qualifier
+        self.collection: str | None = None
+        self.term: str | None = None
         self.resource: str = resource
         self.provider: ProviderType = ProviderType.NONE
 
@@ -210,23 +220,25 @@ class RDFAnnotation:
 
         If the namespace is not embedded in the term return the shortened term.
         """
-        namespace = REGISTRY.ns_dict.get(collection, None)
-        if namespace and not namespace.namespaceEmbeddedInLui:
-            # shorter term
-            if term.lower().startswith(f"{collection}:"):
-                tokens = term.split(":")
-                term = ":".join(tokens[1:])
+        namespace = get_registry().ns_dict.get(collection, None)
+        if (
+            namespace
+            and not namespace.namespaceEmbeddedInLui
+            and term.lower().startswith(f"{collection}:")
+        ):
+            tokens = term.split(":")
+            term = ":".join(tokens[1:])
 
         return term
 
     @staticmethod
-    def from_tuple(t: Tuple[Union[BQB, BQM], str]) -> "RDFAnnotation":
+    def from_tuple(t: tuple[BQB | BQM, str]) -> "RDFAnnotation":
         """Create an annotation from a `(qualifier, resource)` tuple."""
         qualifier, resource = t[0], t[1]
         return RDFAnnotation(qualifier=qualifier, resource=resource)
 
     @property
-    def resource_normalized(self) -> Optional[str]:
+    def resource_normalized(self) -> str | None:
         """Normalize resource for given annotation.
 
         This is the correct usage. Resources are normalized to identifiers.org
@@ -238,14 +250,15 @@ class RDFAnnotation:
         if not self.term:
             return None
 
-        if self.provider == ProviderType.IDENTIFIERS_ORG:
-            if self.collection is not None:
-                namespace = REGISTRY.ns_dict.get(self.collection, None)
-                if namespace:
-                    if namespace.namespaceEmbeddedInLui:
-                        return f"{IDENTIFIERS_ORG_PREFIX}/{self.term}"
-                    else:
-                        return f"{IDENTIFIERS_ORG_PREFIX}/{self.collection}:{self.term}"
+        if (
+            self.provider == ProviderType.IDENTIFIERS_ORG
+            and self.collection is not None
+        ):
+            namespace = get_registry().ns_dict.get(self.collection, None)
+            if namespace:
+                if namespace.namespaceEmbeddedInLui:
+                    return f"{IDENTIFIERS_ORG_PREFIX}/{self.term}"
+                return f"{IDENTIFIERS_ORG_PREFIX}/{self.collection}:{self.term}"
 
         return self.term
 
@@ -253,7 +266,7 @@ class RDFAnnotation:
         """Get representation string."""
         return f"RDFAnnotation({self.qualifier}|{self.collection}|{self.term}|{self.provider.value})"
 
-    def to_dict(self) -> Dict:
+    def to_dict(self) -> dict:
         """Convert the annotation to a dictionary."""
         return {
             "qualifier": self.qualifier.value,
@@ -271,7 +284,9 @@ class RDFAnnotation:
 
         # find the miriam namespace
         if self.collection:
-            namespace: Optional[Namespace] = REGISTRY.ns_dict.get(self.collection, None)
+            namespace: Namespace | None = get_registry().ns_dict.get(
+                self.collection, None
+            )
             if not namespace:
                 logger.error(
                     f"MIRIAM namespace `{self.collection}` does not exist for `{self}`"
@@ -295,7 +310,7 @@ class RDFAnnotation:
         return True
 
     @staticmethod
-    def check_qualifier(qualifier: Union[BQB, BQM]) -> bool:
+    def check_qualifier(qualifier: BQB | BQM) -> bool:
         """Check that the qualifier is a MIRIAM qualifier.
 
         Args:
@@ -365,18 +380,18 @@ class RDFAnnotationData(RDFAnnotation):
         self.resource = annotation.resource
         self.qualifier = annotation.qualifier
         self.collection = annotation.collection
-        self.term: Optional[str] = annotation.term
-        self.url: Optional[str] = None
-        self.description: Optional[str] = None
-        self.label: Optional[str] = None
-        self.synonyms: List = []
-        self.xrefs: List = []
-        self.warnings: List = []
-        self.errors: List = []
+        self.term: str | None = annotation.term
+        self.url: str | None = None
+        self.description: str | None = None
+        self.label: str | None = None
+        self.synonyms: list = []
+        self.xrefs: list = []
+        self.warnings: list = []
+        self.errors: list = []
 
         if self.collection:
             # register MIRIAM xrefs
-            namespace = REGISTRY.ns_dict.get(self.collection, None)
+            namespace = get_registry().ns_dict.get(self.collection, None)
             if not namespace:
                 raise ValueError(
                     f"Namespace does not exist in dict for: `{self.collection}`"
@@ -431,9 +446,8 @@ class RDFAnnotationData(RDFAnnotation):
         """Get the string representation of the resolved annotation."""
         return f"RDFAnnotationData({self.collection}|{self.term}|{self.label}|{self.description}|{self.synonyms}|{self.xrefs})"
 
-    def to_dict(self) -> Dict[str, Any]:
+    def to_dict(self) -> dict[str, Any]:
         """Convert the annotation to a dictionary."""
-
         return {
             "resource": self.resource,
             "resource_normalized": self.resource_normalized,
@@ -449,7 +463,7 @@ class RDFAnnotationData(RDFAnnotation):
             "warnings": self.warnings,
         }
 
-    def query_ols(self) -> Dict:
+    def query_ols(self) -> dict:
         """Resolve the term in the Ontology Lookup Service.
 
         Fills in `label`, `description` and `synonyms`, and replaces `xrefs`
@@ -460,7 +474,7 @@ class RDFAnnotationData(RDFAnnotation):
             The processed OLS response.
         """
         try:
-            d = OLS_QUERY.query_ols(ontology=self.collection, term=self.term)
+            d = get_ols_query().query_ols(ontology=self.collection, term=self.term)
         except requests.HTTPError as err:
             logger.error(err)
             d = {
@@ -468,7 +482,7 @@ class RDFAnnotationData(RDFAnnotation):
                 "warnings": [],
             }
 
-        info = OLS_QUERY.process_response(d)
+        info = get_ols_query().process_response(d)
 
         if self.label is None:
             self.label = info["label"]

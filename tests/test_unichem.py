@@ -1,7 +1,6 @@
 """Testing unichem."""
 
 from pathlib import Path
-from typing import Optional
 
 from pymetadata.unichem import UnichemQuery, UnichemSource
 
@@ -20,7 +19,7 @@ def test_get_sources(tmp_path: Path) -> None:
 def test_get_source_exists() -> None:
     """Test existing source."""
     query = UnichemQuery(cache=False)
-    source: Optional[UnichemSource] = query.sources.get(1, None)
+    source: UnichemSource | None = query.sources.get(1, None)
     assert source
     assert isinstance(source, UnichemSource)
 
@@ -28,7 +27,7 @@ def test_get_source_exists() -> None:
 def test_get_source_missing() -> None:
     """Test missing source."""
     query = UnichemQuery(cache=False)
-    source: Optional[UnichemSource] = query.sources.get(-1, None)
+    source: UnichemSource | None = query.sources.get(-1, None)
     assert source is None
 
 

@@ -1,8 +1,7 @@
 """KISAO ontology."""
 
-from typing import Union, Optional
 from enum import Enum
-
+from typing import Optional, Union
 
 KISAOType = Union[str, "KISAO"]
 
@@ -2769,15 +2768,26 @@ class KISAO(str, Enum):
 
     @staticmethod
     def get_name(kisao: "KISAO") -> Optional[str]:
-        """Get name for term.
+        """Get the name of a term.
 
-        :returns: None if term does not exist in ontology.
+        Returns:
+            The name, or None if the term does not exist in the ontology.
         """
-        return _terms.get(kisao.value, None)
+        return _terms.get(kisao.value)
 
     @classmethod
     def validate(cls, kisao: "KISAOType") -> "KISAO":
-        """Validate and normalize kisao."""
+        """Validate and normalize a KISAO term.
+
+        Accepts an enum member, `KISAO_0000000` and `KISAO:0000000`.
+
+        Returns:
+            The corresponding enum member.
+
+        Raises:
+            ValueError: if the term does not belong to KISAO
+            AttributeError: if the term does not exist in the ontology
+        """
         term: "KISAO"
         if isinstance(kisao, str):
             if not kisao.startswith("KISAO"):

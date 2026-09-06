@@ -29,18 +29,18 @@ accept in a signature which takes either an enum member or the term as a string.
 The modules are generated, see `pymetadata.ontologies.ontology`.
 """
 
-from .sbo import SBO, SBOType
-from .kisao import KISAO, KISAOType
 from .eco import ECO, ECOType
+from .kisao import KISAO, KISAOType
 from .pbpko import PBPKO, PBPKOType
+from .sbo import SBO, SBOType
 
 __all__ = [
-    "SBO",
-    "SBOType",
-    "KISAO",
-    "KISAOType",
     "ECO",
-    "ECOType",
+    "KISAO",
     "PBPKO",
+    "SBO",
+    "ECOType",
+    "KISAOType",
     "PBPKOType",
+    "SBOType",
 ]

@@ -17,7 +17,6 @@ from pymetadata.ontologies import ontology
 )
 def test_import_ontology(ontology_id: str) -> None:
     """Test import of ontology enum."""
-
     ontology.try_ontology_import(ontology_id)
 
 
@@ -30,7 +29,6 @@ def test_import_ontology(ontology_id: str) -> None:
 )
 def test_sbo_name(sbo: SBO, name: str) -> None:
     """Test import of ontology enum."""
-
     assert SBO.get_name(sbo) == name
 
 
@@ -47,7 +45,6 @@ def test_sbo_name(sbo: SBO, name: str) -> None:
 )
 def test_sbo_validate(sbo: SBOType, term: SBO) -> None:
     """Test import of ontology enum."""
-
     assert SBO.validate(sbo) == term
 
 
@@ -63,7 +60,6 @@ def test_sbo_validate(sbo: SBOType, term: SBO) -> None:
 )
 def test_pbpko_name(pbpko: PBPKO, name: str) -> None:
     """Test names of the PBPKO enum."""
-
     assert PBPKO.get_name(pbpko) == name
 
 
@@ -77,5 +73,4 @@ def test_pbpko_name(pbpko: PBPKO, name: str) -> None:
 )
 def test_pbpko_validate(pbpko: PBPKOType, term: PBPKO) -> None:
     """Test validation of PBPKO terms."""
-
     assert PBPKO.validate(pbpko) == term

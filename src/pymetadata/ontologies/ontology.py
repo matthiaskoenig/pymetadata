@@ -27,7 +27,7 @@ from concurrent.futures import ThreadPoolExecutor
 from dataclasses import dataclass
 from enum import Enum
 from pathlib import Path
-from typing import Any, Dict, List, Optional, Union
+from typing import Any
 
 import pronto
 import pronto.utils.warnings
@@ -89,7 +89,7 @@ class OntologyFile:
         return name
 
 
-_ontology_files: List[OntologyFile] = [
+_ontology_files: list[OntologyFile] = [
     OntologyFile(
         "BTO",
         name="The BRENDA Tissue Ontology (BTO)",
@@ -166,7 +166,7 @@ _ontology_files: List[OntologyFile] = [
 ]
 
 
-ontology_files: Dict[str, OntologyFile] = {
+ontology_files: dict[str, OntologyFile] = {
     ontology.id: ontology for ontology in _ontology_files
 }
 
@@ -177,7 +177,6 @@ def update_ontology_file(ofile: OntologyFile) -> None:
     Args:
         ofile: ontology to download
     """
-
     oid = ofile.id
 
     logger.info(f"Update ontology: `{oid}`")
@@ -207,9 +206,11 @@ def update_ontology_files() -> None:
 
 
 class Ontology:
-    """An ontology read from its local OWL file with pronto."""
+    """An ontology read from its local OWL file with pronto.
 
-    _ontology: Optional[ProntoOntology] = None
+    Attributes:
+        ontology_id: id of the ontology, e.g., `SBO`
+    """
 
     def __init__(self, ontology_id: str):
         """Read the ontology from the local file.
@@ -219,14 +220,19 @@ class Ontology:
         """
         ontology_file = ontology_files[ontology_id]
         logger.info(f"Read ontology: `{ontology_id}`")
+        self.ontology_id = ontology_id
 
         # read ontology with pronto
         with warnings.catch_warnings():
             warnings.simplefilter("ignore", pronto.utils.warnings.SyntaxWarning)
             warnings.simplefilter("ignore", pronto.utils.warnings.NotImplementedWarning)
-            self.__class__._ontology = pronto.Ontology(ontology_file.filename)
+            # instance state; a class attribute would be overwritten by the
+            # next ontology which is read
+            self._ontology: ProntoOntology | None = pronto.Ontology(
+                ontology_file.filename
+            )
 
-    def get_pronto_ontology(self) -> Optional[ProntoOntology]:
+    def get_pronto_ontology(self) -> ProntoOntology | None:
         """Get the underlying pronto ontology.
 
         Returns:
@@ -248,10 +254,9 @@ def create_ontology_enum(ontology_id: str, pattern: str) -> None:
     Raises:
         ValueError: if the ontology could not be read
     """
-
     logger.info(f"Create enum: `{ontology_id}`")
 
-    def name_to_variable(name: str) -> Optional[str]:
+    def name_to_variable(name: str) -> str | None:
         """Clean string to python variable name."""
         if name is None:
             return None
@@ -259,11 +264,11 @@ def create_ontology_enum(ontology_id: str, pattern: str) -> None:
         return name.upper()
 
     # load ontology
-    terms: Dict[str, Dict] = {}
+    terms: dict[str, dict] = {}
     ontology: Ontology = Ontology(ontology_id=ontology_id)
 
     names = set()
-    pronto_term: Union[ProntoTerm, ProntoRelationship]
+    pronto_term: ProntoTerm | ProntoRelationship
 
     if not ontology._ontology:
         raise ValueError(f"No Pronto Ontology for `{ontology_id}`")
@@ -275,42 +280,42 @@ def create_ontology_enum(ontology_id: str, pattern: str) -> None:
             try:
                 pronto_term = ontology._ontology.get_term(term_id)
             except KeyError:
-                pass
+                # neither relationship nor term; without `continue` the entry of
+                # the previous iteration would be processed a second time
+                logger.warning(f"Term could not be resolved: `{term_id}`")
+                continue
 
-        pronto_name: Union[str, None, Any] = pronto_term.name
+        pronto_name: str | Any | None = pronto_term.name
         if not isinstance(pronto_name, str):
             logger.warning(f"Pronto name is none: `{pronto_term}`")
             continue
 
-        var_name: Optional[str] = name_to_variable(pronto_name)
+        var_name: str | None = name_to_variable(pronto_name)
         if var_name in names:
             logger.error(f"Duplicate name in ontology: `{var_name}`")
             continue
-        else:
-            names.add(var_name)
-            term_id = pronto_term.id
-            # fix the ids
-            if ontology_id == "KISAO":
-                term_id = term_id.replace("http://www.biomodels.net/kisao/KISAO#", "")
-            if ontology_id == "SBO":
-                term_id = term_id.replace("http://biomodels.net/SBO/", "")
+        names.add(var_name)
+        term_id = pronto_term.id
+        # fix the ids
+        if ontology_id == "KISAO":
+            term_id = term_id.replace("http://www.biomodels.net/kisao/KISAO#", "")
+        if ontology_id == "SBO":
+            term_id = term_id.replace("http://biomodels.net/SBO/", "")
 
-            if ":" in term_id:
-                term_id = term_id.replace(":", "_")
+        if ":" in term_id:
+            term_id = term_id.replace(":", "_")
 
-            terms[term_id] = {
-                "id": term_id,
-                "var_name": var_name,
-                "name": pronto_name.replace('"', "'"),
-                "definition": pronto_term.definition,
-            }
+        terms[term_id] = {
+            "id": term_id,
+            "var_name": var_name,
+            "name": pronto_name.replace('"', "'"),
+            "definition": pronto_term.definition,
+        }
     terms_sorted = {}
     for key in sorted(terms.keys()):
         terms_sorted[key] = terms[key]
 
-    with open(
-        RESOURCES_DIR / "templates" / "ontology_enum.pytemplate", "r"
-    ) as f_template:
+    with open(RESOURCES_DIR / "templates" / "ontology_enum.pytemplate") as f_template:
         template = Template(
             f_template.read(),
             trim_blocks=True,

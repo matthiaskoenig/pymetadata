@@ -9,7 +9,6 @@ Run with `python -m pymetadata.examples.omex_from_url_example`.
 from pymetadata.console import console
 from pymetadata.omex import Omex
 
-
 OMEX_URL: str = (
     "https://github.com/matthiaskoenig/canagliflozin-model/releases/download/"
     "0.7.0/canagliflozin_model.omex"

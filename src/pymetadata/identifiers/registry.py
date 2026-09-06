@@ -28,7 +28,7 @@ import os
 import time
 from dataclasses import dataclass, field
 from pathlib import Path
-from typing import Any, Dict, List, Optional
+from typing import Any
 
 import requests
 
@@ -49,27 +49,27 @@ class Resource:
     entry.
     """
 
-    id: Optional[int]
+    id: int | None
     providerCode: str
     name: str
     urlPattern: str
-    mirId: Optional[str] = field(repr=False)
+    mirId: str | None = field(repr=False)
     description: str = field(repr=False)
     official: bool = field(repr=False)
 
-    sampleId: Optional[str] = field(repr=False)
-    resourceHomeUrl: Optional[str] = field(repr=False)
+    sampleId: str | None = field(repr=False)
+    resourceHomeUrl: str | None = field(repr=False)
     institution: dict = field(repr=False)
     location: dict = field(repr=False)
     deprecated: bool = field(repr=False)
     deprecationDate: str = field(repr=False)
     protectedUrls: bool = field(repr=False, default=False)
     renderProtectedLanding: bool = field(repr=False, default=False)
-    authHelpUrl: Optional[str] = field(repr=False, default=None)
-    authHelpDescription: Optional[str] = field(repr=False, default=None)
+    authHelpUrl: str | None = field(repr=False, default=None)
+    authHelpDescription: str | None = field(repr=False, default=None)
 
     @classmethod
-    def from_dict(cls, d: Dict[str, Any]) -> Resource:
+    def from_dict(cls, d: dict[str, Any]) -> Resource:
         """Create a resource from a registry response, ignoring unknown keys."""
         return cls(
             **{k: v for k, v in d.items() if k in inspect.signature(cls).parameters}
@@ -89,22 +89,22 @@ class Namespace:
         resources: providers which resolve terms of this collection
     """
 
-    id: Optional[str]
-    prefix: Optional[str]
+    id: str | None
+    prefix: str | None
     name: str
     pattern: str
     namespaceEmbeddedInLui: bool
     description: str = field(repr=False)
-    mirId: Optional[str] = field(repr=False, default=None)
-    resources: Optional[List] = field(repr=False, default=None)
-    created: Optional[str] = field(repr=False, default=None)
-    modified: Optional[str] = field(repr=False, default=None)
-    sampleId: Optional[str] = field(repr=False, default=None)
+    mirId: str | None = field(repr=False, default=None)
+    resources: list | None = field(repr=False, default=None)
+    created: str | None = field(repr=False, default=None)
+    modified: str | None = field(repr=False, default=None)
+    sampleId: str | None = field(repr=False, default=None)
     deprecated: bool = field(repr=False, default=False)
-    deprecationDate: Optional[str] = field(repr=False, default=None)
+    deprecationDate: str | None = field(repr=False, default=None)
 
     @classmethod
-    def from_dict(cls, d: Dict[str, Any]) -> Namespace:
+    def from_dict(cls, d: dict[str, Any]) -> Namespace:
         """Create a namespace from a registry response, ignoring unknown keys."""
         return cls(
             **{k: v for k, v in d.items() if k in inspect.signature(cls).parameters}
@@ -115,7 +115,7 @@ class Namespace:
         if self.resources is not None:
             self.resources = [Resource.from_dict(d) for d in self.resources]
         else:
-            self.resources = list()
+            self.resources = []
 
 
 class Registry:
@@ -153,11 +153,11 @@ class Registry:
         else:
             update = True
 
-        self.ns_dict: Dict[str, Namespace] = (
+        self.ns_dict: dict[str, Namespace] = (
             self.update() if update else Registry.load_registry(self.registry_path)
         )
 
-    def update(self) -> Dict[str, Namespace]:
+    def update(self) -> dict[str, Namespace]:
         """Download the registry and return the namespaces.
 
         Returns:
@@ -168,8 +168,8 @@ class Registry:
 
     @staticmethod
     def update_registry(
-        registry_path: Optional[Path] = None,
-    ) -> Dict[str, Namespace]:
+        registry_path: Path | None = None,
+    ) -> dict[str, Namespace]:
         """Download the registry from the identifiers.org web service.
 
         Namespaces without a prefix are skipped.
@@ -184,7 +184,7 @@ class Registry:
         response = requests.get(Registry.URL)
         namespaces = response.json()["payload"]["namespaces"]
 
-        ns_dict: Dict[str, Namespace] = {}
+        ns_dict: dict[str, Namespace] = {}
         for _, data in enumerate(namespaces):
             ns = Namespace.from_dict(data)
             if ns.prefix is None:
@@ -202,7 +202,7 @@ class Registry:
         return ns_dict
 
     @staticmethod
-    def load_registry(registry_path: Path) -> Dict[str, Namespace]:
+    def load_registry(registry_path: Path) -> dict[str, Namespace]:
         """Load the registry from the cached file, downloading it if missing.
 
         Args:
@@ -221,7 +221,30 @@ class Registry:
         return {k: Namespace(**v) for k, v in d.items()}
 
 
-REGISTRY = Registry()
+_REGISTRY: Registry | None = None
+
+
+def get_registry() -> Registry:
+    """Get the shared registry, loading it on first use.
+
+    The registry is loaded lazily so that importing pymetadata does not query
+    the identifiers.org web service.
+
+    Returns:
+        The shared registry instance.
+    """
+    global _REGISTRY
+    if _REGISTRY is None:
+        _REGISTRY = Registry()
+    return _REGISTRY
+
+
+def __getattr__(name: str) -> Any:
+    """Resolve `REGISTRY` lazily (PEP 562)."""
+    if name == "REGISTRY":
+        return get_registry()
+    raise AttributeError(f"module {__name__!r} has no attribute {name!r}")
+
 
 if __name__ == "__main__":
     registry = Registry(cache=False)

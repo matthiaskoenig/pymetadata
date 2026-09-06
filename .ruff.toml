@@ -2,15 +2,31 @@
 line-length = 88
 indent-width = 4
 
-target-version = "py313"
+# oldest supported version, see `project.requires-python`
+target-version = "py311"
 
 
 [lint]
-# Enable Pyflakes (`F`) and a subset of the pycodestyle (`E`)  codes by default.
-# Unlike Flake8, Ruff doesn't enable pycodestyle warnings (`W`) or
-# McCabe complexity (`C901`) by default.
-select = ["E4", "E7", "E9", "F"]
-ignore = []
+# Pyflakes (`F`) and a subset of pycodestyle (`E`), plus:
+#   W    pycodestyle warnings
+#   I    import sorting
+#   D    docstrings (google convention, see [lint.pydocstyle])
+#   UP   pyupgrade, keeps the code on current python syntax
+#   B    bugbear, likely bugs and design problems
+#   C4   comprehensions
+#   SIM  simplifications
+#   RET  return statements
+#   PIE  misc lints
+#   RUF  ruff specific rules
+select = ["E4", "E7", "E9", "F", "W", "I", "D", "UP", "B", "C4", "SIM", "RET", "PIE", "RUF"]
+ignore = [
+    # `str, Enum` is used deliberately, `StrEnum` changes `str(member)`
+    "UP042",
+    # names such as `König` are not ambiguous unicode, they are german
+    "RUF001",
+    "RUF002",
+    "RUF003",
+]
 
 # Allow fix for all enabled rules (when `--fix`) is provided.
 fixable = ["ALL"]
@@ -18,6 +34,15 @@ unfixable = []
 
 # Allow unused variables when underscore-prefixed.
 dummy-variable-rgx = "^(_+|(_+[a-zA-Z0-9_]*[a-zA-Z0-9]+?))$"
+
+[lint.per-file-ignores]
+# generated from the ontologies, see `pymetadata.ontologies.ontology`
+"src/pymetadata/metadata/sbo.py" = ["D", "UP", "PIE796", "RUF"]
+"src/pymetadata/metadata/kisao.py" = ["D", "UP", "PIE796", "RUF"]
+"src/pymetadata/metadata/eco.py" = ["D", "UP", "PIE796", "RUF"]
+"src/pymetadata/metadata/pbpko.py" = ["D", "UP", "PIE796", "RUF"]
+# several suffixes deliberately map to the same media type
+"src/pymetadata/omex.py" = ["PIE796"]
 
 [format]
 # Like Black, use double quotes for strings.

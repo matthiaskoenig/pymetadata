@@ -1,8 +1,7 @@
 """SBO ontology."""
 
-from typing import Union, Optional
 from enum import Enum
-
+from typing import Optional, Union
 
 SBOType = Union[str, "SBO"]
 
@@ -3506,15 +3505,26 @@ class SBO(str, Enum):
 
     @staticmethod
     def get_name(sbo: "SBO") -> Optional[str]:
-        """Get name for term.
+        """Get the name of a term.
 
-        :returns: None if term does not exist in ontology.
+        Returns:
+            The name, or None if the term does not exist in the ontology.
         """
-        return _terms.get(sbo.value, None)
+        return _terms.get(sbo.value)
 
     @classmethod
     def validate(cls, sbo: "SBOType") -> "SBO":
-        """Validate and normalize sbo."""
+        """Validate and normalize a SBO term.
+
+        Accepts an enum member, `SBO_0000000` and `SBO:0000000`.
+
+        Returns:
+            The corresponding enum member.
+
+        Raises:
+            ValueError: if the term does not belong to SBO
+            AttributeError: if the term does not exist in the ontology
+        """
         term: "SBO"
         if isinstance(sbo, str):
             if not sbo.startswith("SBO"):

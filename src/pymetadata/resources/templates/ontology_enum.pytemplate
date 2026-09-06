@@ -1,10 +1,9 @@
 """{{ontology_id}} ontology."""
 
-from typing import Union, Optional
 from enum import Enum
+from typing import Optional, Union
 
-
-{{ontology_id}}Type = Union[str, '{{ontology_id}}']
+{{ontology_id}}Type = Union[str, "{{ontology_id}}"]
 
 _terms = {
     {% for tid in terms %}
@@ -27,17 +26,28 @@ class {{ontology_id}}(str, Enum):
 
     {% endfor %}
     @staticmethod
-    def get_name({{ontology_id.lower()}}: '{{ontology_id}}') -> Optional[str]:
-        """Get name for term.
+    def get_name({{ontology_id.lower()}}: "{{ontology_id}}") -> Optional[str]:
+        """Get the name of a term.
 
-        :returns: None if term does not exist in ontology.
+        Returns:
+            The name, or None if the term does not exist in the ontology.
         """
-        return _terms.get({{ontology_id.lower()}}.value, None)
+        return _terms.get({{ontology_id.lower()}}.value)
 
     @classmethod
-    def validate(cls, {{ontology_id.lower()}}: '{{ontology_id}}Type') -> '{{ontology_id}}':
-        """Validate and normalize {{ontology_id.lower()}}."""
-        term: '{{ontology_id}}'
+    def validate(cls, {{ontology_id.lower()}}: "{{ontology_id}}Type") -> "{{ontology_id}}":
+        """Validate and normalize a {{ontology_id}} term.
+
+        Accepts an enum member, `{{ontology_id}}_0000000` and `{{ontology_id}}:0000000`.
+
+        Returns:
+            The corresponding enum member.
+
+        Raises:
+            ValueError: if the term does not belong to {{ontology_id}}
+            AttributeError: if the term does not exist in the ontology
+        """
+        term: "{{ontology_id}}"
         if isinstance({{ontology_id.lower()}}, str):
             if not {{ontology_id.lower()}}.startswith("{{ontology_id}}"):
                 raise ValueError({{ontology_id.lower()}} + " is not a {{ontology_id}} id.")
@@ -52,6 +62,7 @@ class {{ontology_id}}(str, Enum):
             raise ValueError
 
         return term
+
 
 __all__ = [
     "{{ontology_id}}",

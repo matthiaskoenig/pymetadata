@@ -1,8 +1,7 @@
 """PBPKO ontology."""
 
-from typing import Union, Optional
 from enum import Enum
-
+from typing import Optional, Union
 
 PBPKOType = Union[str, "PBPKO"]
 
@@ -5443,15 +5442,26 @@ class PBPKO(str, Enum):
 
     @staticmethod
     def get_name(pbpko: "PBPKO") -> Optional[str]:
-        """Get name for term.
+        """Get the name of a term.
 
-        :returns: None if term does not exist in ontology.
+        Returns:
+            The name, or None if the term does not exist in the ontology.
         """
-        return _terms.get(pbpko.value, None)
+        return _terms.get(pbpko.value)
 
     @classmethod
     def validate(cls, pbpko: "PBPKOType") -> "PBPKO":
-        """Validate and normalize pbpko."""
+        """Validate and normalize a PBPKO term.
+
+        Accepts an enum member, `PBPKO_0000000` and `PBPKO:0000000`.
+
+        Returns:
+            The corresponding enum member.
+
+        Raises:
+            ValueError: if the term does not belong to PBPKO
+            AttributeError: if the term does not exist in the ontology
+        """
         term: "PBPKO"
         if isinstance(pbpko, str):
             if not pbpko.startswith("PBPKO"):

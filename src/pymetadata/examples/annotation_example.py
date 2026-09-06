@@ -1,6 +1,8 @@
+"""Parsing and normalizing MIRIAM annotation resources."""
+
 from pymetadata.console import console
-from pymetadata.identifiers.miriam import BQB
 from pymetadata.core.annotation import RDFAnnotation
+from pymetadata.identifiers.miriam import BQB
 
 for resource in [
     "urn:miriam:chebi:CHEBI%3A33699",

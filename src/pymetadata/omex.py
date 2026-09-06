@@ -63,7 +63,7 @@ import zipfile
 from enum import Enum
 from pathlib import Path
 from types import TracebackType
-from typing import Any, Dict, List, Optional, Type
+from typing import Any
 
 import requests
 import xmltodict
@@ -71,11 +71,10 @@ from pydantic import BaseModel, PrivateAttr
 
 from pymetadata import log
 
-
 logger = log.get_logger(__name__)
 
 
-__all__ = ["EntryFormat", "ManifestEntry", "Manifest", "Omex"]
+__all__ = ["EntryFormat", "Manifest", "ManifestEntry", "Omex"]
 
 
 IDENTIFIERS_PREFIX = "http://identifiers.org/combine.specifications/"
@@ -427,8 +426,8 @@ class Manifest(BaseModel):
         ```
     """
 
-    _entries_dict: Dict[str, ManifestEntry] = PrivateAttr()
-    entries: List[ManifestEntry] = [
+    _entries_dict: dict[str, ManifestEntry] = PrivateAttr()
+    entries: list[ManifestEntry] = [
         ManifestEntry(location=".", format=EntryFormat.OMEX),
         ManifestEntry(
             location="./manifest.xml",
@@ -469,7 +468,7 @@ class Manifest(BaseModel):
         Returns:
             Manifest with the entries listed in the file.
         """
-        with open(manifest_path, "r") as f_manifest:
+        with open(manifest_path) as f_manifest:
             xml = f_manifest.read()
             d = xmltodict.parse(xml)
 
@@ -478,7 +477,7 @@ class Manifest(BaseModel):
             for e in d["omexManifest"]["content"]:
                 entries.append({k.replace("@", ""): v for (k, v) in e.items()})
 
-            return Manifest(**{"entries": entries})
+            return Manifest(entries=entries)
 
     def to_manifest_xml(self) -> str:
         """Serialize the manifest to `manifest.xml` content.
@@ -488,10 +487,7 @@ class Manifest(BaseModel):
         """
 
         def content_line(e: ManifestEntry) -> str:
-            if e.master:
-                master_token = ' master="true"'
-            else:
-                master_token = ' master="false"'
+            master_token = ' master="true"' if e.master else ' master="false"'
             return f'  <content location="{e.location}" format="{e.format}"{master_token} />'
 
         lines = (
@@ -528,7 +524,7 @@ class Manifest(BaseModel):
         self.entries.append(entry)
         self._entries_dict[entry.location] = entry
 
-    def remove_entry_for_location(self, location: str) -> Optional[ManifestEntry]:
+    def remove_entry_for_location(self, location: str) -> ManifestEntry | None:
         """Remove entry for given location."""
         location = self._check_and_normalize_location(location)
 
@@ -540,15 +536,13 @@ class Manifest(BaseModel):
         if location not in self:
             logger.error(f"The location '{location}' does not exist in manifest.")
             return None
-        else:
-            entry = self._entries_dict.pop(location)
-            self.entries = [e for e in self.entries if e.location != location]
-            return entry
+        entry = self._entries_dict.pop(location)
+        self.entries = [e for e in self.entries if e.location != location]
+        return entry
 
     @staticmethod
     def _check_and_normalize_location(location: str) -> str:
         """Add relative prefix and check location."""
-
         if location.startswith("/"):
             raise ValueError(
                 f"Locations must be relative paths in COMBINE archive, but location is "
@@ -600,9 +594,9 @@ class Omex:
 
     def __exit__(
         self,
-        exc_type: Optional[Type[BaseException]],
-        exc_value: Optional[BaseException],
-        traceback: Optional[TracebackType],
+        exc_type: type[BaseException] | None,
+        exc_value: BaseException | None,
+        traceback: TracebackType | None,
     ) -> None:
         """Remove the temporary directory with the archive content."""
         shutil.rmtree(self._tmp_dir, ignore_errors=True)
@@ -673,7 +667,7 @@ class Omex:
                 return False
 
     @staticmethod
-    def from_omex(omex_path: Path, password: Optional[bytes] = None) -> "Omex":
+    def from_omex(omex_path: Path, password: bytes | None = None) -> "Omex":
         """Read a COMBINE archive from a path.
 
         The archive is extracted into a temporary directory; the entries are
@@ -712,7 +706,7 @@ class Omex:
             return Omex.from_directory(Path(tmp_dir))
 
     @staticmethod
-    def from_url(omex_url: str, password: Optional[bytes] = None) -> "Omex":
+    def from_url(omex_url: str, password: bytes | None = None) -> "Omex":
         """Read a COMBINE archive from a url.
 
         The archive is downloaded to a temporary file and read from there.
@@ -782,7 +776,7 @@ class Omex:
             raise ValueError(msg)
 
         manifest_path: Path = directory / "manifest.xml"
-        manifest: Optional[Manifest] = None
+        manifest: Manifest | None = None
         if manifest_path.exists():
             manifest = Manifest.from_manifest(manifest_path)
         else:
@@ -885,7 +879,7 @@ class Omex:
         # add entry
         self.manifest.add_entry(entry)
 
-    def remove_entry_for_location(self, location: str) -> Optional[ManifestEntry]:
+    def remove_entry_for_location(self, location: str) -> ManifestEntry | None:
         """Remove an entry and the corresponding file from the archive.
 
         Args:
@@ -903,7 +897,7 @@ class Omex:
     def to_omex(
         self,
         omex_path: Path,
-        password: Optional[str] = None,
+        password: str | None = None,
         compression: int = zipfile.ZIP_DEFLATED,
         compresslevel: int = 9,
     ) -> None:
@@ -962,7 +956,6 @@ class Omex:
             omex.to_directory(Path("./unpacked"))
             ```
         """
-
         if isinstance(output_dir, str):
             logger.warning(f"'output_dir' should be 'Path': '{output_dir}'")
             output_dir = Path(output_dir)
@@ -984,7 +977,7 @@ class Omex:
         # write manifest.xml
         self.manifest.to_manifest(manifest_path=output_dir / "manifest.xml")
 
-    def entries_by_format(self, format_key: str) -> List[ManifestEntry]:
+    def entries_by_format(self, format_key: str) -> list[ManifestEntry]:
         """Get all entries of a given format.
 
         Args:
@@ -1000,8 +993,7 @@ class Omex:
                 print(entry.location)
             ```
         """
-
-        entries: List[ManifestEntry] = []
+        entries: list[ManifestEntry] = []
         for entry in self.manifest.entries:
             if ManifestEntry.is_format(format_key, entry.format):
                 entries.append(entry)
@@ -1039,10 +1031,9 @@ class Omex:
             The format URI, or the URI for an unknown media type if the format
             cannot be determined.
         """
-
         extension = path.suffix[1:] if path.suffix else ""
         if extension == "xml":
-            with open(path, "r") as f_in:
+            with open(path) as f_in:
                 try:
                     text = f_in.read(256)
                     if "<sbml" in text:

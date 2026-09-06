@@ -1,8 +1,7 @@
 """ECO ontology."""
 
-from typing import Union, Optional
 from enum import Enum
-
+from typing import Optional, Union
 
 ECOType = Union[str, "ECO"]
 
@@ -16471,15 +16470,26 @@ class ECO(str, Enum):
 
     @staticmethod
     def get_name(eco: "ECO") -> Optional[str]:
-        """Get name for term.
+        """Get the name of a term.
 
-        :returns: None if term does not exist in ontology.
+        Returns:
+            The name, or None if the term does not exist in the ontology.
         """
-        return _terms.get(eco.value, None)
+        return _terms.get(eco.value)
 
     @classmethod
     def validate(cls, eco: "ECOType") -> "ECO":
-        """Validate and normalize eco."""
+        """Validate and normalize a ECO term.
+
+        Accepts an enum member, `ECO_0000000` and `ECO:0000000`.
+
+        Returns:
+            The corresponding enum member.
+
+        Raises:
+            ValueError: if the term does not belong to ECO
+            AttributeError: if the term does not exist in the ontology
+        """
         term: "ECO"
         if isinstance(eco, str):
             if not eco.startswith("ECO"):

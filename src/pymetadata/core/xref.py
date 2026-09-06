@@ -7,11 +7,9 @@ provider registered for a collection in the identifiers.org registry.
 
 import re
 from dataclasses import dataclass
-from typing import Dict
 from urllib.parse import urlparse
 
 from pymetadata import log
-
 
 logger = log.get_logger(__name__)
 
@@ -65,7 +63,7 @@ class CrossReference:
         """Validate the cross reference after construction."""
         self.validate()
 
-    def to_dict(self) -> Dict:
+    def to_dict(self) -> dict:
         """Convert the cross reference to a dictionary."""
         return self.__dict__
 

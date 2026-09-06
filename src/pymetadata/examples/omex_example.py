@@ -10,7 +10,6 @@ from pathlib import Path
 from pymetadata.console import console
 from pymetadata.omex import EntryFormat, ManifestEntry, Omex
 
-
 EXAMPLE_OMEX: Path = Path(__file__).parent / "test.omex"
 
 

@@ -9,6 +9,10 @@ repos:
   hooks:
   - id: check-yaml
     description: Check yaml files for parseable syntax
+  - id: check-toml
+    description: Check toml files for parseable syntax
+  - id: check-json
+    description: Check json files for parseable syntax
   - id: check-added-large-files
     description: Prevent large files from being committed
   - id: check-merge-conflict
@@ -21,6 +25,13 @@ repos:
     description: Fix empty lines at ends of files
   - id: detect-private-key
     description: Detects the presence of private keys
+  - id: check-case-conflict
+    description: Check for names which conflict on case insensitive filesystems
+  - id: mixed-line-ending
+    description: Normalize mixed line endings
+    args: [ --fix=lf ]
+  - id: debug-statements
+    description: Check for forgotten breakpoints and debugger imports
 
 - repo: https://github.com/astral-sh/ruff-pre-commit
   # Ruff version.

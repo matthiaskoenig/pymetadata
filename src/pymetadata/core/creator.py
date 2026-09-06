@@ -1,7 +1,5 @@
 """Creator information for models and archives."""
 
-from typing import Optional
-
 
 class Creator:
     """A person credited with a model or archive.
@@ -34,8 +32,8 @@ class Creator:
         givenName: str,
         email: str,
         organization: str,
-        site: Optional[str] = None,
-        orcid: Optional[str] = None,
+        site: str | None = None,
+        orcid: str | None = None,
     ):
         """Initialize the creator."""
         self.familyName = familyName

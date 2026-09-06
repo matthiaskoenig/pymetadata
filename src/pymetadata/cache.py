@@ -9,10 +9,9 @@ which are read at query time.
 import json
 from json.encoder import JSONEncoder
 from pathlib import Path
-from typing import Any, Dict, Optional, Type
+from typing import Any
 
 from pymetadata import log
-
 
 logger = log.get_logger(__name__)
 
@@ -25,7 +24,7 @@ class DataclassJSONEncoder(JSONEncoder):
         return o.__dict__
 
 
-def read_json_cache(cache_path: Path) -> Dict:
+def read_json_cache(cache_path: Path) -> dict:
     """Read a JSON cache file.
 
     Args:
@@ -42,11 +41,11 @@ def read_json_cache(cache_path: Path) -> Dict:
             logger.debug(f"Read cache: {cache_path}")
             return json.load(fp)
 
-    raise IOError(f"Cache path does not exist: '{cache_path}'")
+    raise OSError(f"Cache path does not exist: '{cache_path}'")
 
 
 def write_json_cache(
-    data: Dict, cache_path: Path, json_encoder: Optional[Type[JSONEncoder]] = None
+    data: dict, cache_path: Path, json_encoder: type[JSONEncoder] | None = None
 ) -> None:
     """Write a JSON cache file.
 

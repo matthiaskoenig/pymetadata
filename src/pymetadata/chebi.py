@@ -13,8 +13,10 @@ info = ChebiQuery.query("CHEBI:33699")
 See <https://www.ebi.ac.uk/chebi/>.
 """
 
+import contextlib
 from pathlib import Path
-from typing import Any, Dict, Optional
+from typing import Any
+
 import requests
 
 import pymetadata
@@ -33,8 +35,8 @@ class ChebiQuery:
 
     @staticmethod
     def query(
-        chebi: str, cache: Optional[bool] = None, cache_path: Optional[Path] = None
-    ) -> Dict:
+        chebi: str, cache: bool | None = None, cache_path: Path | None = None
+    ) -> dict:
         """Query the information stored for a ChEBI term.
 
         Args:
@@ -46,9 +48,8 @@ class ChebiQuery:
         Returns:
             The ChEBI information, empty if the term could not be resolved.
         """
-
         if not chebi:
-            return dict()
+            return {}
         if cache is None:
             cache = pymetadata.CACHE_USE
         if cache_path is None:
@@ -60,12 +61,11 @@ class ChebiQuery:
             chebi_base_path.mkdir(parents=True)
 
         chebi_path = chebi_base_path / f"{chebi.replace(':', '%3A')}.json"
-        data: Dict[str, Any] = {}
+        data: dict[str, Any] = {}
         if cache:
-            try:
+            with contextlib.suppress(OSError):
+                # cache does not exist
                 data = read_json_cache(cache_path=chebi_path)
-            except IOError:
-                pass
 
         # fetch and cache data
         if not data:
@@ -76,7 +76,7 @@ class ChebiQuery:
                 result = response.json()
             else:
                 logger.error(f"CHEBI information could not be retrieved for: {chebi}")
-                return dict()
+                return {}
 
             result = result[chebi]["data"]
             chemical_data = result["chemical_data"]
