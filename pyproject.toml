@@ -70,6 +70,12 @@ Download = "https://pypi.org/project/pymetadata"
 [tool.hatch.version]
 path = "./src/pymetadata/__init__.py"
 
+[tool.hatch.build]
+# work in progress, see `pymetadata.oven`; not shipped
+exclude = [
+    "src/pymetadata/oven",
+]
+
 [tool.ty.environment]
 # first-party modules live in the src layout; the checked python version is
 # inferred from `project.requires-python` (i.e. the oldest supported version)
