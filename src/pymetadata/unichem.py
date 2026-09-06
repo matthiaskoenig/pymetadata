@@ -157,8 +157,10 @@ class UnichemQuery:
             if response.status_code != 200:
                 # the service answers with a HTML error page every now and then
                 logger.error(
-                    f"UniChem xrefs could not be retrieved for '{inchikey}', "
-                    f"'{response.status_code}' response for: '{url}'"
+                    "UniChem xrefs could not be retrieved for '%s', '%s' response for: '%s'",
+                    inchikey,
+                    response.status_code,
+                    url,
                 )
                 return []
             data = response.json()
@@ -169,7 +171,7 @@ class UnichemQuery:
         xrefs: list[CrossReference] = []
         if data:
             if "error" in data:
-                logger.warning(f"No xrefs for inchikey: '{inchikey}'")
+                logger.warning("No xrefs for inchikey: '%s'", inchikey)
                 return []
 
             # process data
@@ -180,8 +182,9 @@ class UnichemQuery:
                     if source_id not in {40, 49, 50}:
                         # number 40 is missing from definitions
                         logger.error(
-                            f"No UniChem source for source id '{source_id}', in item "
-                            f"'{item}'"
+                            "No UniChem source for source id '%s', in item '%s'",
+                            source_id,
+                            item,
                         )
                     continue
 

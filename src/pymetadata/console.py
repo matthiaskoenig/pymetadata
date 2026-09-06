@@ -1,8 +1,7 @@
 """Shared rich console.
 
-All output of the package goes through this console, which is also used by the
-logging handler in `pymetadata.log`. It records what is printed, so the output
-of a script can be exported afterwards.
+The console is used for the output of scripts and examples; library code logs
+instead of printing, see `pymetadata.log`.
 
 ```python
 from pymetadata.console import console
@@ -10,13 +9,15 @@ from pymetadata.console import console
 console.print(omex)
 console.rule("Section", style="white")
 ```
+
+Importing this module has no side effects on the interpreter. To get rich
+representations in an interactive session, install them explicitly with
+`rich.pretty.install()`.
 """
 
-from rich import pretty
 from rich.console import Console
 from rich.theme import Theme
 
-pretty.install()
 custom_theme = Theme(
     {
         "success": "green",
@@ -26,4 +27,4 @@ custom_theme = Theme(
     }
 )
 
-console = Console(record=True, theme=custom_theme)
+console = Console(theme=custom_theme)

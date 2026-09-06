@@ -74,7 +74,7 @@ class ChebiQuery:
             if response.status_code == 200:
                 result = response.json()
             else:
-                logger.error(f"CHEBI information could not be retrieved for: {chebi}")
+                logger.error("CHEBI information could not be retrieved for: %s", chebi)
                 return {}
 
             result = result[chebi]["data"]
@@ -92,7 +92,7 @@ class ChebiQuery:
                 else None,
             }
 
-            logger.info(f"Write chebi: {chebi_path}")
+            logger.info("Write chebi: %s", chebi_path)
             write_json_cache(
                 data=data, cache_path=chebi_path, json_encoder=DataclassJSONEncoder
             )

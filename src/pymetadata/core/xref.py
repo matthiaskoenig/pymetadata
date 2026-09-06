@@ -79,8 +79,11 @@ class CrossReference:
         if not is_url(self.url):
             if warnings:
                 logger.warning(
-                    f"{self.__class__.__name__} <{self.name}|{self.accession}> "
-                    f"has invalid url: '{self.url}'"
+                    "%s <%s|%s> has invalid url: '%s'",
+                    self.__class__.__name__,
+                    self.name,
+                    self.accession,
+                    self.url,
                 )
             return False
         return True

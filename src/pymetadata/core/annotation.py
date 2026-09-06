@@ -158,9 +158,8 @@ class RDFAnnotation:
                 else:
                     self.provider = ProviderType.NONE
                     logger.debug(
-                        f"{resource} does not conform to "
-                        f"http(s)://identifiers.org/collection/id or http(s)://identifiers.org/id or "
-                        f"https://bioregistry.io/id .",
+                        "%s does not conform to http(s)://identifiers.org/collection/id or http(s)://identifiers.org/id or https://bioregistry.io/id .",
+                        resource,
                     )
 
         # handle urns
@@ -173,8 +172,9 @@ class RDFAnnotation:
                 self.provider = ProviderType.IDENTIFIERS_ORG
 
                 logger.warning(
-                    f"Deprecated urn pattern `{resource}` updated: "
-                    f"{self.resource_normalized}"
+                    "Deprecated urn pattern `%s` updated: %s",
+                    resource,
+                    self.resource_normalized,
                 )
 
         else:
@@ -192,10 +192,8 @@ class RDFAnnotation:
             # validation
             if len(tokens) < 2 and not self.collection:
                 logger.error(
-                    f"Resource `{resource}` could not be split in collection and term. "
-                    f"A given resource must be of the form "
-                    f"`collection/term` or an url starting with "
-                    f"`http(s)://`)"
+                    "Resource `%s` could not be split in collection and term. A given resource must be of the form `collection/term` or an url starting with `http(s)://`)",
+                    resource,
                 )
                 self.collection = None
                 self.term = resource
@@ -289,7 +287,9 @@ class RDFAnnotation:
             )
             if not namespace:
                 logger.error(
-                    f"MIRIAM namespace `{self.collection}` does not exist for `{self}`"
+                    "MIRIAM namespace `%s` does not exist for `%s`",
+                    self.collection,
+                    self,
                 )
                 return False
         else:
@@ -301,7 +301,10 @@ class RDFAnnotation:
             m = p.match(self.term)
             if not m:
                 logger.error(
-                    f"Term `{self.term}` did not match pattern `{namespace.pattern}` for collection `{self.collection}`."
+                    "Term `%s` did not match pattern `%s` for collection `%s`.",
+                    self.term,
+                    namespace.pattern,
+                    self.collection,
                 )
                 return False
         else:
@@ -323,7 +326,9 @@ class RDFAnnotation:
             supported_qualifiers = [e.value for e in BQB] + [e.value for e in BQM]
 
             logger.error(
-                f"qualifier `{qualifier}` is not in supported qualifiers: '{supported_qualifiers}'."
+                "qualifier `%s` is not in supported qualifiers: '%s'.",
+                qualifier,
+                supported_qualifiers,
             )
             return False
 

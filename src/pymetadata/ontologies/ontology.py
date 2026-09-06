@@ -36,7 +36,6 @@ from typing import TYPE_CHECKING, Any
 import requests
 
 from pymetadata import ENUM_DIR, RESOURCES_DIR, log
-from pymetadata.console import console
 
 if TYPE_CHECKING:
     from pronto.ontology import Ontology as ProntoOntology
@@ -93,9 +92,7 @@ class OntologyFile:
         Returns:
             Path of the gzipped ontology file.
         """
-        name = str(self.path)
-        console.print(name)
-        return name
+        return str(self.path)
 
 
 _ontology_files: list[OntologyFile] = [
@@ -188,7 +185,7 @@ def update_ontology_file(ofile: OntologyFile) -> None:
     """
     oid = ofile.id
 
-    logger.info(f"Update ontology: `{oid}`")
+    logger.info("Update ontology: `%s`", oid)
 
     with tempfile.TemporaryDirectory() as tmp_dir:
         # download in tmp location
@@ -234,7 +231,7 @@ class Ontology:
             raise ImportError(_ONTOLOGY_EXTRA_MSG) from err
 
         ontology_file = ontology_files[ontology_id]
-        logger.info(f"Read ontology: `{ontology_id}`")
+        logger.info("Read ontology: `%s`", ontology_id)
         self.ontology_id = ontology_id
 
         # read ontology with pronto
@@ -274,7 +271,7 @@ def create_ontology_enum(ontology_id: str, pattern: str) -> None:
     except ImportError as err:  # pragma: no cover - depends on the install
         raise ImportError(_ONTOLOGY_EXTRA_MSG) from err
 
-    logger.info(f"Create enum: `{ontology_id}`")
+    logger.info("Create enum: `%s`", ontology_id)
 
     def name_to_variable(name: str) -> str | None:
         """Clean string to python variable name."""
@@ -302,17 +299,17 @@ def create_ontology_enum(ontology_id: str, pattern: str) -> None:
             except KeyError:
                 # neither relationship nor term; without `continue` the entry of
                 # the previous iteration would be processed a second time
-                logger.warning(f"Term could not be resolved: `{term_id}`")
+                logger.warning("Term could not be resolved: `%s`", term_id)
                 continue
 
         pronto_name: str | Any | None = pronto_term.name
         if not isinstance(pronto_name, str):
-            logger.warning(f"Pronto name is none: `{pronto_term}`")
+            logger.warning("Pronto name is none: `%s`", pronto_term)
             continue
 
         var_name: str | None = name_to_variable(pronto_name)
         if var_name in names:
-            logger.error(f"Duplicate name in ontology: `{var_name}`")
+            logger.error("Duplicate name in ontology: `%s`", var_name)
             continue
         names.add(var_name)
         term_id = pronto_term.id

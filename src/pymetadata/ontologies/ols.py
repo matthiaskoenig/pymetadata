@@ -144,7 +144,7 @@ class OLSQuery:
 
         if ols_ontology is None:
             logger.warning(
-                f"Ontology '{ontology}' is not registered, using default iri."
+                "Ontology '%s' is not registered, using default iri.", ontology
             )
             iri = f"http://purl.obolibrary.org/obo/{ontology.upper()}_{term}"
         else:
@@ -201,7 +201,7 @@ class OLSQuery:
 
         if not data:
             url = self.url_term_query.format(ontology, urliri)
-            logger.info(f"Query: {url}")
+            logger.info("Query: %s", url)
             response = get_session().get(url)
 
             if response.status_code != 200:

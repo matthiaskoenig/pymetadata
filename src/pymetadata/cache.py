@@ -38,7 +38,7 @@ def read_json_cache(cache_path: Path) -> dict:
     """
     if cache_path.exists():
         with open(cache_path) as fp:
-            logger.debug(f"Read cache: {cache_path}")
+            logger.debug("Read cache: %s", cache_path)
             return json.load(fp)
 
     raise OSError(f"Cache path does not exist: '{cache_path}'")
@@ -59,7 +59,7 @@ def write_json_cache(
     """
     cache_path.parent.mkdir(parents=True, exist_ok=True)
     with open(cache_path, "w") as fp:
-        logger.info(f"Write cache: {cache_path}")
+        logger.info("Write cache: %s", cache_path)
         if json_encoder:
             json.dump(data, fp=fp, indent=2, cls=json_encoder)
         else:

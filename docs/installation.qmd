@@ -21,6 +21,28 @@ from GitHub use
 pip install git+https://github.com/matthiaskoenig/pymetadata.git@develop
 ```
 
+## Logging
+
+`pymetadata` does not configure logging. It logs to loggers below the
+`pymetadata` logger and leaves handlers, levels and formatting to the
+application, so the messages of the package stay under your control:
+
+```python
+import logging
+
+logging.basicConfig(level=logging.INFO)
+logging.getLogger("pymetadata").setLevel(logging.WARNING)
+```
+
+For scripts and interactive work the rich output of the package can be turned
+on explicitly:
+
+```python
+from pymetadata import log
+
+log.enable_rich_logging()
+```
+
 ## Optional dependencies
 
 Regenerating the ontology enums reads OWL files and renders python modules from

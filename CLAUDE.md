@@ -83,8 +83,12 @@ assigning `pymetadata.CACHE_PATH = ...` after import. The corresponding tests
 (`test_ols.py`, `test_registry.py`, `test_chebi.py`, `test_unichem.py`) require
 network access.
 
-`console.py` (rich console) and `log.py` (`log.get_logger(__name__)`) provide the
-shared output/logging; modules use these rather than bare `print`/`logging`.
+`console.py` (rich console, for scripts and `__main__` blocks) and `log.py`
+(`log.get_logger(__name__)`, a plain `logging.getLogger`) provide the shared
+output/logging. The package never configures logging: no handlers, no levels,
+only a `NullHandler` on the `pymetadata` logger; `log.enable_rich_logging()` is
+the opt-in for scripts. Library code logs, it does not print, and log calls use
+lazy `%s` formatting rather than f-strings (enforced by ruff `G`).
 
 ## Conventions
 

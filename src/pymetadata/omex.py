@@ -441,7 +441,8 @@ class Manifest(BaseModel):
         for e in self.entries:
             if not e.location.startswith("."):
                 logger.warning(
-                    f"Relative location paths must start with './', but '{e.location}'."
+                    "Relative location paths must start with './', but '%s'.",
+                    e.location,
                 )
                 e.location = f"./{e.location}"
         self._entries_dict = {e.location: e for e in self.entries}
@@ -526,11 +527,11 @@ class Manifest(BaseModel):
 
         if location in [".", "./manifest.xml"]:
             logger.error(
-                f"Core location cannot be removed from manifest: '{location}'."
+                "Core location cannot be removed from manifest: '%s'.", location
             )
             return None
         if location not in self:
-            logger.error(f"The location '{location}' does not exist in manifest.")
+            logger.error("The location '%s' does not exist in manifest.", location)
             return None
         entry = self._entries_dict.pop(location)
         self.entries = [e for e in self.entries if e.location != location]
@@ -622,7 +623,7 @@ class Omex:
     def _check_omex_path(omex_path: Path) -> Path:
         """Check if omex path exist, is a file and a COMBINE archive."""
         if isinstance(omex_path, str):
-            logger.warning(f"'omex_path' should be 'Path': '{omex_path}'")
+            logger.warning("'omex_path' should be 'Path': '%s'", omex_path)
             omex_path = Path(omex_path)
 
         if not omex_path.exists():
@@ -650,7 +651,7 @@ class Omex:
         omex_path = Omex._check_omex_path(omex_path)
 
         if not zipfile.is_zipfile(str(omex_path)):
-            logger.warning(f"Omex path '{omex_path}' is not a zip archive.")
+            logger.warning("Omex path '%s' is not a zip archive.", omex_path)
             return False
 
         with zipfile.ZipFile(omex_path, mode="r") as zf:
@@ -659,7 +660,7 @@ class Omex:
                 return True
             except KeyError:
                 # manifest does not exist in archive
-                logger.warning(f"No 'manifest.xml' in '{omex_path}'.")
+                logger.warning("No 'manifest.xml' in '%s'.", omex_path)
                 return False
 
     @staticmethod
@@ -695,7 +696,7 @@ class Omex:
                         zipfile.ZIP_DEFLATED,
                         zipfile.ZIP_STORED,
                     }:
-                        logger.warning(f"Unsupported compression for: '{info}'")
+                        logger.warning("Unsupported compression for: '%s'", info)
                 # extract all files
                 zf.extractall(tmp_dir, pwd=password)
 
@@ -758,7 +759,7 @@ class Omex:
             ```
         """
         if isinstance(directory, str):
-            logger.warning(f"'directory' should be 'Path': '{directory}'")
+            logger.warning("'directory' should be 'Path': '%s'", directory)
             directory = Path(directory)
 
         if not directory.exists():
@@ -777,8 +778,8 @@ class Omex:
             manifest = Manifest.from_manifest(manifest_path)
         else:
             logger.error(
-                f"No 'manifest.xml' in directory: '{directory}'. Trying "
-                f"to create manifest.xml."
+                "No 'manifest.xml' in directory: '%s'. Trying to create manifest.xml.",
+                directory,
             )
 
         # new archive
@@ -795,7 +796,7 @@ class Omex:
                     # manifest is created from the internal manifest entries
                     continue
 
-                logger.debug(f"'{file_path}' -> '{location}'")
+                logger.debug("'%s' -> '%s'", file_path, location)
                 entry: ManifestEntry
                 if manifest and location in manifest:
                     # use entry from existing manifest
@@ -803,7 +804,8 @@ class Omex:
                 else:
                     if manifest and location not in manifest:
                         logger.warning(
-                            f"Entry with location missing in manifest.xml: '{location}'"
+                            "Entry with location missing in manifest.xml: '%s'",
+                            location,
                         )
 
                     format = Omex.guess_format(Path(file_path))
@@ -849,7 +851,7 @@ class Omex:
             ```
         """
         if isinstance(entry_path, str):
-            logger.warning(f"'entry_path' should be 'Path': '{entry_path}'")
+            logger.warning("'entry_path' should be 'Path': '%s'", entry_path)
             entry_path = Path(entry_path)
 
         if not entry_path.exists():
@@ -862,7 +864,7 @@ class Omex:
 
         if entry.location in self.manifest:
             logger.warning(
-                f"Location already exists and is overwritten: '{entry.location}'."
+                "Location already exists and is overwritten: '%s'.", entry.location
             )
             self.manifest.remove_entry_for_location(entry.location)
 
@@ -916,11 +918,11 @@ class Omex:
             ```
         """
         if isinstance(omex_path, str):
-            logger.warning(f"'omex_path' should be 'Path': '{omex_path}'")
+            logger.warning("'omex_path' should be 'Path': '%s'", omex_path)
             omex_path = Path(omex_path)
 
         if omex_path.exists():
-            logger.warning(f"Existing omex is overwritten: '{omex_path}'")
+            logger.warning("Existing omex is overwritten: '%s'", omex_path)
 
         # write tmp dir
         with tempfile.TemporaryDirectory() as tmp_dir:
@@ -953,11 +955,11 @@ class Omex:
             ```
         """
         if isinstance(output_dir, str):
-            logger.warning(f"'output_dir' should be 'Path': '{output_dir}'")
+            logger.warning("'output_dir' should be 'Path': '%s'", output_dir)
             output_dir = Path(output_dir)
 
         if output_dir and not output_dir.exists():
-            logger.warning(f"Creating working directory: {output_dir}")
+            logger.warning("Creating working directory: %s", output_dir)
             output_dir.mkdir(parents=True, exist_ok=True)
 
         # iterate over all locations and copy to destination
@@ -967,7 +969,7 @@ class Omex:
             src = self._tmp_dir / entry.location
             destination = output_dir / entry.location
             destination.parent.mkdir(parents=True, exist_ok=True)
-            logger.debug(f"'{src}' -> '{destination}")
+            logger.debug("'%s' -> '%s", src, destination)
             shutil.copy2(src=str(src), dst=str(destination))
 
         # write manifest.xml
@@ -1010,7 +1012,7 @@ class Omex:
         if hasattr(EntryFormat, format_key.upper()):
             return str(getattr(EntryFormat, format_key.upper()).value)
 
-        logger.error(f"Unknown format_key: {format_key}")
+        logger.error("Unknown format_key: %s", format_key)
         return PURL_PREFIX + "application/x.unknown"
 
     @staticmethod
@@ -1043,8 +1045,9 @@ class Omex:
                 except UnicodeDecodeError as err:
                     # handle incorrect encodings
                     logger.error(
-                        f"UnicodeDecodeError in '{path}', "
-                        f"incorrect file encoding: '{err}'"
+                        "UnicodeDecodeError in '%s', incorrect file encoding: '%s'",
+                        path,
+                        err,
                     )
 
         return Omex.lookup_format(extension)

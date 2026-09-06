@@ -7,6 +7,7 @@ a temporary directory.
 import tempfile
 from pathlib import Path
 
+from pymetadata import log
 from pymetadata.console import console
 from pymetadata.omex import EntryFormat, ManifestEntry, Omex
 
@@ -76,6 +77,7 @@ def create_archive_from_directory(directory: Path, omex_path: Path) -> None:
 
 
 if __name__ == "__main__":
+    log.enable_rich_logging()
     with tempfile.TemporaryDirectory() as tmp_dir:
         results_dir = Path(tmp_dir)
 

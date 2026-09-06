@@ -6,6 +6,7 @@ copy has to be managed.
 Run with `python -m pymetadata.examples.omex_from_url_example`.
 """
 
+from pymetadata import log
 from pymetadata.console import console
 from pymetadata.omex import Omex
 
@@ -15,6 +16,7 @@ OMEX_URL: str = (
 )
 
 if __name__ == "__main__":
+    log.enable_rich_logging()
     omex = Omex.from_url(OMEX_URL)
     console.print(omex)
 

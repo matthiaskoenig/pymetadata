@@ -179,7 +179,7 @@ class Registry:
         Returns:
             Namespaces of the registry by prefix.
         """
-        logger.info(f"Update registry from '{Registry.URL}'")
+        logger.info("Update registry from '%s'", Registry.URL)
         response = get_session().get(Registry.URL)
         response.raise_for_status()
         namespaces = response.json()["payload"]["namespaces"]
@@ -188,7 +188,7 @@ class Registry:
         for _, data in enumerate(namespaces):
             ns = Namespace.from_dict(data)
             if ns.prefix is None:
-                logger.warning(f"Namespace without prefix is ignored: '{ns}'")
+                logger.warning("Namespace without prefix is ignored: '%s'", ns)
                 continue
             ns_dict[ns.prefix] = ns
 
