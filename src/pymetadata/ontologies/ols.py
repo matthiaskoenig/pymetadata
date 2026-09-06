@@ -24,12 +24,11 @@ from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Any
 
-import requests
-
 import pymetadata
 from pymetadata import log
 from pymetadata.cache import read_json_cache, write_json_cache
 from pymetadata.identifiers.registry import get_registry
+from pymetadata.webservice import get_session
 
 logger = log.get_logger(__name__)
 
@@ -203,7 +202,7 @@ class OLSQuery:
         if not data:
             url = self.url_term_query.format(ontology, urliri)
             logger.info(f"Query: {url}")
-            response = requests.get(url)
+            response = get_session().get(url)
 
             if response.status_code != 200:
                 data = {

@@ -30,12 +30,11 @@ from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Any
 
-import requests
-
 import pymetadata
 from pymetadata import log
 from pymetadata.cache import DataclassJSONEncoder, read_json_cache, write_json_cache
 from pymetadata.console import console
+from pymetadata.webservice import get_session
 
 logger = log.get_logger(__name__)
 
@@ -181,7 +180,8 @@ class Registry:
             Namespaces of the registry by prefix.
         """
         logger.info(f"Update registry from '{Registry.URL}'")
-        response = requests.get(Registry.URL)
+        response = get_session().get(Registry.URL)
+        response.raise_for_status()
         namespaces = response.json()["payload"]["namespaces"]
 
         ns_dict: dict[str, Namespace] = {}

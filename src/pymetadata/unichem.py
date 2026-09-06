@@ -19,12 +19,11 @@ from dataclasses import dataclass, field
 from pathlib import Path
 from typing import ClassVar
 
-import requests
-
 import pymetadata
 from pymetadata import log
 from pymetadata.cache import DataclassJSONEncoder, read_json_cache, write_json_cache
 from pymetadata.core.xref import CrossReference
+from pymetadata.webservice import get_session
 
 logger = log.get_logger(__name__)
 
@@ -107,7 +106,12 @@ class UnichemQuery:
         else:
             # query data
             url = "https://www.ebi.ac.uk/unichem/api/v1/sources/"
-            response = requests.get(url)
+            response = get_session().get(url)
+            if response.status_code != 200:
+                raise OSError(
+                    f"Could not query UniChem sources, "
+                    f"'{response.status_code}' response for: '{url}'"
+                )
             data = response.json()
             if data["response"].lower() != "success":
                 raise OSError(f"Could not query UniChem sources: '{data}'")
@@ -149,7 +153,14 @@ class UnichemQuery:
             data = read_json_cache(xref_path)
         else:
             url = f"https://www.ebi.ac.uk/unichem/rest/inchikey/{inchikey}"
-            response = requests.get(url)
+            response = get_session().get(url)
+            if response.status_code != 200:
+                # the service answers with a HTML error page every now and then
+                logger.error(
+                    f"UniChem xrefs could not be retrieved for '{inchikey}', "
+                    f"'{response.status_code}' response for: '{url}'"
+                )
+                return []
             data = response.json()
             write_json_cache(
                 data=data, cache_path=xref_path, json_encoder=DataclassJSONEncoder

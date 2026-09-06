@@ -17,12 +17,11 @@ import contextlib
 from pathlib import Path
 from typing import Any
 
-import requests
-
 import pymetadata
 from pymetadata import log
 from pymetadata.cache import DataclassJSONEncoder, read_json_cache, write_json_cache
 from pymetadata.console import console
+from pymetadata.webservice import get_session
 
 logger = log.get_logger(__name__)
 
@@ -69,7 +68,7 @@ class ChebiQuery:
 
         # fetch and cache data
         if not data:
-            response = requests.get(
+            response = get_session().get(
                 url=f"https://www.ebi.ac.uk/chebi/backend/api/public/compounds/?chebi_ids={chebi}"
             )
             if response.status_code == 200:

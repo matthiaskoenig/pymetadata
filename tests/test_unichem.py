@@ -1,6 +1,9 @@
 """Testing unichem."""
 
 from pathlib import Path
+from typing import Any
+
+import requests
 
 from pymetadata.unichem import UnichemQuery, UnichemSource
 
@@ -53,3 +56,29 @@ def test_query_xref_for_inchikey_cache(tmp_path: Path) -> None:
     assert xrefs1
     assert xrefs2
     assert len(xrefs1) == len(xrefs2)
+
+
+def test_query_xrefs_server_error(tmp_path: Path, monkeypatch: Any) -> None:
+    """Test that a server error does not surface as a JSONDecodeError.
+
+    The UniChem service intermittently answers with a HTML error page, see #73.
+    """
+    html_error = "<!doctype html><html lang='en'>500 Internal Server Error</html>"
+
+    class FakeResponse:
+        status_code = 500
+        text = html_error
+        content = html_error.encode()
+
+        def json(self) -> Any:
+            raise requests.exceptions.JSONDecodeError("Expecting value", html_error, 0)
+
+    monkeypatch.setattr(
+        "pymetadata.unichem.get_session",
+        lambda: type("S", (), {"get": lambda self, url, **kw: FakeResponse()})(),
+    )
+
+    xrefs = UnichemQuery(cache=False, cache_path=tmp_path).query_xrefs_for_inchikey(
+        inchikey="NGBFQHCMQULJNZ-UHFFFAOYSA-N"
+    )
+    assert xrefs == []
