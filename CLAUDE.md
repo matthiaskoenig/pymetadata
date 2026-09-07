@@ -98,7 +98,7 @@ hits a remote API: `ols.py` (EBI OLS4), `registry.py` (identifiers.org),
 `chebi.py` and `unichem.py`, all going through the shared, retrying session of
 `webservices/webservice.py`. They share the JSON
 cache helpers in `cache.py`, gated by the module-level globals
-`pymetadata.CACHE_USE` (default `False`) and `pymetadata.CACHE_PATH`
+`pymetadata.CACHE_USE` (default `True`) and `pymetadata.CACHE_PATH`
 (`~/.cache/pymetadata`). These are read at call time, so consumers override them by
 assigning `pymetadata.CACHE_PATH = ...` after import. The corresponding tests
 (`test_ols.py`, `test_registry.py`, `test_chebi.py`, `test_unichem.py`) require

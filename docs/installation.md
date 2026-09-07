@@ -66,25 +66,25 @@ log.enable_rich_logging()
 
 ## Cache
 
-Some `pymetadata` features query web services: the [identifiers.org](https://identifiers.org) registry when annotations are validated, the [Ontology Lookup Service](https://www.ebi.ac.uk/ols4) when annotation information is resolved, and ChEBI and UniChem for substance cross references. Responses can be cached on disk so that repeated lookups of the same term do not hit the network again.
+Some `pymetadata` features query web services: the [identifiers.org](https://identifiers.org) registry when annotations are validated, the [Ontology Lookup Service](https://www.ebi.ac.uk/ols4) when annotation information is resolved, and ChEBI and UniChem for substance cross references. Responses are cached on disk so that repeated lookups of the same term do not hit the network again.
 
 Caching is controlled by two module level settings:
 
 ```python
 import pymetadata
 
-pymetadata.CACHE_USE  # False by default
+pymetadata.CACHE_USE  # True by default
 pymetadata.CACHE_PATH  # ~/.cache/pymetadata by default
 ```
 
-Both are read when a query is made, so they can be changed at any point after importing the package:
+Both are read when a query is made, so they can be changed at any point after importing the package, e.g., to cache elsewhere or to always see the current state of a service:
 
 ```python
 from pathlib import Path
 import pymetadata
 
-pymetadata.CACHE_USE = True
 pymetadata.CACHE_PATH = Path("/tmp/pymetadata_cache")
+pymetadata.CACHE_USE = False  # query the services every time
 ```
 
 The identifiers.org registry is cached independently of `CACHE_USE`. It is downloaded to `CACHE_PATH / "identifiers_registry.json"` and refreshed when the local copy is older than the cache duration (24 hours by default):

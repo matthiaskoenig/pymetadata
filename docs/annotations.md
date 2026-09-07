@@ -89,7 +89,7 @@ print(data.description)  # An RNA molecule that transfers the coding information
 print(data.synonyms)  # mRNA, ...
 ```
 
-Both steps require network access. Enable the cache (`pymetadata.CACHE_USE = True`) when resolving many annotations, so repeated terms are not queried again.
+Both steps require network access. Responses are cached on disk by default, so repeated terms are not queried again; see [Cache](installation.md#cache).
 
 ## Ontology terms { #ontology-terms }
 

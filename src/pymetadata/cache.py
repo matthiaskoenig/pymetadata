@@ -1,7 +1,7 @@
 """Caching of web service responses.
 
-Queries to identifiers.org, OLS, ChEBI and UniChem can be cached on disk so that
-repeated lookups of the same term do not hit the network again. Caching is off
+Queries to identifiers.org, OLS, ChEBI and UniChem are cached on disk so that
+repeated lookups of the same term do not hit the network again. Caching is on
 by default and controlled by `pymetadata.CACHE_USE` and `pymetadata.CACHE_PATH`,
 which are read at query time.
 """

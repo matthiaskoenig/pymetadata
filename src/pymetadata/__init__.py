@@ -15,5 +15,6 @@ RESOURCES_DIR: Path = Path(__file__).parent / "resources"
 #: the generated ontology modules, see `pymetadata.ontologies._ontology_builder`
 ONTOLOGY_DIR: Path = Path(__file__).parent / "ontologies"
 
-CACHE_USE: bool = False
+#: cache web service responses on disk, see `pymetadata.cache`
+CACHE_USE: bool = True
 CACHE_PATH: Path = Path.home() / ".cache" / "pymetadata"

@@ -12,7 +12,7 @@ with the package, so the modules here query remote services:
 
 All of them use the shared session of `webservice`, which retries transient
 server responses and applies a default timeout, and cache their responses with
-`pymetadata.cache` when `pymetadata.CACHE_USE` is set.
+`pymetadata.cache` while `pymetadata.CACHE_USE` is set, which it is by default.
 
 Every query needs network access, and the status code of a response has to be
 checked before it is parsed: a service which is unavailable for longer than the
