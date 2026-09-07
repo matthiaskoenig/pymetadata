@@ -45,6 +45,11 @@ def _lookup(
         terms: the terms of the ontology, keyed by identifier
         term: term or identifier, e.g., `SBO_0000247` or `SBO:0000247`
 
+    An ontology can import terms of other ontologies, e.g., PBPKO uses
+    `COB_0000013` (molecule), so the registered terms decide the membership,
+    not the prefix of the identifier. The prefix only tells apart an identifier
+    of another ontology from an unknown identifier of this ontology.
+
     Returns:
         The term of the ontology.
 
@@ -56,13 +61,13 @@ def _lookup(
         raise ValueError(f"Term is not a str or {ontology_id}: {term}")
 
     term_id = str(term).replace(":", "_", 1)
+    found = terms.get(term_id)
+    if found is not None:
+        return found
+
     if not term_id.startswith(ontology_id):
         raise ValueError(f"{term} is not a {ontology_id} id.")
-
-    found = terms.get(term_id)
-    if found is None:
-        raise AttributeError(f"{ontology_id} has no term '{term}'.")
-    return found
+    raise AttributeError(f"{ontology_id} has no term '{term}'.")
 
 
 class OntologyMeta(type):

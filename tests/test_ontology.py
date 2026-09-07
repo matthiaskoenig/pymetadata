@@ -1,5 +1,6 @@
 """Test ontology."""
 
+import copy
 import json
 import pickle
 
@@ -154,6 +155,25 @@ def test_term_identity() -> None:
 def test_term_pickle() -> None:
     """Test that a term survives a roundtrip through pickle."""
     assert pickle.loads(pickle.dumps(SBO.SIMPLE_CHEMICAL)) is SBO.SIMPLE_CHEMICAL
+
+
+def test_imported_term() -> None:
+    """Test that a term imported from another ontology belongs to the ontology.
+
+    PBPKO imports terms of other ontologies, e.g., `COB_0000013` (molecule),
+    which do not carry the PBPKO prefix.
+    """
+    term = PBPKO.COB_0000013
+
+    assert isinstance(term, PBPKO)
+    assert term in PBPKO
+    assert PBPKO["COB_0000013"] is term
+    assert PBPKO("COB:0000013") is term
+    assert PBPKO.validate("COB_0000013") is term
+    assert PBPKO.get_term(term) is term
+    assert pickle.loads(pickle.dumps(term)) is term
+    assert copy.deepcopy(term) is term
+    assert copy.deepcopy([(term, 1)]) == [(term, 1)]
 
 
 def test_term_unknown() -> None:
