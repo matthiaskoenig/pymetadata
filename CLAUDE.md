@@ -14,17 +14,15 @@ needed only to regenerate the ontology modules.
 ## Commands
 
 ```bash
-# environment (uv based)
-uv sync
-uv pip install -r pyproject.toml --extra dev
-uv tool install tox --with tox-uv
-pre-commit install
+# environment (uv based); the dev extra includes the ontology extra
+uv sync --extra dev
+uv run pre-commit install
 
 # tests
 pytest                          # all tests
 pytest tests/test_omex.py       # single file
 pytest tests/test_omex.py::test_entry_from_dict   # single test
-tox r -e py314                  # single tox env (py3.11-3.14 available)
+tox r -e py3.14                 # single tox env (py3.11-3.14 available)
 tox run-parallel                # full matrix + ty
 
 # lint / format / types
@@ -89,7 +87,7 @@ i.e., `ontologies/<id>.py` (plain python string building, no template engine).
 The definition of a term comes from the definition, the comment or the
 annotations, since SBO uses `rdfs:comment` and KISAO `skos:definition`. Running
 `python -m pymetadata.ontologies._ontology_builder` performs download +
-regeneration + import check, and needs `uv sync --extra ontology`.
+regeneration + import check, and needs `pronto` (part of `--extra dev`).
 `ontologies/__init__.py` re-exports `SBO`, `KISAO`, `PBPKO` and their
 `<ONTOLOGY>Type` aliases through a module `__getattr__`, so the generated code
 is only imported when a term is used and `pymetadata.webservices.ols` stays

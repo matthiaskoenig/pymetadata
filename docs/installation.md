@@ -1,22 +1,49 @@
 # Installation
 
-`pymetadata` requires python >= 3.11 and is available from [pypi](https://pypi.python.org/pypi/pymetadata):
+`pymetadata` requires python >= 3.11 and is available from [pypi](https://pypi.python.org/pypi/pymetadata). It is pure python without compiled dependencies, so the installation is the same on Linux, macOS and Windows.
 
-```bash
-pip install pymetadata
-```
+## With uv
 
-With [uv](https://docs.astral.sh/uv/):
+[uv](https://docs.astral.sh/uv/) is the recommended way to install the package. In a project it is added as a dependency, which resolves and locks it together with the rest of the environment:
 
 ```bash
 uv add pymetadata
 ```
 
-The package has no compiled dependencies, so the installation works the same on Linux, macOS and Windows. To install the current development version directly from GitHub use
+For a quick look without setting up a project, `uv run` installs it into a temporary environment for the duration of the command:
+
+```bash
+uv run --with pymetadata python
+```
+
+Into an existing virtual environment it is installed through the pip interface of uv:
+
+```bash
+uv venv
+uv pip install pymetadata
+```
+
+## With pip
+
+```bash
+pip install pymetadata
+```
+
+## Development version
+
+The current state of the `develop` branch is installed directly from GitHub:
+
+```bash
+uv add "pymetadata @ git+https://github.com/matthiaskoenig/pymetadata.git@develop"
+```
+
+or, with pip,
 
 ```bash
 pip install git+https://github.com/matthiaskoenig/pymetadata.git@develop
 ```
+
+To work on the repository itself, with the test and documentation tooling, see [Development](development.md).
 
 ## Logging
 
@@ -36,18 +63,6 @@ from pymetadata import log
 
 log.enable_rich_logging()
 ```
-
-## Optional dependencies
-
-Regenerating the ontologies reads OWL files and writes python modules, which needs `pronto`. These are optional, because the enums in `pymetadata.ontologies` are shipped with the package and using them requires nothing extra:
-
-```bash
-pip install pymetadata[ontology]
-```
-
-Without it `pymetadata.ontologies._ontology_builder` can still be imported, but `Ontology` raises an `ImportError` explaining what to install. See [Regenerating the ontologies](development.md#regenerating-the-ontologies).
-
-For a development setup with the test and documentation tooling see [Development](development.md).
 
 ## Cache
 

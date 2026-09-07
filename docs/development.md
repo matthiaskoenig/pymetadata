@@ -1,41 +1,58 @@
 # Development
 
-Contributions are welcome. The repository is [matthiaskoenig/pymetadata](https://github.com/matthiaskoenig/pymetadata); development happens on the `develop` branch.
+Contributions are welcome. The repository is [matthiaskoenig/pymetadata](https://github.com/matthiaskoenig/pymetadata); development happens against the `develop` branch via pull requests.
 
 ## Setup development environment
 
-To set up everything for the development environment use
+Development needs [uv](https://docs.astral.sh/uv/) and a checkout of the repository:
 
 ```bash
-# install core dependencies
-uv sync
-
-# install dev dependencies
-uv pip install -r pyproject.toml --extra dev
-uv tool install tox --with tox-uv
-
-# setup pre-commit hook
-uv pip install pre-commit
-pre-commit install
-pre-commit run
+git clone https://github.com/matthiaskoenig/pymetadata.git
+cd pymetadata
 ```
 
-The pre-commit hooks run the linter, the formatter and the type checker, i.e., the same checks that run in continuous integration.
+A single sync creates the virtual environment in `.venv`, installs `pymetadata` into it in editable mode and adds the complete tooling:
+
+```bash
+uv sync --extra dev
+```
+
+The `dev` extra contains everything used below, i.e., pytest, ruff, ty, tox, pre-commit, zensical and bump-my-version, and it pulls in the optional `ontology` extra, so nothing has to be installed separately. The python version is taken from `.python-version` (currently 3.14); to work against the oldest supported version instead use `uv sync --extra dev --python 3.11`, which replaces the environment.
+
+The tools are then run either with `uv run <command>`, which uses the environment without activating it, or from the activated environment:
+
+```bash
+source .venv/bin/activate        # Linux and macOS
+.venv\Scripts\activate           # Windows
+```
+
+The commands in this document are written without the `uv run` prefix; prepend it if the environment is not activated.
+
+The last step installs the git hook:
+
+```bash
+uv run pre-commit install          # install the hook, once per checkout
+uv run pre-commit run --all-files  # check the current state of the repository
+```
+
+From now on every commit is checked with ruff (lint and format) and ty, i.e., the same checks that run in continuous integration. On a commit only the changed files are looked at, `--all-files` checks the whole repository and is what a newly added hook should be tried with.
 
 ## Testing
 
-Testing is performed with pytest and tox:
+The tests are written with pytest, tox runs them against every supported python version.
 
-Run single tox target:
+The tox environments are named after the interpreter (`py3.11` to `py3.14`, see `envlist` in `tox.ini`), a single one is run with
 ```bash
-tox r -e py314
+tox r -e py3.14
 ```
-Run all tests in parallel:
+and the complete matrix, including the `ty` environment, in parallel with
 ```bash
 tox run-parallel
 ```
 
-To run the tests directly against the current environment use
+This needs the interpreters to be available, which uv installs with `uv python install 3.11 3.12 3.13 3.14`. Continuous integration runs the same environments as `uvx --with tox-uv tox -e py3.14`.
+
+To run the tests directly against the development environment use
 
 ```bash
 pytest                                            # the full suite
@@ -110,11 +127,10 @@ The `documentation` workflow runs both steps, so the files are regenerated with 
 `pymetadata.ontologies.sbo`, `kisao` and `pbpko` are generated modules and should not be edited by hand. They are rendered from the ontology releases by `pymetadata.ontologies._ontology_builder`, which is internal tooling for maintainers rather than part of the public API, and therefore not in the API reference:
 
 ```bash
-uv sync --extra ontology
 python -m pymetadata.ontologies._ontology_builder
 ```
 
-This needs the optional `ontology` dependency (`pronto`), which is not installed with the package because the generated enums work without it. The development environment (`--extra dev`) includes them.
+This needs the optional `ontology` dependency (`pronto`), which is not installed with the package because the generated terms work without it. It is part of the development environment, so `uv sync --extra dev` covers it.
 
 It downloads the OWL files of the packaged ontologies, stores them gzipped under `src/pymetadata/resources/ontologies/` (not part of the repository), and writes one python module per ontology: a class with one attribute per term, documented with the definition of the term so that editors show it, plus the information registered on the class; the behaviour comes from `OntologyTerm` in `pymetadata.ontologies.term`. The modules are written with plain python string building, there is no template engine. Adding an ontology means adding an `OntologyFile` entry and an entry to `ontology_patterns` with the id pattern of the ontology.
 
