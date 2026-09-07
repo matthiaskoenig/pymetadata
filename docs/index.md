@@ -70,18 +70,18 @@ If you have any questions or issues please [open an issue](https://github.com/ma
 
 If you use `pymetadata` please cite the archived software on [Zenodo](https://doi.org/10.5281/zenodo.5308801):
 
-> König, M. (2026). *pymetadata are python utilities for working with metadata* (Version 0.5.12) [Computer software]. Zenodo. https://doi.org/10.5281/zenodo.19709022
+> König, M. (2026). *pymetadata are python utilities for working with metadata* (Version 0.6.0) [Computer software]. Zenodo. https://doi.org/10.5281/zenodo.22639628
 
 ```bibtex
 @software{konig_pymetadata,
   author    = {König, Matthias},
   title     = {pymetadata are python utilities for working with metadata},
   year      = {2026},
-  month     = apr,
-  version   = {0.5.12},
+  month     = sep,
+  version   = {0.6.0},
   publisher = {Zenodo},
-  doi       = {10.5281/zenodo.19709022},
-  url       = {https://doi.org/10.5281/zenodo.19709022},
+  doi       = {10.5281/zenodo.22639628},
+  url       = {https://doi.org/10.5281/zenodo.22639628},
 }
 ```
 
