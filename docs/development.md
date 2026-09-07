@@ -140,7 +140,7 @@ Run `ruff format` afterwards, since the rendered modules are not formatted.
 
 A release is made from `develop`:
 
-1. update the ontology enums, see [Regenerating the ontologies](#regenerating-the-ontologies), and commit the changes
+1. update the ontology modules, see [Regenerating the ontologies](#regenerating-the-ontologies), and commit the changes
 2. write the release notes for the version in `release-notes/`
 3. make sure everything passes: `tox run-parallel`, `ruff check`, `tox r -e ty`
 4. check the version bump: `uvx bump-my-version bump [major|minor|patch] --dry-run -vv`
@@ -153,4 +153,4 @@ A release is made from `develop`:
     uv pip install pymetadata
     ```
 
-8. once Zenodo has archived the release, update the citation information: `date-released` in `CITATION.cff` and the version, date and version DOI in the BibTeX of `README.md` and `docs/index.md`
+8. once Zenodo has archived the release, update the citation information, i.e., `date-released` in `CITATION.cff` and the version, date and version DOI of the release in the citation of `README.md` and `docs/index.md`. `bump-my-version` only updates the version, not the date and the DOI, which are only known after the release
