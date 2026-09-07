@@ -386,6 +386,7 @@ class RDFAnnotationData(RDFAnnotation):
         self.qualifier = annotation.qualifier
         self.collection = annotation.collection
         self.term: str | None = annotation.term
+        self.provider = annotation.provider
         self.url: str | None = None
         self.description: str | None = None
         self.label: str | None = None
