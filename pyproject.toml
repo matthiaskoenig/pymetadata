@@ -8,6 +8,8 @@ dynamic = ["version"]
 description = "pymetadata are python utilities for working with metadata."
 readme = "README.md"
 requires-python = ">=3.11"
+license = "MIT"
+license-files = ["LICENSE"]
 authors = [
 	{name="Matthias König", email="konigmatt@googlemail.com"}
 ]
@@ -17,7 +19,6 @@ maintainers = [
 classifiers = [
 	"Development Status :: 4 - Beta",
 	"Intended Audience :: Science/Research",
-	"License :: OSI Approved :: MIT License",
 	"Operating System :: OS Independent",
 	"Programming Language :: Python :: 3.11",
 	"Programming Language :: Python :: 3.12",
@@ -42,8 +43,8 @@ dependencies = [
 ]
 
 [project.optional-dependencies]
-# reading ontologies and generating the enum modules in `pymetadata.ontologies`,
-# see `pymetadata.ontologies._ontology_builder`. Not needed to use the enums.
+# reading ontologies and generating the modules in `pymetadata.ontologies`,
+# see `pymetadata.ontologies._ontology_builder`. Not needed to use the terms.
 ontology = [
     "pronto>=2.7.3",
 ]
@@ -57,14 +58,15 @@ dev = [
     "pytest>=9.1.1",
     "pytest-cov>=7.1.0",
     "zensical>=0.0.59",
-    "mkdocstrings-python>=1.11.1",
+    "mkdocstrings-python>=2.0.8",
 ]
 
-[project_urls]
-Homepage = "https://github.com/matthiaskoenig/pymetadata"
+[project.urls]
+Homepage = "https://matthiaskoenig.github.io/pymetadata"
+Documentation = "https://matthiaskoenig.github.io/pymetadata"
 Repository = "https://github.com/matthiaskoenig/pymetadata"
-Documentation = "https://github.com/matthiaskoenig/pymetadata"
 Issues = "https://github.com/matthiaskoenig/pymetadata/issues"
+Changelog = "https://github.com/matthiaskoenig/pymetadata/tree/develop/release-notes"
 Download = "https://pypi.org/project/pymetadata"
 
 [tool.hatch.version]
@@ -75,6 +77,9 @@ path = "./src/pymetadata/__init__.py"
 exclude = [
     "src/pymetadata/oven",
 ]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
 
 [tool.ty.environment]
 # first-party modules live in the src layout; the checked python version is

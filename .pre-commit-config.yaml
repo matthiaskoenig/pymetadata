@@ -1,7 +1,8 @@
-# This is run as a precondition to commits, run manually via `pre-commit run`
-
-# When adding new hooks, it may make sense to once run
-# `pre-commit run --all-files` as by default only changed files are checked
+# Checks run before every commit, see `docs/development.md`.
+# Install once per checkout with `pre-commit install`.
+#
+# A commit only checks the changed files; `pre-commit run --all-files` checks
+# the whole repository, which is what a newly added hook should be tried with.
 
 repos:
 - repo: https://github.com/pre-commit/pre-commit-hooks
@@ -15,6 +16,9 @@ repos:
     description: Check json files for parseable syntax
   - id: check-added-large-files
     description: Prevent large files from being committed
+    # the generated ontology modules are 500-700 kB, see
+    # `pymetadata.ontologies._ontology_builder`
+    args: [ --maxkb=1000 ]
   - id: check-merge-conflict
     description: Check for files that contain merge conflict strings
   - id: check-symlinks

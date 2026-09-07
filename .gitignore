@@ -1,36 +1,31 @@
-uv.lock
-.vscode
+# python
+__pycache__/
 *.pyc
-*~
-.DS_Store
-.eggs/
-build
+
+# packaging artifacts (hatchling builds into dist/)
 dist/
 
-# rendered documentation (zensical output)
-site/
-.zensical/
-.idea
-cover/
+# environments, tool caches
+.venv/
 .tox/
-.venv
-.cache/
+.pytest_cache/
 .coverage
 coverage.xml
-.benchmark
-src/pymetadata.egg-info/
-src/pymetadata/resources/cache
+# build cache of zensical
+.cache/
 
+# rendered documentation, built by the `documentation` workflow
+site/
 
-wheels
-__pycache__
-.pytest_cache
-.Rhistory
-*.tsv#
-*.xlsx#
+# the lock file is not committed, pymetadata is a library and pins nothing
+uv.lock
 
-# OWL ontologies
+# editors, operating system
+.idea/
+.vscode/
+*~
+.DS_Store
+
+# OWL ontologies, downloaded to regenerate the ontology modules,
+# see `pymetadata.ontologies._ontology_builder`
 *.owl.gz
-
-# output of the examples
-src/pymetadata/examples/results/

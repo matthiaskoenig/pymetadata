@@ -1,7 +1,7 @@
 cff-version: 1.2.0
 message: "If you use pymetadata, please cite it as below."
 title: "pymetadata are python utilities for working with metadata"
-abstract: "pymetadata is a collection of python utilities for working with metadata in the context of COMBINE standards: COMBINE archives (OMEX), MIRIAM annotations and ontology enums."
+abstract: "pymetadata is a collection of python utilities for working with metadata in the context of COMBINE standards: COMBINE archives (OMEX), MIRIAM annotations and ontology terms."
 type: software
 authors:
   - family-names: "König"
