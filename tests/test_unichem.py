@@ -73,8 +73,9 @@ def test_query_xrefs_server_error(tmp_path: Path, monkeypatch: Any) -> None:
         def json(self) -> Any:
             raise requests.exceptions.JSONDecodeError("Expecting value", html_error, 0)
 
+    # the queries go through `get_json`, which uses the session of `webservice`
     monkeypatch.setattr(
-        "pymetadata.webservices.unichem.get_session",
+        "pymetadata.webservices.webservice.get_session",
         lambda: type("S", (), {"get": lambda self, url, **kw: FakeResponse()})(),
     )
 

@@ -26,9 +26,14 @@ from pathlib import Path
 from typing import Any
 
 import pymetadata
-from pymetadata.cache import read_json_cache, write_json_cache
+from pymetadata.cache import (
+    CACHE_DURATION_ONTOLOGY,
+    read_json_cache,
+    read_json_cache_fallback,
+    write_json_cache,
+)
 from pymetadata.webservices.registry import get_registry
-from pymetadata.webservices.webservice import get_session
+from pymetadata.webservices.webservice import WebserviceError, get_json
 
 logger = logging.getLogger(__name__)
 
@@ -89,7 +94,9 @@ ONTOLOGIES = [
 class OLSQuery:
     """Queries against the Ontology Lookup Service.
 
-    Responses can be cached on disk, see `pymetadata.CACHE_USE`.
+    Responses are cached on disk for `CACHE_DURATION_ONTOLOGY` hours, see
+    `pymetadata.CACHE_USE`. If OLS cannot be reached, cached content is used
+    however old it is.
 
     Attributes:
         ontologies: the queryable ontologies by name
@@ -196,35 +203,36 @@ class OLSQuery:
         data: dict[str, Any] = {}
         if self.cache:
             with contextlib.suppress(OSError):
-                # cache does not exist
-                data = read_json_cache(cache_path=cache_path)
+                # cache does not exist or is outdated
+                data = read_json_cache(
+                    cache_path=cache_path, max_age=CACHE_DURATION_ONTOLOGY
+                )
 
         if not data:
             url = self.url_term_query.format(ontology, urliri)
             logger.info("Query: %s", url)
-            response = get_session().get(url)
+            try:
+                data = get_json(url)
+            except WebserviceError as err:
+                # prefer outdated information over none, e.g., when offline
+                if self.cache:
+                    fallback = read_json_cache_fallback(cache_path, reason=str(err))
+                    if fallback is not None:
+                        return fallback
 
-            if response.status_code != 200:
-                data = {
-                    "errors": [f"{response.status_code} response for: '{url}'"],
+                return {"errors": [str(err)], "warnings": []}
+
+            if not data or "error" in data:
+                error_msg = f"Error in OLS query <{ontology}|{term}> at {url}: {data}"
+                logger.error(error_msg)
+                return {
+                    "errors": [error_msg],
                     "warnings": [],
                 }
-            else:
-                # print(response.text)
-                data = response.json()
-                if not data or "error" in data:
-                    error_msg = (
-                        f"Error in OLS query <{ontology}|{term}> at {url}: {data}"
-                    )
-                    logger.error(error_msg)
-                    return {
-                        "errors": [error_msg],
-                        "warnings": [],
-                    }
-                data["errors"] = []
-                data["warnings"] = []
-                if self.cache:
-                    write_json_cache(data=data, cache_path=cache_path)
+            data["errors"] = []
+            data["warnings"] = []
+            if self.cache:
+                write_json_cache(data=data, cache_path=cache_path)
 
         return data
 

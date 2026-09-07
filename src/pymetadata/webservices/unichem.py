@@ -14,6 +14,7 @@ xrefs = query.query_xrefs_for_inchikey("AAOVKJBEBIDNHE-UHFFFAOYSA-N")
 See <https://www.ebi.ac.uk/unichem/info/webservices>.
 """
 
+import contextlib
 import logging
 import urllib.parse
 from dataclasses import dataclass, field
@@ -21,9 +22,15 @@ from pathlib import Path
 from typing import ClassVar
 
 import pymetadata
-from pymetadata.cache import DataclassJSONEncoder, read_json_cache, write_json_cache
+from pymetadata.cache import (
+    CACHE_DURATION_ONTOLOGY,
+    DataclassJSONEncoder,
+    read_json_cache,
+    read_json_cache_fallback,
+    write_json_cache,
+)
 from pymetadata.core.xref import CrossReference
-from pymetadata.webservices.webservice import get_session
+from pymetadata.webservices.webservice import WebserviceError, get_json
 
 logger = logging.getLogger(__name__)
 
@@ -64,7 +71,9 @@ class UnichemQuery:
     """Queries against the UniChem web service.
 
     The sources of UniChem are retrieved once and shared by all instances.
-    Responses can be cached on disk, see `pymetadata.CACHE_USE`.
+    Responses are cached on disk for `CACHE_DURATION_ONTOLOGY` hours, see
+    `pymetadata.CACHE_USE`. If UniChem cannot be reached, cached content is used
+    however old it is.
     """
 
     sources: ClassVar[dict[int, UnichemSource]] = {}
@@ -95,39 +104,48 @@ class UnichemQuery:
 
         Returns:
             The sources by their UniChem source id.
+
+        Raises:
+            WebserviceError: if the sources are neither cached nor retrievable
         """
-        sources: dict[int, UnichemSource]
         unichem_sources_path = self.cache_path / "unichem_sources.json"
 
         data: dict
-        if self.cache and unichem_sources_path.exists():
-            data = read_json_cache(unichem_sources_path)
-            sources = {int(k): UnichemSource(**v) for k, v in data.items()}
-        else:
-            # query data
-            url = "https://www.ebi.ac.uk/unichem/api/v1/sources/"
-            response = get_session().get(url)
-            if response.status_code != 200:
-                raise OSError(
-                    f"Could not query UniChem sources, "
-                    f"'{response.status_code}' response for: '{url}'"
+        if self.cache:
+            with contextlib.suppress(OSError):
+                # cache does not exist or is outdated
+                data = read_json_cache(
+                    unichem_sources_path, max_age=CACHE_DURATION_ONTOLOGY
                 )
-            data = response.json()
+                return {int(k): UnichemSource(**v) for k, v in data.items()}
+
+        url = "https://www.ebi.ac.uk/unichem/api/v1/sources/"
+        try:
+            data = get_json(url)
             if data["response"].lower() != "success":
-                raise OSError(f"Could not query UniChem sources: '{data}'")
-
-            sources_list: list[UnichemSource] = [
-                UnichemSource(**v) for v in data["sources"]
-            ]
-            sources = {source.sourceID: source for source in sources_list}
-
-            # write cache
+                raise WebserviceError(f"Could not query UniChem sources: '{data}'")
+        except WebserviceError as err:
+            # prefer outdated sources over none, e.g., when offline
             if self.cache:
-                write_json_cache(
-                    data=sources,
-                    cache_path=unichem_sources_path,
-                    json_encoder=DataclassJSONEncoder,
+                fallback = read_json_cache_fallback(
+                    unichem_sources_path, reason=str(err)
                 )
+                if fallback is not None:
+                    return {int(k): UnichemSource(**v) for k, v in fallback.items()}
+            raise
+
+        sources_list: list[UnichemSource] = [
+            UnichemSource(**v) for v in data["sources"]
+        ]
+        sources = {source.sourceID: source for source in sources_list}
+
+        # write cache
+        if self.cache:
+            write_json_cache(
+                data=sources,
+                cache_path=unichem_sources_path,
+                json_encoder=DataclassJSONEncoder,
+            )
 
         return sources
 
@@ -148,25 +166,34 @@ class UnichemQuery:
         xref_path = xref_base_path / f"{inchikey}.json"
 
         # retrieve or query data
-        data: dict
-        if self.cache and xref_path.exists():
-            data = read_json_cache(xref_path)
-        else:
+        data: dict = {}
+        if self.cache:
+            with contextlib.suppress(OSError):
+                # cache does not exist or is outdated
+                data = read_json_cache(xref_path, max_age=CACHE_DURATION_ONTOLOGY)
+
+        if not data:
             url = f"https://www.ebi.ac.uk/unichem/rest/inchikey/{inchikey}"
-            response = get_session().get(url)
-            if response.status_code != 200:
-                # the service answers with a HTML error page every now and then
-                logger.error(
-                    "UniChem xrefs could not be retrieved for '%s', '%s' response for: '%s'",
-                    inchikey,
-                    response.status_code,
-                    url,
+            try:
+                data = get_json(url)
+            except WebserviceError as err:
+                # prefer outdated cross references over none, e.g., when offline
+                if self.cache:
+                    fallback = read_json_cache_fallback(xref_path, reason=str(err))
+                    if fallback is not None:
+                        data = fallback
+
+                if not data:
+                    logger.error(
+                        "UniChem xrefs could not be retrieved for '%s': %s",
+                        inchikey,
+                        err,
+                    )
+                    return []
+            else:
+                write_json_cache(
+                    data=data, cache_path=xref_path, json_encoder=DataclassJSONEncoder
                 )
-                return []
-            data = response.json()
-            write_json_cache(
-                data=data, cache_path=xref_path, json_encoder=DataclassJSONEncoder
-            )
 
         xrefs: list[CrossReference] = []
         if data:

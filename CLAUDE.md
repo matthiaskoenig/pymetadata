@@ -96,11 +96,17 @@ cheap (the `pymetadata.metadata` package was removed in 0.6.0).
 **Web services + caching.** The `webservices/` package holds everything which
 hits a remote API: `ols.py` (EBI OLS4), `registry.py` (identifiers.org),
 `chebi.py` and `unichem.py`, all going through the shared, retrying session of
-`webservices/webservice.py`. They share the JSON
-cache helpers in `cache.py`, gated by the module-level globals
+`webservices/webservice.py`, whose `get_json` turns an unreachable service, an
+error response and a non-JSON body into one `WebserviceError`. They share the
+JSON cache helpers in `cache.py`, gated by the module-level globals
 `pymetadata.CACHE_USE` (default `True`) and `pymetadata.CACHE_PATH`
 (`~/.cache/pymetadata`). These are read at call time, so consumers override them by
-assigning `pymetadata.CACHE_PATH = ...` after import. The corresponding tests
+assigning `pymetadata.CACHE_PATH = ...` after import. Cached content expires
+after `CACHE_DURATION_ONTOLOGY` (30 days, for OLS/ChEBI/UniChem, which describe
+an ontology release) or `CACHE_DURATION_REGISTRY` (24 h, for the identifiers.org
+registry). When a refresh fails, `read_json_cache_fallback` returns the outdated
+content with a warning instead of failing, so queries answered before keep
+working offline; `tests/test_offline.py` covers this per service. The corresponding tests
 (`test_ols.py`, `test_registry.py`, `test_chebi.py`, `test_unichem.py`) require
 network access.
 

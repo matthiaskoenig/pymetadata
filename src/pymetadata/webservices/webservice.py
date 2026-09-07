@@ -7,23 +7,27 @@ which retries these responses with an exponential backoff and applies a default
 timeout, so that a single hiccup of a service does not fail the query.
 
 ```python
-from pymetadata.webservices.webservice import get_session
+from pymetadata.webservices.webservice import get_json
 
-response = get_session().get("https://www.ebi.ac.uk/unichem/rest/inchikey/...")
-if response.status_code == 200:
-    data = response.json()
+data = get_json("https://www.ebi.ac.uk/unichem/rest/inchikey/...")
 ```
 
-The status code must still be checked before parsing the response: a service
-which is down for longer than the retries return an error response, and calling
-`response.json()` on it raises a `JSONDecodeError`.
+`get_json` raises a `WebserviceError` for everything which keeps a query from
+answering, i.e., an unreachable service, an error response and a response which
+is not JSON. A service which is down for longer than the retries answers with an
+HTML error page, so the status code has to be checked before the response is
+parsed; `get_json` does that and the callers fall back to their cache, see
+`pymetadata.cache`.
 """
 
+import logging
 from typing import Any
 
 import requests
 from requests.adapters import HTTPAdapter
 from urllib3.util.retry import Retry
+
+logger = logging.getLogger(__name__)
 
 #: transient responses, retried with a backoff
 RETRY_STATUS_CODES = (429, 500, 502, 503, 504)
@@ -93,3 +97,42 @@ def get_session() -> requests.Session:
         _SESSION = session
 
     return _SESSION
+
+
+class WebserviceError(OSError):
+    """Raised when a web service query cannot be answered.
+
+    Covers the unreachable service, the error response and the response which
+    is not JSON, i.e., everything a caller handles the same way: fall back to
+    the cached content, see `pymetadata.cache.read_json_cache_fallback`.
+    """
+
+
+def get_json(url: str) -> Any:
+    """Query a url and return the parsed JSON response.
+
+    Args:
+        url: url to query
+
+    Returns:
+        The parsed JSON response.
+
+    Raises:
+        WebserviceError: if the service cannot be reached, answers with a
+            status other than 200, or does not answer with JSON
+    """
+    logger.debug("Query: %s", url)
+    try:
+        response = get_session().get(url)
+    except requests.RequestException as err:
+        # no network, DNS failure, timeout, too many retries, ...
+        raise WebserviceError(f"Service is not reachable for '{url}': {err}") from err
+
+    if response.status_code != 200:
+        raise WebserviceError(f"'{response.status_code}' response for: '{url}'")
+
+    try:
+        return response.json()
+    except ValueError as err:
+        # a service which is down answers with an HTML error page
+        raise WebserviceError(f"Response for '{url}' is not JSON: {err}") from err

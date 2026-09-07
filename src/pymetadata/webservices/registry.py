@@ -7,7 +7,11 @@ references.
 
 The registry is downloaded once and cached in
 `CACHE_PATH / "identifiers_registry.json"`, and refreshed when the local copy is
-older than the cache duration.
+older than the cache duration of `CACHE_DURATION_REGISTRY` hours. Namespaces are
+added and corrected continuously, so the registry is refreshed daily, much more
+often than the ontology information of `pymetadata.webservices.ols`. If the
+refresh fails, because identifiers.org is unreachable, the outdated copy is used
+and a warning is logged.
 
 ```python
 from pymetadata.webservices.registry import Registry
@@ -25,16 +29,21 @@ from __future__ import annotations
 
 import inspect
 import logging
-import os
-import time
 from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Any
 
 import pymetadata
-from pymetadata.cache import DataclassJSONEncoder, read_json_cache, write_json_cache
+from pymetadata.cache import (
+    CACHE_DURATION_REGISTRY,
+    DataclassJSONEncoder,
+    cache_age,
+    read_json_cache,
+    read_json_cache_fallback,
+    write_json_cache,
+)
 from pymetadata.console import console
-from pymetadata.webservices.webservice import get_session
+from pymetadata.webservices.webservice import WebserviceError, get_json
 
 logger = logging.getLogger(__name__)
 
@@ -120,6 +129,10 @@ class Namespace:
 class Registry:
     """The identifiers.org registry, cached on disk.
 
+    The cached registry is refreshed once it is older than the cache duration.
+    If identifiers.org cannot be reached, the outdated copy is used however old
+    it is, so that validating annotations keeps working offline.
+
     Attributes:
         ns_dict: namespaces of the registry by prefix
         registry_path: path of the cached registry
@@ -129,7 +142,7 @@ class Registry:
 
     def __init__(
         self,
-        cache_duration: int = 24,
+        cache_duration: float = CACHE_DURATION_REGISTRY,
         cache: bool = True,
     ):
         """Load the registry, updating the cached copy if it is outdated.
@@ -137,33 +150,59 @@ class Registry:
         Args:
             cache_duration: maximum age of the cached registry in hours
             cache: use the cached registry; if False the registry is downloaded
+                and the cache is not read, not even when the download fails
+
+        Raises:
+            WebserviceError: if the registry is neither cached nor retrievable
         """
         self.registry_path = pymetadata.CACHE_PATH / "identifiers_registry.json"
 
         # check if update needed
-        if cache:
-            if os.path.exists(self.registry_path):
-                registry_age = (
-                    time.time() - os.path.getmtime(self.registry_path)
-                ) / 3600  # [hr]
-                update = registry_age > cache_duration
-            else:
-                update = True
-        else:
-            update = True
+        age = cache_age(self.registry_path) if cache else None
+        update = age is None or age > cache_duration
 
-        self.ns_dict: dict[str, Namespace] = (
-            self.update() if update else Registry.load_registry(self.registry_path)
-        )
+        if not update:
+            self.ns_dict: dict[str, Namespace] = Registry.load_registry(
+                self.registry_path
+            )
+            return
+
+        try:
+            self.ns_dict = self.update()
+        except WebserviceError as err:
+            # prefer an outdated registry over none, e.g., when offline
+            data = (
+                read_json_cache_fallback(self.registry_path, reason=str(err))
+                if cache
+                else None
+            )
+            if data is None:
+                raise
+            self.ns_dict = Registry.namespaces_from_dict(data)
 
     def update(self) -> dict[str, Namespace]:
         """Download the registry and return the namespaces.
 
         Returns:
             Namespaces of the registry by prefix.
+
+        Raises:
+            WebserviceError: if the registry could not be downloaded
         """
         Registry.update_registry(registry_path=self.registry_path)
         return Registry.load_registry(registry_path=self.registry_path)
+
+    @staticmethod
+    def namespaces_from_dict(data: dict[str, Any]) -> dict[str, Namespace]:
+        """Build the namespaces from the serialized registry.
+
+        Args:
+            data: content of the cached registry
+
+        Returns:
+            Namespaces of the registry by prefix.
+        """
+        return {k: Namespace(**v) for k, v in data.items()}
 
     @staticmethod
     def update_registry(
@@ -178,11 +217,12 @@ class Registry:
 
         Returns:
             Namespaces of the registry by prefix.
+
+        Raises:
+            WebserviceError: if the registry could not be downloaded
         """
         logger.info("Update registry from '%s'", Registry.URL)
-        response = get_session().get(Registry.URL)
-        response.raise_for_status()
-        namespaces = response.json()["payload"]["namespaces"]
+        namespaces = get_json(Registry.URL)["payload"]["namespaces"]
 
         ns_dict: dict[str, Namespace] = {}
         for _, data in enumerate(namespaces):
@@ -218,7 +258,7 @@ class Registry:
         if not d:
             raise ValueError("Registry could not be loaded from cache.")
 
-        return {k: Namespace(**v) for k, v in d.items()}
+        return Registry.namespaces_from_dict(d)
 
 
 _REGISTRY: Registry | None = None

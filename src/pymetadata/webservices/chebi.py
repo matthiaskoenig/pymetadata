@@ -19,9 +19,15 @@ from pathlib import Path
 from typing import Any
 
 import pymetadata
-from pymetadata.cache import DataclassJSONEncoder, read_json_cache, write_json_cache
+from pymetadata.cache import (
+    CACHE_DURATION_ONTOLOGY,
+    DataclassJSONEncoder,
+    read_json_cache,
+    read_json_cache_fallback,
+    write_json_cache,
+)
 from pymetadata.console import console
-from pymetadata.webservices.webservice import get_session
+from pymetadata.webservices.webservice import WebserviceError, get_json
 
 logger = logging.getLogger(__name__)
 
@@ -29,7 +35,9 @@ logger = logging.getLogger(__name__)
 class ChebiQuery:
     """Queries against the ChEBI web service.
 
-    Responses can be cached on disk, see `pymetadata.CACHE_USE`.
+    Responses are cached on disk for `CACHE_DURATION_ONTOLOGY` hours, see
+    `pymetadata.CACHE_USE`. If ChEBI cannot be reached, cached content is used
+    however old it is.
     """
 
     @staticmethod
@@ -63,18 +71,29 @@ class ChebiQuery:
         data: dict[str, Any] = {}
         if cache:
             with contextlib.suppress(OSError):
-                # cache does not exist
-                data = read_json_cache(cache_path=chebi_path)
+                # cache does not exist or is outdated
+                data = read_json_cache(
+                    cache_path=chebi_path, max_age=CACHE_DURATION_ONTOLOGY
+                )
 
         # fetch and cache data
         if not data:
-            response = get_session().get(
-                url=f"https://www.ebi.ac.uk/chebi/backend/api/public/compounds/?chebi_ids={chebi}"
+            url = (
+                "https://www.ebi.ac.uk/chebi/backend/api/public/compounds/"
+                f"?chebi_ids={chebi}"
             )
-            if response.status_code == 200:
-                result = response.json()
-            else:
-                logger.error("CHEBI information could not be retrieved for: %s", chebi)
+            try:
+                result = get_json(url)
+            except WebserviceError as err:
+                # prefer outdated information over none, e.g., when offline
+                if cache:
+                    fallback = read_json_cache_fallback(chebi_path, reason=str(err))
+                    if fallback is not None:
+                        return fallback
+
+                logger.error(
+                    "CHEBI information could not be retrieved for '%s': %s", chebi, err
+                )
                 return {}
 
             result = result[chebi]["data"]

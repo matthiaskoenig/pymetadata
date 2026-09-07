@@ -10,12 +10,6 @@
 uv add pymetadata
 ```
 
-For a quick look without setting up a project, `uv run` installs it into a temporary environment for the duration of the command:
-
-```bash
-uv run --with pymetadata python
-```
-
 Into an existing virtual environment it is installed through the pip interface of uv:
 
 ```bash
@@ -87,7 +81,31 @@ pymetadata.CACHE_PATH = Path("/tmp/pymetadata_cache")
 pymetadata.CACHE_USE = False  # query the services every time
 ```
 
-The identifiers.org registry is cached independently of `CACHE_USE`. It is downloaded to `CACHE_PATH / "identifiers_registry.json"` and refreshed when the local copy is older than the cache duration (24 hours by default):
+### Cache duration
+
+Cached content is refreshed once it is older than the cache duration of its service:
+
+| content | duration | why |
+| --- | --- | --- |
+| OLS, ChEBI and UniChem responses | 30 days | they describe the terms of an ontology release, which changes with the release |
+| identifiers.org registry | 24 hours | namespaces and their patterns are added and corrected continuously |
+
+The durations are `CACHE_DURATION_ONTOLOGY` and `CACHE_DURATION_REGISTRY` in `pymetadata.cache`.
+
+### Outdated content instead of a failure
+
+If content has to be refreshed but the service cannot be reached, because there is no network or the service is down, the outdated content is used and a warning is logged:
+
+```
+Using the cache from 1080.0 h ago, it could not be refreshed:
+/home/user/.cache/pymetadata/ols/....json (Service is not reachable for ...)
+```
+
+A query which was answered before therefore keeps working offline. Only a query which was never cached fails: `ChebiQuery.query` and `OLSQuery.query_ols` report the problem in their result, `UnichemQuery` and `Registry` raise a `WebserviceError`.
+
+### The registry
+
+The identifiers.org registry is cached independently of `CACHE_USE`. It is downloaded to `CACHE_PATH / "identifiers_registry.json"` and refreshed when the local copy is older than the cache duration:
 
 ```python
 from pymetadata.webservices.registry import Registry
