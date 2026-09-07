@@ -8,14 +8,15 @@ from rich.logging import RichHandler
 from pymetadata import log
 
 
-def test_get_logger_does_not_configure() -> None:
-    """Test that getting a logger neither adds a handler nor sets a level.
+def test_module_logger_is_not_configured() -> None:
+    """Test that a module of the package neither adds a handler nor sets a level.
 
     Configuring logging is the task of the application, not of the library.
     """
-    logger = log.get_logger("pymetadata.testing")
+    import pymetadata.omex  # noqa: F401
 
-    assert logger is logging.getLogger("pymetadata.testing")
+    logger = logging.getLogger("pymetadata.omex")
+
     assert logger.handlers == []
     assert logger.level == logging.NOTSET
 

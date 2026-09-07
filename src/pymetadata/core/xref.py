@@ -5,13 +5,12 @@ page for `CHEBI:33699`. `RDFAnnotationData` creates one cross reference per
 provider registered for a collection in the identifiers.org registry.
 """
 
+import logging
 import re
 from dataclasses import dataclass
 from urllib.parse import urlparse
 
-from pymetadata import log
-
-logger = log.get_logger(__name__)
+logger = logging.getLogger(__name__)
 
 url_regex = re.compile(
     r"^(?:http|ftp)s?://"  # http:// or https://

@@ -7,13 +7,12 @@ which are read at query time.
 """
 
 import json
+import logging
 from json.encoder import JSONEncoder
 from pathlib import Path
 from typing import Any
 
-from pymetadata import log
-
-logger = log.get_logger(__name__)
+logger = logging.getLogger(__name__)
 
 
 class DataclassJSONEncoder(JSONEncoder):

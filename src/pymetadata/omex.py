@@ -55,6 +55,7 @@ References:
     https://doi.org/10.2390/biecoll-jib-2015-261
 """
 
+import logging
 import os
 import pprint
 import shutil
@@ -69,9 +70,7 @@ from typing import Any
 import requests
 from pydantic import BaseModel, PrivateAttr
 
-from pymetadata import log
-
-logger = log.get_logger(__name__)
+logger = logging.getLogger(__name__)
 
 
 __all__ = ["EntryFormat", "Manifest", "ManifestEntry", "Omex"]

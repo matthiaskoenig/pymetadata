@@ -24,6 +24,7 @@ See <https://identifiers.org/> and
 from __future__ import annotations
 
 import inspect
+import logging
 import os
 import time
 from dataclasses import dataclass, field
@@ -31,12 +32,11 @@ from pathlib import Path
 from typing import Any
 
 import pymetadata
-from pymetadata import log
 from pymetadata.cache import DataclassJSONEncoder, read_json_cache, write_json_cache
 from pymetadata.console import console
 from pymetadata.webservices.webservice import get_session
 
-logger = log.get_logger(__name__)
+logger = logging.getLogger(__name__)
 
 
 @dataclass

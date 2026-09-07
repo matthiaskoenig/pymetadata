@@ -18,6 +18,7 @@ print(annotation.validate())
 ```
 """
 
+import logging
 import re
 import urllib.parse
 from enum import Enum
@@ -26,7 +27,6 @@ from typing import Any, ClassVar, Final
 
 import requests
 
-from pymetadata import log
 from pymetadata.core.miriam import BQB, BQM
 from pymetadata.core.xref import CrossReference, is_url
 from pymetadata.webservices.ols import ONTOLOGIES, OLSQuery
@@ -60,7 +60,7 @@ BIOREGISTRY_PATTERN: Final = re.compile(r"^https?://bioregistry.io/(.+)")
 
 MIRIAM_URN_PATTERN: Final = re.compile(r"^urn:miriam:(.+)")
 
-logger = log.get_logger(__name__)
+logger = logging.getLogger(__name__)
 
 
 class ProviderType(str, Enum):

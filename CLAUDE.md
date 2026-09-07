@@ -105,10 +105,10 @@ assigning `pymetadata.CACHE_PATH = ...` after import. The corresponding tests
 network access.
 
 `console.py` (rich console, for scripts and `__main__` blocks) and `log.py`
-(`log.get_logger(__name__)`, a plain `logging.getLogger`) provide the shared
-output/logging. The package never configures logging: no handlers, no levels,
-only a `NullHandler` on the `pymetadata` logger; `log.enable_rich_logging()` is
-the opt-in for scripts. Library code logs, it does not print, and log calls use
+provide the shared output/logging. Modules get their logger from the standard
+library with `logging.getLogger(__name__)`. The package never configures
+logging: no handlers, no levels, only a `NullHandler` on the `pymetadata`
+logger; `log.enable_rich_logging()` is the opt-in for scripts. Library code logs, it does not print, and log calls use
 lazy `%s` formatting rather than f-strings (enforced by ruff `G`).
 
 ## Conventions

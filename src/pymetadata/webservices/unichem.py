@@ -14,18 +14,18 @@ xrefs = query.query_xrefs_for_inchikey("AAOVKJBEBIDNHE-UHFFFAOYSA-N")
 See <https://www.ebi.ac.uk/unichem/info/webservices>.
 """
 
+import logging
 import urllib.parse
 from dataclasses import dataclass, field
 from pathlib import Path
 from typing import ClassVar
 
 import pymetadata
-from pymetadata import log
 from pymetadata.cache import DataclassJSONEncoder, read_json_cache, write_json_cache
 from pymetadata.core.xref import CrossReference
 from pymetadata.webservices.webservice import get_session
 
-logger = log.get_logger(__name__)
+logger = logging.getLogger(__name__)
 
 
 @dataclass

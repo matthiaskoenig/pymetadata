@@ -17,11 +17,10 @@ annotated entity, whereas `BQB.IS_VERSION_OF` is the weaker claim that it is one
 form of it.
 """
 
+import logging
 from enum import Enum
 
-from pymetadata import log
-
-logger = log.get_logger(__name__)
+logger = logging.getLogger(__name__)
 
 __all__ = [
     "BQB",

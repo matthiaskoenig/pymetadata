@@ -19,18 +19,18 @@ See <https://www.ebi.ac.uk/ols4>.
 """
 
 import contextlib
+import logging
 import urllib.parse
 from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Any
 
 import pymetadata
-from pymetadata import log
 from pymetadata.cache import read_json_cache, write_json_cache
 from pymetadata.webservices.registry import get_registry
 from pymetadata.webservices.webservice import get_session
 
-logger = log.get_logger(__name__)
+logger = logging.getLogger(__name__)
 
 
 @dataclass

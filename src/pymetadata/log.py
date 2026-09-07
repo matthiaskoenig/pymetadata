@@ -5,16 +5,16 @@ to them, it does not configure logging. Handlers, levels and formatting are left
 to the application, which keeps the messages of the package under the control of
 whoever uses it.
 
-Modules get their logger with
+Modules get their logger from the standard library with
 
 ```python
-from pymetadata import log
+import logging
 
-logger = log.get_logger(__name__)
+logger = logging.getLogger(__name__)
 ```
 
-which is `logging.getLogger(__name__)`. All loggers are below the `pymetadata`
-logger, so an application configures them in one place:
+All loggers are therefore below the `pymetadata` logger, so an application
+configures them in one place:
 
 ```python
 import logging
@@ -41,20 +41,6 @@ from pymetadata.console import console as default_console
 
 #: name of the logger all loggers of the package are below
 PACKAGE_LOGGER = "pymetadata"
-
-
-def get_logger(name: str) -> logging.Logger:
-    """Get the logger for a module.
-
-    No handler is attached and no level is set, see the module documentation.
-
-    Args:
-        name: name of the logger, usually `__name__`
-
-    Returns:
-        The logger for the name.
-    """
-    return logging.getLogger(name)
 
 
 def enable_rich_logging(

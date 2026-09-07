@@ -29,6 +29,7 @@ be edited by hand.
 
 import gzip
 import importlib
+import logging
 import re
 import shutil
 import tempfile
@@ -41,14 +42,14 @@ from typing import TYPE_CHECKING
 
 import requests
 
-from pymetadata import ONTOLOGY_DIR, RESOURCES_DIR, log
+from pymetadata import ONTOLOGY_DIR, RESOURCES_DIR
 
 if TYPE_CHECKING:
     from pronto.ontology import Ontology as ProntoOntology
     from pronto.relationship import Relationship as ProntoRelationship
     from pronto.term import Term as ProntoTerm
 
-logger = log.get_logger(__name__)
+logger = logging.getLogger(__name__)
 
 #: information collected for one term, i.e.
 #: `(label, definition, synonyms, deprecated)`
