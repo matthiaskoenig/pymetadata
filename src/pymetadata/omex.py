@@ -131,6 +131,7 @@ class EntryFormat(str, Enum):
     SCI = PURL_PREFIX + "application/x-scilab"
     XPP = PURL_PREFIX + "text/plain"
     SEDX = PURL_PREFIX + "application/x-sed-ml-archive"
+    ANTIMONY = PURL_PREFIX + "text/plain"
 
     H323 = PURL_PREFIX + "text/h323"
     ACX = PURL_PREFIX + "application/internet-property-stream"
