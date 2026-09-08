@@ -64,7 +64,7 @@ the web interface, so a change to a policy is reviewed like any other change:
 | ruleset                 | applies to | rules                                                                                                                                       |
 | ----------------------- | ---------- | ------------------------------------------------------------------------------------------------------------------------------------------- |
 | `develop.json`          | `develop`  | pull request required, the four checks above, resolved conversations, linear history, no force push, no deletion. **No bypass, for anybody.** |
-| `main.json`             | `main`     | linear history, no force push, no deletion; bypassed by the GitHub Actions app, which fast-forwards the branch on a release                   |
+| `main.json`             | `main`     | linear history, no force push, no deletion, no bypass. The fast-forward of the release workflow needs none, only a force push or a merge commit would be rejected |
 | `tags.json`             | all tags   | a tag cannot be deleted or moved, so a release tag keeps pointing at what was released                                                       |
 
 Changing a policy means changing the json and applying it:
