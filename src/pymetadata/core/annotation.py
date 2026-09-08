@@ -118,10 +118,10 @@ class RDFAnnotation:
         self.resource: str = resource
         self.provider: ProviderType = ProviderType.NONE
 
-        if not qualifier:
+        if not isinstance(qualifier, BQB | BQM):
             raise ValueError(
-                f"MIRIAM qualifiers are required for rdf annotation, but no "
-                f"qualifier for resource '{resource}' was provided."
+                f"MIRIAM qualifiers are required for rdf annotation, but "
+                f"'{qualifier}' was provided for resource '{resource}'."
             )
         if not resource:
             raise ValueError(
@@ -341,9 +341,7 @@ class RDFAnnotation:
             True if the qualifier is a MIRIAM qualifier and the term matches the
             pattern of its collection.
         """
-        valid_qualifier: bool = False
-        if self.qualifier:
-            valid_qualifier = self.check_qualifier(self.qualifier)
+        valid_qualifier: bool = self.check_qualifier(self.qualifier)
         valid_term: bool = True
         if self.collection and self.term:
             valid_term = self.check_miriam_term()
