@@ -5,7 +5,9 @@
 # a ruleset which already exists is updated instead of added a second time, so
 # it can be run again after every change of the json files.
 #
-# The file name of a ruleset has to match the "name" in the json.
+# The file name of a ruleset has to match the "name" in the json. A ruleset which
+# is removed from this directory stays on the repository, delete it with
+# `gh api -X DELETE repos/<owner>/<repo>/rulesets/<id>`.
 #
 # Requires the github cli (https://cli.github.com) authenticated as a user with
 # admin permission on the repository:

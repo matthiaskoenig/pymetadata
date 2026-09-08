@@ -41,10 +41,14 @@ Further rules of a pull request:
 - an approval is dismissed when new commits are pushed
 - the history stays linear, i.e., a pull request is merged with squash or
   rebase; merge commits are disabled
-- a pull request of a contributor needs a review and the approval of the
-  maintainer, who owns the whole repository in `.github/CODEOWNERS`. The
-  maintainer merges their own pull requests without an approval, since GitHub
-  does not allow approving ones own pull request
+- the maintainer is the code owner of the repository (`.github/CODEOWNERS`) and
+  is requested for review on every pull request. A pull request of a contributor
+  is therefore reviewed and merged by the maintainer, who has the only write
+  access. The rulesets themselves do not require an approval: on a personal
+  repository a ruleset cannot ask for an approval only from somebody else, and
+  requiring one would block the pull requests of the maintainer, who cannot
+  approve their own. Once a second person has write access, a ruleset requiring
+  an approving review of a code owner can be added
 
 [Auto-merge](https://docs.github.com/pull-requests/collaborating-with-pull-requests/incorporating-changes-from-a-pull-request/automatically-merging-a-pull-request)
 is enabled for the repository, so a pull request can be queued and is merged as
@@ -60,7 +64,6 @@ the web interface, so a change to a policy is reviewed like any other change:
 | ruleset                 | applies to | rules                                                                                                                                       |
 | ----------------------- | ---------- | ------------------------------------------------------------------------------------------------------------------------------------------- |
 | `develop.json`          | `develop`  | pull request required, the four checks above, resolved conversations, linear history, no force push, no deletion. **No bypass, for anybody.** |
-| `develop-review.json`   | `develop`  | one approving review of a code owner; bypassed by the repository admin                                                                       |
 | `main.json`             | `main`     | linear history, no force push, no deletion; bypassed by the GitHub Actions app, which fast-forwards the branch on a release                   |
 | `tags.json`             | all tags   | a tag cannot be deleted or moved, so a release tag keeps pointing at what was released                                                       |
 
