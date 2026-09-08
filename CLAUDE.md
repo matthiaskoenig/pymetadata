@@ -32,10 +32,18 @@ tox -e ty                       # ty type check (config in [tool.ty] in pyprojec
 uvx ty check                    # same check, straight from the working tree
 ```
 
-Release steps are in `docs/development.md` (there is no separate `RELEASE.md`);
-version bumps go through `uvx bump-my-version bump [major|minor|patch]` (updates
-`src/pymetadata/__init__.py` and `CITATION.cff`), and pushing the tag triggers
-the PyPI release workflow.
+`develop` is the default branch and takes every change through a pull request;
+direct pushes are rejected by the rulesets in `.github/rulesets/` (applied with
+`.github/rulesets/apply.sh`), which require the `tests`, `ruff`, `ty` and `docs`
+checks. `main` only tracks the latest release and is fast-forwarded by the
+`sync-main` job of the release workflow, never by hand.
+
+Release steps are in `docs/development.md` (there is no separate `RELEASE.md`):
+the release is prepared on a branch, `uvx bump-my-version bump [major|minor|patch]`
+updates `src/pymetadata/__init__.py` and `CITATION.cff` and commits without
+tagging (`tag = false`, a squash merge would rewrite the commit), and the tag is
+created on `develop` after the pull request was merged, which triggers the PyPI
+release workflow.
 
 Documentation is [Zensical](https://zensical.org/): markdown sources in `docs/`,
 configured in `zensical.toml`, built into the gitignored `site/`
