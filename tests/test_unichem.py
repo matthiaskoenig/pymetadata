@@ -8,6 +8,48 @@ import requests
 from pymetadata.webservices.unichem import UnichemQuery, UnichemSource
 
 
+def test_source_from_dict_current_fields() -> None:
+    """Test creating a source from the fields UniChem answers with."""
+    source = UnichemSource.from_dict(
+        {
+            "UCICount": 29916004,
+            "baseIdUrl": "https://www.surechembl.org/chemical/",
+            "created": None,
+            "description": "SureChEMBL extracts chemistry from patents.",
+            "lastChecked": "2026-09-15",
+            "name": "surechembl",
+            "nameLabel": "SureChEMBL",
+            "nameLong": "SureChEMBL",
+            "private": False,
+            "sourceID": 15,
+            "srcDetails": None,
+            "srcLastUpdated": "2026-09-12 00:49:52",
+            "srcUrl": "https://www.surechembl.org/",
+            "updateComments": None,
+        }
+    )
+    assert source.sourceID == 15
+    assert source.name == "surechembl"
+    assert source.baseIdUrl == "https://www.surechembl.org/chemical/"
+    assert source.lastChecked == "2026-09-15"
+    assert source.srcLastUpdated == "2026-09-12 00:49:52"
+
+
+def test_source_from_dict_schema_changes() -> None:
+    """Test that added and removed fields of UniChem do not break a source.
+
+    UniChem changed the fields of a source without notice, e.g., `lastChecked`
+    appeared and `srcReleaseNumber` disappeared.
+    """
+    source = UnichemSource.from_dict(
+        {"sourceID": 1, "name": "chembl", "srcReleaseNumber": 1, "newField": "x"}
+    )
+    assert source.sourceID == 1
+    assert source.name == "chembl"
+    assert source.baseIdUrl is None
+    assert not hasattr(source, "newField")
+
+
 def test_get_sources(tmp_path: Path) -> None:
     """Test retrieving sources."""
     cache_path: Path = tmp_path
