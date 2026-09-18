@@ -1,6 +1,6 @@
 # Installation
 
-`pymetadata` requires python >= 3.11 and is available from [pypi](https://pypi.python.org/pypi/pymetadata). It is pure python without compiled dependencies, so the installation is the same on Linux, macOS and Windows.
+`pymetadata` requires python >= 3.11 and is available from [pypi](https://pypi.python.org/pypi/pymetadata). It is pure python and tested with python 3.11 to 3.15 on Linux, macOS and Windows. The only compiled dependency is `pydantic-core`, which comes with [pydantic](https://docs.pydantic.dev/) and is installed from a wheel; for python 3.15 these wheels are part of pydantic 2.14, with an older pydantic it is built from source, which requires a Rust toolchain.
 
 ## With uv
 

@@ -22,7 +22,7 @@ uv run pre-commit install
 pytest                          # all tests
 pytest tests/test_omex.py       # single file
 pytest tests/test_omex.py::test_entry_from_dict   # single test
-tox r -e py3.14                 # single tox env (py3.11-3.14 available)
+tox r -e py3.15                 # single tox env (py3.11-3.15 available)
 tox run-parallel                # full matrix + ty
 
 # lint / format / types
