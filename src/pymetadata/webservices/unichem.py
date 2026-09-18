@@ -17,9 +17,9 @@ See <https://www.ebi.ac.uk/unichem/info/webservices>.
 import contextlib
 import logging
 import urllib.parse
-from dataclasses import dataclass, field
+from dataclasses import dataclass, field, fields
 from pathlib import Path
-from typing import ClassVar
+from typing import Any, ClassVar
 
 import pymetadata
 from pymetadata.cache import (
@@ -37,34 +37,62 @@ logger = logging.getLogger(__name__)
 
 @dataclass
 class UnichemSource:
-    """Unichem source.
+    """Database known to UniChem, see the `sources` endpoint of the web service.
 
-    src_id (the src_id for this source),
-    src_url (the main home page of the source),
-    name (the unique name for the source in UniChem, always lower case),
-    name_long (the full name of the source, as defined by the source),
-    name_label (A name for the source suitable for use as a 'label' for the source within a web-page. Correct case setting for source, and always less than 30 characters),
-    description (a description of the content of the source),
-    base_id_url_available (an flag indicating whether this source provides a valid base_id_url for creating cpd-specific links [1=yes, 0=no]).
-    base_id_url (the base url for constructing hyperlinks to this source [append an identifier from this source to the end of this url to create a valid url to a specific page for this cpd], unless aux_for_url=1),
-    aux_for_url (A flag to indicate whether the aux_src field should be used to create hyperlinks instead of the src_compound_id [1=yes, 0=no]
+    Only `sourceID` and `name` are required. UniChem adds and removes the
+    descriptive fields without notice, so they are optional, and
+    `UnichemSource.from_dict` ignores fields which are not declared here.
+
+    Attributes:
+        sourceID: id of the source in UniChem
+        name: unique name of the source in UniChem, always lower case
+        nameLabel: name suitable as label of the source, in the case used by
+            the source
+        nameLong: full name of the source, as defined by the source
+        srcUrl: home page of the source
+        baseIdUrl: base url for links to a compound in the source; the
+            identifier of the compound is appended or replaces `{$id}`
+        description: description of the content of the source
+        UCICount: number of UniChem compound identifiers in the source
+        created: date the source was added to UniChem
+        lastChecked: date UniChem checked the source for an update
+        srcLastUpdated: date of the last update of the source
+        srcDetails: details on the source
+        updateComments: comments on the update of the source
+        private: the source is not public
     """
 
     sourceID: int
-    srcUrl: str
     name: str
-    nameLabel: str = field(repr=False)
-    nameLong: str = field(repr=False)
-    UCICount: int = field(repr=False)
-    baseIdUrl: str = field(repr=False)
-    description: str = field(repr=False)
-    created: str = field(repr=False)
-    lastUpdated: str = field(repr=False)
-    srcDetails: str = field(repr=False)
-    srcReleaseDate: str = field(repr=False)
-    srcReleaseNumber: int = field(repr=False)
-    updateComments: str = field(repr=False)
-    private: bool = field(repr=False)
+    nameLabel: str | None = field(default=None, repr=False)
+    nameLong: str | None = field(default=None, repr=False)
+    srcUrl: str | None = None
+    baseIdUrl: str | None = field(default=None, repr=False)
+    description: str | None = field(default=None, repr=False)
+    UCICount: int | None = field(default=None, repr=False)
+    created: str | None = field(default=None, repr=False)
+    lastChecked: str | None = field(default=None, repr=False)
+    srcLastUpdated: str | None = field(default=None, repr=False)
+    srcDetails: str | None = field(default=None, repr=False)
+    updateComments: str | None = field(default=None, repr=False)
+    private: bool | None = field(default=None, repr=False)
+
+    @classmethod
+    def from_dict(cls, data: dict[str, Any]) -> "UnichemSource":
+        """Create a source from a source of the web service or of the cache.
+
+        Args:
+            data: fields of the source, fields unknown to `UnichemSource` are
+                ignored
+
+        Returns:
+            The source.
+        """
+        names = {f.name for f in fields(cls)}
+        unknown = sorted(set(data) - names)
+        if unknown:
+            logger.debug("Ignored fields of UniChem source: %s", unknown)
+        return cls(**{k: v for k, v in data.items() if k in names})
 
 
 class UnichemQuery:
@@ -117,7 +145,7 @@ class UnichemQuery:
                 data = read_json_cache(
                     unichem_sources_path, max_age=CACHE_DURATION_ONTOLOGY
                 )
-                return {int(k): UnichemSource(**v) for k, v in data.items()}
+                return {int(k): UnichemSource.from_dict(v) for k, v in data.items()}
 
         url = "https://www.ebi.ac.uk/unichem/api/v1/sources/"
         try:
@@ -131,11 +159,13 @@ class UnichemQuery:
                     unichem_sources_path, reason=str(err)
                 )
                 if fallback is not None:
-                    return {int(k): UnichemSource(**v) for k, v in fallback.items()}
+                    return {
+                        int(k): UnichemSource.from_dict(v) for k, v in fallback.items()
+                    }
             raise
 
         sources_list: list[UnichemSource] = [
-            UnichemSource(**v) for v in data["sources"]
+            UnichemSource.from_dict(v) for v in data["sources"]
         ]
         sources = {source.sourceID: source for source in sources_list}
 
@@ -219,9 +249,6 @@ class UnichemQuery:
                 accession = item["src_compound_id"]
                 if source.baseIdUrl:
                     # create and clean url
-                    if not source.baseIdUrl:
-                        continue
-
                     url = f"{source.baseIdUrl}{accession}"
 
                     url_accession = urllib.parse.quote(accession)
