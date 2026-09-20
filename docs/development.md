@@ -162,6 +162,8 @@ uvx ty check
 
 The configuration lives in `[tool.ty]` in `pyproject.toml`. Warnings are treated as errors, so the codebase is kept free of diagnostics. Suppress an unavoidable diagnostic with a rule specific `# ty: ignore[rule-name]` rather than a blanket comment.
 
+`[tool.pyright]` in `pyproject.toml` is not a second type check. It only points the [pyright](https://github.com/microsoft/pyright) language server, which editors and coding agents use for navigation, at the uv environment in `.venv`, so that the imports of the dependencies resolve.
+
 ## Documentation
 
 The documentation is built with [Zensical](https://zensical.org/), the static site generator of the Material for MkDocs authors. The sources are markdown files in `docs/`, the site is configured in `zensical.toml` in the repository root. Nothing rendered is committed: the site is built by the `documentation` workflow on every push and published to [matthiaskoenig.github.io/pymetadata](https://matthiaskoenig.github.io/pymetadata) from the `develop` branch.

@@ -93,3 +93,10 @@ include = ["src", "tests"]
 [tool.ty.terminal]
 # warnings are failures: keep the codebase free of any diagnostic
 error-on-warning = true
+
+[tool.pyright]
+# pyright is not a check of the project, types are checked with ty; this only
+# points the pyright language server of an editor or agent at the uv
+# environment, so that the dependencies resolve
+venvPath = "."
+venv = ".venv"
