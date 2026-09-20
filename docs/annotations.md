@@ -51,6 +51,14 @@ RDFAnnotation(qualifier=BQB.IS, resource="https://en.wikipedia.org/wiki/Cytosol"
 
 `resource_normalized` returns `https://identifiers.org/<prefix>:<accession>`. For namespaces which embed their prefix in the identifier (GO, CHEBI, SBO, BTO) the prefix is already part of the term and is not added a second time.
 
+The normalization never changes what a resource says: `resource_normalized` is a URL, and parsing it again gives the same `collection` and `term`. A collection which is not in the identifiers.org registry, or a term which does not carry the prefix of its collection, cannot be written as a compact identifier and is returned as `https://identifiers.org/<collection>/<term>`:
+
+```python
+annotation = RDFAnnotation(qualifier=BQB.IS, resource="urn:miriam:sabiork:1406")
+print(annotation.resource_normalized)
+# https://identifiers.org/sabiork/1406
+```
+
 ## Validation
 
 Validation answers two questions: is the qualifier a real MIRIAM qualifier, and does the term match the pattern the identifiers.org registry defines for its collection?
