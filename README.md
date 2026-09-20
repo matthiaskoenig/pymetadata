@@ -19,7 +19,7 @@ If you have any questions or issues please [open an issue](https://github.com/ma
 
 If you use `pymetadata` please cite the archived software on [Zenodo](https://doi.org/10.5281/zenodo.5308801):
 
-> König, M. (2026). *pymetadata are python utilities for working with metadata* (Version 0.6.0) [Computer software]. Zenodo. https://doi.org/10.5281/zenodo.22639628
+> König, M. (2026). *pymetadata are python utilities for working with metadata* (Version 0.6.4) [Computer software]. Zenodo. https://doi.org/10.5281/zenodo.22865571
 
 ```bibtex
 @software{konig_pymetadata,
@@ -27,10 +27,10 @@ If you use `pymetadata` please cite the archived software on [Zenodo](https://do
   title     = {pymetadata are python utilities for working with metadata},
   year      = {2026},
   month     = sep,
-  version   = {0.6.0},
+  version   = {0.6.4},
   publisher = {Zenodo},
-  doi       = {10.5281/zenodo.22639628},
-  url       = {https://doi.org/10.5281/zenodo.22639628},
+  doi       = {10.5281/zenodo.22865571},
+  url       = {https://doi.org/10.5281/zenodo.22865571},
 }
 ```
 
