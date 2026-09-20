@@ -743,6 +743,10 @@ class Omex:
         `Omex.guess_format`; SED-ML files added this way get `master=True`,
         as they are the entry point of a simulation study.
 
+        The entries are in the order of the manifest, followed by the files
+        which the manifest does not list, sorted by their location. The order
+        does not depend on the file system.
+
         Args:
             directory: directory with the content of the archive
 
@@ -785,7 +789,8 @@ class Omex:
         # new archive
         omex = Omex()
 
-        # iterate over all locations and add entry
+        # locations of all files
+        file_paths: dict[str, str] = {}
         for root, _dirs, files in os.walk(str(directory)):
             for file in files:
                 file_path = os.path.join(root, file)
@@ -795,32 +800,46 @@ class Omex:
                 if location == "./manifest.xml":
                     # manifest is created from the internal manifest entries
                     continue
+                file_paths[location] = file_path
 
-                logger.debug("'%s' -> '%s'", file_path, location)
-                entry: ManifestEntry
-                if manifest and location in manifest:
-                    # use entry from existing manifest
-                    entry = manifest[location]
-                else:
-                    if manifest and location not in manifest:
-                        logger.warning(
-                            "Entry with location missing in manifest.xml: '%s'",
-                            location,
-                        )
+        # The order of `os.walk` is the order of the file system, which differs
+        # between machines: the entries are added in the order of the manifest,
+        # followed by the files which the manifest does not list, by location.
+        positions: dict[str, int] = {}
+        if manifest:
+            positions = {e.location: k for k, e in enumerate(manifest.entries)}
+        locations = sorted(
+            file_paths, key=lambda loc: (positions.get(loc, len(positions)), loc)
+        )
 
-                    format = Omex.guess_format(Path(file_path))
-                    master = False
-                    if format and ManifestEntry.is_format(
-                        format_key="sedml", format=format
-                    ):
-                        master = True
-                    entry = ManifestEntry(
-                        location=location,
-                        format=format,
-                        master=master,
+        # iterate over all locations and add entry
+        for location in locations:
+            file_path = file_paths[location]
+            logger.debug("'%s' -> '%s'", file_path, location)
+            entry: ManifestEntry
+            if manifest and location in manifest:
+                # use entry from existing manifest
+                entry = manifest[location]
+            else:
+                if manifest and location not in manifest:
+                    logger.warning(
+                        "Entry with location missing in manifest.xml: '%s'",
+                        location,
                     )
 
-                omex.add_entry(entry_path=Path(file_path), entry=entry)
+                format = Omex.guess_format(Path(file_path))
+                master = False
+                if format and ManifestEntry.is_format(
+                    format_key="sedml", format=format
+                ):
+                    master = True
+                entry = ManifestEntry(
+                    location=location,
+                    format=format,
+                    master=master,
+                )
+
+            omex.add_entry(entry_path=Path(file_path), entry=entry)
 
         return omex
 
