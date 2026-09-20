@@ -48,11 +48,13 @@ def get_ols_query() -> OLSQuery:
 
 
 IDENTIFIERS_ORG_PREFIX: Final = "https://identifiers.org"
+# prefixes of the registry consist of letters, digits, `.`, `_` and `-`,
+# e.g., `ec-code` or `go_ref`
 IDENTIFIERS_ORG_PATTERN_COMPACT: Final = re.compile(
-    r"^https?://identifiers.org/([a-zA-Z0-9.]+):(.+)"
+    r"^https?://identifiers.org/([a-zA-Z0-9._-]+):(.+)"
 )
 IDENTIFIERS_ORG_PATTERN_CLASSIC: Final = re.compile(
-    r"^https?://identifiers.org/([a-zA-Z0-9.]+)/(.+)"
+    r"^https?://identifiers.org/([a-zA-Z0-9._-]+)/(.+)"
 )
 
 BIOREGISTRY_PREFIX: Final = "https://bioregistry.io"
@@ -167,21 +169,15 @@ class RDFAnnotation:
             match3 = MIRIAM_URN_PATTERN.match(resource)
             if match3:
                 tokens = match3.group(1).split(":")
-                self.collection = tokens[0]
+                self.collection = tokens[0].lower()
                 self.term = ":".join(tokens[1:]).replace("%3A", ":")
                 self.provider = ProviderType.IDENTIFIERS_ORG
-
-                logger.warning(
-                    "Deprecated urn pattern `%s` updated: %s",
-                    resource,
-                    self.resource_normalized,
-                )
 
         else:
             # handle short notation
             tokens = resource.split("/")
             if len(tokens) > 1:
-                self.collection = tokens[0]
+                self.collection = tokens[0].lower()
                 self.term = "/".join(tokens[1:])
                 self.provider = ProviderType.IDENTIFIERS_ORG
             elif len(tokens) == 1 and ":" in tokens[0]:
@@ -208,6 +204,13 @@ class RDFAnnotation:
         # clean legacy collections
         if self.collection in self.replaced_collections:
             self.collection = self.replaced_collections[self.collection]
+
+        if resource.startswith("urn:miriam:"):
+            logger.warning(
+                "Deprecated urn pattern `%s` updated: %s",
+                resource,
+                self.resource_normalized,
+            )
 
         if validate:
             self.validate()
@@ -244,21 +247,33 @@ class RDFAnnotation:
         `https://identifiers.org/<prefix>:<accession>`. If the namespace is
         embedded in the LUI the prefix is already part of the term, otherwise
         the prefix of the identifiers.org registry is prepended.
+
+        The normalization never changes what the resource says: the result is
+        an url, and parsing it again yields the same `collection` and `term`.
+        A collection which is not in the registry, or a term which does not
+        carry the prefix of its collection, can not be written as a compact
+        identifier and is returned as
+        `https://identifiers.org/<collection>/<term>`. Whether the term is
+        valid does not matter here, this is the task of `validate`.
+
+        Resources without a collection, i.e., arbitrary urls, are returned
+        unchanged.
         """
         if not self.term:
             return None
 
-        if (
-            self.provider == ProviderType.IDENTIFIERS_ORG
-            and self.collection is not None
-        ):
-            namespace = get_registry().ns_dict.get(self.collection, None)
-            if namespace:
-                if namespace.namespaceEmbeddedInLui:
-                    return f"{IDENTIFIERS_ORG_PREFIX}/{self.term}"
-                return f"{IDENTIFIERS_ORG_PREFIX}/{self.collection}:{self.term}"
+        if self.provider != ProviderType.IDENTIFIERS_ORG or self.collection is None:
+            return self.term
 
-        return self.term
+        namespace = get_registry().ns_dict.get(self.collection, None)
+        if namespace and not namespace.namespaceEmbeddedInLui:
+            return f"{IDENTIFIERS_ORG_PREFIX}/{self.collection}:{self.term}"
+
+        # the term is only a compact identifier if its prefix is the collection
+        if self.term.lower().startswith(f"{self.collection}:"):
+            return f"{IDENTIFIERS_ORG_PREFIX}/{self.term}"
+
+        return f"{IDENTIFIERS_ORG_PREFIX}/{self.collection}/{self.term}"
 
     def __repr__(self) -> str:
         """Get representation string."""

@@ -227,3 +227,82 @@ def test_resource_normalized(resource: str, expected: str) -> None:
     """Test normalization to identifiers.org compact identifiers."""
     a = RDFAnnotation(qualifier=BQB.IS, resource=resource)
     assert a.resource_normalized == expected
+
+
+resource_kept_data = [
+    # collection which is not in the registry (see #81)
+    ("http://identifiers.org/sabiork/1406", "https://identifiers.org/sabiork/1406"),
+    ("urn:miriam:foo:bar", "https://identifiers.org/foo/bar"),
+    ("foo/bar", "https://identifiers.org/foo/bar"),
+    # collection which is not in the registry, term with a prefix of its own
+    (
+        "http://identifiers.org/unit/UO:0000040",
+        "https://identifiers.org/unit/UO:0000040",
+    ),
+    # compact identifier of a prefix which is not in the registry
+    ("https://identifiers.org/CMO:0000012", "https://identifiers.org/CMO:0000012"),
+    ("CMO:0000012", "https://identifiers.org/CMO:0000012"),
+    # term which does not match the pattern of its collection
+    (
+        "http://identifiers.org/chebi/000000035",
+        "https://identifiers.org/chebi/000000035",
+    ),
+    ("taxonomy/abc", "https://identifiers.org/taxonomy:abc"),
+    # prefix with a hyphen or an underscore
+    ("urn:miriam:ec-code:1.1.1.1", "https://identifiers.org/ec-code:1.1.1.1"),
+    (
+        "https://identifiers.org/ec-code/1.1.1.1",
+        "https://identifiers.org/ec-code:1.1.1.1",
+    ),
+    ("go_ref/GO_REF:0000041", "https://identifiers.org/GO_REF:0000041"),
+    (
+        "https://identifiers.org/GO_REF:0000041",
+        "https://identifiers.org/GO_REF:0000041",
+    ),
+    # prefixes are case insensitive
+    ("urn:miriam:CHEBI:CHEBI%3A33699", "https://identifiers.org/CHEBI:33699"),
+    ("TAXONOMY/9606", "https://identifiers.org/taxonomy:9606"),
+]
+
+
+def assert_resource_kept(resource: str) -> None:
+    """Assert that the normalized resource is a url with the same meaning."""
+    a = RDFAnnotation(qualifier=BQB.IS, resource=resource, validate=False)
+    normalized = a.resource_normalized
+    assert normalized
+    assert normalized.startswith("https://")
+
+    b = RDFAnnotation(qualifier=BQB.IS, resource=normalized, validate=False)
+    assert (b.collection, b.term) == (a.collection, a.term)
+    assert b.resource_normalized == normalized
+
+
+@pytest.mark.parametrize("resource,expected", resource_kept_data)
+def test_resource_normalized_keeps_resource(resource: str, expected: str) -> None:
+    """Test that collection and term survive the normalization, see #81."""
+    a = RDFAnnotation(qualifier=BQB.IS, resource=resource, validate=False)
+    assert a.resource_normalized == expected
+    assert_resource_kept(resource)
+
+
+@pytest.mark.parametrize(
+    "resource", [resource for resource, _ in resource_normalized_data]
+)
+def test_resource_normalized_roundtrip(resource: str) -> None:
+    """Test that the normalized resource parses to the same annotation."""
+    assert_resource_kept(resource)
+
+
+def test_resource_normalized_registry() -> None:
+    """Test the normalization with the sample of every registry namespace."""
+    from pymetadata.webservices.registry import get_registry
+
+    for prefix, namespace in get_registry().ns_dict.items():
+        sample_id = namespace.sampleId
+        if not sample_id:
+            continue
+        for resource in [
+            f"https://identifiers.org/{prefix}/{sample_id}",
+            f"urn:miriam:{prefix}:{sample_id.replace(':', '%3A')}",
+        ]:
+            assert_resource_kept(resource)
