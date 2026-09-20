@@ -272,3 +272,66 @@ def test_manifest_without_namespace(tmp_path: Path) -> None:
     manifest = Manifest.from_manifest(manifest_path)
     assert len(manifest) == 2
     assert manifest["./model.xml"].master is True
+
+
+# locations of a manifest in an order which is neither sorted nor the order in
+# which the files are created, so that no file system returns it by chance
+ORDERED_LOCATIONS = [
+    f"./{directory}{name}.xml"
+    for name in ["m", "b", "z", "a", "q", "c", "y", "d"]
+    for directory in ["models/", "", "data/"]
+]
+
+
+def _ordered_directory(directory: Path, locations: list[str]) -> Path:
+    """Write the files of all locations and a manifest which lists `locations`."""
+    for location in sorted(ORDERED_LOCATIONS):
+        path = directory / location
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.write_text("<sbml/>")
+
+    manifest = Manifest()
+    for location in locations:
+        manifest.add_entry(ManifestEntry(location=location, format="sbml"))
+    manifest.to_manifest(directory / "manifest.xml")
+    return directory
+
+
+def test_from_directory_keeps_manifest_order(tmp_path: Path) -> None:
+    """The entries of a directory are in the order of its manifest.
+
+    The order in which the file system returns the files differs between
+    machines and must not be the order of the entries.
+    """
+    directory = _ordered_directory(tmp_path, ORDERED_LOCATIONS)
+    omex = Omex.from_directory(directory)
+    locations = [entry.location for entry in omex.manifest.entries]
+    assert locations == [".", "./manifest.xml", *ORDERED_LOCATIONS]
+
+
+def test_from_directory_appends_unlisted_files(tmp_path: Path) -> None:
+    """Files which the manifest does not list follow the listed ones, sorted."""
+    listed = ORDERED_LOCATIONS[:5]
+    directory = _ordered_directory(tmp_path, listed)
+    omex = Omex.from_directory(directory)
+    locations = [entry.location for entry in omex.manifest.entries]
+    unlisted = sorted(set(ORDERED_LOCATIONS) - set(listed))
+    assert locations == [".", "./manifest.xml", *listed, *unlisted]
+
+
+def test_from_directory_without_manifest_is_sorted(tmp_path: Path) -> None:
+    """Without a manifest the entries are sorted by their location."""
+    directory = _ordered_directory(tmp_path, [])
+    (directory / "manifest.xml").unlink()
+    omex = Omex.from_directory(directory)
+    locations = [entry.location for entry in omex.manifest.entries]
+    assert locations == [".", "./manifest.xml", *sorted(ORDERED_LOCATIONS)]
+
+
+def test_omex_roundtrip_keeps_manifest_order(tmp_path: Path) -> None:
+    """The order of the entries survives writing and reading an archive."""
+    omex = Omex.from_directory(_ordered_directory(tmp_path / "in", ORDERED_LOCATIONS))
+    omex_path = tmp_path / "ordered.omex"
+    omex.to_omex(omex_path)
+    locations = [entry.location for entry in Omex.from_omex(omex_path).manifest.entries]
+    assert locations == [".", "./manifest.xml", *ORDERED_LOCATIONS]
