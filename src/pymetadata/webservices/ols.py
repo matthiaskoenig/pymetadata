@@ -20,6 +20,7 @@ See <https://www.ebi.ac.uk/ols4>.
 
 import contextlib
 import logging
+import re
 import urllib.parse
 from dataclasses import dataclass, field
 from pathlib import Path
@@ -70,6 +71,7 @@ ONTOLOGIES = [
     OLSOntology(name="cmo"),
     OLSOntology(name="chmo"),
     OLSOntology(name="doid"),
+    OLSOntology(name="dron"),
     OLSOntology(name="efo", iri_pattern="http://www.ebi.ac.uk/efo/EFO_{$Id}"),
     OLSOntology(name="fix"),
     OLSOntology(name="fma"),
@@ -81,12 +83,14 @@ ONTOLOGIES = [
     OLSOntology(name="mondo"),
     OLSOntology(name="ncit"),
     OLSOntology(name="mp"),
+    OLSOntology(name="mmo"),
     OLSOntology(name="oba"),
     OLSOntology(name="opmi"),
     OLSOntology(name="omit"),
     OLSOntology(
         name="sio", iri_pattern="http://semanticscience.org/resource/SIO_{$Id}"
     ),
+    OLSOntology(name="scdo"),
     OLSOntology(name="vto"),
 ]
 
@@ -146,8 +150,7 @@ class OLSQuery:
         """
         ols_ontology: OLSOntology | None = self.ontologies.get(ontology, None)
         # remove prefix if existing
-        if term.startswith(ontology.upper()):
-            term = term.replace(f"{ontology.upper()}:", "")
+        term = re.sub(rf"^{re.escape(ontology)}[:_]", "", term, count=1, flags=re.I)
 
         if ols_ontology is None:
             logger.warning(
@@ -177,22 +180,20 @@ class OLSQuery:
         if not term:
             return {"errors": [], "warnings": [f"No term: '{ontology}'"]}
 
-        namespace = get_registry().ns_dict.get(ontology)
-        ols_pattern = None
-        if namespace and namespace.resources:
-            for ns_resource in namespace.resources:
-                if ns_resource.providerCode == "ols":
-                    ols_pattern = ns_resource.urlPattern
-                    break
-
-        if not ols_pattern:
-            return {
-                "errors": [],
-                "warnings": [f"'{ontology}' is not on OLS."],
-            }
-
         if ontology == "taxonomy":
             ontology = "ncbitaxon"
+
+        # Configured ontologies need no identifiers.org namespace. Bioregistry
+        # includes ontologies which are absent from that registry.
+        if ontology not in self.ontologies:
+            namespace = get_registry().ns_dict.get(ontology)
+            if not namespace or not any(
+                resource.providerCode == "ols" for resource in namespace.resources or []
+            ):
+                return {
+                    "errors": [],
+                    "warnings": [f"'{ontology}' is not on OLS."],
+                }
 
         iri = self.get_iri(ontology=ontology, term=term)
 

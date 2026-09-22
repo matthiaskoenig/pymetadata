@@ -149,7 +149,7 @@ rdf_annotation_data = [
     (
         BQB.IS,
         "https://bioregistry.io/chebi:15996",
-        "RDFAnnotation(BQB.IS|None|https://bioregistry.io/chebi:15996|bioregistry.io)",
+        "RDFAnnotation(BQB.IS|chebi|chebi:15996|bioregistry.io)",
     ),
     (
         BQB.IS,
