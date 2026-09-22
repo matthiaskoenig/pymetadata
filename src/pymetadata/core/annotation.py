@@ -58,7 +58,9 @@ IDENTIFIERS_ORG_PATTERN_CLASSIC: Final = re.compile(
 )
 
 BIOREGISTRY_PREFIX: Final = "https://bioregistry.io"
-BIOREGISTRY_PATTERN: Final = re.compile(r"^https?://bioregistry.io/(.+)")
+BIOREGISTRY_PATTERN: Final = re.compile(
+    r"^https?://bioregistry\.io/([a-zA-Z0-9._-]+):([^?#]+)$"
+)
 
 MIRIAM_URN_PATTERN: Final = re.compile(r"^urn:miriam:(.+)")
 
@@ -155,7 +157,12 @@ class RDFAnnotation:
                 # other urls are directly stored as resources without collection
                 self.collection = None
                 self.term = resource
-                if BIOREGISTRY_PATTERN.match(resource):
+                match_bioregistry = BIOREGISTRY_PATTERN.match(resource)
+                if match_bioregistry:
+                    self.collection = match_bioregistry.group(1).lower()
+                    self.term = (
+                        f"{match_bioregistry.group(1)}:{match_bioregistry.group(2)}"
+                    )
                     self.provider = ProviderType.BIOREGISTRY_IO
                 else:
                     self.provider = ProviderType.NONE
@@ -196,7 +203,11 @@ class RDFAnnotation:
                 self.provider = ProviderType.NONE
 
         # shorten compact terms
-        if self.term and self.collection:
+        if (
+            self.term
+            and self.collection
+            and self.provider == ProviderType.IDENTIFIERS_ORG
+        ):
             self.term = self.shorten_compact_term(
                 term=self.term, collection=self.collection
             )
@@ -256,12 +267,15 @@ class RDFAnnotation:
         `https://identifiers.org/<collection>/<term>`. Whether the term is
         valid does not matter here, this is the task of `validate`.
 
-        Resources without a collection, i.e., arbitrary urls, are returned
-        unchanged.
+        Bioregistry URLs retain their original resource while exposing their
+        collection and compact term for OLS resolution. Arbitrary URLs are also
+        returned unchanged.
         """
         if not self.term:
             return None
 
+        if self.provider == ProviderType.BIOREGISTRY_IO:
+            return self.resource
         if self.provider != ProviderType.IDENTIFIERS_ORG or self.collection is None:
             return self.term
 
@@ -353,12 +367,17 @@ class RDFAnnotation:
         """Validate qualifier and term of the annotation.
 
         Returns:
-            True if the qualifier is a MIRIAM qualifier and the term matches the
-            pattern of its collection.
+            True if the qualifier is a MIRIAM qualifier and an identifiers.org
+            term matches its collection pattern. Other providers do not use
+            identifiers.org term validation.
         """
         valid_qualifier: bool = self.check_qualifier(self.qualifier)
         valid_term: bool = True
-        if self.collection and self.term:
+        if (
+            self.collection
+            and self.term
+            and self.provider == ProviderType.IDENTIFIERS_ORG
+        ):
             valid_term = self.check_miriam_term()
 
         return valid_qualifier and valid_term
@@ -408,7 +427,7 @@ class RDFAnnotationData(RDFAnnotation):
         self.warnings: list = []
         self.errors: list = []
 
-        if self.collection:
+        if self.collection and self.provider == ProviderType.IDENTIFIERS_ORG:
             # register MIRIAM xrefs
             namespace = get_registry().ns_dict.get(self.collection, None)
             if not namespace:

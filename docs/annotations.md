@@ -59,6 +59,13 @@ print(annotation.resource_normalized)
 # https://identifiers.org/sabiork/1406
 ```
 
+Bioregistry URLs such as `https://bioregistry.io/CMO:0000003` also expose a
+collection (`cmo`) and compact term (`CMO:0000003`). Their normalized resource
+remains the original Bioregistry URL. `RDFAnnotationData` resolves configured
+OLS ontologies even when they have no identifiers.org namespace, including
+CMO, DRON, MMO and SCDO. Bioregistry terms are not validated against the
+identifiers.org registry.
+
 ## Validation
 
 Validation answers two questions: is the qualifier a real MIRIAM qualifier, and does the term match the pattern the identifiers.org registry defines for its collection?
