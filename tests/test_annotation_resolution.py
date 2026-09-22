@@ -64,6 +64,9 @@ def test_bioregistry_resolves_without_identifiers_namespace(
         ("chebi", "chebi:37924", "http://purl.obolibrary.org/obo/CHEBI_37924"),
         ("chebi", "CHEBI:37924", "http://purl.obolibrary.org/obo/CHEBI_37924"),
         ("sio", "001013", "http://semanticscience.org/resource/SIO_001013"),
+        ("fma", "10951", "http://purl.org/sig/ont/fma/fma10951"),
+        ("fma", "FMA:10951", "http://purl.org/sig/ont/fma/fma10951"),
+        ("fma", "FMA_10951", "http://purl.org/sig/ont/fma/fma10951"),
     ],
 )
 def test_ols_iri_prefix(ontology: str, term: str, iri: str, tmp_path: Path) -> None:
