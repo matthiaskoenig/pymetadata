@@ -5,6 +5,7 @@ import logging
 import os
 import time
 from pathlib import Path
+from typing import Any
 
 import pytest
 
@@ -114,3 +115,38 @@ def test_write_json_cache_creates_parents(tmp_path: Path) -> None:
     write_json_cache(data={"a": 1}, cache_path=cache_path)
 
     assert json.loads(cache_path.read_text()) == {"a": 1}
+
+
+def test_write_json_cache_overlapping_access(tmp_path: Path) -> None:
+    """Readers and overlapping writers never see partially written JSON."""
+    cache_path = tmp_path / "data.json"
+    write_json_cache(data={"old": True}, cache_path=cache_path)
+
+    class OverlappingEncoder(json.JSONEncoder):
+        def default(self, o: Any) -> Any:
+            """Read and replace the cache while the outer write is in progress."""
+            assert read_json_cache(cache_path) == {"old": True}
+            write_json_cache(data={"other": "writer"}, cache_path=cache_path)
+            assert read_json_cache(cache_path) == {"other": "writer"}
+            return "encoded"
+
+    write_json_cache(
+        data={"new": object()},
+        cache_path=cache_path,
+        json_encoder=OverlappingEncoder,
+    )
+
+    assert read_json_cache(cache_path) == {"new": "encoded"}
+    assert list(tmp_path.iterdir()) == [cache_path]
+
+
+def test_write_json_cache_failure_preserves_cache(tmp_path: Path) -> None:
+    """A serialization failure preserves the old cache and removes temporary files."""
+    cache_path = tmp_path / "data.json"
+    write_json_cache(data={"old": True}, cache_path=cache_path)
+
+    with pytest.raises(TypeError, match="not JSON serializable"):
+        write_json_cache(data={"new": object()}, cache_path=cache_path)
+
+    assert read_json_cache(cache_path) == {"old": True}
+    assert list(tmp_path.iterdir()) == [cache_path]

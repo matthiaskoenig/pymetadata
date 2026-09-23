@@ -15,6 +15,7 @@ whatever was cached before.
 
 import json
 import logging
+import tempfile
 import time
 from json.encoder import JSONEncoder
 from pathlib import Path
@@ -124,7 +125,9 @@ def write_json_cache(
 ) -> None:
     """Write a JSON cache file.
 
-    Missing parent directories are created.
+    Missing parent directories are created. The file is replaced atomically so
+    concurrent readers never see partial JSON and failed writes preserve the
+    previous cache.
 
     Args:
         data: data to serialize
@@ -133,9 +136,17 @@ def write_json_cache(
             `DataclassJSONEncoder` for dataclasses
     """
     cache_path.parent.mkdir(parents=True, exist_ok=True)
-    with open(cache_path, "w") as fp:
-        logger.info("Write cache: %s", cache_path)
-        if json_encoder:
+    temporary_path: Path | None = None
+    try:
+        # Use the same filesystem for atomic replacement. Close the file before
+        # replacing it so this also works on Windows.
+        with tempfile.NamedTemporaryFile(
+            mode="w", dir=cache_path.parent, delete=False
+        ) as fp:
+            temporary_path = Path(fp.name)
+            logger.info("Write cache: %s", cache_path)
             json.dump(data, fp=fp, indent=2, cls=json_encoder)
-        else:
-            json.dump(data, fp=fp, indent=2)
+        temporary_path.replace(cache_path)
+    finally:
+        if temporary_path is not None:
+            temporary_path.unlink(missing_ok=True)
