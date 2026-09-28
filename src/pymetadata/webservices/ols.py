@@ -74,7 +74,7 @@ ONTOLOGIES = [
     OLSOntology(name="dron"),
     OLSOntology(name="efo", iri_pattern="http://www.ebi.ac.uk/efo/EFO_{$Id}"),
     OLSOntology(name="fix"),
-    OLSOntology(name="fma"),
+    OLSOntology(name="fma", iri_pattern="http://purl.org/sig/ont/fma/fma{$Id}"),
     OLSOntology(name="foodon"),
     OLSOntology(name="go"),
     OLSOntology(name="hp"),
