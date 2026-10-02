@@ -3,6 +3,7 @@
 from pathlib import Path
 from typing import Any
 
+import pytest
 import requests
 
 from pymetadata.webservices.unichem import UnichemQuery, UnichemSource
@@ -115,6 +116,12 @@ def test_query_xrefs_server_error(tmp_path: Path, monkeypatch: Any) -> None:
         def json(self) -> Any:
             raise requests.exceptions.JSONDecodeError("Expecting value", html_error, 0)
 
+    # the sources are not the subject here, they must not be queried
+    monkeypatch.setattr(
+        UnichemQuery,
+        "sources",
+        {1: UnichemSource(sourceID=1, name="chembl", baseIdUrl="https://x.org/")},
+    )
     # the queries go through `get_json`, which uses the session of `webservice`
     monkeypatch.setattr(
         "pymetadata.webservices.webservice.get_session",
@@ -125,3 +132,70 @@ def test_query_xrefs_server_error(tmp_path: Path, monkeypatch: Any) -> None:
         inchikey="NGBFQHCMQULJNZ-UHFFFAOYSA-N"
     )
     assert xrefs == []
+
+
+class FakeUnichem:
+    """Stand-in for `get_json` which answers like the UniChem web service."""
+
+    def __init__(self) -> None:
+        """Start without recorded queries."""
+        self.urls: list[str] = []
+
+    def __call__(self, url: str) -> Any:
+        """Record the query and answer with a single ChEMBL entry."""
+        self.urls.append(url)
+        return [{"src_id": "1", "src_compound_id": "CHEMBL1"}]
+
+
+def offline_query(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch, cache: bool
+) -> tuple[UnichemQuery, FakeUnichem]:
+    """Create a query which answers without network."""
+    fake = FakeUnichem()
+    monkeypatch.setattr("pymetadata.webservices.unichem.get_json", fake)
+    monkeypatch.setattr(
+        UnichemQuery,
+        "sources",
+        {1: UnichemSource(sourceID=1, name="chembl", baseIdUrl="https://x.org/")},
+    )
+    query = UnichemQuery(cache=cache, cache_path=tmp_path / "cache")
+    return query, fake
+
+
+def test_query_xrefs_normalizes_inchikey(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    """Test that a lower case InChIKey is queried and cached upper case."""
+    query, fake = offline_query(tmp_path, monkeypatch, cache=True)
+
+    xrefs = query.query_xrefs_for_inchikey("ngbfqhcmquljnz-uhfffaoysa-n")
+
+    assert [xref.accession for xref in xrefs] == ["CHEMBL1"]
+    assert fake.urls == [
+        "https://www.ebi.ac.uk/unichem/rest/inchikey/NGBFQHCMQULJNZ-UHFFFAOYSA-N"
+    ]
+    assert (
+        tmp_path / "cache" / "unichem" / "NGBFQHCMQULJNZ-UHFFFAOYSA-N.json"
+    ).exists()
+
+
+@pytest.mark.parametrize("inchikey", ["../../evil", "yxsdfasdfs", ""])
+def test_query_xrefs_rejects_invalid_inchikey(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch, inchikey: str
+) -> None:
+    """Test that an invalid InChIKey is neither queried nor cached."""
+    query, fake = offline_query(tmp_path, monkeypatch, cache=True)
+
+    assert query.query_xrefs_for_inchikey(inchikey) == []
+    assert fake.urls == []
+    assert list(tmp_path.rglob("*.json")) == []
+
+
+def test_query_xrefs_without_cache_writes_nothing(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    """Test that `cache=False` neither creates the cache nor writes to it."""
+    query, _ = offline_query(tmp_path, monkeypatch, cache=False)
+
+    assert query.query_xrefs_for_inchikey("NGBFQHCMQULJNZ-UHFFFAOYSA-N")
+    assert not (tmp_path / "cache").exists()

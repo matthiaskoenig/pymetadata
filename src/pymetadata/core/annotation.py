@@ -22,10 +22,9 @@ import logging
 import re
 import urllib.parse
 from enum import Enum
+from functools import lru_cache
 from pprint import pprint
 from typing import Any, ClassVar, Final
-
-import requests
 
 from pymetadata.core.miriam import BQB, BQM
 from pymetadata.core.xref import CrossReference, is_url
@@ -49,22 +48,89 @@ def get_ols_query() -> OLSQuery:
 
 IDENTIFIERS_ORG_PREFIX: Final = "https://identifiers.org"
 # prefixes of the registry consist of letters, digits, `.`, `_` and `-`,
-# e.g., `ec-code` or `go_ref`
+# e.g., `ec-code` or `go_ref`; query string, fragment and a trailing `/` are
+# not part of the term
+_TERM_PATTERN: Final = r"([^?#]+?)/?(?:[?#].*)?$"
 IDENTIFIERS_ORG_PATTERN_COMPACT: Final = re.compile(
-    r"^https?://identifiers.org/([a-zA-Z0-9._-]+):(.+)"
+    rf"^https?://identifiers\.org/([a-zA-Z0-9._-]+):{_TERM_PATTERN}", re.IGNORECASE
 )
 IDENTIFIERS_ORG_PATTERN_CLASSIC: Final = re.compile(
-    r"^https?://identifiers.org/([a-zA-Z0-9._-]+)/(.+)"
+    rf"^https?://identifiers\.org/([a-zA-Z0-9._-]+)/{_TERM_PATTERN}", re.IGNORECASE
 )
 
 BIOREGISTRY_PREFIX: Final = "https://bioregistry.io"
 BIOREGISTRY_PATTERN: Final = re.compile(
-    r"^https?://bioregistry\.io/([a-zA-Z0-9._-]+):([^?#]+)$"
+    rf"^https?://bioregistry\.io/([a-zA-Z0-9._-]+):{_TERM_PATTERN}", re.IGNORECASE
 )
 
 MIRIAM_URN_PATTERN: Final = re.compile(r"^urn:miriam:(.+)")
 
 logger = logging.getLogger(__name__)
+
+
+@lru_cache(maxsize=1024)
+def _compile_pattern(pattern: str) -> re.Pattern[str]:
+    """Compile a pattern of the identifiers.org registry.
+
+    Args:
+        pattern: regular expression of a registry namespace
+
+    Returns:
+        The compiled regular expression.
+    """
+    return re.compile(pattern)
+
+
+# characters of a term which would start the query string or the fragment of
+# an url, they are percent-encoded when the term is part of an url
+_URL_TERM_ESCAPES: Final = {"?": "%3F", "#": "%23"}
+
+
+def _encode_url_term(term: str) -> str:
+    """Percent-encode the characters of a term which end the path of an url.
+
+    Args:
+        term: term to write into an url
+
+    Returns:
+        The term with `?` and `#` percent-encoded.
+    """
+    for char, escaped in _URL_TERM_ESCAPES.items():
+        term = term.replace(char, escaped)
+    return term
+
+
+def _decode_url_term(term: str) -> str:
+    """Decode the characters which `_encode_url_term` percent-encodes.
+
+    Only `?` and `#` are decoded, since other percent-encodings can be part
+    of a term, e.g., `--%3E` of `datanator.reaction`.
+
+    Args:
+        term: term read from an url
+
+    Returns:
+        The term with `?` and `#` decoded.
+    """
+    for char, escaped in _URL_TERM_ESCAPES.items():
+        term = re.sub(re.escape(escaped), char, term, flags=re.IGNORECASE)
+    return term
+
+
+def _is_http_url(resource: str) -> bool:
+    """Check if a resource is an http(s) url.
+
+    Args:
+        resource: resource to check
+
+    Returns:
+        True if the scheme of the resource is `http` or `https`.
+    """
+    try:
+        scheme = urllib.parse.urlparse(resource).scheme
+    except ValueError:
+        return False
+    return scheme.lower() in {"http", "https"}
 
 
 class ProviderType(str, Enum):
@@ -129,7 +195,7 @@ class RDFAnnotation:
             )
         if not resource:
             raise ValueError(
-                f"resource is required for annotation, but resource is emtpy "
+                f"resource is required for annotation, but resource is empty "
                 f"'{qualifier} {resource}'."
             )
         if not isinstance(resource, str):
@@ -138,19 +204,21 @@ class RDFAnnotation:
             )
 
         # handle urls
-        if resource.startswith("http"):
+        if _is_http_url(resource):
             # tests new compact patterns
             match_compact = IDENTIFIERS_ORG_PATTERN_COMPACT.match(resource)
             if match_compact:
                 self.collection = match_compact.group(1).lower()
-                self.term = f"{match_compact.group(1)}:{match_compact.group(2)}"
+                self.term = _decode_url_term(
+                    f"{match_compact.group(1)}:{match_compact.group(2)}"
+                )
                 self.provider = ProviderType.IDENTIFIERS_ORG
 
             if not self.collection:
                 match_classic = IDENTIFIERS_ORG_PATTERN_CLASSIC.match(resource)
                 if match_classic:
                     self.collection = match_classic.group(1).lower()
-                    self.term = match_classic.group(2)
+                    self.term = _decode_url_term(match_classic.group(2))
                     self.provider = ProviderType.IDENTIFIERS_ORG
 
             if not self.collection:
@@ -171,29 +239,35 @@ class RDFAnnotation:
                         resource,
                     )
 
+        # other urls, e.g., ftp, are kept as they are
+        elif "://" in resource:
+            self.term = resource
+            self.provider = ProviderType.NONE
+
         # handle urns
         elif resource.startswith("urn:miriam:"):
             match3 = MIRIAM_URN_PATTERN.match(resource)
             if match3:
                 tokens = match3.group(1).split(":")
                 self.collection = tokens[0].lower()
-                self.term = ":".join(tokens[1:]).replace("%3A", ":")
+                self.term = urllib.parse.unquote(":".join(tokens[1:]))
                 self.provider = ProviderType.IDENTIFIERS_ORG
 
         else:
-            # handle short notation
-            tokens = resource.split("/")
-            if len(tokens) > 1:
-                self.collection = tokens[0].lower()
-                self.term = "/".join(tokens[1:])
+            # handle short notation, a `:` before the first `/` marks a compact
+            # identifier such as `doi:10.1016/j.jtbi.2004.04.039`
+            head, sep, tail = resource.partition("/")
+            if ":" in head:
+                self.collection = head.split(":")[0].lower()
+                self.term = resource
                 self.provider = ProviderType.IDENTIFIERS_ORG
-            elif len(tokens) == 1 and ":" in tokens[0]:
-                self.collection = tokens[0].split(":")[0].lower()
-                self.term = tokens[0]
+            elif sep:
+                self.collection = head.lower()
+                self.term = tail
                 self.provider = ProviderType.IDENTIFIERS_ORG
 
             # validation
-            if len(tokens) < 2 and not self.collection:
+            if not self.collection:
                 logger.error(
                     "Resource `%s` could not be split in collection and term. A given resource must be of the form `collection/term` or an url starting with `http(s)://`)",
                     resource,
@@ -201,6 +275,10 @@ class RDFAnnotation:
                 self.collection = None
                 self.term = resource
                 self.provider = ProviderType.NONE
+
+        # clean legacy collections
+        if self.collection in self.replaced_collections:
+            self.collection = self.replaced_collections[self.collection]
 
         # shorten compact terms
         if (
@@ -211,10 +289,6 @@ class RDFAnnotation:
             self.term = self.shorten_compact_term(
                 term=self.term, collection=self.collection
             )
-
-        # clean legacy collections
-        if self.collection in self.replaced_collections:
-            self.collection = self.replaced_collections[self.collection]
 
         if resource.startswith("urn:miriam:"):
             logger.warning(
@@ -228,9 +302,19 @@ class RDFAnnotation:
 
     @staticmethod
     def shorten_compact_term(term: str, collection: str) -> str:
-        """Shorten the compact terms and return term.
+        """Shorten a compact term to the accession.
 
-        If the namespace is not embedded in the term return the shortened term.
+        If the namespace is not embedded in the LUI, the prefix of the
+        collection is removed from the term, e.g., `ncit:C75913` becomes
+        `C75913`.
+
+        Args:
+            term: term, possibly with the prefix of its collection
+            collection: collection of the term
+
+        Returns:
+            The term without the prefix if the namespace is not embedded in the
+            LUI, otherwise the unchanged term.
         """
         namespace = get_registry().ns_dict.get(collection, None)
         if (
@@ -245,7 +329,14 @@ class RDFAnnotation:
 
     @staticmethod
     def from_tuple(t: tuple[BQB | BQM, str]) -> "RDFAnnotation":
-        """Create an annotation from a `(qualifier, resource)` tuple."""
+        """Create an annotation from a `(qualifier, resource)` tuple.
+
+        Args:
+            t: qualifier and resource of the annotation
+
+        Returns:
+            The annotation.
+        """
         qualifier, resource = t[0], t[1]
         return RDFAnnotation(qualifier=qualifier, resource=resource)
 
@@ -261,6 +352,8 @@ class RDFAnnotation:
 
         The normalization never changes what the resource says: the result is
         an url, and parsing it again yields the same `collection` and `term`.
+        A `?` or `#` of the term is percent-encoded, since it would otherwise
+        start the query string or the fragment of the url.
         A collection which is not in the registry, or a term which does not
         carry the prefix of its collection, can not be written as a compact
         identifier and is returned as
@@ -279,22 +372,27 @@ class RDFAnnotation:
         if self.provider != ProviderType.IDENTIFIERS_ORG or self.collection is None:
             return self.term
 
+        term = _encode_url_term(self.term)
         namespace = get_registry().ns_dict.get(self.collection, None)
         if namespace and not namespace.namespaceEmbeddedInLui:
-            return f"{IDENTIFIERS_ORG_PREFIX}/{self.collection}:{self.term}"
+            return f"{IDENTIFIERS_ORG_PREFIX}/{self.collection}:{term}"
 
         # the term is only a compact identifier if its prefix is the collection
         if self.term.lower().startswith(f"{self.collection}:"):
-            return f"{IDENTIFIERS_ORG_PREFIX}/{self.term}"
+            return f"{IDENTIFIERS_ORG_PREFIX}/{term}"
 
-        return f"{IDENTIFIERS_ORG_PREFIX}/{self.collection}/{self.term}"
+        return f"{IDENTIFIERS_ORG_PREFIX}/{self.collection}/{term}"
 
     def __repr__(self) -> str:
         """Get representation string."""
         return f"RDFAnnotation({self.qualifier}|{self.collection}|{self.term}|{self.provider.value})"
 
-    def to_dict(self) -> dict:
-        """Convert the annotation to a dictionary."""
+    def to_dict(self) -> dict[str, Any]:
+        """Convert the annotation to a dictionary.
+
+        Returns:
+            Qualifier, collection and term of the annotation.
+        """
         return {
             "qualifier": self.qualifier.value,
             "collection": self.collection,
@@ -326,9 +424,7 @@ class RDFAnnotation:
 
         # check the pattern
         if self.term:
-            p = re.compile(namespace.pattern)
-            m = p.match(self.term)
-            if not m:
+            if not _compile_pattern(namespace.pattern).fullmatch(self.term):
                 logger.error(
                     "Term `%s` did not match pattern `%s` for collection `%s`.",
                     self.term,
@@ -368,17 +464,20 @@ class RDFAnnotation:
 
         Returns:
             True if the qualifier is a MIRIAM qualifier and an identifiers.org
-            term matches its collection pattern. Other providers do not use
-            identifiers.org term validation.
+            term matches its collection pattern. Bioregistry.io resources do not
+            use identifiers.org term validation, other resources must be urls.
         """
         valid_qualifier: bool = self.check_qualifier(self.qualifier)
         valid_term: bool = True
-        if (
-            self.collection
-            and self.term
-            and self.provider == ProviderType.IDENTIFIERS_ORG
-        ):
+        if self.provider == ProviderType.IDENTIFIERS_ORG:
             valid_term = self.check_miriam_term()
+        elif self.provider == ProviderType.NONE:
+            valid_term = bool(self.term) and is_url(self.term or "")
+            if not valid_term:
+                logger.error(
+                    "Resource `%s` is neither an identifier nor an url.",
+                    self.resource,
+                )
 
         return valid_qualifier and valid_term
 
@@ -422,10 +521,10 @@ class RDFAnnotationData(RDFAnnotation):
         self.url: str | None = None
         self.description: str | None = None
         self.label: str | None = None
-        self.synonyms: list = []
-        self.xrefs: list = []
-        self.warnings: list = []
-        self.errors: list = []
+        self.synonyms: list[Any] = []
+        self.xrefs: list[Any] = []
+        self.warnings: list[Any] = []
+        self.errors: list[Any] = []
 
         if self.collection and self.provider == ProviderType.IDENTIFIERS_ORG:
             # register MIRIAM xrefs
@@ -449,8 +548,12 @@ class RDFAnnotationData(RDFAnnotation):
 
                 term = self.term
 
-                # remove prefix
-                if namespace_embedded and namespace.prefix:
+                # remove the embedded prefix, the url pattern contains it
+                if (
+                    namespace_embedded
+                    and namespace.prefix
+                    and term.lower().startswith(f"{namespace.prefix.lower()}:")
+                ):
                     term = term[len(namespace.prefix) + 1 :]
 
                 # urlencode term
@@ -459,11 +562,6 @@ class RDFAnnotationData(RDFAnnotation):
                 # create url
                 url = url.replace("{$Id}", term)
                 url = url.replace("{$id}", term)
-                if namespace.prefix:
-                    url = url.replace(
-                        f"{namespace.prefix.upper}:",
-                        urllib.parse.quote(f"{namespace.prefix.upper}:"),
-                    )
 
                 if not self.url:
                     # set url to first resource url
@@ -473,7 +571,7 @@ class RDFAnnotationData(RDFAnnotation):
                 _xref = CrossReference(
                     name=ns_resource.name, accession=self.term, url=url
                 )
-                valid = _xref.validate() and is_url(self.url)
+                valid = _xref.validate() and is_url(url)
                 if valid:
                     self.xrefs.append(_xref)
 
@@ -501,7 +599,7 @@ class RDFAnnotationData(RDFAnnotation):
             "warnings": self.warnings,
         }
 
-    def query_ols(self) -> dict:
+    def query_ols(self) -> dict[str, Any]:
         """Resolve the term in the Ontology Lookup Service.
 
         Fills in `label`, `description` and `synonyms`, and replaces `xrefs`
@@ -511,15 +609,7 @@ class RDFAnnotationData(RDFAnnotation):
         Returns:
             The processed OLS response.
         """
-        try:
-            d = get_ols_query().query_ols(ontology=self.collection, term=self.term)
-        except requests.HTTPError as err:
-            logger.error(err)
-            d = {
-                "errors": [err],
-                "warnings": [],
-            }
-
+        d = get_ols_query().query_ols(ontology=self.collection, term=self.term)
         info = get_ols_query().process_response(d)
 
         if self.label is None:

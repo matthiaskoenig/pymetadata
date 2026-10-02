@@ -18,7 +18,7 @@ import pymetadata
 from pymetadata.cache import write_json_cache
 from pymetadata.webservices.chebi import ChebiQuery
 from pymetadata.webservices.ols import ONTOLOGIES, OLSQuery
-from pymetadata.webservices.registry import Namespace, Registry
+from pymetadata.webservices.registry import Namespace, Registry, Resource
 from pymetadata.webservices.unichem import UnichemQuery
 from pymetadata.webservices.webservice import WebserviceError
 
@@ -27,7 +27,7 @@ from pymetadata.webservices.webservice import WebserviceError
 def offline(monkeypatch: pytest.MonkeyPatch) -> None:
     """Make every web service query fail as if there were no network."""
 
-    def fail(url: str) -> Any:
+    def fail(url: str, **kwargs: Any) -> Any:
         raise WebserviceError(f"Service is not reachable for '{url}': offline")
 
     for module in ["chebi", "ols", "registry", "unichem"]:
@@ -65,7 +65,7 @@ def test_chebi_without_cache_returns_empty(tmp_path: Path, offline: None) -> Non
 
 def ols_registry() -> Registry:
     """Build a registry with a single collection resolved by OLS."""
-    # `Namespace.__post_init__` builds the resources from dictionaries
+    # the resource as the identifiers.org registry describes it
     resource = {
         "id": 1,
         "providerCode": "ols",
@@ -88,7 +88,7 @@ def ols_registry() -> Registry:
         pattern=r"^CHEBI:\d+$",
         namespaceEmbeddedInLui=True,
         description="",
-        resources=[resource],
+        resources=[Resource.from_dict(resource)],
     )
     registry = Registry.__new__(Registry)
     registry.ns_dict = {"chebi": namespace}

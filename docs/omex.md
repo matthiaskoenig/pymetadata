@@ -131,6 +131,10 @@ with Omex.from_omex(Path("archive.omex")) as omex:
     ...
 ```
 
+Outside of a `with` block, `omex.close()` removes the directory; an archive which is neither closed nor used as a context manager removes it at the latest when it is garbage collected.
+
+Locations are normalized to relative paths starting with `./` when an entry is created, e.g., `model.xml` becomes `./model.xml`. A location which is absolute or points outside of the archive, such as `../model.xml`, is rejected with a `ValidationError`, so a manifest cannot write files outside of the archive directory.
+
 ## Writing back out
 
 ```python
@@ -161,6 +165,6 @@ The COMBINE archive and the OMEX format are described in:
 
 Further resources:
 
-- [COMBINE archive](https://combinearchive.org/) — specifications and tooling
-- [COMBINE](https://co.mbine.org/) — the standards this archive format ties together
-- [identifiers.org combine.specifications](https://registry.identifiers.org/registry/combine.specifications) — the format URIs used in the manifest
+- [COMBINE archive](https://combinearchive.org/) - specifications and tooling
+- [COMBINE](https://co.mbine.org/) - the standards this archive format ties together
+- [identifiers.org combine.specifications](https://registry.identifiers.org/registry/combine.specifications) - the format URIs used in the manifest

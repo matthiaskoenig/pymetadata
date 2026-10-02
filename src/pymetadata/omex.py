@@ -58,17 +58,22 @@ References:
 import logging
 import os
 import pprint
+import re
 import shutil
 import tempfile
+import weakref
 import xml.etree.ElementTree as ET
 import zipfile
 from enum import Enum
-from pathlib import Path
+from pathlib import Path, PurePosixPath
 from types import TracebackType
 from typing import Any
+from urllib.parse import urlparse
+from xml.sax.saxutils import quoteattr
 
-import requests
-from pydantic import BaseModel, PrivateAttr
+from pydantic import BaseModel, ConfigDict, PrivateAttr, field_validator
+
+from pymetadata.webservices.webservice import get_session
 
 logger = logging.getLogger(__name__)
 
@@ -336,6 +341,58 @@ class EntryFormat(str, Enum):
     ZIP = PURL_PREFIX + "application/zip"
 
 
+#: format keys matching all level and version variants of a specification
+_FORMAT_FAMILIES: dict[str, re.Pattern[str]] = {
+    key: re.compile(rf"identifiers\.org/combine\.specifications[/:]{prefix}")
+    for key, prefix in (("sbml", "sbml"), ("sedml", "sed"), ("sbgn", "sbgn"))
+}
+
+
+#: start tags in the head of `.xml` files and the corresponding format keys
+_XML_ROOT_FORMATS: tuple[tuple[bytes, str], ...] = (
+    (b"<sbml", "sbml"),
+    (b"<sedML", "sedml"),
+    (b"<cell", "cellml"),
+    (b"<COPASI", "copasi"),
+)
+
+
+def normalize_location(location: str) -> str:
+    """Normalize the location of an entry in a COMBINE archive.
+
+    Locations are relative POSIX paths starting with `./`, e.g.,
+    `./models/model.xml`; the archive itself has the location `.`. A missing
+    `./` prefix is added, backslashes are converted to slashes and empty or `.`
+    path segments are removed.
+
+    Args:
+        location: location to normalize
+
+    Returns:
+        The normalized location.
+
+    Raises:
+        ValueError: if the location is empty, absolute or points outside of the
+            archive, e.g., `../model.xml`
+    """
+    if not location:
+        raise ValueError("Location of an archive entry must not be empty.")
+
+    path = PurePosixPath(location.replace("\\", "/"))
+    if path.is_absolute() or re.match(r"^[A-Za-z]:", location):
+        raise ValueError(
+            f"Locations must be relative paths in COMBINE archive, but location is "
+            f"'{location}'."
+        )
+    if ".." in path.parts:
+        raise ValueError(
+            f"Locations must not point outside of the COMBINE archive, but location "
+            f"is '{location}'."
+        )
+
+    return "./" + path.as_posix() if path.parts else "."
+
+
 class ManifestEntry(BaseModel):
     """A single file of the archive, as listed in the `manifest.xml`.
 
@@ -358,10 +415,13 @@ class ManifestEntry(BaseModel):
     format: str
     master: bool = False
 
-    # pydantic configuration
-    model_config = {
-        "use_enum_values": True,
-    }
+    model_config = ConfigDict(use_enum_values=True, validate_assignment=True)
+
+    @field_validator("location")
+    @classmethod
+    def _validate_location(cls, location: str) -> str:
+        """Normalize the location, see `normalize_location`."""
+        return normalize_location(location)
 
     @staticmethod
     def is_format(format_key: str, format: str) -> bool:
@@ -375,25 +435,12 @@ class ManifestEntry(BaseModel):
         Returns:
             True if the format matches the key.
         """
-        # FIXME: use regular expressions
-        if format_key == "sbml":
-            return ("identifiers.org/combine.specifications/sbml" in format) or (
-                "identifiers.org/combine.specifications:sbml" in format
-            )
-        if format_key == "sedml":
-            return ("identifiers.org/combine.specifications/sed" in format) or (
-                "identifiers.org/combine.specifications:sed" in format
-            )
-        if format_key == "sbgn":
-            return ("identifiers.org/combine.specifications/sbgn" in format) or (
-                "identifiers.org/combine.specifications:sbgn" in format
-            )
+        family = _FORMAT_FAMILIES.get(format_key.lower())
+        if family:
+            return family.search(format) is not None
 
-        if hasattr(EntryFormat, format_key):
-            format_reference = str(getattr(EntryFormat, format_key.upper()))
-            return format_reference == format
-
-        return False
+        entry_format = EntryFormat.__members__.get(format_key.upper())
+        return entry_format is not None and entry_format.value == format
 
     def is_sbml(self) -> bool:
         """Check if entry is SBML."""
@@ -438,22 +485,18 @@ class Manifest(BaseModel):
     def __init__(self, **data: Any) -> None:
         """Initialize Manifest."""
         super().__init__(**data)
-        for e in self.entries:
-            if not e.location.startswith("."):
-                logger.warning(
-                    "Relative location paths must start with './', but '%s'.",
-                    e.location,
-                )
-                e.location = f"./{e.location}"
         self._entries_dict = {e.location: e for e in self.entries}
 
     def __contains__(self, location: str) -> bool:
         """Check if location is in manifest."""
-        return location in self._entries_dict
+        try:
+            return normalize_location(location) in self._entries_dict
+        except ValueError:
+            return False
 
     def __getitem__(self, location: str) -> ManifestEntry:
         """Get entry by location."""
-        return self._entries_dict[location]
+        return self._entries_dict[normalize_location(location)]
 
     def __len__(self) -> int:
         """Get number of entries."""
@@ -484,8 +527,11 @@ class Manifest(BaseModel):
         """
 
         def content_line(e: ManifestEntry) -> str:
-            master_token = ' master="true"' if e.master else ' master="false"'
-            return f'  <content location="{e.location}" format="{e.format}"{master_token} />'
+            master = "true" if e.master else "false"
+            return (
+                f"  <content location={quoteattr(e.location)} "
+                f'format={quoteattr(e.format)} master="{master}" />'
+            )
 
         lines = (
             [
@@ -503,27 +549,25 @@ class Manifest(BaseModel):
         Args:
             manifest_path: path of the file to write
         """
-        with open(manifest_path, "w") as f_manifest:
+        with open(manifest_path, "w", encoding="utf-8") as f_manifest:
             xml = self.to_manifest_xml()
             f_manifest.write(xml)
 
     def add_entry(self, entry: ManifestEntry) -> None:
         """Add an entry to the manifest.
 
-        The location is normalized to a relative path starting with `./`.
         Duplicated locations are not checked, use `Omex.add_entry` to add
         a file together with its entry.
 
         Args:
             entry: entry to add
         """
-        entry.location = self._check_and_normalize_location(entry.location)
         self.entries.append(entry)
         self._entries_dict[entry.location] = entry
 
     def remove_entry_for_location(self, location: str) -> ManifestEntry | None:
         """Remove entry for given location."""
-        location = self._check_and_normalize_location(location)
+        location = normalize_location(location)
 
         if location in [".", "./manifest.xml"]:
             logger.error(
@@ -536,20 +580,6 @@ class Manifest(BaseModel):
         entry = self._entries_dict.pop(location)
         self.entries = [e for e in self.entries if e.location != location]
         return entry
-
-    @staticmethod
-    def _check_and_normalize_location(location: str) -> str:
-        """Add relative prefix and check location."""
-        if location.startswith("/"):
-            raise ValueError(
-                f"Locations must be relative paths in COMBINE archive, but location is "
-                f"'{location}'."
-            )
-
-        # add prefix
-        if not location.startswith("./") and location != ".":
-            location = f"./{location}"
-        return location
 
 
 class Omex:
@@ -570,6 +600,10 @@ class Omex:
     Attributes:
         manifest: entries of the archive, i.e., the content of the `manifest.xml`
 
+    The temporary directory is removed by `Omex.close`, when the archive is
+    used as a context manager and the block is left, or at the latest when the
+    archive is garbage collected.
+
     Example:
         Using the archive as a context manager removes the temporary
         directory when the block is left:
@@ -583,7 +617,18 @@ class Omex:
     def __init__(self) -> None:
         """Create an empty COMBINE archive."""
         self.manifest: Manifest = Manifest()
-        self._tmp_dir: Path = Path(tempfile.mkdtemp())
+        self._tmp_dir: Path = Path(tempfile.mkdtemp(prefix="pymetadata_omex_"))
+        self._finalizer = weakref.finalize(
+            self, shutil.rmtree, self._tmp_dir, ignore_errors=True
+        )
+
+    def close(self) -> None:
+        """Remove the temporary directory with the archive content.
+
+        The archive cannot be used afterwards. Calling `close` more than once
+        has no effect.
+        """
+        self._finalizer()
 
     def __enter__(self) -> "Omex":
         """Enter the context manager."""
@@ -596,7 +641,7 @@ class Omex:
         traceback: TracebackType | None,
     ) -> None:
         """Remove the temporary directory with the archive content."""
-        shutil.rmtree(self._tmp_dir, ignore_errors=True)
+        self.close()
 
     def __str__(self) -> str:
         """Get contents of archive string."""
@@ -616,8 +661,8 @@ class Omex:
             KeyError: if no entry exists for the location
         """
         # check that entry exists (raises KeyError)
-        _ = self.manifest[location]
-        return self._tmp_dir / location
+        entry = self.manifest[location]
+        return self._tmp_dir / entry.location
 
     @staticmethod
     def _check_omex_path(omex_path: Path) -> Path:
@@ -678,29 +723,53 @@ class Omex:
             Omex with the content of the archive.
 
         Raises:
-            ValueError: if the path does not exist or is not a file
+            ValueError: if the path does not exist, is not a file or is not a
+                COMBINE archive, i.e., a zip archive with a `manifest.xml`
 
         Example:
             ```python
             omex = Omex.from_omex(Path("archive.omex"))
             ```
         """
-        omex_path = Omex._check_omex_path(omex_path)
+        if not Omex.is_omex(omex_path):
+            raise ValueError(
+                f"'omex_path' is not a COMBINE archive, i.e., a zip archive with "
+                f"a 'manifest.xml': '{omex_path}'."
+            )
 
-        # extract archive to tmp directory
-        with tempfile.TemporaryDirectory() as tmp_dir:
+        omex = Omex()
+        try:
+            # the archive is extracted into the temporary directory of the
+            # archive, so its files do not have to be copied again
             with zipfile.ZipFile(omex_path, "r") as zf:
-                # Figure out algorithm:
                 for info in zf.infolist():
                     if info.compress_type not in {
                         zipfile.ZIP_DEFLATED,
                         zipfile.ZIP_STORED,
                     }:
-                        logger.warning("Unsupported compression for: '%s'", info)
-                # extract all files
-                zf.extractall(tmp_dir, pwd=password)
+                        logger.warning(
+                            "Compression of '%s' is not deflate, as required by "
+                            "the specification: '%s'",
+                            info.filename,
+                            info.compress_type,
+                        )
+                # `extractall` removes `..` and absolute prefixes from the names
+                zf.extractall(omex._tmp_dir, pwd=password)
 
-            return Omex.from_directory(Path(tmp_dir))
+            for file_path, entry in Omex._entries_for_directory(omex._tmp_dir):
+                destination = omex._tmp_dir / entry.location
+                if file_path != destination:
+                    # names which are normalized, e.g., with backslashes
+                    destination.parent.mkdir(parents=True, exist_ok=True)
+                    file_path.replace(destination)
+                omex.manifest.add_entry(entry)
+            # the manifest is created from the entries when the archive is written
+            (omex._tmp_dir / "manifest.xml").unlink(missing_ok=True)
+        except BaseException:
+            omex.close()
+            raise
+
+        return omex
 
     @staticmethod
     def from_url(omex_url: str, password: bytes | None = None) -> "Omex":
@@ -716,7 +785,8 @@ class Omex:
             Omex with the content of the archive.
 
         Raises:
-            requests.HTTPError: if the archive could not be downloaded
+            ValueError: if the url is not an http or https url
+            requests.RequestException: if the archive could not be downloaded
 
         Example:
             ```python
@@ -726,13 +796,27 @@ class Omex:
             )
             ```
         """
-        with tempfile.NamedTemporaryFile(delete=False) as tmp:
-            r = requests.get(omex_url)
-            r.raise_for_status()
-            tmp.write(r.content)
-            tmp_path = Path(tmp.name)
+        scheme = urlparse(omex_url).scheme.lower()
+        if scheme not in {"http", "https"}:
+            raise ValueError(
+                f"Only http and https urls are supported, but url scheme is "
+                f"'{scheme}': '{omex_url}'."
+            )
 
-        return Omex.from_omex(tmp_path, password=password)
+        fd, tmp_name = tempfile.mkstemp(suffix=".omex")
+        tmp_path = Path(tmp_name)
+        try:
+            # streamed, so a large archive is not held in memory
+            with (
+                os.fdopen(fd, "wb") as tmp,
+                get_session().get(omex_url, stream=True) as response,
+            ):
+                response.raise_for_status()
+                for chunk in response.iter_content(chunk_size=1 << 16):
+                    tmp.write(chunk)
+            return Omex.from_omex(tmp_path, password=password)
+        finally:
+            tmp_path.unlink(missing_ok=True)
 
     @classmethod
     def from_directory(cls, directory: Path) -> "Omex":
@@ -762,49 +846,68 @@ class Omex:
             omex.to_omex(Path("study.omex"))
             ```
         """
+        directory = Omex._check_directory(directory)
+        omex = Omex()
+        try:
+            for file_path, entry in Omex._entries_for_directory(directory):
+                omex.add_entry(entry_path=file_path, entry=entry)
+        except BaseException:
+            omex.close()
+            raise
+
+        return omex
+
+    @staticmethod
+    def _check_directory(directory: Path) -> Path:
+        """Check that the directory exists and is a directory."""
         if isinstance(directory, str):
             logger.warning("'directory' should be 'Path': '%s'", directory)
             directory = Path(directory)
 
         if not directory.exists():
-            msg = f"'directory' does not exist: '{directory}'."
-            logger.error(msg)
-            raise ValueError(msg)
-
+            raise ValueError(f"'directory' does not exist: '{directory}'.")
         if not directory.is_dir():
-            msg = f"'directory' is not a directory: '{directory}'."
-            logger.error(msg)
-            raise ValueError(msg)
+            raise ValueError(f"'directory' is not a directory: '{directory}'.")
 
+        return directory
+
+    @staticmethod
+    def _entries_for_directory(directory: Path) -> list[tuple[Path, ManifestEntry]]:
+        """Get the manifest entries for the files of a directory.
+
+        See `Omex.from_directory` for the entries and their order.
+
+        Args:
+            directory: directory with the content of an archive
+
+        Returns:
+            Path of every file except the `manifest.xml` together with its entry.
+        """
         manifest_path: Path = directory / "manifest.xml"
         manifest: Manifest | None = None
         if manifest_path.exists():
             manifest = Manifest.from_manifest(manifest_path)
         else:
-            logger.error(
-                "No 'manifest.xml' in directory: '%s'. Trying to create manifest.xml.",
+            logger.warning(
+                "No 'manifest.xml' in directory, the entries are created from the "
+                "files: '%s'.",
                 directory,
             )
 
-        # new archive
-        omex = Omex()
-
         # locations of all files
-        file_paths: dict[str, str] = {}
-        for root, _dirs, files in os.walk(str(directory)):
-            for file in files:
-                file_path = os.path.join(root, file)
-                location = f"./{os.path.relpath(file_path, directory)}"
-                # bugfix for windows paths
-                location = location.replace("\\", "/")
-                if location == "./manifest.xml":
-                    # manifest is created from the internal manifest entries
-                    continue
-                file_paths[location] = file_path
+        file_paths: dict[str, Path] = {}
+        for file_path in directory.rglob("*"):
+            if not file_path.is_file():
+                continue
+            location = normalize_location(file_path.relative_to(directory).as_posix())
+            if location == "./manifest.xml":
+                # manifest is created from the internal manifest entries
+                continue
+            file_paths[location] = file_path
 
-        # The order of `os.walk` is the order of the file system, which differs
-        # between machines: the entries are added in the order of the manifest,
-        # followed by the files which the manifest does not list, by location.
+        # The order of the file system differs between machines: the entries are
+        # in the order of the manifest, followed by the files which the manifest
+        # does not list, by location.
         positions: dict[str, int] = {}
         if manifest:
             positions = {e.location: k for k, e in enumerate(manifest.entries)}
@@ -812,7 +915,7 @@ class Omex:
             file_paths, key=lambda loc: (positions.get(loc, len(positions)), loc)
         )
 
-        # iterate over all locations and add entry
+        entries: list[tuple[Path, ManifestEntry]] = []
         for location in locations:
             file_path = file_paths[location]
             logger.debug("'%s' -> '%s'", file_path, location)
@@ -821,27 +924,21 @@ class Omex:
                 # use entry from existing manifest
                 entry = manifest[location]
             else:
-                if manifest and location not in manifest:
+                if manifest:
                     logger.warning(
                         "Entry with location missing in manifest.xml: '%s'",
                         location,
                     )
-
-                format = Omex.guess_format(Path(file_path))
-                master = False
-                if format and ManifestEntry.is_format(
-                    format_key="sedml", format=format
-                ):
-                    master = True
+                format = Omex.guess_format(file_path)
                 entry = ManifestEntry(
                     location=location,
                     format=format,
-                    master=master,
+                    # SED-ML files are the entry point of a simulation study
+                    master=ManifestEntry.is_format(format_key="sedml", format=format),
                 )
+            entries.append((file_path, entry))
 
-            omex.add_entry(entry_path=Path(file_path), entry=entry)
-
-        return omex
+        return entries
 
     def add_entry(self, entry_path: Path, entry: ManifestEntry) -> None:
         """Add a file to the archive.
@@ -874,13 +971,12 @@ class Omex:
             entry_path = Path(entry_path)
 
         if not entry_path.exists():
-            msg = f"'entry_path' does not exist: '{entry_path}'."
-            logger.error(msg)
-            raise ValueError(msg)
-
+            raise ValueError(f"'entry_path' does not exist: '{entry_path}'.")
         if not entry_path.is_file():
             raise ValueError(f"'entry_path' is not a file: '{entry_path}'.")
 
+        # the archive keeps its own entry, changes of the caller do not affect it
+        entry = entry.model_copy()
         if entry.location in self.manifest:
             logger.warning(
                 "Location already exists and is overwritten: '%s'.", entry.location
@@ -889,9 +985,8 @@ class Omex:
 
         # copy path
         destination = self._tmp_dir / entry.location
-        if not destination.parent.exists():
-            destination.parent.mkdir(parents=True)
-        shutil.copy2(src=str(entry_path), dst=str(destination))
+        destination.parent.mkdir(parents=True, exist_ok=True)
+        shutil.copy2(src=entry_path, dst=destination)
 
         # add entry
         self.manifest.add_entry(entry)
@@ -907,8 +1002,7 @@ class Omex:
         """
         entry = self.manifest.remove_entry_for_location(location)
         if entry:
-            destination = self._tmp_dir / entry.location
-            os.remove(destination)
+            (self._tmp_dir / entry.location).unlink(missing_ok=True)
         return entry
 
     def to_omex(
@@ -921,7 +1015,9 @@ class Omex:
         """Write the archive to an omex file.
 
         The `manifest.xml` is generated from the entries of the archive. By
-        definition OMEX files are zip deflated.
+        definition OMEX files are zip deflated. The archive is written to a
+        temporary file first, so a failing write does not leave a broken file
+        or destroy an existing one.
 
         Args:
             omex_path: path of the omex file to write
@@ -943,21 +1039,34 @@ class Omex:
         if omex_path.exists():
             logger.warning("Existing omex is overwritten: '%s'", omex_path)
 
-        # write tmp dir
-        with tempfile.TemporaryDirectory() as tmp_dir:
-            self.to_directory(output_dir=Path(tmp_dir))
-
-            # compress directory as zip
-            with zipfile.ZipFile(
-                omex_path,
-                mode="w",
-                compression=compression,
-                compresslevel=compresslevel,
-            ) as zf:
+        omex_path.parent.mkdir(parents=True, exist_ok=True)
+        fd, tmp_name = tempfile.mkstemp(
+            dir=omex_path.parent, prefix=f".{omex_path.name}."
+        )
+        tmp_path = Path(tmp_name)
+        try:
+            with (
+                os.fdopen(fd, "wb") as tmp,
+                zipfile.ZipFile(
+                    tmp,
+                    mode="w",
+                    compression=compression,
+                    compresslevel=compresslevel,
+                ) as zf,
+            ):
                 for e in self.manifest.entries:
-                    if e.location != ".":
-                        f = Path(tmp_dir) / e.location
-                        zf.write(filename=str(f), arcname=e.location)
+                    # zip names are relative without the `./` prefix
+                    arcname = e.location.removeprefix("./")
+                    if e.location == ".":
+                        continue
+                    if e.location == "./manifest.xml":
+                        zf.writestr(arcname, self.manifest.to_manifest_xml())
+                    else:
+                        zf.write(filename=self._tmp_dir / e.location, arcname=arcname)
+            tmp_path.replace(omex_path)
+        except BaseException:
+            tmp_path.unlink(missing_ok=True)
+            raise
 
     def to_directory(self, output_dir: Path) -> None:
         """Extract the archive to a directory.
@@ -1048,25 +1157,13 @@ class Omex:
             The format URI, or the URI for an unknown media type if the format
             cannot be determined.
         """
-        extension = path.suffix[1:] if path.suffix else ""
+        extension = path.suffix[1:].lower()
         if extension == "xml":
-            with open(path) as f_in:
-                try:
-                    text = f_in.read(256)
-                    if "<sbml" in text:
-                        return Omex.lookup_format("sbml")
-                    if "<sedML" in text:
-                        return Omex.lookup_format("sedml")
-                    if "<cell" in text:
-                        return Omex.lookup_format("cellml")
-                    if "<COPASI" in text:
-                        return Omex.lookup_format("copasi")
-                except UnicodeDecodeError as err:
-                    # handle incorrect encodings
-                    logger.error(
-                        "UnicodeDecodeError in '%s', incorrect file encoding: '%s'",
-                        path,
-                        err,
-                    )
+            # bytes, so the guess does not depend on the encoding of the file
+            with open(path, "rb") as f_in:
+                head = f_in.read(256)
+            for tag, format_key in _XML_ROOT_FORMATS:
+                if tag in head:
+                    return Omex.lookup_format(format_key)
 
         return Omex.lookup_format(extension)

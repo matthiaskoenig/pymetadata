@@ -13,6 +13,7 @@ from pymetadata.cache import (
     CACHE_DURATION_ONTOLOGY,
     CACHE_DURATION_REGISTRY,
     cache_age,
+    cache_file,
     read_json_cache,
     read_json_cache_fallback,
     write_json_cache,
@@ -150,3 +151,48 @@ def test_write_json_cache_failure_preserves_cache(tmp_path: Path) -> None:
 
     assert read_json_cache(cache_path) == {"old": True}
     assert list(tmp_path.iterdir()) == [cache_path]
+
+
+def test_cache_file_quotes_the_key(tmp_path: Path) -> None:
+    """Test that the key is quoted into a single file name."""
+    assert cache_file(tmp_path, "CHEBI:2668") == tmp_path / "CHEBI%3A2668.json"
+
+
+def test_cache_file_stays_inside_the_directory(tmp_path: Path) -> None:
+    """Test that a key with path separators cannot leave the directory."""
+    path = cache_file(tmp_path, "../../evil")
+
+    assert path.parent == tmp_path
+    assert path.name == "..%2F..%2Fevil.json"
+
+
+def test_cache_file_hashes_long_keys(tmp_path: Path) -> None:
+    """Test that a key too long for a file name is hashed."""
+    path = cache_file(tmp_path, "x" * 1000)
+    other = cache_file(tmp_path, "x" * 999 + "y")
+
+    assert path.parent == tmp_path
+    assert len(path.name.encode()) <= 255
+    assert path.suffix == ".json"
+    assert path == cache_file(tmp_path, "x" * 1000)
+    assert path != other
+
+
+def test_cache_file_rejects_empty_key(tmp_path: Path) -> None:
+    """Test that an empty key does not name a cache file."""
+    with pytest.raises(ValueError, match="empty"):
+        cache_file(tmp_path, "")
+
+
+def test_read_json_cache_of_corrupt_cache(
+    tmp_path: Path, caplog: pytest.LogCaptureFixture
+) -> None:
+    """Test that a corrupt cache file is a cache miss and is removed."""
+    cache_path = tmp_path / "data.json"
+    cache_path.write_text("{not json")
+
+    with caplog.at_level(logging.WARNING), pytest.raises(OSError, match="corrupt"):
+        read_json_cache(cache_path)
+
+    assert not cache_path.exists()
+    assert "corrupt" in caplog.text

@@ -1,6 +1,13 @@
 """Testing OLS."""
 
+from pathlib import Path
+from typing import Any
+
+import pytest
+
+import pymetadata
 from pymetadata.core.annotation import BQB, RDFAnnotation, RDFAnnotationData
+from pymetadata.webservices.ols import ONTOLOGIES, OLSQuery
 
 
 def test_ols_query() -> None:
@@ -33,3 +40,32 @@ def test_annotation_data_to_dict() -> None:
     assert info["resource_normalized"] == "https://identifiers.org/CHEBI:37924"
     assert info["collection"] == "chebi"
     assert info["term"] == "CHEBI:37924"
+
+
+def test_ols_explicit_cache_false(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    """Test that `cache=False` is not overridden by `pymetadata.CACHE_USE`."""
+    monkeypatch.setattr(pymetadata, "CACHE_USE", True)
+
+    query = OLSQuery(ontologies=ONTOLOGIES, cache_path=tmp_path, cache=False)
+
+    assert query.cache is False
+    assert not (tmp_path / "ols").exists()
+
+
+def test_ols_caches_long_iri(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
+    """Test that a term whose IRI is too long for a file name is cached."""
+
+    def respond(url: str) -> Any:
+        return {"label": "long"}
+
+    monkeypatch.setattr("pymetadata.webservices.ols.get_json", respond)
+    query = OLSQuery(ontologies=ONTOLOGIES, cache_path=tmp_path, cache=True)
+
+    data = query.query_ols(ontology="chebi", term="CHEBI:" + "1" * 300)
+
+    assert data["label"] == "long"
+    cached = list((tmp_path / "ols").iterdir())
+    assert len(cached) == 1
+    assert len(cached[0].name.encode()) <= 255

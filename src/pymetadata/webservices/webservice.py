@@ -108,11 +108,12 @@ class WebserviceError(OSError):
     """
 
 
-def get_json(url: str) -> Any:
+def get_json(url: str, params: dict[str, str] | None = None) -> Any:
     """Query a url and return the parsed JSON response.
 
     Args:
         url: url to query
+        params: query parameters, encoded and appended to the url
 
     Returns:
         The parsed JSON response.
@@ -121,9 +122,9 @@ def get_json(url: str) -> Any:
         WebserviceError: if the service cannot be reached, answers with a
             status other than 200, or does not answer with JSON
     """
-    logger.debug("Query: %s", url)
+    logger.debug("Query: %s %s", url, params or "")
     try:
-        response = get_session().get(url)
+        response = get_session().get(url, params=params)
     except requests.RequestException as err:
         # no network, DNS failure, timeout, too many retries, ...
         raise WebserviceError(f"Service is not reachable for '{url}': {err}") from err
