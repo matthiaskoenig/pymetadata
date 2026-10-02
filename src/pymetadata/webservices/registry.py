@@ -27,9 +27,8 @@ See <https://identifiers.org/> and
 
 from __future__ import annotations
 
-import inspect
 import logging
-from dataclasses import dataclass, field
+from dataclasses import dataclass, field, fields
 from pathlib import Path
 from typing import Any
 
@@ -67,8 +66,8 @@ class Resource:
 
     sampleId: str | None = field(repr=False)
     resourceHomeUrl: str | None = field(repr=False)
-    institution: dict = field(repr=False)
-    location: dict = field(repr=False)
+    institution: dict[str, Any] = field(repr=False)
+    location: dict[str, Any] = field(repr=False)
     deprecated: bool = field(repr=False)
     deprecationDate: str = field(repr=False)
     protectedUrls: bool = field(repr=False, default=False)
@@ -78,10 +77,15 @@ class Resource:
 
     @classmethod
     def from_dict(cls, d: dict[str, Any]) -> Resource:
-        """Create a resource from a registry response, ignoring unknown keys."""
-        return cls(
-            **{k: v for k, v in d.items() if k in inspect.signature(cls).parameters}
-        )
+        """Create a resource from a registry response, ignoring unknown keys.
+
+        Args:
+            d: resource of the registry response or of the cached registry
+
+        Returns:
+            The resource.
+        """
+        return cls(**{k: v for k, v in d.items() if k in _RESOURCE_FIELDS})
 
 
 @dataclass
@@ -104,7 +108,7 @@ class Namespace:
     namespaceEmbeddedInLui: bool
     description: str = field(repr=False)
     mirId: str | None = field(repr=False, default=None)
-    resources: list | None = field(repr=False, default=None)
+    resources: list[Resource] | None = field(repr=False, default=None)
     created: str | None = field(repr=False, default=None)
     modified: str | None = field(repr=False, default=None)
     sampleId: str | None = field(repr=False, default=None)
@@ -113,17 +117,27 @@ class Namespace:
 
     @classmethod
     def from_dict(cls, d: dict[str, Any]) -> Namespace:
-        """Create a namespace from a registry response, ignoring unknown keys."""
-        return cls(
-            **{k: v for k, v in d.items() if k in inspect.signature(cls).parameters}
-        )
+        """Create a namespace from a registry response, ignoring unknown keys.
+
+        Args:
+            d: namespace of the registry response or of the cached registry
+
+        Returns:
+            The namespace with its resources.
+        """
+        return cls(**{k: v for k, v in d.items() if k in _NAMESPACE_FIELDS})
 
     def __post_init__(self) -> None:
-        """Set resources."""
-        if self.resources is not None:
-            self.resources = [Resource.from_dict(d) for d in self.resources]
-        else:
-            self.resources = []
+        """Set resources, creating them from dictionaries if necessary."""
+        self.resources = [
+            Resource.from_dict(r) if isinstance(r, dict) else r
+            for r in self.resources or []
+        ]
+
+
+# field names to filter registry responses with, unknown keys are ignored
+_RESOURCE_FIELDS: frozenset[str] = frozenset(f.name for f in fields(Resource))
+_NAMESPACE_FIELDS: frozenset[str] = frozenset(f.name for f in fields(Namespace))
 
 
 class Registry:
@@ -202,7 +216,7 @@ class Registry:
         Returns:
             Namespaces of the registry by prefix.
         """
-        return {k: Namespace(**v) for k, v in data.items()}
+        return {k: Namespace.from_dict(v) for k, v in data.items()}
 
     @staticmethod
     def update_registry(

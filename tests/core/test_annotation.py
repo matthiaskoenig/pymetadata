@@ -1,9 +1,13 @@
 """Test annotations."""
 
+import dataclasses
+
 import pytest
 
-from pymetadata.core.annotation import RDFAnnotation
+from pymetadata.core.annotation import ProviderType, RDFAnnotation, RDFAnnotationData
 from pymetadata.core.miriam import BQB, BQM
+from pymetadata.core.xref import is_url
+from pymetadata.webservices.registry import Registry, Resource
 
 rdf_annotation_data = [
     (
@@ -306,3 +310,177 @@ def test_resource_normalized_registry() -> None:
             f"urn:miriam:{prefix}:{sample_id.replace(':', '%3A')}",
         ]:
             assert_resource_kept(resource)
+
+
+xref_url_data = [
+    # term without the embedded prefix of its collection
+    ("chebi/33699", "chebiId=CHEBI:33699"),
+    ("go/0005829", "id=GO:0005829"),
+    # term with the embedded prefix
+    ("CHEBI:33699", "chebiId=CHEBI:33699"),
+    ("GO:0005829", "id=GO:0005829"),
+]
+
+
+@pytest.mark.parametrize("resource,expected", xref_url_data)
+def test_rdf_annotation_data_url(
+    resource: str, expected: str, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    """Test that the provider url contains the full term."""
+    monkeypatch.setattr(RDFAnnotationData, "query_ols", lambda self: {})
+    data = RDFAnnotationData(RDFAnnotation(qualifier=BQB.IS, resource=resource))
+    assert data.url
+    assert data.url.endswith(expected)
+
+
+def test_rdf_annotation_data_xrefs_validate_each_url(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    """Test that every cross reference is checked by its own url."""
+    from pymetadata.webservices.registry import get_registry
+
+    namespace = dataclasses.replace(get_registry().ns_dict["taxonomy"])
+    valid, invalid = (
+        dataclasses.replace(resource) for resource in (namespace.resources or [])[:2]
+    )
+    invalid.urlPattern = "no url {$id}"
+    namespace.resources = [valid, invalid]
+    monkeypatch.setitem(get_registry().ns_dict, "taxonomy", namespace)
+    monkeypatch.setattr(RDFAnnotationData, "query_ols", lambda self: {})
+
+    data = RDFAnnotationData(RDFAnnotation(qualifier=BQB.IS, resource="taxonomy/9606"))
+    assert [xref.url for xref in data.xrefs] == [data.url]
+    assert all(is_url(xref.url) for xref in data.xrefs)
+
+
+parse_data = [
+    # compact identifier with a `/` in the accession
+    ("doi:10.1016/j.jtbi.2004.04.039", "doi", "10.1016/j.jtbi.2004.04.039"),
+    ("DOI:10.1016/j.jtbi.2004.04.039", "doi", "10.1016/j.jtbi.2004.04.039"),
+    # lowercase percent encoding in urns
+    ("urn:miriam:chebi:CHEBI%3a33699", "chebi", "CHEBI:33699"),
+    (
+        "urn:miriam:doi:10.1016%2Fj.jtbi.2004.04.039",
+        "doi",
+        "10.1016/j.jtbi.2004.04.039",
+    ),
+    # scheme and host are case insensitive
+    ("HTTPS://identifiers.org/taxonomy/9606", "taxonomy", "9606"),
+    ("https://IDENTIFIERS.ORG/taxonomy/9606", "taxonomy", "9606"),
+    ("HTTPS://bioregistry.io/chebi:15996", "chebi", "chebi:15996"),
+    # query string, fragment and trailing slash are not part of the term
+    ("https://identifiers.org/taxonomy/9606/", "taxonomy", "9606"),
+    ("https://identifiers.org/taxonomy/9606?format=json", "taxonomy", "9606"),
+    ("https://identifiers.org/taxonomy/9606#top", "taxonomy", "9606"),
+    ("https://identifiers.org/CHEBI:33699/", "chebi", "CHEBI:33699"),
+    ("https://identifiers.org/CHEBI:33699?x=1", "chebi", "CHEBI:33699"),
+    ("https://bioregistry.io/chebi:15996/", "chebi", "chebi:15996"),
+    ("https://bioregistry.io/chebi:15996?x=1", "chebi", "chebi:15996"),
+    # percent-encoded `#` and `?` are part of the term
+    ("https://identifiers.org/dev.ga4ghdos:abc%23def", "dev.ga4ghdos", "abc#def"),
+]
+
+
+@pytest.mark.parametrize("resource,collection,term", parse_data)
+def test_rdf_annotation_parse(resource: str, collection: str, term: str) -> None:
+    """Test parsing of resources into collection and term."""
+    a = RDFAnnotation(qualifier=BQB.IS, resource=resource, validate=False)
+    assert (a.collection, a.term) == (collection, term)
+    assert a.provider != ProviderType.NONE
+
+
+none_provider_data = [
+    # the dot of identifiers.org is not a wildcard
+    "https://identifiersXorg/taxonomy/9606",
+    # not an http(s) url
+    "httpfoo",
+    "ftp://identifiers.org/taxonomy/9606",
+]
+
+
+@pytest.mark.parametrize("resource", none_provider_data)
+def test_rdf_annotation_not_identifiers_org(resource: str) -> None:
+    """Test that only identifiers.org urls are parsed as identifiers.org."""
+    a = RDFAnnotation(qualifier=BQB.IS, resource=resource, validate=False)
+    assert a.provider == ProviderType.NONE
+    assert a.collection is None
+
+
+invalid_term_data = [
+    # unanchored registry patterns must match the whole term
+    "gtr/123abc",
+    "m4i/foo-bar",
+    "taxonomy/9606abc",
+]
+
+
+@pytest.mark.parametrize("resource", invalid_term_data)
+def test_check_miriam_term_full_match(resource: str) -> None:
+    """Test that a term must match the registry pattern completely."""
+    a = RDFAnnotation(qualifier=BQB.IS, resource=resource, validate=False)
+    assert a.provider == ProviderType.IDENTIFIERS_ORG
+    assert not a.check_miriam_term()
+    assert not a.validate()
+
+
+def test_validate_unparseable_resource() -> None:
+    """Test that a resource which is neither an identifier nor a url is invalid."""
+    a = RDFAnnotation(qualifier=BQB.IS, resource="foo", validate=False)
+    assert a.provider == ProviderType.NONE
+    assert not a.validate()
+
+
+def test_validate_url() -> None:
+    """Test that an arbitrary url is valid."""
+    a = RDFAnnotation(
+        qualifier=BQB.IS, resource="https://en.wikipedia.org/wiki/Cytosol"
+    )
+    assert a.validate()
+
+
+def test_replaced_collection_before_shortening(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    """Test that legacy collections are replaced before the term is shortened."""
+    monkeypatch.setitem(RDFAnnotation.replaced_collections, "obo.ncit", "ncit")
+    a = RDFAnnotation(
+        qualifier=BQB.IS, resource="urn:miriam:obo.ncit:ncit%3AC75913", validate=False
+    )
+    assert (a.collection, a.term) == ("ncit", "C75913")
+
+
+def test_namespaces_from_dict_ignores_unknown_keys() -> None:
+    """Test that a cached registry with additional keys can be loaded."""
+    data = {
+        "taxonomy": {
+            "id": "1",
+            "prefix": "taxonomy",
+            "name": "Taxonomy",
+            "pattern": r"^\d+$",
+            "namespaceEmbeddedInLui": False,
+            "description": "",
+            "unknownKey": "value",
+            "resources": [
+                {
+                    "id": 1,
+                    "providerCode": "ncbi",
+                    "name": "NCBI",
+                    "urlPattern": "https://example.org/{$id}",
+                    "mirId": None,
+                    "description": "",
+                    "official": True,
+                    "sampleId": None,
+                    "resourceHomeUrl": None,
+                    "institution": {},
+                    "location": {},
+                    "deprecated": False,
+                    "deprecationDate": "",
+                    "unknownKey": "value",
+                }
+            ],
+        }
+    }
+    ns_dict = Registry.namespaces_from_dict(data)
+    namespace = ns_dict["taxonomy"]
+    assert namespace.resources
+    assert isinstance(namespace.resources[0], Resource)

@@ -31,7 +31,6 @@ import gzip
 import importlib
 import logging
 import re
-import shutil
 import tempfile
 import warnings
 from concurrent.futures import ThreadPoolExecutor
@@ -40,9 +39,8 @@ from enum import Enum
 from pathlib import Path
 from typing import TYPE_CHECKING
 
-import requests
-
 from pymetadata import ONTOLOGY_DIR, RESOURCES_DIR
+from pymetadata.webservices.webservice import get_session
 
 if TYPE_CHECKING:
     from pronto.ontology import Ontology as ProntoOntology
@@ -194,28 +192,40 @@ ontology_files: dict[str, OntologyFile] = {
 def update_ontology_file(ofile: OntologyFile) -> None:
     """Download one ontology and store it gzipped in the resources.
 
+    The download is streamed through the shared session of the web services
+    and gzipped into a temporary file next to the stored ontology, which then
+    replaces it. An interrupted download therefore keeps the previous file.
+
     Args:
         ofile: ontology to download
+
+    Raises:
+        requests.RequestException: if the download fails
     """
     oid = ofile.id
-
     logger.info("Update ontology: `%s`", oid)
 
-    with tempfile.TemporaryDirectory() as tmp_dir:
-        # download in tmp location
-        owl_path = Path(tmp_dir) / f"{oid.lower()}.owl"
-        url = ofile.source
-        with requests.get(url, stream=True) as r:
-            r.raise_for_status()
-            with open(owl_path, "wb") as f:
+    gzip_path = ofile.path
+    gzip_path.parent.mkdir(parents=True, exist_ok=True)
+    temporary_path: Path | None = None
+    try:
+        with tempfile.NamedTemporaryFile(
+            dir=gzip_path.parent, suffix=".tmp", delete=False
+        ) as f_tmp:
+            temporary_path = Path(f_tmp.name)
+            with (
+                get_session().get(ofile.source, stream=True) as r,
+                gzip.GzipFile(
+                    filename=f"{oid.lower()}.owl", fileobj=f_tmp, mode="wb"
+                ) as f_out,
+            ):
+                r.raise_for_status()
                 for chunk in r.iter_content(chunk_size=8192):
-                    f.write(chunk)
-
-        # only store gzip version
-        with open(owl_path, "rb") as f_in:
-            gzip_path = RESOURCES_DIR / "ontologies" / f"{oid.lower()}.owl.gz"
-            with gzip.open(gzip_path, "wb") as f_out:
-                shutil.copyfileobj(f_in, f_out)
+                    f_out.write(chunk)
+        temporary_path.replace(gzip_path)
+    finally:
+        if temporary_path is not None:
+            temporary_path.unlink(missing_ok=True)
 
 
 def update_ontology_files(ontology_ids: list[str] | None = None) -> None:
@@ -224,11 +234,18 @@ def update_ontology_files(ontology_ids: list[str] | None = None) -> None:
     Args:
         ontology_ids: ids of the ontologies to download, all of
             `ontology_files` if none are given
+
+    Raises:
+        Exception: the error of the first failed download, after all
+            downloads finished
     """
     ids = ontology_ids if ontology_ids is not None else list(ontology_files)
     with ThreadPoolExecutor(max_workers=4) as pool:
-        for oid in ids:
-            pool.submit(update_ontology_file, ontology_files[oid])
+        futures = [
+            pool.submit(update_ontology_file, ontology_files[oid]) for oid in ids
+        ]
+    for future in futures:
+        future.result()
 
 
 class Ontology:

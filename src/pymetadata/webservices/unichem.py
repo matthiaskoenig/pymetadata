@@ -16,6 +16,7 @@ See <https://www.ebi.ac.uk/unichem/info/webservices>.
 
 import contextlib
 import logging
+import re
 import urllib.parse
 from dataclasses import dataclass, field, fields
 from pathlib import Path
@@ -25,6 +26,7 @@ import pymetadata
 from pymetadata.cache import (
     CACHE_DURATION_ONTOLOGY,
     DataclassJSONEncoder,
+    cache_file,
     read_json_cache,
     read_json_cache_fallback,
     write_json_cache,
@@ -33,6 +35,9 @@ from pymetadata.core.xref import CrossReference
 from pymetadata.webservices.webservice import WebserviceError, get_json
 
 logger = logging.getLogger(__name__)
+
+#: standard InChIKey, e.g., `AAOVKJBEBIDNHE-UHFFFAOYSA-N`
+INCHIKEY_PATTERN = re.compile(r"^[A-Z]{14}-[A-Z]{10}-[A-Z]$")
 
 
 @dataclass
@@ -184,16 +189,19 @@ class UnichemQuery:
 
         Args:
             inchikey: InChIKey of the structure, e.g.,
-                `AAOVKJBEBIDNHE-UHFFFAOYSA-N`
+                `AAOVKJBEBIDNHE-UHFFFAOYSA-N`, case is ignored
 
         Returns:
-            One cross reference per database which contains the structure.
+            One cross reference per database which contains the structure,
+            empty for an invalid InChIKey.
         """
-        # cache files
-        xref_base_path = self.cache_path / "unichem"
-        if not xref_base_path.exists():
-            xref_base_path.mkdir(parents=True)
-        xref_path = xref_base_path / f"{inchikey}.json"
+        key = inchikey.strip().upper()
+        if not INCHIKEY_PATTERN.match(key):
+            logger.error("Invalid InChIKey: '%s'", inchikey)
+            return []
+        inchikey = key
+
+        xref_path = cache_file(self.cache_path / "unichem", inchikey)
 
         # retrieve or query data
         data: dict = {}
@@ -203,7 +211,10 @@ class UnichemQuery:
                 data = read_json_cache(xref_path, max_age=CACHE_DURATION_ONTOLOGY)
 
         if not data:
-            url = f"https://www.ebi.ac.uk/unichem/rest/inchikey/{inchikey}"
+            url = (
+                "https://www.ebi.ac.uk/unichem/rest/inchikey/"
+                f"{urllib.parse.quote(inchikey, safe='')}"
+            )
             try:
                 data = get_json(url)
             except WebserviceError as err:
@@ -221,9 +232,12 @@ class UnichemQuery:
                     )
                     return []
             else:
-                write_json_cache(
-                    data=data, cache_path=xref_path, json_encoder=DataclassJSONEncoder
-                )
+                if self.cache:
+                    write_json_cache(
+                        data=data,
+                        cache_path=xref_path,
+                        json_encoder=DataclassJSONEncoder,
+                    )
 
         xrefs: list[CrossReference] = []
         if data:

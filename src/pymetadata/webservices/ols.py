@@ -29,6 +29,7 @@ from typing import Any
 import pymetadata
 from pymetadata.cache import (
     CACHE_DURATION_ONTOLOGY,
+    cache_file,
     read_json_cache,
     read_json_cache_fallback,
     write_json_cache,
@@ -127,9 +128,9 @@ class OLSQuery:
         self.ontologies: dict[str, OLSOntology] = {
             ontology.name: ontology for ontology in ontologies
         }
-        if not cache_path:
+        if cache_path is None:
             cache_path = pymetadata.CACHE_PATH
-        if not cache:
+        if cache is None:
             cache = pymetadata.CACHE_USE
 
         self.cache_path = cache_path / "ols"
@@ -198,9 +199,10 @@ class OLSQuery:
         iri = self.get_iri(ontology=ontology, term=term)
 
         # double urlencode iri for OLS
-        urliri = urllib.parse.quote(iri, safe="")
-        urliri = urllib.parse.quote(urliri, safe="")
-        cache_path = self.cache_path / f"{urliri}.json"
+        quoted_iri = urllib.parse.quote(iri, safe="")
+        urliri = urllib.parse.quote(quoted_iri, safe="")
+        # quoting the quoted iri again gives the file name `<urliri>.json`
+        cache_path = cache_file(self.cache_path, quoted_iri)
         data: dict[str, Any] = {}
         if self.cache:
             with contextlib.suppress(OSError):

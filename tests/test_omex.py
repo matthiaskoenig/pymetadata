@@ -1,10 +1,13 @@
 """Test omex."""
 
+import gc
+import zipfile
 from pathlib import Path
 
 import pytest
+from pydantic import ValidationError
 
-from pymetadata.omex import Manifest, ManifestEntry, Omex
+from pymetadata.omex import EntryFormat, Manifest, ManifestEntry, Omex
 
 
 @pytest.fixture(scope="session")
@@ -335,3 +338,167 @@ def test_omex_roundtrip_keeps_manifest_order(tmp_path: Path) -> None:
     omex.to_omex(omex_path)
     locations = [entry.location for entry in Omex.from_omex(omex_path).manifest.entries]
     assert locations == [".", "./manifest.xml", *ORDERED_LOCATIONS]
+
+
+@pytest.mark.parametrize(
+    "location",
+    ["../escaped.txt", "./a/../../escaped.txt", "/abs/file.txt", "C:/file.txt", ""],
+)
+def test_location_outside_archive_is_rejected(location: str) -> None:
+    """Locations must stay inside the archive."""
+    with pytest.raises(ValidationError):
+        ManifestEntry(location=location, format=EntryFormat.TXT)
+
+
+@pytest.mark.parametrize(
+    "location, normalized",
+    [
+        (".", "."),
+        ("./", "."),
+        ("model.xml", "./model.xml"),
+        (".hidden", "./.hidden"),
+        ("./a//b/./model.xml", "./a/b/model.xml"),
+        ("a\\b.xml", "./a/b.xml"),
+    ],
+)
+def test_location_is_normalized(location: str, normalized: str) -> None:
+    """Locations are normalized to relative paths starting with `./`."""
+    entry = ManifestEntry(location=location, format=EntryFormat.TXT)
+    assert entry.location == normalized
+
+
+def test_add_entry_does_not_escape_archive(tmp_path: Path) -> None:
+    """A location changed after creation is validated as well."""
+    entry = ManifestEntry(location="./model.txt", format=EntryFormat.TXT)
+    with pytest.raises(ValidationError):
+        entry.location = "../escaped.txt"
+
+
+def test_manifest_special_characters_roundtrip(tmp_path: Path) -> None:
+    """Locations with XML special characters survive writing and reading."""
+    # `"`, `<` and `>` are not allowed in file names on Windows
+    name = "a&b 'c'.txt"
+    source = tmp_path / "source.txt"
+    source.write_text("content", encoding="utf-8")
+    omex = Omex()
+    omex.add_entry(source, ManifestEntry(location=name, format=EntryFormat.TXT))
+    omex_path = tmp_path / "special.omex"
+    omex.to_omex(omex_path)
+
+    with Omex.from_omex(omex_path) as omex2:
+        assert f"./{name}" in omex2.manifest
+        assert omex2.get_path(name).read_text(encoding="utf-8") == "content"
+
+
+def test_add_entry_unnormalized_location_twice(tmp_path: Path) -> None:
+    """Adding the same unnormalized location twice replaces the entry."""
+    source = tmp_path / "m.txt"
+    source.write_text("content", encoding="utf-8")
+    with Omex() as omex:
+        for _ in range(2):
+            omex.add_entry(source, ManifestEntry(location="m.txt", format="txt"))
+        locations = [e.location for e in omex.manifest.entries]
+        assert locations == [".", "./manifest.xml", "./m.txt"]
+        assert omex.get_path("m.txt").exists()
+
+
+def test_add_entry_does_not_modify_entry(tmp_path: Path) -> None:
+    """The entry passed to `add_entry` is not changed by the archive."""
+    source = tmp_path / "m.txt"
+    source.write_text("content", encoding="utf-8")
+    entry = ManifestEntry(location="./m.txt", format=EntryFormat.TXT)
+    with Omex() as omex:
+        omex.add_entry(source, entry)
+        assert omex.manifest["./m.txt"] is not entry
+
+
+@pytest.mark.parametrize(
+    "format_key, count",
+    [("csv", 1), ("CSV", 1), ("SBML_L3V1", 1), ("sbml", 1), ("png", 0)],
+)
+def test_entries_by_format_name(tmp_path: Path, format_key: str, count: int) -> None:
+    """Formats are matched by the name of an `EntryFormat`."""
+    source = tmp_path / "m.txt"
+    source.write_text("content", encoding="utf-8")
+    with Omex() as omex:
+        omex.add_entry(
+            source, ManifestEntry(location="data.csv", format=EntryFormat.CSV)
+        )
+        omex.add_entry(
+            source,
+            ManifestEntry(location="model.xml", format=EntryFormat.SBML_L3V1),
+        )
+        assert len(omex.entries_by_format(format_key)) == count
+
+
+def test_temporary_directory_removed_without_context_manager() -> None:
+    """The temporary directory is removed when the archive is collected."""
+    omex = Omex()
+    tmp_dir = omex._tmp_dir
+    assert tmp_dir.exists()
+    del omex
+    gc.collect()
+    assert not tmp_dir.exists()
+
+
+def test_close_removes_temporary_directory() -> None:
+    """`close` removes the temporary directory and can be called twice."""
+    omex = Omex()
+    tmp_dir = omex._tmp_dir
+    omex.close()
+    omex.close()
+    assert not tmp_dir.exists()
+
+
+def test_guess_format_uppercase_xml(tmp_path: Path) -> None:
+    """The content of `.XML` files is inspected like that of `.xml` files."""
+    path = tmp_path / "model.XML"
+    path.write_text('<?xml version="1.0"?>\n<sbml level="3">', encoding="utf-8")
+    assert Omex.guess_format(path) == EntryFormat.SBML.value
+
+
+def test_guess_format_non_utf8_xml(tmp_path: Path) -> None:
+    """The format of an XML file which is not UTF-8 can be guessed."""
+    path = tmp_path / "model.xml"
+    path.write_bytes('<?xml version="1.0"?>\n<sbml name="é">'.encode("latin-1"))
+    assert Omex.guess_format(path) == EntryFormat.SBML.value
+
+
+@pytest.mark.parametrize("url", ["file:///etc/passwd", "ftp://example.org/a.omex"])
+def test_from_url_rejects_scheme(url: str) -> None:
+    """Only http and https urls can be read."""
+    with pytest.raises(ValueError, match="scheme"):
+        Omex.from_url(url)
+
+
+def test_from_omex_without_manifest_fails(tmp_path: Path) -> None:
+    """A zip without `manifest.xml` is not a COMBINE archive."""
+    zip_path = tmp_path / "plain.zip"
+    with zipfile.ZipFile(zip_path, "w") as zf:
+        zf.writestr("model.xml", "<sbml/>")
+    with pytest.raises(ValueError, match="manifest"):
+        Omex.from_omex(zip_path)
+
+
+def test_to_omex_keeps_existing_file_on_error(tmp_path: Path) -> None:
+    """A failing write does not destroy an existing archive."""
+    omex_path = tmp_path / "archive.omex"
+    omex_path.write_bytes(b"existing")
+    omex = Omex()
+    omex.manifest.entries.append(
+        ManifestEntry(location="./missing.txt", format=EntryFormat.TXT)
+    )
+    with pytest.raises(FileNotFoundError):
+        omex.to_omex(omex_path)
+    assert omex_path.read_bytes() == b"existing"
+    assert list(tmp_path.iterdir()) == [omex_path]
+
+
+def test_manifest_xml_escapes_attributes(tmp_path: Path) -> None:
+    """All XML special characters in the attributes are escaped."""
+    location = "./a&b \"c\" <d> 'e'.txt"
+    manifest = Manifest()
+    manifest.add_entry(ManifestEntry(location=location, format=EntryFormat.TXT))
+    manifest_path = tmp_path / "manifest.xml"
+    manifest.to_manifest(manifest_path)
+    assert location in Manifest.from_manifest(manifest_path)

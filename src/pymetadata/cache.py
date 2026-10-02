@@ -13,10 +13,12 @@ see `read_json_cache_fallback`. Working offline therefore keeps working with
 whatever was cached before.
 """
 
+import hashlib
 import json
 import logging
 import tempfile
 import time
+import urllib.parse
 from json.encoder import JSONEncoder
 from pathlib import Path
 from typing import Any
@@ -33,6 +35,10 @@ CACHE_DURATION_ONTOLOGY: float = 30 * 24
 #: registry is refreshed daily
 CACHE_DURATION_REGISTRY: float = 24
 
+#: maximum length in bytes of a cache file name; longer names are hashed. Most
+#: file systems allow 255 bytes, the margin leaves room for temporary suffixes
+CACHE_FILENAME_MAX_BYTES: int = 200
+
 
 class DataclassJSONEncoder(JSONEncoder):
     """JSON encoder which serializes dataclasses via their `__dict__`."""
@@ -40,6 +46,39 @@ class DataclassJSONEncoder(JSONEncoder):
     def default(self, o: Any) -> Any:
         """Serialize an object which json cannot serialize itself."""
         return o.__dict__
+
+
+def cache_file(directory: Path, key: str) -> Path:
+    """Get the path of the cache file for a key.
+
+    The key, e.g., a term or an IRI, is percent-quoted into a single file name,
+    so that it cannot contain path separators and leave the directory. A key
+    whose file name would exceed `CACHE_FILENAME_MAX_BYTES` is replaced by its
+    sha256 hash, which keeps the name within the limits of the file system.
+
+    Args:
+        directory: directory of the cache files
+        key: what is cached, e.g., `CHEBI:2668`
+
+    Returns:
+        The path of the JSON cache file inside `directory`.
+
+    Raises:
+        ValueError: if the key is empty or the file would be outside `directory`
+    """
+    if not key:
+        raise ValueError("Cache key must not be empty.")
+
+    filename = f"{urllib.parse.quote(key, safe='')}.json"
+    if len(filename.encode("utf-8")) > CACHE_FILENAME_MAX_BYTES:
+        digest = hashlib.sha256(key.encode("utf-8")).hexdigest()
+        filename = f"{digest}.json"
+
+    path = directory / filename
+    if path.resolve().parent != directory.resolve():
+        raise ValueError(f"Cache file for '{key}' is outside of '{directory}'.")
+
+    return path
 
 
 def cache_age(cache_path: Path) -> float | None:
@@ -69,7 +108,9 @@ def read_json_cache(cache_path: Path, max_age: float | None = None) -> dict:
         The cached content.
 
     Raises:
-        IOError: if the cache file does not exist or is older than `max_age`
+        IOError: if the cache file does not exist, is older than `max_age` or
+            is corrupt. A corrupt file is removed, so that it is replaced by
+            the next query.
     """
     age = cache_age(cache_path)
     if age is None:
@@ -79,9 +120,16 @@ def read_json_cache(cache_path: Path, max_age: float | None = None) -> dict:
         logger.debug("Cache outdated after %.1f h: %s", age, cache_path)
         raise OSError(f"Cache is older than {max_age} h: '{cache_path}'")
 
-    with open(cache_path) as fp:
-        logger.debug("Read cache: %s", cache_path)
-        return json.load(fp)
+    try:
+        with open(cache_path, encoding="utf-8") as fp:
+            logger.debug("Read cache: %s", cache_path)
+            return json.load(fp)
+    except ValueError as err:
+        # JSONDecodeError and UnicodeDecodeError, e.g., a file written by
+        # a crashed process or modified by hand
+        logger.warning("Removing corrupt cache: '%s': %s", cache_path, err)
+        cache_path.unlink(missing_ok=True)
+        raise OSError(f"Cache is corrupt: '{cache_path}': {err}") from err
 
 
 def read_json_cache_fallback(cache_path: Path, reason: str) -> dict | None:
@@ -105,9 +153,9 @@ def read_json_cache_fallback(cache_path: Path, reason: str) -> dict | None:
         return None
 
     try:
-        with open(cache_path) as fp:
+        with open(cache_path, encoding="utf-8") as fp:
             data = json.load(fp)
-    except (OSError, json.JSONDecodeError) as err:
+    except (OSError, ValueError) as err:
         logger.warning("Outdated cache could not be read: '%s': %s", cache_path, err)
         return None
 
@@ -141,7 +189,7 @@ def write_json_cache(
         # Use the same filesystem for atomic replacement. Close the file before
         # replacing it so this also works on Windows.
         with tempfile.NamedTemporaryFile(
-            mode="w", dir=cache_path.parent, delete=False
+            mode="w", encoding="utf-8", dir=cache_path.parent, delete=False
         ) as fp:
             temporary_path = Path(fp.name)
             logger.info("Write cache: %s", cache_path)
