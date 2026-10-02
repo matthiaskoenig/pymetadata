@@ -376,7 +376,8 @@ def test_add_entry_does_not_escape_archive(tmp_path: Path) -> None:
 
 def test_manifest_special_characters_roundtrip(tmp_path: Path) -> None:
     """Locations with XML special characters survive writing and reading."""
-    name = "a&b \"c\" <d> 'e'.txt"
+    # `"`, `<` and `>` are not allowed in file names on Windows
+    name = "a&b 'c'.txt"
     source = tmp_path / "source.txt"
     source.write_text("content", encoding="utf-8")
     omex = Omex()
@@ -491,3 +492,13 @@ def test_to_omex_keeps_existing_file_on_error(tmp_path: Path) -> None:
         omex.to_omex(omex_path)
     assert omex_path.read_bytes() == b"existing"
     assert list(tmp_path.iterdir()) == [omex_path]
+
+
+def test_manifest_xml_escapes_attributes(tmp_path: Path) -> None:
+    """All XML special characters in the attributes are escaped."""
+    location = "./a&b \"c\" <d> 'e'.txt"
+    manifest = Manifest()
+    manifest.add_entry(ManifestEntry(location=location, format=EntryFormat.TXT))
+    manifest_path = tmp_path / "manifest.xml"
+    manifest.to_manifest(manifest_path)
+    assert location in Manifest.from_manifest(manifest_path)
