@@ -73,6 +73,7 @@ from xml.sax.saxutils import quoteattr
 
 from pydantic import BaseModel, ConfigDict, PrivateAttr, field_validator
 
+from pymetadata._files import set_regular_file_mode
 from pymetadata.webservices.webservice import get_session
 
 logger = logging.getLogger(__name__)
@@ -1063,6 +1064,7 @@ class Omex:
                         zf.writestr(arcname, self.manifest.to_manifest_xml())
                     else:
                         zf.write(filename=self._tmp_dir / e.location, arcname=arcname)
+            set_regular_file_mode(tmp_path)
             tmp_path.replace(omex_path)
         except BaseException:
             tmp_path.unlink(missing_ok=True)

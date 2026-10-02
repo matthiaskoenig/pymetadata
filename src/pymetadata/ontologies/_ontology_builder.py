@@ -40,6 +40,7 @@ from pathlib import Path
 from typing import TYPE_CHECKING
 
 from pymetadata import ONTOLOGY_DIR, RESOURCES_DIR
+from pymetadata._files import set_regular_file_mode
 from pymetadata.webservices.webservice import get_session
 
 if TYPE_CHECKING:
@@ -222,6 +223,7 @@ def update_ontology_file(ofile: OntologyFile) -> None:
                 r.raise_for_status()
                 for chunk in r.iter_content(chunk_size=8192):
                     f_out.write(chunk)
+        set_regular_file_mode(temporary_path)
         temporary_path.replace(gzip_path)
     finally:
         if temporary_path is not None:
