@@ -1,6 +1,8 @@
 """Test omex."""
 
 import gc
+import os
+import stat
 import zipfile
 from pathlib import Path
 
@@ -502,3 +504,16 @@ def test_manifest_xml_escapes_attributes(tmp_path: Path) -> None:
     manifest_path = tmp_path / "manifest.xml"
     manifest.to_manifest(manifest_path)
     assert location in Manifest.from_manifest(manifest_path)
+
+
+@pytest.mark.skipif(os.name == "nt", reason="POSIX file modes")
+def test_to_omex_file_mode_follows_umask(tmp_path: Path) -> None:
+    """The archive is created with the permissions of a regular new file."""
+    omex_path = tmp_path / "archive.omex"
+    with Omex() as omex:
+        omex.to_omex(omex_path)
+    reference = tmp_path / "reference"
+    reference.touch()
+    assert stat.S_IMODE(omex_path.stat().st_mode) == stat.S_IMODE(
+        reference.stat().st_mode
+    )
