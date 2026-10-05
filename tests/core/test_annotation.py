@@ -612,3 +612,37 @@ def test_pattern_mismatch(uniprot_registry: None) -> None:
         )
     )
     assert data.pattern_match is False
+
+
+@pytest.mark.parametrize(
+    "resource,expected",
+    [
+        ("chebi/33699", True),
+        ("CHEBI:33699", True),
+        ("chebi/abc", False),
+    ],
+)
+def test_pattern_match_embedded_prefix(
+    monkeypatch: pytest.MonkeyPatch, resource: str, expected: bool
+) -> None:
+    """A term written without the embedded prefix is checked with the prefix."""
+    namespace = Namespace.from_dict(
+        {
+            "id": None,
+            "prefix": "chebi",
+            "name": "ChEBI",
+            "pattern": r"^CHEBI:\d+$",
+            "namespaceEmbeddedInLui": True,
+            "description": "ChEBI",
+            "resources": [
+                _resource("ChEBI", "https://example.org/{$id}", True),
+            ],
+        }
+    )
+    registry = SimpleNamespace(ns_dict={"chebi": namespace})
+    monkeypatch.setattr("pymetadata.core.annotation.get_registry", lambda: registry)
+    monkeypatch.setattr(RDFAnnotationData, "query_ols", lambda self: {})
+    data = RDFAnnotationData(
+        RDFAnnotation(qualifier=BQB.IS, resource=resource, validate=False)
+    )
+    assert data.pattern_match is expected

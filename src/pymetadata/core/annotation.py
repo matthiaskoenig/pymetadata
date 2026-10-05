@@ -632,7 +632,22 @@ class RDFAnnotationData(RDFAnnotation):
 
             primary = primary_resource(namespace.resources)
             self.collection_name = namespace.name
-            self.pattern_match = pattern_matches(namespace.pattern, self.term)
+            candidates = [self.term]
+            if (
+                namespace_embedded
+                and namespace.prefix
+                and self.term
+                and not self.term.lower().startswith(f"{namespace.prefix.lower()}:")
+            ):
+                # the pattern contains the prefix, the term is written without it
+                candidates = [
+                    f"{namespace.prefix.upper()}:{self.term}",
+                    f"{namespace.prefix}:{self.term}",
+                ]
+            results = [pattern_matches(namespace.pattern, c) for c in candidates]
+            self.pattern_match = (
+                True if any(results) else (False if False in results else None)
+            )
             if primary is not None:
                 self.collection_homepage = primary.resourceHomeUrl
                 self.url = urls.get(id(primary))
