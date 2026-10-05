@@ -92,7 +92,7 @@ def test_unknown_bioregistry_ontology_is_not_guessed(
     )
     assert data.label is None
     assert data.errors == []
-    assert data.warnings == ["'unknown' is not on OLS."]
+    assert data.warnings == []
 
 
 @pytest.mark.parametrize(

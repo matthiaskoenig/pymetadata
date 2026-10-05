@@ -90,11 +90,15 @@ from pymetadata.core.miriam import BQB
 
 annotation = RDFAnnotation(qualifier=BQB.IS, resource="chebi/CHEBI:33699")
 data = RDFAnnotationData(annotation)
-print(data.url)  # url of the first provider
+print(data.url)  # url of the primary provider, the official one of the registry
+print(data.providers)  # the non deprecated providers, the primary one first
+print(data.collection_name)  # name of the collection
+print(data.collection_homepage)  # homepage of the primary provider
+print(data.pattern_match)  # whether the term matches the pattern of the collection
 print(data.xrefs)  # one entry per identifiers.org provider
 ```
 
-`query_ols()` then asks the [Ontology Lookup Service](https://www.ebi.ac.uk/ols4) for the term itself and fills in label, description and synonyms. Note that it also replaces `xrefs` with the cross references reported by OLS, which can be empty for a given term:
+`query_ols()` then asks the [Ontology Lookup Service](https://www.ebi.ac.uk/ols4) for the term itself and fills in label, description and synonyms, and the ontology, the IRI and the page of the term in OLS (`ontology`, `iri`, `ols_url`). A collection which is not on OLS gives no information and no message, a term which OLS does not know gives a warning. Note that it also replaces `xrefs` with the cross references reported by OLS, which can be empty for a given term:
 
 ```python
 data.query_ols()
@@ -103,6 +107,8 @@ print(data.label)  # messenger RNA
 print(data.description)  # An RNA molecule that transfers the coding information ...
 print(data.synonyms)  # mRNA, ...
 ```
+
+Protein information of UniProt and the structure of a ChEBI compound are queried with `UniprotQuery.query("P69905")` and `ChebiQuery.structure("CHEBI:15377")`, see the [API reference](api/webservices.uniprot.md).
 
 Both steps require network access. Responses are cached on disk by default, so repeated terms are not queried again; see [Cache](installation.md#cache).
 

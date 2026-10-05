@@ -16,6 +16,7 @@ See <https://www.ebi.ac.uk/chebi/>.
 import contextlib
 import logging
 import re
+import tempfile
 from pathlib import Path
 from typing import Any
 
@@ -23,12 +24,18 @@ import pymetadata
 from pymetadata.cache import (
     CACHE_DURATION_ONTOLOGY,
     DataclassJSONEncoder,
+    cache_age,
     cache_file,
     read_json_cache,
     read_json_cache_fallback,
     write_json_cache,
 )
-from pymetadata.webservices.webservice import WebserviceError, get_json
+from pymetadata.webservices.webservice import (
+    WebserviceError,
+    WebserviceNotFoundError,
+    get_bytes,
+    get_json,
+)
 
 logger = logging.getLogger(__name__)
 
@@ -37,6 +44,25 @@ CHEBI_PATTERN = re.compile(r"^(?:CHEBI:)?(\d+)$", flags=re.IGNORECASE)
 
 #: endpoint of the ChEBI compounds, queried with the `chebi_ids` parameter
 CHEBI_URL = "https://www.ebi.ac.uk/chebi/backend/api/public/compounds/"
+
+#: endpoint of the structure (svg image) of a compound, formatted with its number
+CHEBI_STRUCTURE_URL = (
+    "https://www.ebi.ac.uk/chebi/backend/api/public/compound/{}/structure/"
+)
+
+
+def _write_bytes_atomic(path: Path, content: bytes) -> None:
+    """Write a file atomically, so a reader never sees a partial file."""
+    path.parent.mkdir(parents=True, exist_ok=True)
+    temporary_path: Path | None = None
+    try:
+        with tempfile.NamedTemporaryFile(dir=path.parent, delete=False) as fp:
+            temporary_path = Path(fp.name)
+            fp.write(content)
+        temporary_path.replace(path)
+    finally:
+        if temporary_path is not None:
+            temporary_path.unlink(missing_ok=True)
 
 
 class ChebiQuery:
@@ -95,8 +121,8 @@ class ChebiQuery:
         chebi_path = cache_file(Path(cache_path) / "chebi", chebi)
         data: dict[str, Any] = {}
         if cache:
-            with contextlib.suppress(OSError):
-                # cache does not exist or is outdated
+            with contextlib.suppress(OSError, ValueError):
+                # cache does not exist, is outdated or corrupt
                 data = read_json_cache(
                     cache_path=chebi_path, max_age=CACHE_DURATION_ONTOLOGY
                 )
@@ -143,6 +169,55 @@ class ChebiQuery:
                 )
 
         return data
+
+    @staticmethod
+    def structure(
+        chebi: str, cache: bool | None = None, cache_path: Path | None = None
+    ) -> bytes | None:
+        """Get the structure of a ChEBI compound as an svg image.
+
+        Args:
+            chebi: ChEBI term, e.g., `CHEBI:33699`
+            cache: cache the image, defaults to `pymetadata.CACHE_USE`
+            cache_path: directory for cached responses, defaults to
+                `pymetadata.CACHE_PATH`
+
+        Returns:
+            The svg image, None if the id is invalid, the compound has no
+            structure, or ChEBI cannot be reached and nothing is cached.
+        """
+        match = CHEBI_PATTERN.match(chebi.strip()) if chebi else None
+        if not match:
+            logger.error("Invalid ChEBI id: '%s'", chebi)
+            return None
+        number = match.group(1)
+        if cache is None:
+            cache = pymetadata.CACHE_USE
+        if cache_path is None:
+            cache_path = pymetadata.CACHE_PATH
+        path = Path(cache_path) / "chebi" / f"CHEBI%3A{number}.svg"
+        age = cache_age(path) if cache else None
+        if age is not None and age <= CACHE_DURATION_ONTOLOGY:
+            return path.read_bytes()
+        try:
+            svg = get_bytes(CHEBI_STRUCTURE_URL.format(number))
+        except WebserviceNotFoundError:
+            return None
+        except WebserviceError as err:
+            if age is not None:
+                logger.warning(
+                    "Using outdated structure of 'CHEBI:%s': %s", number, err
+                )
+                return path.read_bytes()
+            logger.error(
+                "ChEBI structure could not be retrieved for 'CHEBI:%s': %s",
+                number,
+                err,
+            )
+            return None
+        if cache:
+            _write_bytes_atomic(path, svg)
+        return svg
 
 
 if __name__ == "__main__":

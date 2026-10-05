@@ -1,5 +1,6 @@
 """Testing the shared web service session."""
 
+import pytest
 import requests
 
 from pymetadata.webservices.webservice import (
@@ -38,3 +39,57 @@ def test_session_has_timeout() -> None:
     adapter = get_session().get_adapter("https://www.ebi.ac.uk")
     assert isinstance(adapter, _TimeoutHTTPAdapter)
     assert adapter.timeout == TIMEOUT
+
+
+def test_get_json_raises_not_found_for_404(monkeypatch: pytest.MonkeyPatch) -> None:
+    """A 404 is the dedicated not found error, a subclass of the webservice error."""
+    from pymetadata.webservices import webservice
+
+    class Response:
+        status_code = 404
+
+    class Session:
+        def get(self, url: str, params: object = None) -> Response:
+            return Response()
+
+    monkeypatch.setattr(webservice, "get_session", lambda: Session())
+    with pytest.raises(webservice.WebserviceNotFoundError):
+        webservice.get_json("https://example.org/missing")
+    assert issubclass(webservice.WebserviceNotFoundError, webservice.WebserviceError)
+
+
+def _fake_bytes_session(
+    monkeypatch: pytest.MonkeyPatch, content_type: str, content: bytes
+) -> None:
+    """Let the shared session answer 200 with the given content."""
+    from pymetadata.webservices import webservice
+
+    class Response:
+        status_code = 200
+
+        def __init__(self) -> None:
+            self.headers = {"Content-Type": content_type}
+            self.content = content
+
+    class Session:
+        def get(self, url: str, params: object = None) -> Response:
+            return Response()
+
+    monkeypatch.setattr(webservice, "get_session", lambda: Session())
+
+
+def test_get_bytes_returns_svg(monkeypatch: pytest.MonkeyPatch) -> None:
+    """The content of an svg response is returned."""
+    from pymetadata.webservices import webservice
+
+    _fake_bytes_session(monkeypatch, "image/svg+xml", b"<svg/>")
+    assert webservice.get_bytes("https://example.org/a.svg") == b"<svg/>"
+
+
+def test_get_bytes_rejects_other_content_type(monkeypatch: pytest.MonkeyPatch) -> None:
+    """A 200 response which is no svg image is an error."""
+    from pymetadata.webservices import webservice
+
+    _fake_bytes_session(monkeypatch, "text/html", b"<html/>")
+    with pytest.raises(webservice.WebserviceError):
+        webservice.get_bytes("https://example.org/a.svg")

@@ -108,6 +108,14 @@ class WebserviceError(OSError):
     """
 
 
+class WebserviceNotFoundError(WebserviceError):
+    """Raised when a web service answers that the queried entry does not exist (404).
+
+    A caller tells a missing entry apart from a service which cannot answer:
+    the entry is reported as unknown, and no cached content is used.
+    """
+
+
 def get_json(url: str, params: dict[str, str] | None = None) -> Any:
     """Query a url and return the parsed JSON response.
 
@@ -119,6 +127,7 @@ def get_json(url: str, params: dict[str, str] | None = None) -> Any:
         The parsed JSON response.
 
     Raises:
+        WebserviceNotFoundError: if the service answers 404
         WebserviceError: if the service cannot be reached, answers with a
             status other than 200, or does not answer with JSON
     """
@@ -129,6 +138,8 @@ def get_json(url: str, params: dict[str, str] | None = None) -> Any:
         # no network, DNS failure, timeout, too many retries, ...
         raise WebserviceError(f"Service is not reachable for '{url}': {err}") from err
 
+    if response.status_code == 404:
+        raise WebserviceNotFoundError(f"'404' response for: '{url}'")
     if response.status_code != 200:
         raise WebserviceError(f"'{response.status_code}' response for: '{url}'")
 
@@ -137,3 +148,33 @@ def get_json(url: str, params: dict[str, str] | None = None) -> Any:
     except ValueError as err:
         # a service which is down answers with an HTML error page
         raise WebserviceError(f"Response for '{url}' is not JSON: {err}") from err
+
+
+def get_bytes(url: str, params: dict[str, str] | None = None) -> bytes:
+    """Query a url for an svg image and return its content.
+
+    Args:
+        url: url to query
+        params: query parameters, encoded and appended to the url
+
+    Returns:
+        The content of the response.
+
+    Raises:
+        WebserviceNotFoundError: if the service answers 404
+        WebserviceError: if the service cannot be reached, answers with another
+            status than 200, or does not answer with an svg image
+    """
+    logger.debug("Query: %s %s", url, params or "")
+    try:
+        response = get_session().get(url, params=params)
+    except requests.RequestException as err:
+        raise WebserviceError(f"Service is not reachable for '{url}': {err}") from err
+    if response.status_code == 404:
+        raise WebserviceNotFoundError(f"'404' response for: '{url}'")
+    if response.status_code != 200:
+        raise WebserviceError(f"'{response.status_code}' response for: '{url}'")
+    content_type = response.headers.get("Content-Type", "").lower()
+    if not content_type.startswith("image/svg+xml"):
+        raise WebserviceError(f"Response for '{url}' is no svg image: '{content_type}'")
+    return response.content

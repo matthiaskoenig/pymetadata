@@ -21,6 +21,7 @@ print(annotation.validate())
 import logging
 import re
 import urllib.parse
+from dataclasses import asdict, dataclass
 from enum import Enum
 from functools import lru_cache
 from pprint import pprint
@@ -29,7 +30,7 @@ from typing import Any, ClassVar, Final
 from pymetadata.core.miriam import BQB, BQM
 from pymetadata.core.xref import CrossReference, is_url
 from pymetadata.webservices.ols import ONTOLOGIES, OLSQuery
-from pymetadata.webservices.registry import Namespace, get_registry
+from pymetadata.webservices.registry import Namespace, Resource, get_registry
 
 _OLS_QUERY: OLSQuery | None = None
 
@@ -482,6 +483,46 @@ class RDFAnnotation:
         return valid_qualifier and valid_term
 
 
+@dataclass
+class Provider:
+    """A provider which resolves the term of an annotation.
+
+    Attributes:
+        name: name of the provider, e.g., `UniProt`
+        url: url of the term at the provider
+        official: whether the registry names it the official provider
+    """
+
+    name: str
+    url: str
+    official: bool
+
+
+def primary_resource(resources: list[Resource]) -> Resource | None:
+    """Get the provider a term links to: the official non deprecated one.
+
+    Falls back to the first non deprecated provider, and to the first provider
+    when all are deprecated.
+    """
+    active = [resource for resource in resources if not resource.deprecated]
+    for resource in active:
+        if resource.official:
+            return resource
+    if active:
+        return active[0]
+    return resources[0] if resources else None
+
+
+def pattern_matches(pattern: str | None, term: str | None) -> bool | None:
+    """Check a term against the pattern of its collection, None if it cannot be checked."""
+    if not pattern or not term:
+        return None
+    try:
+        return re.match(pattern, term) is not None
+    except re.error:
+        return None
+
+
 class RDFAnnotationData(RDFAnnotation):
     """An annotation with the information behind the identifier resolved.
 
@@ -492,8 +533,16 @@ class RDFAnnotationData(RDFAnnotation):
     cross references reported by OLS.
 
     Attributes:
-        url: url of the first provider of the collection
+        url: url of the primary provider of the collection
+        providers: non deprecated providers, the primary one first
+        collection_name: name of the collection, e.g., `UniProt Knowledgebase`
+        collection_homepage: homepage of the primary provider
+        pattern_match: whether the term matches the pattern of the collection,
+            None if it cannot be checked
         label: name of the term
+        ontology: ontology id of the term in OLS, e.g., `go`
+        iri: IRI of the term
+        ols_url: page of the term in OLS
         description: definition of the term
         synonyms: synonyms of the term
         xrefs: cross references of the term
@@ -519,8 +568,15 @@ class RDFAnnotationData(RDFAnnotation):
         self.term: str | None = annotation.term
         self.provider = annotation.provider
         self.url: str | None = None
+        self.providers: list[Provider] = []
+        self.collection_name: str | None = None
+        self.collection_homepage: str | None = None
+        self.pattern_match: bool | None = None
         self.description: str | None = None
         self.label: str | None = None
+        self.ontology: str | None = None
+        self.iri: str | None = None
+        self.ols_url: str | None = None
         self.synonyms: list[Any] = []
         self.xrefs: list[Any] = []
         self.warnings: list[Any] = []
@@ -539,6 +595,7 @@ class RDFAnnotationData(RDFAnnotation):
             if not namespace.resources:
                 namespace.resources = []
 
+            urls: dict[int, str] = {}
             for ns_resource in namespace.resources:
                 # create url
                 url = ns_resource.urlPattern
@@ -563,9 +620,7 @@ class RDFAnnotationData(RDFAnnotation):
                 url = url.replace("{$Id}", term)
                 url = url.replace("{$id}", term)
 
-                if not self.url:
-                    # set url to first resource url
-                    self.url = url
+                urls[id(ns_resource)] = url
 
                 # print(url)
                 _xref = CrossReference(
@@ -574,6 +629,36 @@ class RDFAnnotationData(RDFAnnotation):
                 valid = _xref.validate() and is_url(url)
                 if valid:
                     self.xrefs.append(_xref)
+
+            primary = primary_resource(namespace.resources)
+            self.collection_name = namespace.name
+            candidates = [self.term]
+            if (
+                namespace_embedded
+                and namespace.prefix
+                and self.term
+                and not self.term.lower().startswith(f"{namespace.prefix.lower()}:")
+            ):
+                # the pattern contains the prefix, the term is written without it
+                candidates = [
+                    f"{namespace.prefix.upper()}:{self.term}",
+                    f"{namespace.prefix}:{self.term}",
+                ]
+            results = [pattern_matches(namespace.pattern, c) for c in candidates]
+            self.pattern_match = (
+                True if any(results) else (False if False in results else None)
+            )
+            if primary is not None:
+                self.collection_homepage = primary.resourceHomeUrl
+                self.url = urls.get(id(primary))
+            active = [
+                r for r in namespace.resources if not r.deprecated and id(r) in urls
+            ]
+            active.sort(key=lambda r: r is not primary)
+            self.providers = [
+                Provider(name=r.name, url=urls[id(r)], official=bool(r.official))
+                for r in active
+            ]
 
         # query OLS information
         self.query_ols()
@@ -591,8 +676,15 @@ class RDFAnnotationData(RDFAnnotation):
             "collection": self.collection,
             "term": self.term,
             "label": self.label,
+            "ontology": self.ontology,
+            "iri": self.iri,
+            "ols_url": self.ols_url,
             "description": self.description,
             "url": self.url,
+            "providers": [asdict(p) for p in self.providers],
+            "collection_name": self.collection_name,
+            "collection_homepage": self.collection_homepage,
+            "pattern_match": self.pattern_match,
             "synonyms": self.synonyms,
             "xrefs": self.xrefs,
             "errors": self.errors,
@@ -618,6 +710,9 @@ class RDFAnnotationData(RDFAnnotation):
         if self.description is None:
             self.description = info["description"]
 
+        self.ontology = info.get("ontology")
+        self.iri = info.get("iri")
+        self.ols_url = info.get("ols_url")
         self.synonyms = info["synonyms"]
         self.xrefs = info["xrefs"]
         self.warnings.extend(info["warnings"])

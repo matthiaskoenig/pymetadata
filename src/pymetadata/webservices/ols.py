@@ -35,7 +35,11 @@ from pymetadata.cache import (
     write_json_cache,
 )
 from pymetadata.webservices.registry import get_registry
-from pymetadata.webservices.webservice import WebserviceError, get_json
+from pymetadata.webservices.webservice import (
+    WebserviceError,
+    WebserviceNotFoundError,
+    get_json,
+)
 
 logger = logging.getLogger(__name__)
 
@@ -94,6 +98,24 @@ ONTOLOGIES = [
     OLSOntology(name="scdo"),
     OLSOntology(name="vto"),
 ]
+
+
+OLS_TERM_PAGE = "https://www.ebi.ac.uk/ols4/ontologies/{}/classes?iri={}"
+
+
+def ols_term_url(ontology: str | None, iri: str | None) -> str | None:
+    """Get the page of a term in the Ontology Lookup Service.
+
+    Args:
+        ontology: ontology id of OLS, e.g., `go`
+        iri: IRI of the term
+
+    Returns:
+        The url of the page, or None without an ontology or an IRI.
+    """
+    if not ontology or not iri:
+        return None
+    return OLS_TERM_PAGE.format(ontology, urllib.parse.quote(iri, safe=""))
 
 
 class OLSQuery:
@@ -174,7 +196,8 @@ class OLSQuery:
 
         Returns:
             The OLS response, with `errors` and `warnings` describing problems
-            with the query.
+            with the query. A term OLS does not know is a warning, an ontology
+            which is not on OLS returns no information and no message.
         """
         if not ontology:
             return {"errors": [], "warnings": ["No collection."]}
@@ -191,10 +214,7 @@ class OLSQuery:
             if not namespace or not any(
                 resource.providerCode == "ols" for resource in namespace.resources or []
             ):
-                return {
-                    "errors": [],
-                    "warnings": [f"'{ontology}' is not on OLS."],
-                }
+                return {"errors": [], "warnings": []}
 
         iri = self.get_iri(ontology=ontology, term=term)
 
@@ -216,6 +236,8 @@ class OLSQuery:
             logger.info("Query: %s", url)
             try:
                 data = get_json(url)
+            except WebserviceNotFoundError:
+                return {"errors": [], "warnings": [f"Term '{term}' is not on OLS."]}
             except WebserviceError as err:
                 # prefer outdated information over none, e.g., when offline
                 if self.cache:
@@ -246,7 +268,8 @@ class OLSQuery:
             term: OLS response from `query_ols`
 
         Returns:
-            Dictionary with `label`, `description`, `synonyms` and `xrefs`.
+            Dictionary with `label`, `description`, `synonyms`, `xrefs`,
+            `ontology`, `iri` and `ols_url`.
         """
         data = {
             "errors": term["errors"],
@@ -268,10 +291,15 @@ class OLSQuery:
         synonyms = term.get("obo_synonym", [])
         xrefs = term.get("obo_xref", [])
 
+        ontology = term.get("ontology_name")
+        iri = term.get("iri")
         return {
             **data,
             "label": label,
             "description": description,
             "synonyms": synonyms,
             "xrefs": xrefs,
+            "ontology": ontology,
+            "iri": iri,
+            "ols_url": ols_term_url(ontology, iri),
         }
