@@ -103,8 +103,8 @@ class UniprotQuery:
 
         path = cache_file(Path(cache_path) / "uniprot", accession)
         if cache:
-            with contextlib.suppress(OSError):
-                # cache does not exist or is outdated
+            with contextlib.suppress(OSError, ValueError):
+                # cache does not exist, is outdated or corrupt
                 data = read_json_cache(cache_path=path, max_age=CACHE_DURATION_ONTOLOGY)
                 if data:
                     return data
@@ -127,7 +127,10 @@ class UniprotQuery:
             )
             return {}
 
-        if not isinstance(entry, dict) or entry.get("entryType") == "Inactive":
+        if not isinstance(entry, dict):
+            logger.error("Unexpected response of UniProt for '%s'", accession)
+            return {}
+        if entry.get("entryType") == "Inactive":
             logger.error("UniProt entry is inactive: '%s'", accession)
             return {}
 

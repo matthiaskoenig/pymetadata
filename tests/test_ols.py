@@ -1,5 +1,7 @@
 """Testing OLS."""
 
+import os
+import urllib.parse
 from pathlib import Path
 from types import SimpleNamespace
 from typing import Any
@@ -7,8 +9,10 @@ from typing import Any
 import pytest
 
 import pymetadata
+from pymetadata.cache import cache_file
 from pymetadata.core.annotation import BQB, RDFAnnotation, RDFAnnotationData
-from pymetadata.webservices.ols import ONTOLOGIES, OLSQuery
+from pymetadata.webservices.ols import ONTOLOGIES, OLSQuery, ols_term_url
+from pymetadata.webservices.webservice import WebserviceNotFoundError
 
 
 def test_ols_query() -> None:
@@ -76,7 +80,6 @@ def test_unknown_term_is_a_warning(
     tmp_path: Path, monkeypatch: pytest.MonkeyPatch
 ) -> None:
     """A term OLS does not know is a warning and no error, nothing is cached."""
-    from pymetadata.webservices.webservice import WebserviceNotFoundError
 
     def missing(url: str, params: object = None) -> dict:
         raise WebserviceNotFoundError(f"'404' response for: '{url}'")
@@ -101,8 +104,6 @@ def test_collection_not_on_ols_warns_nothing(monkeypatch: pytest.MonkeyPatch) ->
 
 def test_process_response_reports_the_term_page() -> None:
     """The ontology, the IRI and the OLS page of the term are part of the response."""
-    from pymetadata.webservices.ols import ONTOLOGIES, OLSQuery
-
     info = OLSQuery(ontologies=ONTOLOGIES, cache=False).process_response(
         {
             "errors": [],
@@ -122,7 +123,26 @@ def test_process_response_reports_the_term_page() -> None:
 
 def test_term_page_needs_ontology_and_iri() -> None:
     """Without an ontology or an IRI there is no term page."""
-    from pymetadata.webservices.ols import ols_term_url
-
     assert ols_term_url(None, "http://purl.obolibrary.org/obo/GO_0006096") is None
     assert ols_term_url("go", None) is None
+
+
+def test_unknown_term_ignores_stale_cache(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    """A 404 means the term is gone, an outdated cache entry is not used."""
+    query = OLSQuery(ontologies=ONTOLOGIES, cache_path=tmp_path, cache=True)
+    iri = query.get_iri(ontology="go", term="GO:0006096")
+    quoted = urllib.parse.quote(urllib.parse.quote(iri, safe=""), safe="")
+    path = cache_file(query.cache_path, urllib.parse.quote(iri, safe=""))
+    assert path.name == f"{quoted}.json"
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text('{"label": "stale"}')
+    os.utime(path, (0, 0))
+
+    def missing(url: str, params: object = None) -> dict:
+        raise WebserviceNotFoundError(f"'404' response for: '{url}'")
+
+    monkeypatch.setattr("pymetadata.webservices.ols.get_json", missing)
+    data = query.query_ols(ontology="go", term="GO:0006096")
+    assert data == {"errors": [], "warnings": ["Term 'GO:0006096' is not on OLS."]}

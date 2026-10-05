@@ -16,6 +16,7 @@ See <https://www.ebi.ac.uk/chebi/>.
 import contextlib
 import logging
 import re
+import tempfile
 from pathlib import Path
 from typing import Any
 
@@ -48,6 +49,20 @@ CHEBI_URL = "https://www.ebi.ac.uk/chebi/backend/api/public/compounds/"
 CHEBI_STRUCTURE_URL = (
     "https://www.ebi.ac.uk/chebi/backend/api/public/compound/{}/structure/"
 )
+
+
+def _write_bytes_atomic(path: Path, content: bytes) -> None:
+    """Write a file atomically, so a reader never sees a partial file."""
+    path.parent.mkdir(parents=True, exist_ok=True)
+    temporary_path: Path | None = None
+    try:
+        with tempfile.NamedTemporaryFile(dir=path.parent, delete=False) as fp:
+            temporary_path = Path(fp.name)
+            fp.write(content)
+        temporary_path.replace(path)
+    finally:
+        if temporary_path is not None:
+            temporary_path.unlink(missing_ok=True)
 
 
 class ChebiQuery:
@@ -106,8 +121,8 @@ class ChebiQuery:
         chebi_path = cache_file(Path(cache_path) / "chebi", chebi)
         data: dict[str, Any] = {}
         if cache:
-            with contextlib.suppress(OSError):
-                # cache does not exist or is outdated
+            with contextlib.suppress(OSError, ValueError):
+                # cache does not exist, is outdated or corrupt
                 data = read_json_cache(
                     cache_path=chebi_path, max_age=CACHE_DURATION_ONTOLOGY
                 )
@@ -201,8 +216,7 @@ class ChebiQuery:
             )
             return None
         if cache:
-            path.parent.mkdir(parents=True, exist_ok=True)
-            path.write_bytes(svg)
+            _write_bytes_atomic(path, svg)
         return svg
 
 

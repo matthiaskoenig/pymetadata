@@ -98,3 +98,32 @@ def test_inactive_entry(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None
         },
     )
     assert UniprotQuery.query("P00000", cache=False, cache_path=tmp_path) == {}
+
+
+def test_isoform_accession(tmp_path: Path, fake_uniprot: list[str]) -> None:
+    """An isoform accession is queried as given."""
+    UniprotQuery.query("P69905-2", cache=False, cache_path=tmp_path)
+    assert fake_uniprot[0].endswith("/P69905-2.json")
+
+
+def test_corrupt_cache_is_refetched(tmp_path: Path, fake_uniprot: list[str]) -> None:
+    """A corrupt cache file is queried again instead of failing."""
+    path = tmp_path / "uniprot" / "P69905.json"
+    path.parent.mkdir(parents=True)
+    path.write_text("{not json")
+    assert UniprotQuery.query("P69905", cache=True, cache_path=tmp_path)["entry"] == (
+        "HBA_HUMAN"
+    )
+    assert len(fake_uniprot) == 1
+
+
+def test_unexpected_response(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch, caplog: pytest.LogCaptureFixture
+) -> None:
+    """A response which is no entry is reported as unexpected, not as inactive."""
+    monkeypatch.setattr(
+        "pymetadata.webservices.uniprot.get_json", lambda url, params=None: []
+    )
+    assert UniprotQuery.query("P69905", cache=False, cache_path=tmp_path) == {}
+    assert "Unexpected response" in caplog.text
+    assert "inactive" not in caplog.text

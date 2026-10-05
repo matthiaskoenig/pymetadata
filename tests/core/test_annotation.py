@@ -6,7 +6,12 @@ from typing import Any
 
 import pytest
 
-from pymetadata.core.annotation import ProviderType, RDFAnnotation, RDFAnnotationData
+from pymetadata.core.annotation import (
+    ProviderType,
+    RDFAnnotation,
+    RDFAnnotationData,
+    primary_resource,
+)
 from pymetadata.core.miriam import BQB, BQM
 from pymetadata.core.xref import is_url
 from pymetadata.webservices.registry import Namespace, Registry, Resource
@@ -646,3 +651,32 @@ def test_pattern_match_embedded_prefix(
         RDFAnnotation(qualifier=BQB.IS, resource=resource, validate=False)
     )
     assert data.pattern_match is expected
+
+
+def _stub_resource(name: str, official: bool, deprecated: bool) -> SimpleNamespace:
+    """A resource with the attributes `primary_resource` reads."""
+    return SimpleNamespace(name=name, official=official, deprecated=deprecated)
+
+
+def test_primary_resource_without_official_provider() -> None:
+    """Without an official provider the first non deprecated one is primary."""
+    resources: Any = [
+        _stub_resource("old", official=False, deprecated=True),
+        _stub_resource("first", official=False, deprecated=False),
+        _stub_resource("second", official=False, deprecated=False),
+    ]
+    primary = primary_resource(resources)
+    assert primary is not None
+    assert primary.name == "first"
+
+
+def test_primary_resource_all_deprecated() -> None:
+    """When all providers are deprecated the first one is primary."""
+    resources: Any = [
+        _stub_resource("a", official=False, deprecated=True),
+        _stub_resource("b", official=True, deprecated=True),
+    ]
+    primary = primary_resource(resources)
+    assert primary is not None
+    assert primary.name == "a"
+    assert primary_resource([]) is None

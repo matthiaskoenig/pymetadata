@@ -127,6 +127,7 @@ def get_json(url: str, params: dict[str, str] | None = None) -> Any:
         The parsed JSON response.
 
     Raises:
+        WebserviceNotFoundError: if the service answers 404
         WebserviceError: if the service cannot be reached, answers with a
             status other than 200, or does not answer with JSON
     """
@@ -173,7 +174,7 @@ def get_bytes(url: str, params: dict[str, str] | None = None) -> bytes:
         raise WebserviceNotFoundError(f"'404' response for: '{url}'")
     if response.status_code != 200:
         raise WebserviceError(f"'{response.status_code}' response for: '{url}'")
-    content_type = response.headers.get("Content-Type", "")
+    content_type = response.headers.get("Content-Type", "").lower()
     if not content_type.startswith("image/svg+xml"):
         raise WebserviceError(f"Response for '{url}' is no svg image: '{content_type}'")
     return response.content

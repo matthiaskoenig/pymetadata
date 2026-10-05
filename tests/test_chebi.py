@@ -1,11 +1,13 @@
 """Test ChEBI."""
 
+import os
 from pathlib import Path
 from typing import Any
 
 import pytest
 
 from pymetadata.webservices.chebi import ChebiQuery
+from pymetadata.webservices.webservice import WebserviceError, WebserviceNotFoundError
 
 WATER = {
     "ascii_name": "water",
@@ -138,17 +140,48 @@ def test_structure_is_cached(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) ->
 
 
 @pytest.mark.parametrize("chebi", ["../../evil", "CHEBI:abc", ""])
-def test_structure_rejects_invalid_id(tmp_path: Path, chebi: str) -> None:
+def test_structure_rejects_invalid_id(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch, chebi: str
+) -> None:
     """An invalid id has no structure and queries nothing."""
+
+    def fail(url: str, params: Any = None) -> bytes:
+        raise AssertionError("nothing must be queried")
+
+    monkeypatch.setattr("pymetadata.webservices.chebi.get_bytes", fail)
     assert ChebiQuery.structure(chebi, cache=True, cache_path=tmp_path) is None
 
 
 def test_structure_unknown(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
     """A compound without a structure answers None."""
-    from pymetadata.webservices.webservice import WebserviceNotFoundError
 
     def missing(url: str, params: Any = None) -> bytes:
         raise WebserviceNotFoundError("404")
 
     monkeypatch.setattr("pymetadata.webservices.chebi.get_bytes", missing)
     assert ChebiQuery.structure("CHEBI:1", cache=True, cache_path=tmp_path) is None
+
+
+def _offline(url: str, params: Any = None) -> bytes:
+    raise WebserviceError("Service is not reachable")
+
+
+def test_structure_outdated_cache_when_offline(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    """An outdated structure is used when ChEBI cannot be reached."""
+    path = tmp_path / "chebi" / "CHEBI%3A15377.svg"
+    path.parent.mkdir(parents=True)
+    path.write_bytes(SVG)
+    os.utime(path, (0, 0))
+    monkeypatch.setattr("pymetadata.webservices.chebi.get_bytes", _offline)
+    assert ChebiQuery.structure("CHEBI:15377", cache=True, cache_path=tmp_path) == SVG
+
+
+def test_structure_offline_without_cache(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    """Without cache and without connection there is no structure."""
+    monkeypatch.setattr("pymetadata.webservices.chebi.get_bytes", _offline)
+    assert ChebiQuery.structure("CHEBI:15377", cache=True, cache_path=tmp_path) is None
+    assert not list(tmp_path.rglob("*.svg"))
