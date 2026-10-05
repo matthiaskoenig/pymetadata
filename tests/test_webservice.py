@@ -1,5 +1,6 @@
 """Testing the shared web service session."""
 
+import pytest
 import requests
 
 from pymetadata.webservices.webservice import (
@@ -38,3 +39,20 @@ def test_session_has_timeout() -> None:
     adapter = get_session().get_adapter("https://www.ebi.ac.uk")
     assert isinstance(adapter, _TimeoutHTTPAdapter)
     assert adapter.timeout == TIMEOUT
+
+
+def test_get_json_raises_not_found_for_404(monkeypatch: pytest.MonkeyPatch) -> None:
+    """A 404 is the dedicated not found error, a subclass of the webservice error."""
+    from pymetadata.webservices import webservice
+
+    class Response:
+        status_code = 404
+
+    class Session:
+        def get(self, url: str, params: object = None) -> Response:
+            return Response()
+
+    monkeypatch.setattr(webservice, "get_session", lambda: Session())
+    with pytest.raises(webservice.WebserviceNotFoundError):
+        webservice.get_json("https://example.org/missing")
+    assert issubclass(webservice.WebserviceNotFoundError, webservice.WebserviceError)

@@ -1,6 +1,7 @@
 """Testing OLS."""
 
 from pathlib import Path
+from types import SimpleNamespace
 from typing import Any
 
 import pytest
@@ -69,3 +70,30 @@ def test_ols_caches_long_iri(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) ->
     cached = list((tmp_path / "ols").iterdir())
     assert len(cached) == 1
     assert len(cached[0].name.encode()) <= 255
+
+
+def test_unknown_term_is_a_warning(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    """A term OLS does not know is a warning and no error, nothing is cached."""
+    from pymetadata.webservices.webservice import WebserviceNotFoundError
+
+    def missing(url: str, params: object = None) -> dict:
+        raise WebserviceNotFoundError(f"'404' response for: '{url}'")
+
+    monkeypatch.setattr("pymetadata.webservices.ols.get_json", missing)
+    query = OLSQuery(ontologies=ONTOLOGIES, cache_path=tmp_path, cache=True)
+    data = query.query_ols(ontology="go", term="GO:9999999")
+    assert data == {"errors": [], "warnings": ["Term 'GO:9999999' is not on OLS."]}
+    assert not any(tmp_path.rglob("*.json"))
+
+
+def test_collection_not_on_ols_warns_nothing(monkeypatch: pytest.MonkeyPatch) -> None:
+    """A collection without an ontology on OLS is no problem of the annotation."""
+    registry = SimpleNamespace(ns_dict={})
+    monkeypatch.setattr("pymetadata.webservices.ols.get_registry", lambda: registry)
+    query = OLSQuery(ontologies=ONTOLOGIES, cache=False)
+    assert query.query_ols(ontology="pubmed", term="10659856") == {
+        "errors": [],
+        "warnings": [],
+    }

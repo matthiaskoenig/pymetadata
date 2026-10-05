@@ -35,7 +35,11 @@ from pymetadata.cache import (
     write_json_cache,
 )
 from pymetadata.webservices.registry import get_registry
-from pymetadata.webservices.webservice import WebserviceError, get_json
+from pymetadata.webservices.webservice import (
+    WebserviceError,
+    WebserviceNotFoundError,
+    get_json,
+)
 
 logger = logging.getLogger(__name__)
 
@@ -174,7 +178,8 @@ class OLSQuery:
 
         Returns:
             The OLS response, with `errors` and `warnings` describing problems
-            with the query.
+            with the query. A term OLS does not know is a warning, an ontology
+            which is not on OLS returns no information and no message.
         """
         if not ontology:
             return {"errors": [], "warnings": ["No collection."]}
@@ -191,10 +196,7 @@ class OLSQuery:
             if not namespace or not any(
                 resource.providerCode == "ols" for resource in namespace.resources or []
             ):
-                return {
-                    "errors": [],
-                    "warnings": [f"'{ontology}' is not on OLS."],
-                }
+                return {"errors": [], "warnings": []}
 
         iri = self.get_iri(ontology=ontology, term=term)
 
@@ -216,6 +218,8 @@ class OLSQuery:
             logger.info("Query: %s", url)
             try:
                 data = get_json(url)
+            except WebserviceNotFoundError:
+                return {"errors": [], "warnings": [f"Term '{term}' is not on OLS."]}
             except WebserviceError as err:
                 # prefer outdated information over none, e.g., when offline
                 if self.cache:
