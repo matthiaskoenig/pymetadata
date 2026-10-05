@@ -73,7 +73,10 @@ identifiers.org URL (classic or compact), a bioregistry.io URL, a `urn:miriam:*`
 a `collection/term` shorthand, or an arbitrary URL, and normalizes it into
 `collection` + `term`. Validation checks the term against the identifiers.org
 registry pattern (`webservices/registry.py`). `RDFAnnotationData` enriches an
-annotation with label/description/synonyms/xrefs by querying OLS.
+annotation with label/description/synonyms/xrefs by querying OLS, and with the
+providers of the collection: `url` is the url of the primary provider (the official
+non deprecated one, see `primary_resource`), `providers` lists the others, and
+`collection_name`, `collection_homepage` and `pattern_match` describe the collection.
 
 **Ontologies are generated code.** `ontologies/sbo.py`, `kisao.py`, `pbpko.py`
 are machine-generated (large; do not hand-edit). Each is a class of
@@ -103,9 +106,11 @@ cheap (the `pymetadata.metadata` package was removed in 0.6.0).
 
 **Web services + caching.** The `webservices/` package holds everything which
 hits a remote API: `ols.py` (EBI OLS4), `registry.py` (identifiers.org),
-`chebi.py` and `unichem.py`, all going through the shared, retrying session of
+`chebi.py` (also the svg structure of a compound), `uniprot.py` and `unichem.py`, all going through the shared, retrying session of
 `webservices/webservice.py`, whose `get_json` turns an unreachable service, an
-error response and a non-JSON body into one `WebserviceError`. They share the
+error response and a non-JSON body into one `WebserviceError`; a 404 raises its
+subclass `WebserviceNotFoundError`, which callers treat as an unknown entry and
+never answer from an outdated cache. `get_bytes` does the same for svg images. They share the
 JSON cache helpers in `cache.py`, gated by the module-level globals
 `pymetadata.CACHE_USE` (default `True`) and `pymetadata.CACHE_PATH`
 (`~/.cache/pymetadata`). These are read at call time, so consumers override them by
@@ -115,7 +120,7 @@ an ontology release) or `CACHE_DURATION_REGISTRY` (24 h, for the identifiers.org
 registry). When a refresh fails, `read_json_cache_fallback` returns the outdated
 content with a warning instead of failing, so queries answered before keep
 working offline; `tests/test_offline.py` covers this per service. The corresponding tests
-(`test_ols.py`, `test_registry.py`, `test_chebi.py`, `test_unichem.py`) require
+(`test_ols.py`, `test_registry.py`, `test_chebi.py`, `test_unichem.py`, `test_uniprot.py`) require
 network access.
 
 `console.py` (rich console, for scripts and `__main__` blocks) and `log.py`

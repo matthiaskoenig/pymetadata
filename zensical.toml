@@ -39,6 +39,7 @@ nav = [
       { "ols" = "api/webservices.ols.md" },
       { "registry" = "api/webservices.registry.md" },
       { "unichem" = "api/webservices.unichem.md" },
+      { "uniprot" = "api/webservices.uniprot.md" },
       { "webservice" = "api/webservices.webservice.md" },
     ] },
   ] },
