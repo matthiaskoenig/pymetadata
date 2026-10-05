@@ -100,6 +100,24 @@ ONTOLOGIES = [
 ]
 
 
+OLS_TERM_PAGE = "https://www.ebi.ac.uk/ols4/ontologies/{}/classes?iri={}"
+
+
+def ols_term_url(ontology: str | None, iri: str | None) -> str | None:
+    """Get the page of a term in the Ontology Lookup Service.
+
+    Args:
+        ontology: ontology id of OLS, e.g., `go`
+        iri: IRI of the term
+
+    Returns:
+        The url of the page, or None without an ontology or an IRI.
+    """
+    if not ontology or not iri:
+        return None
+    return OLS_TERM_PAGE.format(ontology, urllib.parse.quote(iri, safe=""))
+
+
 class OLSQuery:
     """Queries against the Ontology Lookup Service.
 
@@ -250,7 +268,8 @@ class OLSQuery:
             term: OLS response from `query_ols`
 
         Returns:
-            Dictionary with `label`, `description`, `synonyms` and `xrefs`.
+            Dictionary with `label`, `description`, `synonyms`, `xrefs`,
+            `ontology`, `iri` and `ols_url`.
         """
         data = {
             "errors": term["errors"],
@@ -272,10 +291,15 @@ class OLSQuery:
         synonyms = term.get("obo_synonym", [])
         xrefs = term.get("obo_xref", [])
 
+        ontology = term.get("ontology_name")
+        iri = term.get("iri")
         return {
             **data,
             "label": label,
             "description": description,
             "synonyms": synonyms,
             "xrefs": xrefs,
+            "ontology": ontology,
+            "iri": iri,
+            "ols_url": ols_term_url(ontology, iri),
         }

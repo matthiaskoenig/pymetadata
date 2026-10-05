@@ -494,6 +494,9 @@ class RDFAnnotationData(RDFAnnotation):
     Attributes:
         url: url of the first provider of the collection
         label: name of the term
+        ontology: ontology id of the term in OLS, e.g., `go`
+        iri: IRI of the term
+        ols_url: page of the term in OLS
         description: definition of the term
         synonyms: synonyms of the term
         xrefs: cross references of the term
@@ -521,6 +524,9 @@ class RDFAnnotationData(RDFAnnotation):
         self.url: str | None = None
         self.description: str | None = None
         self.label: str | None = None
+        self.ontology: str | None = None
+        self.iri: str | None = None
+        self.ols_url: str | None = None
         self.synonyms: list[Any] = []
         self.xrefs: list[Any] = []
         self.warnings: list[Any] = []
@@ -591,6 +597,9 @@ class RDFAnnotationData(RDFAnnotation):
             "collection": self.collection,
             "term": self.term,
             "label": self.label,
+            "ontology": self.ontology,
+            "iri": self.iri,
+            "ols_url": self.ols_url,
             "description": self.description,
             "url": self.url,
             "synonyms": self.synonyms,
@@ -618,6 +627,9 @@ class RDFAnnotationData(RDFAnnotation):
         if self.description is None:
             self.description = info["description"]
 
+        self.ontology = info.get("ontology")
+        self.iri = info.get("iri")
+        self.ols_url = info.get("ols_url")
         self.synonyms = info["synonyms"]
         self.xrefs = info["xrefs"]
         self.warnings.extend(info["warnings"])

@@ -1,6 +1,7 @@
 """Test annotations."""
 
 import dataclasses
+from typing import Any
 
 import pytest
 
@@ -484,3 +485,32 @@ def test_namespaces_from_dict_ignores_unknown_keys() -> None:
     namespace = ns_dict["taxonomy"]
     assert namespace.resources
     assert isinstance(namespace.resources[0], Resource)
+
+
+def test_annotation_data_carries_the_ols_term(monkeypatch: pytest.MonkeyPatch) -> None:
+    """The ontology, the IRI and the OLS page of the term end up in `to_dict`."""
+
+    class Query:
+        def query_ols(self, ontology: Any, term: Any) -> dict:
+            return {"errors": [], "warnings": []}
+
+        def process_response(self, term: dict) -> dict:
+            return {
+                "errors": [],
+                "warnings": [],
+                "label": "glycolytic process",
+                "description": None,
+                "synonyms": [],
+                "xrefs": [],
+                "ontology": "go",
+                "iri": "http://purl.obolibrary.org/obo/GO_0006096",
+                "ols_url": "https://www.ebi.ac.uk/ols4/ontologies/go/classes?iri=x",
+            }
+
+    monkeypatch.setattr("pymetadata.core.annotation.get_ols_query", lambda: Query())
+    data = RDFAnnotationData(
+        RDFAnnotation(qualifier=BQB.IS, resource="GO:0006096")
+    ).to_dict()
+    assert data["ontology"] == "go"
+    assert data["iri"] == "http://purl.obolibrary.org/obo/GO_0006096"
+    assert data["ols_url"] == "https://www.ebi.ac.uk/ols4/ontologies/go/classes?iri=x"

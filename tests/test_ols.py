@@ -97,3 +97,32 @@ def test_collection_not_on_ols_warns_nothing(monkeypatch: pytest.MonkeyPatch) ->
         "errors": [],
         "warnings": [],
     }
+
+
+def test_process_response_reports_the_term_page() -> None:
+    """The ontology, the IRI and the OLS page of the term are part of the response."""
+    from pymetadata.webservices.ols import ONTOLOGIES, OLSQuery
+
+    info = OLSQuery(ontologies=ONTOLOGIES, cache=False).process_response(
+        {
+            "errors": [],
+            "warnings": [],
+            "label": "glycolytic process",
+            "ontology_name": "go",
+            "iri": "http://purl.obolibrary.org/obo/GO_0006096",
+        }
+    )
+    assert info["ontology"] == "go"
+    assert info["iri"] == "http://purl.obolibrary.org/obo/GO_0006096"
+    assert info["ols_url"] == (
+        "https://www.ebi.ac.uk/ols4/ontologies/go/classes?iri="
+        "http%3A%2F%2Fpurl.obolibrary.org%2Fobo%2FGO_0006096"
+    )
+
+
+def test_term_page_needs_ontology_and_iri() -> None:
+    """Without an ontology or an IRI there is no term page."""
+    from pymetadata.webservices.ols import ols_term_url
+
+    assert ols_term_url(None, "http://purl.obolibrary.org/obo/GO_0006096") is None
+    assert ols_term_url("go", None) is None
