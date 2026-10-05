@@ -23,12 +23,18 @@ import pymetadata
 from pymetadata.cache import (
     CACHE_DURATION_ONTOLOGY,
     DataclassJSONEncoder,
+    cache_age,
     cache_file,
     read_json_cache,
     read_json_cache_fallback,
     write_json_cache,
 )
-from pymetadata.webservices.webservice import WebserviceError, get_json
+from pymetadata.webservices.webservice import (
+    WebserviceError,
+    WebserviceNotFoundError,
+    get_bytes,
+    get_json,
+)
 
 logger = logging.getLogger(__name__)
 
@@ -37,6 +43,11 @@ CHEBI_PATTERN = re.compile(r"^(?:CHEBI:)?(\d+)$", flags=re.IGNORECASE)
 
 #: endpoint of the ChEBI compounds, queried with the `chebi_ids` parameter
 CHEBI_URL = "https://www.ebi.ac.uk/chebi/backend/api/public/compounds/"
+
+#: endpoint of the structure (svg image) of a compound, formatted with its number
+CHEBI_STRUCTURE_URL = (
+    "https://www.ebi.ac.uk/chebi/backend/api/public/compound/{}/structure/"
+)
 
 
 class ChebiQuery:
@@ -143,6 +154,56 @@ class ChebiQuery:
                 )
 
         return data
+
+    @staticmethod
+    def structure(
+        chebi: str, cache: bool | None = None, cache_path: Path | None = None
+    ) -> bytes | None:
+        """Get the structure of a ChEBI compound as an svg image.
+
+        Args:
+            chebi: ChEBI term, e.g., `CHEBI:33699`
+            cache: cache the image, defaults to `pymetadata.CACHE_USE`
+            cache_path: directory for cached responses, defaults to
+                `pymetadata.CACHE_PATH`
+
+        Returns:
+            The svg image, None if the id is invalid, the compound has no
+            structure, or ChEBI cannot be reached and nothing is cached.
+        """
+        match = CHEBI_PATTERN.match(chebi.strip()) if chebi else None
+        if not match:
+            logger.error("Invalid ChEBI id: '%s'", chebi)
+            return None
+        number = match.group(1)
+        if cache is None:
+            cache = pymetadata.CACHE_USE
+        if cache_path is None:
+            cache_path = pymetadata.CACHE_PATH
+        path = Path(cache_path) / "chebi" / f"CHEBI%3A{number}.svg"
+        age = cache_age(path) if cache else None
+        if age is not None and age <= CACHE_DURATION_ONTOLOGY:
+            return path.read_bytes()
+        try:
+            svg = get_bytes(CHEBI_STRUCTURE_URL.format(number))
+        except WebserviceNotFoundError:
+            return None
+        except WebserviceError as err:
+            if age is not None:
+                logger.warning(
+                    "Using outdated structure of 'CHEBI:%s': %s", number, err
+                )
+                return path.read_bytes()
+            logger.error(
+                "ChEBI structure could not be retrieved for 'CHEBI:%s': %s",
+                number,
+                err,
+            )
+            return None
+        if cache:
+            path.parent.mkdir(parents=True, exist_ok=True)
+            path.write_bytes(svg)
+        return svg
 
 
 if __name__ == "__main__":

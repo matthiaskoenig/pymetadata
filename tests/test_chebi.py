@@ -115,3 +115,40 @@ def test_chebi(tmp_path: Path, chebi: str) -> None:
         assert key in d
     for key in keys:
         assert key in d
+
+
+SVG = b"<?xml version='1.0'?><svg xmlns='http://www.w3.org/2000/svg'></svg>"
+
+
+def test_structure_is_cached(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
+    """The structure is fetched once and cached as an svg file."""
+    urls: list[str] = []
+
+    def get_bytes(url: str, params: Any = None) -> bytes:
+        urls.append(url)
+        return SVG
+
+    monkeypatch.setattr("pymetadata.webservices.chebi.get_bytes", get_bytes)
+    assert ChebiQuery.structure("CHEBI:15377", cache=True, cache_path=tmp_path) == SVG
+    assert ChebiQuery.structure("chebi:15377", cache=True, cache_path=tmp_path) == SVG
+    assert urls == [
+        "https://www.ebi.ac.uk/chebi/backend/api/public/compound/15377/structure/"
+    ]
+    assert (tmp_path / "chebi" / "CHEBI%3A15377.svg").read_bytes() == SVG
+
+
+@pytest.mark.parametrize("chebi", ["../../evil", "CHEBI:abc", ""])
+def test_structure_rejects_invalid_id(tmp_path: Path, chebi: str) -> None:
+    """An invalid id has no structure and queries nothing."""
+    assert ChebiQuery.structure(chebi, cache=True, cache_path=tmp_path) is None
+
+
+def test_structure_unknown(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
+    """A compound without a structure answers None."""
+    from pymetadata.webservices.webservice import WebserviceNotFoundError
+
+    def missing(url: str, params: Any = None) -> bytes:
+        raise WebserviceNotFoundError("404")
+
+    monkeypatch.setattr("pymetadata.webservices.chebi.get_bytes", missing)
+    assert ChebiQuery.structure("CHEBI:1", cache=True, cache_path=tmp_path) is None
