@@ -30,10 +30,11 @@ The services queried for the information which does not ship with the package. T
 
 | module | description |
 | --- | --- |
-| [webservices.chebi](webservices.chebi.md) | Substance information from ChEBI |
+| [webservices.chebi](webservices.chebi.md) | Substance information and structure from ChEBI |
 | [webservices.ols](webservices.ols.md) | Lookup of ontology terms in the Ontology Lookup Service |
 | [webservices.registry](webservices.registry.md) | The identifiers.org registry |
 | [webservices.unichem](webservices.unichem.md) | Substance cross references from UniChem |
+| [webservices.uniprot](webservices.uniprot.md) | Protein information from UniProt |
 | [webservices.webservice](webservices.webservice.md) | The shared HTTP session |
 
 ## pymetadata.ontologies
