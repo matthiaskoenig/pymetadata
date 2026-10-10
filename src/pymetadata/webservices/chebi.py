@@ -16,7 +16,6 @@ See <https://www.ebi.ac.uk/chebi/>.
 import contextlib
 import logging
 import re
-import tempfile
 from pathlib import Path
 from typing import Any
 
@@ -26,8 +25,10 @@ from pymetadata.cache import (
     DataclassJSONEncoder,
     cache_age,
     cache_file,
+    read_bytes_cache,
     read_json_cache,
     read_json_cache_fallback,
+    write_bytes_cache,
     write_json_cache,
 )
 from pymetadata.webservices.webservice import (
@@ -49,20 +50,6 @@ CHEBI_URL = "https://www.ebi.ac.uk/chebi/backend/api/public/compounds/"
 CHEBI_STRUCTURE_URL = (
     "https://www.ebi.ac.uk/chebi/backend/api/public/compound/{}/structure/"
 )
-
-
-def _write_bytes_atomic(path: Path, content: bytes) -> None:
-    """Write a file atomically, so a reader never sees a partial file."""
-    path.parent.mkdir(parents=True, exist_ok=True)
-    temporary_path: Path | None = None
-    try:
-        with tempfile.NamedTemporaryFile(dir=path.parent, delete=False) as fp:
-            temporary_path = Path(fp.name)
-            fp.write(content)
-        temporary_path.replace(path)
-    finally:
-        if temporary_path is not None:
-            temporary_path.unlink(missing_ok=True)
 
 
 class ChebiQuery:
@@ -198,7 +185,7 @@ class ChebiQuery:
         path = Path(cache_path) / "chebi" / f"CHEBI%3A{number}.svg"
         age = cache_age(path) if cache else None
         if age is not None and age <= CACHE_DURATION_ONTOLOGY:
-            return path.read_bytes()
+            return read_bytes_cache(path)
         try:
             svg = get_bytes(CHEBI_STRUCTURE_URL.format(number))
         except WebserviceNotFoundError:
@@ -208,7 +195,7 @@ class ChebiQuery:
                 logger.warning(
                     "Using outdated structure of 'CHEBI:%s': %s", number, err
                 )
-                return path.read_bytes()
+                return read_bytes_cache(path)
             logger.error(
                 "ChEBI structure could not be retrieved for 'CHEBI:%s': %s",
                 number,
@@ -216,7 +203,7 @@ class ChebiQuery:
             )
             return None
         if cache:
-            _write_bytes_atomic(path, svg)
+            write_bytes_cache(svg, path)
         return svg
 
 

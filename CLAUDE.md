@@ -122,7 +122,14 @@ registry). When a refresh fails, `read_json_cache_fallback` returns the outdated
 content with a warning instead of failing, so queries answered before keep
 working offline; `tests/test_offline.py` covers this per service. The corresponding tests
 (`test_ols.py`, `test_registry.py`, `test_chebi.py`, `test_unichem.py`, `test_uniprot.py`) require
-network access.
+network access. Processes share the cache (pytest-xdist workers): `write_bytes_cache`
+and `write_json_cache` write a temporary file next to the cache file and `os.replace`
+it, so a reader never sees a partial file, and the write is best effort, a failure is
+a warning and the caller keeps its data. On Windows a file another process has open
+cannot be replaced and a file being replaced cannot be opened, so both are retried
+(`CACHE_IN_USE_ATTEMPTS`); `Registry` uses the downloaded namespaces and does not read
+them back. `test_registry.py` loads the registry from several processes into one empty
+cache, with the download answered from `tests/data/registry/` (#102).
 
 `console.py` (rich console, for scripts and `__main__` blocks) and `log.py`
 provide the shared output/logging. Modules get their logger from the standard

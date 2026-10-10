@@ -103,6 +103,12 @@ Using the cache from 1080.0 h ago, it could not be refreshed:
 
 A query which was answered before therefore keeps working offline. Only a query which was never cached fails: `ChebiQuery.query` and `OLSQuery.query_ols` report the problem in their result, `UnichemQuery` and `Registry` raise a `WebserviceError`.
 
+### Several processes
+
+Processes which run at the same time can share the cache, e.g., the workers of [pytest-xdist](https://pytest-xdist.readthedocs.io). A cache file is written to a temporary file in the same directory, which then replaces the cache file atomically, so a process never reads a partially written file. Processes which start on an empty cache each download what they need once, e.g., the registry.
+
+Writing the cache is best effort, the process has the content already: a cache file which cannot be written is a warning, and the query returns its result anyway. On Windows a file which another process has open cannot be replaced, and a file which another process replaces cannot be opened; both are retried for about a second, after which the cache file of the other process is kept.
+
 ### The registry
 
 The identifiers.org registry is cached independently of `CACHE_USE`. It is downloaded to `CACHE_PATH / "identifiers_registry.json"` and refreshed when the local copy is older than the cache duration:

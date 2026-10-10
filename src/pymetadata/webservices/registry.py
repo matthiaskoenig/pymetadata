@@ -176,10 +176,14 @@ class Registry:
         update = age is None or age > cache_duration
 
         if not update:
-            self.ns_dict: dict[str, Namespace] = Registry.load_registry(
-                self.registry_path
-            )
-            return
+            try:
+                self.ns_dict: dict[str, Namespace] = Registry.load_registry(
+                    self.registry_path
+                )
+                return
+            except OSError as err:
+                # e.g., a corrupt cache, which is removed by reading it
+                logger.warning("Cached registry is downloaded again: %s", err)
 
         try:
             self.ns_dict = self.update()
@@ -195,7 +199,11 @@ class Registry:
             self.ns_dict = Registry.namespaces_from_dict(data)
 
     def update(self) -> dict[str, Namespace]:
-        """Download the registry and return the namespaces.
+        """Download the registry, cache it and return the namespaces.
+
+        The namespaces are the downloaded ones, they are not read back from the
+        cache: writing the cache is best effort and fails, e.g., on Windows
+        while another process reads the cached registry.
 
         Returns:
             Namespaces of the registry by prefix.
@@ -203,8 +211,7 @@ class Registry:
         Raises:
             WebserviceError: if the registry could not be downloaded
         """
-        Registry.update_registry(registry_path=self.registry_path)
-        return Registry.load_registry(registry_path=self.registry_path)
+        return Registry.update_registry(registry_path=self.registry_path)
 
     @staticmethod
     def namespaces_from_dict(data: dict[str, Any]) -> dict[str, Namespace]:
@@ -227,7 +234,9 @@ class Registry:
         Namespaces without a prefix are skipped.
 
         Args:
-            registry_path: path to cache the registry in, not cached if None
+            registry_path: path to cache the registry in, not cached if None.
+                Writing the cache is best effort, see
+                `pymetadata.cache.write_json_cache`
 
         Returns:
             Namespaces of the registry by prefix.
@@ -264,9 +273,14 @@ class Registry:
 
         Returns:
             Namespaces of the registry by prefix.
+
+        Raises:
+            OSError: if the cached registry cannot be read or is corrupt
+            WebserviceError: if the registry is missing and could not be
+                downloaded
         """
         if not registry_path.exists():
-            Registry.update_registry(registry_path=registry_path)
+            return Registry.update_registry(registry_path=registry_path)
 
         d = read_json_cache(cache_path=registry_path)
         if not d:
