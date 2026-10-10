@@ -27,13 +27,15 @@ A pull request can only be merged once the four required checks are green:
 
 | check   | workflow      | content                                                              |
 | ------- | ------------- | -------------------------------------------------------------------- |
-| `tests` | `ci-cd.yml`   | the test matrix, linux, macos and windows with python 3.11 to 3.15    |
+| `tests` | `ci-cd.yml`   | the test matrix, python 3.14 on linux, macos and windows              |
 | `ruff`  | `ruff.yml`    | `ruff check` and `ruff format --check`                                |
 | `ty`    | `ty.yml`      | `tox r -e ty`                                                         |
 | `docs`  | `docs.yml`    | the zensical build including the api reference and the agent files    |
 
 `tests` aggregates the test matrix into a single job, so the name of the
 required check stays the same when the matrix changes.
+
+Continuous integration is kept small: every workflow cancels its running build when a newer commit of the same branch or pull request arrives, uv caches the packages and the interpreters between runs, dependabot proposes its updates once a month, and the matrix tests only python 3.14. The other python versions are tested locally, see [Testing](#testing), before a pull request is opened.
 
 Further rules of a pull request:
 
@@ -94,7 +96,7 @@ A single sync creates the virtual environment in `.venv`, installs `pymetadata` 
 uv sync --extra dev
 ```
 
-The environment is resolved from `uv.lock`, which is committed, so local development, including `uv run ty check`, and the documentation build use the same versions. The tox environments, i.e. the test matrix and the `ty` check of continuous integration, resolve from `pyproject.toml` and do not use the lock; the lower bounds in `pyproject.toml` are what a user of the library installs against. After changing a dependency in `pyproject.toml` run `uv lock`: the `documentation` workflow syncs with `uv sync --locked`, which fails when `pyproject.toml` and the lock disagree. `uv lock --upgrade` moves the lock to the newest releases. Dependabot bumps the locked dependencies as one grouped weekly pull request, with `versioning-strategy: lockfile-only`, so the lower bounds in `pyproject.toml` are never raised by it and only ever changed by hand.
+The environment is resolved from `uv.lock`, which is committed, so local development, including `uv run ty check`, and the documentation build use the same versions. The tox environments, i.e. the test matrix and the `ty` check of continuous integration, resolve from `pyproject.toml` and do not use the lock; the lower bounds in `pyproject.toml` are what a user of the library installs against. After changing a dependency in `pyproject.toml` run `uv lock`: the `documentation` workflow syncs with `uv sync --locked`, which fails when `pyproject.toml` and the lock disagree. `uv lock --upgrade` moves the lock to the newest releases. Dependabot bumps the locked dependencies as one grouped monthly pull request, with `versioning-strategy: lockfile-only`, so the lower bounds in `pyproject.toml` are never raised by it and only ever changed by hand.
 
 The `dev` extra contains everything used below, i.e., pytest, ruff, ty, tox, pre-commit, zensical and bump-my-version, and it pulls in the optional `ontology` extra, so nothing has to be installed separately. The python version is taken from `.python-version` (currently 3.14); to work against the oldest supported version instead use `uv sync --extra dev --python 3.11`, which replaces the environment.
 
@@ -129,7 +131,7 @@ and the complete matrix, including the `ty` environment, in parallel with
 tox run-parallel
 ```
 
-This needs the interpreters to be available, which uv installs with `uv python install 3.11 3.12 3.13 3.14 3.15`. Continuous integration runs the same environments as `uvx --with tox-uv tox -e py3.15`.
+This needs the interpreters to be available, which uv installs with `uv python install 3.11 3.12 3.13 3.14 3.15`. It is the complete test and is run before a pull request is opened: continuous integration runs only `py3.14`, on linux, macos and windows, as `uvx --with tox-uv tox -e py3.14 -- -n auto --durations=15`, i.e., with the tests distributed over the cores of the runner by pytest-xdist and the 15 slowest tests listed. What follows `--` is passed on to pytest, so `tox r -e py3.14 -- -n auto` does the same locally.
 
 To run the tests directly against the development environment use
 
