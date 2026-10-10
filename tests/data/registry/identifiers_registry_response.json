@@ -1,0 +1,596 @@
+{
+  "apiVersion": "1.0",
+  "errorMessage": null,
+  "payload": {
+    "namespaces": [
+      {
+        "id": 1,
+        "prefix": "chebi",
+        "mirId": "MIR:00000002",
+        "name": "ChEBI",
+        "pattern": "^CHEBI:\\d+$",
+        "description": "Chemical Entities of Biological Interest (ChEBI) is a freely available dictionary of molecular entities focused on 'small' chemical compounds.",
+        "created": "2019-06-11T14:15:26.925+00:00",
+        "modified": "2019-06-11T14:15:26.925+00:00",
+        "resources": [
+          {
+            "id": 3,
+            "mirId": "MIR:00100009",
+            "urlPattern": "https://www.ebi.ac.uk/chebi/searchId.do?chebiId=CHEBI:{$id}",
+            "name": "ChEBI (Chemical Entities of Biological Interest)",
+            "description": "ChEBI (Chemical Entities of Biological Interest)",
+            "official": true,
+            "providerCode": "ebi",
+            "sampleId": "36927",
+            "resourceHomeUrl": "https://www.ebi.ac.uk/chebi/",
+            "institution": {
+              "id": 2,
+              "name": "European Bioinformatics Institute",
+              "homeUrl": "https://www.ebi.ac.uk",
+              "description": "At EMBL-EBI, we make the world’s public biological data freely available to the scientific community via a range of services and tools, perform basic research and provide professional training in bioinformatics. \nWe are part of the European Molecular Biology Laboratory (EMBL), an international, innovative and interdisciplinary research organisation funded by 26 member states and two associate member states.",
+              "rorId": "https://ror.org/02catss52",
+              "location": {
+                "countryCode": "GB",
+                "countryName": "United Kingdom"
+              }
+            },
+            "location": {
+              "countryCode": "GB",
+              "countryName": "United Kingdom"
+            },
+            "deprecated": false,
+            "deprecationDate": null,
+            "deprecationOfflineDate": null,
+            "renderDeprecatedLanding": false,
+            "deprecationStatement": null,
+            "protectedUrls": false,
+            "renderProtectedLanding": false,
+            "authHelpUrl": null,
+            "authHelpDescription": null
+          },
+          {
+            "id": 6,
+            "mirId": "MIR:00100565",
+            "urlPattern": "http://purl.bioontology.org/ontology/CHEBI/CHEBI:{$id}",
+            "name": "ChEBI through BioPortal",
+            "description": "ChEBI through BioPortal",
+            "official": false,
+            "providerCode": "bptl",
+            "sampleId": "36927",
+            "resourceHomeUrl": "http://bioportal.bioontology.org/ontologies/CHEBI",
+            "institution": {
+              "id": 5,
+              "name": "National Center for Biomedical Ontology, Stanford",
+              "homeUrl": "https://ncbo.bioontology.org/",
+              "description": "The goal of the National Center for Biomedical Ontology is to support biomedical researchers in their knowledge-intensive work, by providing online tools and a Web portal enabling them to access, review, and integrate disparate ontological resources in all aspects of biomedical investigation and clinical practice. A major focus of our work involves the use of biomedical ontologies to aid in the management and analysis of data derived from complex experiments.",
+              "rorId": null,
+              "location": {
+                "countryCode": "US",
+                "countryName": "United States"
+              }
+            },
+            "location": {
+              "countryCode": "US",
+              "countryName": "United States"
+            },
+            "deprecated": false,
+            "deprecationDate": null,
+            "deprecationOfflineDate": null,
+            "renderDeprecatedLanding": false,
+            "deprecationStatement": null,
+            "protectedUrls": false,
+            "renderProtectedLanding": false,
+            "authHelpUrl": null,
+            "authHelpDescription": null
+          },
+          {
+            "id": 4,
+            "mirId": "MIR:00100158",
+            "urlPattern": "https://www.ebi.ac.uk/ols4/ontologies/chebi/terms?obo_id=CHEBI:{$id}",
+            "name": "ChEBI through OLS",
+            "description": "ChEBI through OLS",
+            "official": false,
+            "providerCode": "ols",
+            "sampleId": "36927",
+            "resourceHomeUrl": "https://www.ebi.ac.uk/ols4/ontologies/chebi",
+            "institution": {
+              "id": 2,
+              "name": "European Bioinformatics Institute",
+              "homeUrl": "https://www.ebi.ac.uk",
+              "description": "At EMBL-EBI, we make the world’s public biological data freely available to the scientific community via a range of services and tools, perform basic research and provide professional training in bioinformatics. \nWe are part of the European Molecular Biology Laboratory (EMBL), an international, innovative and interdisciplinary research organisation funded by 26 member states and two associate member states.",
+              "rorId": "https://ror.org/02catss52",
+              "location": {
+                "countryCode": "GB",
+                "countryName": "United Kingdom"
+              }
+            },
+            "location": {
+              "countryCode": "GB",
+              "countryName": "United Kingdom"
+            },
+            "deprecated": false,
+            "deprecationDate": null,
+            "deprecationOfflineDate": null,
+            "renderDeprecatedLanding": false,
+            "deprecationStatement": null,
+            "protectedUrls": false,
+            "renderProtectedLanding": false,
+            "authHelpUrl": null,
+            "authHelpDescription": null
+          }
+        ],
+        "sampleId": "36927",
+        "namespaceEmbeddedInLui": true,
+        "deprecated": false,
+        "deprecationDate": null,
+        "deprecationOfflineDate": null,
+        "renderDeprecatedLanding": false,
+        "deprecationStatement": null,
+        "infoOnPostmortemAccess": null,
+        "successor": null
+      },
+      {
+        "id": 28,
+        "prefix": "taxonomy",
+        "mirId": "MIR:00000006",
+        "name": "Taxonomy",
+        "pattern": "^\\d+$",
+        "description": "The taxonomy contains the relationships between all living forms for which nucleic acid or protein sequence have been determined.",
+        "created": "2019-06-11T14:15:29.882+00:00",
+        "modified": "2019-06-11T14:15:29.882+00:00",
+        "resources": [
+          {
+            "id": 29,
+            "mirId": "MIR:00100007",
+            "urlPattern": "https://www.ncbi.nlm.nih.gov/Taxonomy/Browser/wwwtax.cgi?mode=Info&id={$id}",
+            "name": "NCBI Taxonomy",
+            "description": "NCBI Taxonomy",
+            "official": true,
+            "providerCode": "ncbi",
+            "sampleId": "9606",
+            "resourceHomeUrl": "https://www.ncbi.nlm.nih.gov/Taxonomy/",
+            "institution": {
+              "id": 26,
+              "name": "National Center for Biotechnology Information",
+              "homeUrl": "https://www.ncbi.nlm.nih.gov/",
+              "description": "The National Center for Biotechnology Information advances science and health by providing access to biomedical and genomic information.",
+              "rorId": "https://ror.org/02meqm098",
+              "location": {
+                "countryCode": "US",
+                "countryName": "United States"
+              }
+            },
+            "location": {
+              "countryCode": "US",
+              "countryName": "United States"
+            },
+            "deprecated": false,
+            "deprecationDate": null,
+            "deprecationOfflineDate": null,
+            "renderDeprecatedLanding": false,
+            "deprecationStatement": null,
+            "protectedUrls": false,
+            "renderProtectedLanding": false,
+            "authHelpUrl": null,
+            "authHelpDescription": null
+          },
+          {
+            "id": 31,
+            "mirId": "MIR:00100299",
+            "urlPattern": "https://www.ebi.ac.uk/ena/data/view/Taxon:{$id}",
+            "name": "European Nucleotide Archive (ENA)",
+            "description": "European Nucleotide Archive (ENA)",
+            "official": false,
+            "providerCode": "ebi",
+            "sampleId": "9606",
+            "resourceHomeUrl": "https://www.ebi.ac.uk/ena/",
+            "institution": {
+              "id": 2,
+              "name": "European Bioinformatics Institute",
+              "homeUrl": "https://www.ebi.ac.uk",
+              "description": "At EMBL-EBI, we make the world’s public biological data freely available to the scientific community via a range of services and tools, perform basic research and provide professional training in bioinformatics. \nWe are part of the European Molecular Biology Laboratory (EMBL), an international, innovative and interdisciplinary research organisation funded by 26 member states and two associate member states.",
+              "rorId": "https://ror.org/02catss52",
+              "location": {
+                "countryCode": "GB",
+                "countryName": "United Kingdom"
+              }
+            },
+            "location": {
+              "countryCode": "GB",
+              "countryName": "United Kingdom"
+            },
+            "deprecated": false,
+            "deprecationDate": null,
+            "deprecationOfflineDate": null,
+            "renderDeprecatedLanding": false,
+            "deprecationStatement": null,
+            "protectedUrls": false,
+            "renderProtectedLanding": false,
+            "authHelpUrl": null,
+            "authHelpDescription": null
+          },
+          {
+            "id": 32,
+            "mirId": "MIR:00100507",
+            "urlPattern": "http://purl.bioontology.org/ontology/NCBITAXON/{$id}",
+            "name": "BioPortal",
+            "description": "BioPortal",
+            "official": false,
+            "providerCode": "bptl",
+            "sampleId": "9606",
+            "resourceHomeUrl": "http://bioportal.bioontology.org/ontologies/NCBITAXON",
+            "institution": {
+              "id": 5,
+              "name": "National Center for Biomedical Ontology, Stanford",
+              "homeUrl": "https://ncbo.bioontology.org/",
+              "description": "The goal of the National Center for Biomedical Ontology is to support biomedical researchers in their knowledge-intensive work, by providing online tools and a Web portal enabling them to access, review, and integrate disparate ontological resources in all aspects of biomedical investigation and clinical practice. A major focus of our work involves the use of biomedical ontologies to aid in the management and analysis of data derived from complex experiments.",
+              "rorId": null,
+              "location": {
+                "countryCode": "US",
+                "countryName": "United States"
+              }
+            },
+            "location": {
+              "countryCode": "US",
+              "countryName": "United States"
+            },
+            "deprecated": false,
+            "deprecationDate": null,
+            "deprecationOfflineDate": null,
+            "renderDeprecatedLanding": false,
+            "deprecationStatement": null,
+            "protectedUrls": false,
+            "renderProtectedLanding": false,
+            "authHelpUrl": null,
+            "authHelpDescription": null
+          },
+          {
+            "id": 35,
+            "mirId": "MIR:00100770",
+            "urlPattern": "https://www.ebi.ac.uk/ols4/ontologies/ncbitaxon/terms?short_form=NCBITaxon_{$id}",
+            "name": "NCBI Taxonomy through OLS",
+            "description": "NCBI Taxonomy through OLS",
+            "official": false,
+            "providerCode": "ols",
+            "sampleId": "9606",
+            "resourceHomeUrl": "https://www.ebi.ac.uk/ols4/ontologies/ncbitaxon/",
+            "institution": {
+              "id": 2,
+              "name": "European Bioinformatics Institute",
+              "homeUrl": "https://www.ebi.ac.uk",
+              "description": "At EMBL-EBI, we make the world’s public biological data freely available to the scientific community via a range of services and tools, perform basic research and provide professional training in bioinformatics. \nWe are part of the European Molecular Biology Laboratory (EMBL), an international, innovative and interdisciplinary research organisation funded by 26 member states and two associate member states.",
+              "rorId": "https://ror.org/02catss52",
+              "location": {
+                "countryCode": "GB",
+                "countryName": "United Kingdom"
+              }
+            },
+            "location": {
+              "countryCode": "GB",
+              "countryName": "United Kingdom"
+            },
+            "deprecated": false,
+            "deprecationDate": null,
+            "deprecationOfflineDate": null,
+            "renderDeprecatedLanding": false,
+            "deprecationStatement": null,
+            "protectedUrls": false,
+            "renderProtectedLanding": false,
+            "authHelpUrl": null,
+            "authHelpDescription": null
+          },
+          {
+            "id": 34,
+            "mirId": "MIR:00100695",
+            "urlPattern": "https://bio2rdf.org/taxonomy:{$id}",
+            "name": "Bio2RDF",
+            "description": "Bio2RDF",
+            "official": false,
+            "providerCode": "",
+            "sampleId": "9606",
+            "resourceHomeUrl": "https://bio2rdf.org/",
+            "institution": {
+              "id": 33,
+              "name": "Bio2RDF.org",
+              "homeUrl": "https://bio2rdf.org",
+              "description": "Bio2RDF is an open-source project that uses Semantic Web technologies to build and provide the largest network of Linked Data for the Life Sciences. Bio2RDF defines a set of simple conventions to create RDF(S) compatible Linked Data from a diverse set of heterogeneously formatted sources obtained from multiple data providers.",
+              "rorId": null,
+              "location": {
+                "countryCode": "US",
+                "countryName": "United States"
+              }
+            },
+            "location": {
+              "countryCode": "US",
+              "countryName": "United States"
+            },
+            "deprecated": false,
+            "deprecationDate": null,
+            "deprecationOfflineDate": null,
+            "renderDeprecatedLanding": false,
+            "deprecationStatement": null,
+            "protectedUrls": false,
+            "renderProtectedLanding": false,
+            "authHelpUrl": null,
+            "authHelpDescription": null
+          },
+          {
+            "id": 30,
+            "mirId": "MIR:00100019",
+            "urlPattern": "https://purl.uniprot.org/taxonomy/{$id}",
+            "name": "Taxonomy through UniProt PURL",
+            "description": "Taxonomy through UniProt PURL",
+            "official": false,
+            "providerCode": "",
+            "sampleId": "9606",
+            "resourceHomeUrl": "https://www.uniprot.org/taxonomy/",
+            "institution": {
+              "id": 24,
+              "name": "UniProt Consortium",
+              "homeUrl": "https://www.uniprot.org",
+              "description": "The Universal Protein Resource (UniProt) is a comprehensive resource for protein sequence and annotation data. The UniProt databases are the UniProt Knowledgebase (UniProtKB), the UniProt Reference Clusters (UniRef), and the UniProt Archive (UniParc). The UniProt consortium and host institutions EMBL-EBI, SIB and PIR are committed to the long-term preservation of the UniProt databases.",
+              "rorId": null,
+              "location": {
+                "countryCode": "GB",
+                "countryName": "United Kingdom"
+              }
+            },
+            "location": {
+              "countryCode": "US",
+              "countryName": "United States"
+            },
+            "deprecated": false,
+            "deprecationDate": null,
+            "deprecationOfflineDate": null,
+            "renderDeprecatedLanding": false,
+            "deprecationStatement": null,
+            "protectedUrls": false,
+            "renderProtectedLanding": false,
+            "authHelpUrl": null,
+            "authHelpDescription": null
+          }
+        ],
+        "sampleId": "9606",
+        "namespaceEmbeddedInLui": false,
+        "deprecated": false,
+        "deprecationDate": null,
+        "deprecationOfflineDate": null,
+        "renderDeprecatedLanding": false,
+        "deprecationStatement": null,
+        "infoOnPostmortemAccess": null,
+        "successor": null
+      },
+      {
+        "id": 87,
+        "prefix": "go",
+        "mirId": "MIR:00000022",
+        "name": "Gene Ontology",
+        "pattern": "^GO:\\d{7}$",
+        "description": "The Gene Ontology project provides a controlled vocabulary to describe gene and gene product attributes in any organism.",
+        "created": "2019-06-11T14:15:35.970+00:00",
+        "modified": "2019-06-11T14:15:35.970+00:00",
+        "resources": [
+          {
+            "id": 88,
+            "mirId": "MIR:00100012",
+            "urlPattern": "https://www.ebi.ac.uk/QuickGO/GTerm?id=GO:{$id}",
+            "name": "QuickGO (Gene Ontology browser)",
+            "description": "QuickGO (Gene Ontology browser)",
+            "official": false,
+            "providerCode": "quickgo",
+            "sampleId": "0006915",
+            "resourceHomeUrl": "https://www.ebi.ac.uk/QuickGO/",
+            "institution": {
+              "id": 2,
+              "name": "European Bioinformatics Institute",
+              "homeUrl": "https://www.ebi.ac.uk",
+              "description": "At EMBL-EBI, we make the world’s public biological data freely available to the scientific community via a range of services and tools, perform basic research and provide professional training in bioinformatics. \nWe are part of the European Molecular Biology Laboratory (EMBL), an international, innovative and interdisciplinary research organisation funded by 26 member states and two associate member states.",
+              "rorId": "https://ror.org/02catss52",
+              "location": {
+                "countryCode": "GB",
+                "countryName": "United Kingdom"
+              }
+            },
+            "location": {
+              "countryCode": "GB",
+              "countryName": "United Kingdom"
+            },
+            "deprecated": false,
+            "deprecationDate": null,
+            "deprecationOfflineDate": null,
+            "renderDeprecatedLanding": false,
+            "deprecationStatement": null,
+            "protectedUrls": false,
+            "renderProtectedLanding": false,
+            "authHelpUrl": null,
+            "authHelpDescription": null
+          },
+          {
+            "id": 90,
+            "mirId": "MIR:00100013",
+            "urlPattern": "http://amigo.geneontology.org/amigo/term/GO:{$id}",
+            "name": "AmiGO 2",
+            "description": "AmiGO 2",
+            "official": true,
+            "providerCode": "amigo",
+            "sampleId": "0006915",
+            "resourceHomeUrl": "http://amigo.geneontology.org/",
+            "institution": {
+              "id": 89,
+              "name": "The Gene Ontology Consortium",
+              "homeUrl": "http://geneontology.org/",
+              "description": "The mission of the GO Consortium is to develop a comprehensive, computational model of biological systems, ranging from the molecular to the organism level, across the multiplicity of species in the tree of life.\n\nThe Gene Ontology (GO) knowledgebase is the world’s largest source of information on the functions of genes. This knowledge is both human-readable and machine-readable, and is a foundation for computational analysis of large-scale molecular biology and genetics experiments in biomedical research. ",
+              "rorId": null,
+              "location": {
+                "countryCode": "US",
+                "countryName": "United States"
+              }
+            },
+            "location": {
+              "countryCode": "US",
+              "countryName": "United States"
+            },
+            "deprecated": false,
+            "deprecationDate": null,
+            "deprecationOfflineDate": null,
+            "renderDeprecatedLanding": false,
+            "deprecationStatement": null,
+            "protectedUrls": false,
+            "renderProtectedLanding": false,
+            "authHelpUrl": null,
+            "authHelpDescription": null
+          },
+          {
+            "id": 93,
+            "mirId": "MIR:00100237",
+            "urlPattern": "http://purl.bioontology.org/ontology/GO/GO:{$id}",
+            "name": "GO through BioPortal",
+            "description": "GO through BioPortal",
+            "official": false,
+            "providerCode": "bptl",
+            "sampleId": "0006915",
+            "resourceHomeUrl": "http://bioportal.bioontology.org/ontologies/GO",
+            "institution": {
+              "id": 5,
+              "name": "National Center for Biomedical Ontology, Stanford",
+              "homeUrl": "https://ncbo.bioontology.org/",
+              "description": "The goal of the National Center for Biomedical Ontology is to support biomedical researchers in their knowledge-intensive work, by providing online tools and a Web portal enabling them to access, review, and integrate disparate ontological resources in all aspects of biomedical investigation and clinical practice. A major focus of our work involves the use of biomedical ontologies to aid in the management and analysis of data derived from complex experiments.",
+              "rorId": null,
+              "location": {
+                "countryCode": "US",
+                "countryName": "United States"
+              }
+            },
+            "location": {
+              "countryCode": "US",
+              "countryName": "United States"
+            },
+            "deprecated": false,
+            "deprecationDate": null,
+            "deprecationOfflineDate": null,
+            "renderDeprecatedLanding": false,
+            "deprecationStatement": null,
+            "protectedUrls": false,
+            "renderProtectedLanding": false,
+            "authHelpUrl": null,
+            "authHelpDescription": null
+          },
+          {
+            "id": 96,
+            "mirId": "MIR:00100675",
+            "urlPattern": "https://www.ebi.ac.uk/ols4/ontologies/go/terms?obo_id=GO:{$id}",
+            "name": "GO through OLS",
+            "description": "GO through OLS",
+            "official": false,
+            "providerCode": "ols",
+            "sampleId": "0006915",
+            "resourceHomeUrl": "https://www.ebi.ac.uk/ols4/ontologies/go",
+            "institution": {
+              "id": 2,
+              "name": "European Bioinformatics Institute",
+              "homeUrl": "https://www.ebi.ac.uk",
+              "description": "At EMBL-EBI, we make the world’s public biological data freely available to the scientific community via a range of services and tools, perform basic research and provide professional training in bioinformatics. \nWe are part of the European Molecular Biology Laboratory (EMBL), an international, innovative and interdisciplinary research organisation funded by 26 member states and two associate member states.",
+              "rorId": "https://ror.org/02catss52",
+              "location": {
+                "countryCode": "GB",
+                "countryName": "United Kingdom"
+              }
+            },
+            "location": {
+              "countryCode": "GB",
+              "countryName": "United Kingdom"
+            },
+            "deprecated": false,
+            "deprecationDate": null,
+            "deprecationOfflineDate": null,
+            "renderDeprecatedLanding": false,
+            "deprecationStatement": null,
+            "protectedUrls": false,
+            "renderProtectedLanding": false,
+            "authHelpUrl": null,
+            "authHelpDescription": null
+          },
+          {
+            "id": 92,
+            "mirId": "MIR:00100015",
+            "urlPattern": "http://www.informatics.jax.org/searches/GO.cgi?id=GO:{$id}",
+            "name": "GO Browser",
+            "description": "GO Browser",
+            "official": false,
+            "providerCode": "",
+            "sampleId": "0006915",
+            "resourceHomeUrl": "http://www.informatics.jax.org/searches/GO_form.shtml",
+            "institution": {
+              "id": 91,
+              "name": "The Jackson Laboratory",
+              "homeUrl": "https://www.jax.org/#",
+              "description": "The Jackson Laboratory (JAX) is an independent, nonprofit biomedical research organization that leverages a unique combination of research, education and resources to achieve our mission: We DISCOVER precise genomic solutions for disease and EMPOWER the global biomedical community in its shared quest to improve human health.",
+              "rorId": "https://ror.org/021sy4w91",
+              "location": {
+                "countryCode": "US",
+                "countryName": "United States"
+              }
+            },
+            "location": {
+              "countryCode": "US",
+              "countryName": "United States"
+            },
+            "deprecated": false,
+            "deprecationDate": null,
+            "deprecationOfflineDate": null,
+            "renderDeprecatedLanding": false,
+            "deprecationStatement": null,
+            "protectedUrls": false,
+            "renderProtectedLanding": false,
+            "authHelpUrl": null,
+            "authHelpDescription": null
+          },
+          {
+            "id": 95,
+            "mirId": "MIR:00100585",
+            "urlPattern": "http://www.pantherdb.org/panther/category.do?categoryAcc=GO:{$id}",
+            "name": "GO through PANTHER",
+            "description": "GO through PANTHER",
+            "official": false,
+            "providerCode": "",
+            "sampleId": "0000003",
+            "resourceHomeUrl": "http://www.pantherdb.org/",
+            "institution": {
+              "id": 94,
+              "name": "Keck School of Medicine, University of Southern California",
+              "homeUrl": "https://www.keckmedicine.org/",
+              "description": "Keck Medicine of USC is the University of Southern California’s medical enterprise, one of only two university-based medical systems in the Los Angeles area. Keck Medicine combines academic excellence, world-class research and state-of-the-art facilities to provide highly specialized care for some of the most acute patients in the country. ",
+              "rorId": "https://ror.org/01rq8ck58",
+              "location": {
+                "countryCode": "US",
+                "countryName": "United States"
+              }
+            },
+            "location": {
+              "countryCode": "US",
+              "countryName": "United States"
+            },
+            "deprecated": false,
+            "deprecationDate": null,
+            "deprecationOfflineDate": null,
+            "renderDeprecatedLanding": false,
+            "deprecationStatement": null,
+            "protectedUrls": false,
+            "renderProtectedLanding": false,
+            "authHelpUrl": null,
+            "authHelpDescription": null
+          }
+        ],
+        "sampleId": "0006915",
+        "namespaceEmbeddedInLui": true,
+        "deprecated": false,
+        "deprecationDate": null,
+        "deprecationOfflineDate": null,
+        "renderDeprecatedLanding": false,
+        "deprecationStatement": null,
+        "infoOnPostmortemAccess": null,
+        "successor": null
+      }
+    ]
+  }
+}
