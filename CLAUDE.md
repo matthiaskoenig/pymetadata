@@ -17,6 +17,7 @@ needed only to regenerate the ontology modules.
 # environment (uv based); the dev extra includes the ontology extra
 uv sync --extra dev
 uv run pre-commit install
+uv lock                         # after every change of a dependency in pyproject.toml
 
 # tests
 pytest                          # all tests
@@ -138,6 +139,16 @@ lazy `%s` formatting rather than f-strings (enforced by ruff `G`).
   `project.requires-python`. Suppress a diagnostic with a rule-specific
   `# ty: ignore[rule-name]`, never a blanket `# type: ignore`. ty also runs as a
   pre-commit hook (`--extra dev`, so the hook syncs the dev environment it checks against).
+- `uv.lock` is committed and pins the local development environment (`uv sync`,
+  `uv run`, so also `uv run ty check`), the `documentation` workflow, which runs
+  `uv sync --locked`, and the ruff version of the `ruff` workflow; the tox
+  environments, i.e. the test matrix and the `ty` check of continuous
+  integration, resolve from `pyproject.toml` and do not use it. After changing a
+  dependency in `pyproject.toml` run `uv lock`, otherwise the `documentation`
+  workflow fails; `uv lock --upgrade` moves the lock to the newest releases.
+  Dependabot bumps the lock weekly with `versioning-strategy: lockfile-only`, so
+  the lower bounds in `pyproject.toml`, which users install against, are only
+  changed by hand.
 - Every module, class and function carries full type annotations and a google-style
   docstring.
 - `examples/` at the top level holds the runnable usage examples, they are not
