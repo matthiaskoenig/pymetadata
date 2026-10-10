@@ -17,9 +17,6 @@ coverage.xml
 # rendered documentation, built by the `documentation` workflow
 site/
 
-# the lock file is not committed, pymetadata is a library and pins nothing
-uv.lock
-
 # editors, operating system
 .idea/
 .vscode/

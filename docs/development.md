@@ -94,6 +94,8 @@ A single sync creates the virtual environment in `.venv`, installs `pymetadata` 
 uv sync --extra dev
 ```
 
+The environment is resolved from `uv.lock`, which is committed, so local development, including `uv run ty check`, and the documentation build use the same versions. The tox environments, i.e. the test matrix and the `ty` check of continuous integration, resolve from `pyproject.toml` and do not use the lock; the lower bounds in `pyproject.toml` are what a user of the library installs against. After changing a dependency in `pyproject.toml` run `uv lock`: the `documentation` workflow syncs with `uv sync --locked`, which fails when `pyproject.toml` and the lock disagree. `uv lock --upgrade` moves the lock to the newest releases. Dependabot bumps the locked dependencies as one grouped weekly pull request, with `versioning-strategy: lockfile-only`, so the lower bounds in `pyproject.toml` are never raised by it and only ever changed by hand.
+
 The `dev` extra contains everything used below, i.e., pytest, ruff, ty, tox, pre-commit, zensical and bump-my-version, and it pulls in the optional `ontology` extra, so nothing has to be installed separately. The python version is taken from `.python-version` (currently 3.14); to work against the oldest supported version instead use `uv sync --extra dev --python 3.11`, which replaces the environment.
 
 The tools are then run either with `uv run <command>`, which uses the environment without activating it, or from the activated environment:
@@ -147,6 +149,8 @@ Linting and formatting use [ruff](https://docs.astral.sh/ruff/):
 ruff check     # lint
 ruff format    # format
 ```
+
+The `ruff` workflow installs the ruff version locked in `uv.lock`, so continuous integration and `uv run ruff` agree.
 
 ## Type checking
 
