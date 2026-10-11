@@ -41,7 +41,7 @@ dependencies = [
 	"rich>=15.0.0",
 	"requests>=2.34.2",
 	"urllib3>=2.5.0",
-	"pydantic>=2.13.5",
+	"pydantic>=2.12",
 ]
 
 [project.optional-dependencies]
