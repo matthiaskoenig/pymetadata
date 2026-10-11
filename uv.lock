@@ -1128,7 +1128,7 @@ requires-dist = [
     { name = "pre-commit", marker = "extra == 'dev'", specifier = ">=4.6.2" },
     { name = "pronto", marker = "extra == 'dev'", specifier = ">=2.7.3" },
     { name = "pronto", marker = "extra == 'ontology'", specifier = ">=2.7.3" },
-    { name = "pydantic", specifier = ">=2.13.5" },
+    { name = "pydantic", specifier = ">=2.12" },
     { name = "pytest", marker = "extra == 'dev'", specifier = ">=9.1.1" },
     { name = "pytest-cov", marker = "extra == 'dev'", specifier = ">=7.1.0" },
     { name = "requests", specifier = ">=2.34.2" },
