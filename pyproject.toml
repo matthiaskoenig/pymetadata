@@ -41,6 +41,9 @@ dependencies = [
 	"rich>=15.0.0",
 	"requests>=2.34.2",
 	"urllib3>=2.5.0",
+	# not imported, reached through requests; the floor excludes the CA store
+	# with the compromised emSign intermediates, GHSA-6q48-6c7w-9gw2
+	"certifi>=2026.10.19",
 	"pydantic>=2.12",
 ]
 

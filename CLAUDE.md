@@ -4,12 +4,7 @@ This file provides guidance when working with code in this repository.
 
 ## Project
 
-`pymetadata` is a python library for metadata in the context of COMBINE standards:
-COMBINE archives (OMEX), MIRIAM/RDF annotations, and ontology terms (SBO, KISAO, PBPKO).
-Pure library, no CLI entry points. Requires python >= 3.11, packaged with hatchling
-(version is read from `src/pymetadata/__init__.py`). Runtime dependencies are
-`rich`, `requests` and `pydantic`; `pronto` is the optional `ontology` extra,
-needed only to regenerate the ontology modules.
+`pymetadata` is a python library for metadata in the context of COMBINE standards: COMBINE archives (OMEX), MIRIAM/RDF annotations, and ontology terms (SBO, KISAO, PBPKO). Pure library, no CLI entry points. Requires python >= 3.11, packaged with hatchling (version is read from `src/pymetadata/__init__.py`). Runtime dependencies are `rich`, `requests` and `pydantic`, plus the floors of `urllib3` and `certifi`, which are not imported but reached through `requests` (`certifi>=2026.10.19` excludes the CA store with the compromised emSign intermediates, GHSA-6q48-6c7w-9gw2); `pronto` is the optional `ontology` extra, needed only to regenerate the ontology modules.
 
 ## Commands
 
