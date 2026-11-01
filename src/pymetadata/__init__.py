@@ -7,7 +7,7 @@ from pathlib import Path
 logging.getLogger(__name__).addHandler(logging.NullHandler())
 
 __author__ = "Matthias Koenig"
-__version__ = "0.8.2"
+__version__ = "0.8.3"
 
 
 program_name: str = "pymetadata"
