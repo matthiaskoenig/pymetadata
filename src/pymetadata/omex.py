@@ -1237,14 +1237,17 @@ class Omex:
                 `ZIP_STORED` at level 0.
             compresslevel: level of compression, 0-9 (see zlib). Larger values
                 compress better. Only a level other than the default deflates
-                the entries again.
+                the entries again. `-1` is accepted as the default level, for
+                compatibility with `zipfile`.
 
         Raises:
             FileNotFoundError: if an entry of the manifest has no content, i.e.,
                 neither a file in the temporary directory nor content in the
                 archive this one was read from
-            ValueError: if the content of an entry cannot be read or the core
-                refuses an entry
+            ValueError: if the content of an entry cannot be read, the core
+                refuses an entry or `compresslevel` is an integer outside of
+                0 to 9 (`-1` is the default)
+            TypeError: if `compresslevel` is not an integer
 
         Example:
             ```python
@@ -1258,10 +1261,11 @@ class Omex:
         if omex_path.exists():
             logger.warning("Existing omex is overwritten: '%s'", omex_path)
 
-        level = compresslevel
+        # -1 is the default of zlib and zipfile, the default of this library is 9
+        level = 9 if compresslevel == -1 else compresslevel
         if compression != zipfile.ZIP_DEFLATED:
             # the core writes deflate alone; stored members are deflated at 0
-            level = 0 if compression == zipfile.ZIP_STORED else compresslevel
+            level = 0 if compression == zipfile.ZIP_STORED else level
             logger.warning(
                 "A COMBINE archive is deflated, the compression '%s' is not "
                 "written: the entries are deflated at level %s.",

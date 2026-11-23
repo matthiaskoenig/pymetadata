@@ -33,9 +33,10 @@ class PasswordError(ValueError):
 
     A subclass of `ValueError`, so code which catches the `ValueError` of the
     bridge keeps working. It is raised for a password which is wrong and for a
-    password which is missing, and it proves that the member exists: a caller
-    which only asks whether a file is an archive, such as `Omex.is_omex`, reads
-    it as a yes.
+    password which is missing, and it proves that the member exists. A caller
+    can tell it from a container which has no manifest at all, but
+    `Omex.is_omex` does not need to: it asks about the structure of the zip
+    and never reads a member.
     """
 
 
@@ -290,9 +291,11 @@ def write_archive(
             changed in place as the write proceeds, so a write is not free of
             side effects: a second write of the same `Omex` after further
             changes of its manifest can fail on a member whose bytes the
-            archive no longer holds, e.g. a location which was removed, written
-            and declared again, which fails with the `FileNotFoundError` of its
-            missing file. A write which repeats the same entries is unaffected
+            archive no longer holds. The cause is that the first write already
+            dropped the bytes of a removed member from the archive, so a
+            location which was removed, written and then declared again has no
+            content left and fails with the `FileNotFoundError` of its missing
+            file. A write which repeats the same entries is unaffected
             and gives the same bytes again.
         entries: the manifest entries of the `Omex`
         files: the file of every location whose content is written from one

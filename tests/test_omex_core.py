@@ -561,6 +561,26 @@ def test_a_write_without_a_change_copies_every_member(
     assert {member: after[member] for member in before} == before
 
 
+def test_a_compresslevel_of_minus_one_is_the_default(tmp_path: Path) -> None:
+    """`-1` is the default level of `zipfile`, and writes the same archive."""
+    default, minus_one = tmp_path / "default.omex", tmp_path / "minus_one.omex"
+    with Omex.from_omex(COMPMODELS) as omex:
+        omex.to_omex(default)
+        omex.to_omex(minus_one, compresslevel=-1)
+    assert minus_one.read_bytes() == default.read_bytes()
+
+
+@pytest.mark.parametrize("level", [10, -2])
+def test_a_compresslevel_outside_of_zero_to_nine_raises(
+    level: int, tmp_path: Path
+) -> None:
+    """A level outside of 0 to 9 is a `ValueError` and writes no file."""
+    target = tmp_path / "out.omex"
+    with Omex.from_omex(COMPMODELS) as omex, pytest.raises(ValueError, match="level"):
+        omex.to_omex(target, compresslevel=level)
+    assert not target.exists()
+
+
 def test_an_untouched_member_is_copied_as_its_compressed_blob(tmp_path: Path) -> None:
     """Read, change one entry, write: every other member keeps its blob."""
     source = tmp_path / "README.md"
