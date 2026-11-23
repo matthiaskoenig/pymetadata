@@ -13,6 +13,7 @@ import shutil
 import stat
 import subprocess
 import zipfile
+from concurrent.futures import Future, ThreadPoolExecutor
 from pathlib import Path
 
 import pytest
@@ -22,7 +23,7 @@ from pymetadata.omex import (
     EntryFormat,
     ManifestEntry,
     Omex,
-    format_from_suffix_and_head,
+    _format_from_suffix_and_head,
 )
 
 DATA = Path(__file__).parent / "data" / "omex"
@@ -85,7 +86,7 @@ def test_guessed_formats_equal_omex_guess_format(name: str, tmp_path: Path) -> N
     archive = open_archive((DATA / f"{name}.omex").read_bytes(), None)
     declared = {loc for loc, _, _ in archive.declared_entries}
     checked = 0
-    for entry in entries_for_archive(archive, format_from_suffix_and_head):
+    for entry in entries_for_archive(archive, _format_from_suffix_and_head):
         location = str(entry["location"])
         if location in declared:
             continue
@@ -884,3 +885,144 @@ def test_a_changed_format_is_written_without_a_file_from_the_caller(
         assert result.manifest["./models/omex_comp.xml"].master is True
     with zipfile.ZipFile(COMPMODELS) as source, zipfile.ZipFile(target) as written:
         assert written.read("README.md") == source.read("README.md")
+
+
+def _content_locations(omex: Omex) -> list[str]:
+    """Get the locations of an archive which have content, i.e., a file."""
+    return [
+        entry.location
+        for entry in omex.manifest.entries
+        if entry.location not in {".", "./manifest.xml"}
+    ]
+
+
+def test_get_path_from_several_threads_extracts_every_entry() -> None:
+    """One `Omex` is read from eight threads, as one could be before the swap.
+
+    The core gives access to one archive to one thread at a time and refuses a
+    second one; `Omex` serializes the extractions with a lock of the instance,
+    so the property the pre-swap `get_path`, a dict lookup plus a path join,
+    had by construction is kept. Without the lock most of these calls fail with
+    the `ArchiveBusyError` of the binding.
+    """
+    with Omex.from_omex(ICGB21FR) as omex, Omex.from_omex(ICGB21FR) as reference:
+        locations = _content_locations(omex)
+        assert len(locations) == 21
+
+        with ThreadPoolExecutor(max_workers=8) as pool:
+            paths = list(pool.map(omex.get_path, locations))
+
+        assert len(paths) == len(locations)
+        for location, path in zip(locations, paths, strict=True):
+            assert path.is_file(), location
+            # the bytes of the threaded extraction are the ones of a read which
+            # extracts the same member alone
+            assert path.read_bytes() == reference.get_path(location).read_bytes()
+
+
+def test_get_path_races_a_write(tmp_path: Path) -> None:
+    """Extracting entries in several threads while the archive is written works.
+
+    `to_omex` reaches the same archive as `get_path`, so both hold the lock of
+    the instance; the writes and the extractions happen one after the other
+    instead of refusing each other.
+    """
+    targets = [tmp_path / f"out{i}.omex" for i in range(3)]
+    with Omex.from_omex(ICGB21FR) as omex:
+        locations = _content_locations(omex)
+        reads: list[Future[Path]] = []
+        writes: list[Future[None]] = []
+        with ThreadPoolExecutor(max_workers=8) as pool:
+            for index, location in enumerate(locations):
+                reads.append(pool.submit(omex.get_path, location))
+                if index % 7 == 0:
+                    writes.append(pool.submit(omex.to_omex, targets[index // 7]))
+
+            paths = [read.result() for read in reads]
+            # a failing write raises here
+            assert [write.result() for write in writes] == [None, None, None]
+
+        assert all(path.is_file() for path in paths)
+
+    for target in targets:
+        with Omex.from_omex(target) as result:
+            assert {entry.location for entry in result.manifest.entries} == set(
+                ICGB21FR_LOCATIONS
+            )
+
+
+def test_a_removed_file_of_an_extracted_entry_is_not_written_from_the_archive(
+    tmp_path: Path,
+) -> None:
+    """A caller who removes the file of an entry does not get the old content.
+
+    Before the swap every member was extracted when the archive was read, so a
+    removed file made the write raise. The archive the content was read from
+    must not answer for a location the caller touched, otherwise a write
+    silently restores content the caller got rid of.
+    """
+    target = tmp_path / "out.omex"
+    with Omex.from_omex(COMPMODELS) as omex:
+        omex.get_path("./README.md").unlink()
+        with pytest.raises(FileNotFoundError, match=r"README\.md"):
+            omex.to_omex(target)
+
+    assert not target.exists()
+
+
+def test_a_removed_file_of_an_added_entry_does_not_resurrect_the_original(
+    tmp_path: Path,
+) -> None:
+    """A replacement whose file goes missing is not written from the archive.
+
+    This is the case the fallback to the archive is dangerous in: the write
+    would restore the content the caller replaced, without an error.
+    """
+    replacement = tmp_path / "README.md"
+    replacement.write_text("replaced", encoding="utf-8")
+    target = tmp_path / "out.omex"
+    with Omex.from_omex(COMPMODELS) as omex:
+        omex.add_entry(
+            entry_path=replacement,
+            entry=ManifestEntry(
+                location="./README.md", format=EntryFormat.MARKDOWN, master=False
+            ),
+        )
+        omex.get_path("./README.md").unlink()
+        with pytest.raises(FileNotFoundError, match=r"README\.md"):
+            omex.to_omex(target)
+
+    assert not target.exists()
+
+
+def test_to_directory_does_not_write_the_archive_content_of_a_removed_file(
+    tmp_path: Path,
+) -> None:
+    """`to_directory` fails for a removed file instead of falling back."""
+    with Omex.from_omex(COMPMODELS) as omex:
+        omex.get_path("./README.md").unlink()
+        with pytest.raises(FileNotFoundError, match=r"README\.md"):
+            omex.to_directory(tmp_path / "out")
+
+
+def test_is_omex_of_a_container_whose_manifest_is_named_with_a_prefix(
+    tmp_path: Path,
+) -> None:
+    """`is_omex` normalizes the names of the container, as the core does.
+
+    A container whose manifest member is stored as `./manifest.xml` is read by
+    `from_omex`, so `is_omex` must not answer False for it: the two have to
+    agree, because the documentation offers `is_omex` as the gate of `from_omex`.
+    """
+    omex_path = tmp_path / "prefixed.omex"
+    with zipfile.ZipFile(omex_path, "w", zipfile.ZIP_DEFLATED) as zf:
+        zf.writestr("./manifest.xml", MANIFEST)
+        zf.writestr("./a.txt", "hi")
+
+    assert Omex.is_omex(omex_path) is True
+    with Omex.from_omex(omex_path) as omex:
+        assert [entry.location for entry in omex.manifest.entries] == [
+            ".",
+            "./manifest.xml",
+            "./a.txt",
+        ]

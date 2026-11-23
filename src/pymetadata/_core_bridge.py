@@ -2,8 +2,10 @@
 
 This is the only module which imports `pymetadata_core`. It translates the core's
 errors into the `ValueError` and `KeyError` the public API of `pymetadata.omex`
-raises, derives the manifest entries `pymetadata` wants from an opened archive,
-and applies the changes of an `Omex` to the archive when it is written.
+raises, and the refusal of an archive which another thread holds into
+`ConcurrentUseError`; it derives the manifest entries `pymetadata` wants from an
+opened archive, and applies the changes of an `Omex` to the archive when it is
+written.
 """
 
 from __future__ import annotations
@@ -14,18 +16,20 @@ from collections.abc import Callable
 from pathlib import Path
 from typing import TYPE_CHECKING
 
-from pymetadata_core import Archive, OmexError
+from pymetadata_core import Archive, ArchiveBusyError, OmexError
 
 if TYPE_CHECKING:
     from pymetadata.omex import ManifestEntry
 
 logger = logging.getLogger(__name__)
 
-_MANIFEST = "./manifest.xml"
+#: the normalized location of the manifest of an archive; `pymetadata.omex`
+#: shares this one definition
+MANIFEST_LOCATION = "./manifest.xml"
 _ARCHIVE = "."
 #: the locations the core writes itself, they are never set or removed by hand and
 #: hold no file of their own; `pymetadata.omex` shares this one definition
-DERIVED_LOCATIONS = frozenset({_ARCHIVE, _MANIFEST})
+DERIVED_LOCATIONS = frozenset({_ARCHIVE, MANIFEST_LOCATION})
 
 
 class PasswordError(ValueError):
@@ -38,6 +42,38 @@ class PasswordError(ValueError):
     `Omex.is_omex` does not need to: it asks about the structure of the zip
     and never reads a member.
     """
+
+
+class ConcurrentUseError(RuntimeError):
+    """One archive used by two threads at the same time.
+
+    The core gives access to one archive to one thread at a time and refuses a
+    second one instead of waiting. `Omex` serializes the calls of its own
+    methods, so one `Omex` can be used from several threads; this error is the
+    backstop for an archive which is shared in another way, e.g., for two
+    `Omex` instances built around the same `Archive` object.
+
+    A `RuntimeError`, not a `ValueError`: nothing is wrong with the values the
+    caller passed, the call came at the wrong moment and can be repeated.
+
+    It cannot be raised by `open_archive`, which builds a new archive no other
+    thread can hold yet.
+    """
+
+
+def _busy_error(error: ArchiveBusyError) -> ConcurrentUseError:
+    """Translate the busy error of the core into a `ConcurrentUseError`.
+
+    Args:
+        error: the error of the core
+
+    Returns:
+        The `ConcurrentUseError` to raise.
+    """
+    return ConcurrentUseError(
+        f"The archive is used by another thread, one archive cannot be read or "
+        f"written concurrently: {error}"
+    )
 
 
 def _is_sedml(format: str) -> bool:
@@ -148,30 +184,38 @@ def entries_for_archive(
 
     Returns:
         One dict per entry with the keys `location`, `format` and `master`.
+
+    Raises:
+        ConcurrentUseError: if another thread uses the same archive.
     """
     entries: list[dict[str, str | bool]] = []
     declared: set[str] = set()
-    for location, format, master in archive.declared_entries:
-        declared.add(location)
-        if location in DERIVED_LOCATIONS:
-            continue
-        if not archive.has_bytes(location):
-            logger.warning("Entry in manifest.xml without a file: '%s'", location)
-            continue
-        entries.append({"location": location, "format": format, "master": master})
+    try:
+        for location, format, master in archive.declared_entries:
+            declared.add(location)
+            if location in DERIVED_LOCATIONS:
+                continue
+            if not archive.has_bytes(location):
+                logger.warning("Entry in manifest.xml without a file: '%s'", location)
+                continue
+            entries.append({"location": location, "format": format, "master": master})
 
-    unlisted = sorted(
-        location
-        for location, _, _, _ in archive.members
-        if location not in declared and location not in DERIVED_LOCATIONS
-    )
-    for location in unlisted:
-        logger.warning("Entry with location missing in manifest.xml: '%s'", location)
-        suffix = Path(location).suffix[1:].lower()
-        format = guess_format(suffix, _head_of(archive, location, suffix))
-        entries.append(
-            {"location": location, "format": format, "master": _is_sedml(format)}
+        unlisted = sorted(
+            location
+            for location, _, _, _ in archive.members
+            if location not in declared and location not in DERIVED_LOCATIONS
         )
+        for location in unlisted:
+            logger.warning(
+                "Entry with location missing in manifest.xml: '%s'", location
+            )
+            suffix = Path(location).suffix[1:].lower()
+            format = guess_format(suffix, _head_of(archive, location, suffix))
+            entries.append(
+                {"location": location, "format": format, "master": _is_sedml(format)}
+            )
+    except ArchiveBusyError as error:
+        raise _busy_error(error) from error
     return entries
 
 
@@ -192,6 +236,10 @@ def _head_of(archive: Archive, location: str, suffix: str) -> bytes:
     Returns:
         The first 256 bytes of the member for an `xml` suffix, nothing for
         every other suffix and for a member which cannot be read.
+
+    Raises:
+        ArchiveBusyError: if another thread uses the same archive; the caller
+            translates it, a busy archive is not a member which cannot be read.
     """
     if suffix != "xml":
         return b""
@@ -224,11 +272,14 @@ def materialize(archive: Archive, location: str, target: Path) -> None:
             method and a member over the inflate cap are refused here, when the
             bytes are read, not when the archive is opened (`manifest.xml` is
             the exception); the message names the member as `./location`.
+        ConcurrentUseError: if another thread uses the same archive.
     """
     if location in DERIVED_LOCATIONS:
         raise KeyError(location)
     try:
         data = archive.entry_bytes(location)
+    except ArchiveBusyError as error:
+        raise _busy_error(error) from error
     except OmexError as error:
         if str(error).startswith("not found"):
             raise KeyError(location) from error
@@ -253,9 +304,16 @@ def has_bytes(archive: Archive, location: str) -> bool:
         True if the archive can write the content of the location by itself. A
         location the core cannot normalize, which a `ManifestEntry` cannot
         carry, is reported as one without bytes.
+
+    Raises:
+        ConcurrentUseError: if another thread uses the same archive. A busy
+            archive is not an archive without the bytes, so this is raised
+            instead of being answered with False.
     """
     try:
         return archive.has_bytes(location)
+    except ArchiveBusyError as error:
+        raise _busy_error(error) from error
     except OmexError:
         return False
 
@@ -313,6 +371,7 @@ def write_archive(
         ValueError: if the core refuses an entry, if `level` is outside of 0 to
             9 or if a member cannot be read, which includes an entry with
             neither a file in `files` nor bytes in the archive.
+        ConcurrentUseError: if another thread uses the same archive.
     """
     target = Archive() if archive is None else archive
     wanted = {e.location: e for e in entries if e.location not in DERIVED_LOCATIONS}
@@ -329,6 +388,8 @@ def write_archive(
             elif current.get(location) != (format, master):
                 target.set_entry(location, format, master, target.entry_bytes(location))
         data = target.to_bytes(recompress=recompress, level=level)
+    except ArchiveBusyError as error:
+        raise _busy_error(error) from error
     except OmexError as error:
         raise _map_error(error) from error
     return data

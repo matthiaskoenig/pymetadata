@@ -5,11 +5,13 @@ import shutil
 import subprocess
 import zipfile
 from pathlib import Path
+from typing import Any, cast
 
 import pytest
-from pymetadata_core import Archive
+from pymetadata_core import Archive, ArchiveBusyError
 
 from pymetadata._core_bridge import (
+    ConcurrentUseError,
     PasswordError,
     entries_for_archive,
     has_bytes,
@@ -21,7 +23,7 @@ from pymetadata.omex import (
     EntryFormat,
     ManifestEntry,
     Omex,
-    format_from_suffix_and_head,
+    _format_from_suffix_and_head,
 )
 
 DATA = Path(__file__).parent / "data" / "omex"
@@ -112,7 +114,8 @@ def test_entries_drop_a_manifest_entry_without_bytes() -> None:
     """iCGB21FR lists ./iCGB21FR_memote.html, which no member provides."""
     archive = _open("iCGB21FR")
     locations = [
-        e["location"] for e in entries_for_archive(archive, format_from_suffix_and_head)
+        e["location"]
+        for e in entries_for_archive(archive, _format_from_suffix_and_head)
     ]
     assert "./iCGB21FR_memote.html" not in locations
     assert "." not in locations
@@ -130,7 +133,7 @@ def test_entries_drop_a_manifest_entry_without_bytes() -> None:
 )
 def test_entries_count(name: str, count: int) -> None:
     """The two entries `Manifest` holds make the count `pymetadata` reports."""
-    entries = entries_for_archive(_open(name), format_from_suffix_and_head)
+    entries = entries_for_archive(_open(name), _format_from_suffix_and_head)
     assert len(entries) + 2 == count
     assert len({e["location"] for e in entries}) == len(entries)
 
@@ -139,7 +142,7 @@ def test_entries_append_the_unlisted_members_sorted() -> None:
     """The 16 unlisted members of iCGB21FR follow the listed ones, sorted."""
     archive = _open("iCGB21FR")
     declared = [loc for loc, _, _ in archive.declared_entries]
-    entries = entries_for_archive(archive, format_from_suffix_and_head)
+    entries = entries_for_archive(archive, _format_from_suffix_and_head)
     locations = [str(e["location"]) for e in entries]
     # a declared format is the one of the manifest, not a guess
     sbml = next(e for e in entries if e["location"] == "./iCGB21FR.xml")
@@ -160,7 +163,7 @@ def test_entries_guess_the_format_of_an_unlisted_member() -> None:
     by_location = {
         e["location"]: e
         for e in entries_for_archive(
-            _open("BIOMD0000000001"), format_from_suffix_and_head
+            _open("BIOMD0000000001"), _format_from_suffix_and_head
         )
     }
     entry = by_location["./metadata.rdf"]
@@ -179,7 +182,7 @@ def test_an_unlisted_sedml_member_is_master() -> None:
         ),
         None,
     )
-    (entry,) = entries_for_archive(archive, format_from_suffix_and_head)
+    (entry,) = entries_for_archive(archive, _format_from_suffix_and_head)
     assert entry["location"] == "./study.xml"
     assert ManifestEntry.is_format("sedml", str(entry["format"]))
     assert entry["master"] is True
@@ -286,7 +289,7 @@ def test_write_archive_applies_removals_changes_and_the_manifest(
     archive = _open("BIOMD0000000001")
     entries = [
         ManifestEntry(**e)  # ty: ignore[invalid-argument-type]
-        for e in entries_for_archive(archive, format_from_suffix_and_head)
+        for e in entries_for_archive(archive, _format_from_suffix_and_head)
     ]
     removed = entries.pop(-1)
     new_file = tmp_path / "new.txt"
@@ -300,7 +303,7 @@ def test_write_archive_applies_removals_changes_and_the_manifest(
     assert not result.has_bytes(removed.location)
     assert {e.location for e in entries} <= {
         str(e["location"])
-        for e in entries_for_archive(result, format_from_suffix_and_head)
+        for e in entries_for_archive(result, _format_from_suffix_and_head)
     }
 
 
@@ -319,7 +322,7 @@ def test_write_archive_without_an_archive_writes_the_files_alone(
     result = open_archive(data, None)
     assert result.entry_bytes("./model.xml") == b"<sbml/>"
     assert [
-        e["location"] for e in entries_for_archive(result, format_from_suffix_and_head)
+        e["location"] for e in entries_for_archive(result, _format_from_suffix_and_head)
     ] == ["./model.xml"]
 
 
@@ -345,3 +348,65 @@ def test_has_bytes_is_false_for_a_location_the_archive_has_no_content_for() -> N
     assert has_bytes(archive, "./iCGB21FR_memote.html") is False
     assert has_bytes(archive, "./manifest.xml") is False
     assert has_bytes(archive, "../outside.txt") is False
+
+
+class _BusyArchive:
+    """An archive which another thread holds, as the binding reports it.
+
+    Every attribute the bridge asks for raises the `ArchiveBusyError` of the
+    core. The refusal of the real core needs a second thread inside one of its
+    calls, which cannot be provoked deterministically from python, while the
+    translation of that refusal can be.
+    """
+
+    def __getattr__(self, name: str) -> Any:
+        """Refuse the attribute the bridge asks for.
+
+        Args:
+            name: name of the attribute
+
+        Returns:
+            Nothing, every access raises.
+
+        Raises:
+            ArchiveBusyError: always, as the core does for an archive in use.
+        """
+        raise ArchiveBusyError(
+            f"this Archive is already in use by another thread ('{name}')"
+        )
+
+
+def _busy() -> Archive:
+    """Get a stand-in for an archive which another thread holds."""
+    return cast("Archive", _BusyArchive())
+
+
+def test_concurrent_use_error_is_a_runtime_error() -> None:
+    """Not a `ValueError`: the values of the caller are fine, the moment is not."""
+    assert issubclass(ConcurrentUseError, RuntimeError)
+    assert not issubclass(ConcurrentUseError, ValueError)
+
+
+def test_entries_for_archive_of_a_busy_archive_raises_concurrent_use() -> None:
+    """The busy error of the core does not reach the caller as it is."""
+    with pytest.raises(ConcurrentUseError, match="concurrently"):
+        entries_for_archive(_busy(), _format_from_suffix_and_head)
+
+
+def test_materialize_of_a_busy_archive_raises_concurrent_use(tmp_path: Path) -> None:
+    """A busy archive is not a member which cannot be read."""
+    with pytest.raises(ConcurrentUseError, match="concurrently"):
+        materialize(_busy(), "./a.txt", tmp_path / "a.txt")
+
+
+def test_has_bytes_of_a_busy_archive_raises_instead_of_answering_false() -> None:
+    """A busy archive is not an archive without the bytes of the location."""
+    with pytest.raises(ConcurrentUseError, match="concurrently"):
+        has_bytes(_busy(), "./a.txt")
+
+
+def test_write_archive_of_a_busy_archive_raises_concurrent_use() -> None:
+    """The write translates the busy error as well."""
+    entries = [ManifestEntry(location="./a.txt", format=EntryFormat.TXT)]
+    with pytest.raises(ConcurrentUseError, match="concurrently"):
+        write_archive(_busy(), entries, {})

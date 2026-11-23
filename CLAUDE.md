@@ -4,7 +4,7 @@ This file provides guidance when working with code in this repository.
 
 ## Project
 
-`pymetadata` is a python library for metadata in the context of COMBINE standards: COMBINE archives (OMEX), MIRIAM/RDF annotations, and ontology terms (SBO, KISAO, PBPKO). Pure library, no CLI entry points. Requires python >= 3.11, packaged with hatchling (version is read from `src/pymetadata/__init__.py`). Runtime dependencies are `rich`, `requests` and `pydantic`, plus the floors of `urllib3` and `certifi`, which are not imported but reached through `requests` (`certifi>=2026.10.19` excludes the CA store with the compromised emSign intermediates, GHSA-6q48-6c7w-9gw2); `pronto` is the optional `ontology` extra, needed only to regenerate the ontology modules.
+`pymetadata` is a python library for metadata in the context of COMBINE standards: COMBINE archives (OMEX), MIRIAM/RDF annotations, and ontology terms (SBO, KISAO, PBPKO). Pure library, no CLI entry points. Requires python >= 3.11, packaged with hatchling (version is read from `src/pymetadata/__init__.py`). Runtime dependencies are `pymetadata-core>=0.2.0`, `rich`, `requests` and `pydantic`, plus the floors of `urllib3` and `certifi`, which are not imported but reached through `requests` (`certifi>=2026.10.19` excludes the CA store with the compromised emSign intermediates, GHSA-6q48-6c7w-9gw2); `pronto` is the optional `ontology` extra, needed only to regenerate the ontology modules. `pymetadata-core` is the Rust core of the OMEX reading and writing, so the package is not pure python: it is a hard dependency without a pure-python fallback, shipped as one abi3 wheel for CPython 3.11+ on five targets (`manylinux2014_x86_64`, `manylinux2014_aarch64`, `macosx_10_12_x86_64`, `macosx_11_0_arm64`, `win_amd64`), and built from its sdist with a Rust toolchain everywhere else (musl linux, other linux architectures, FreeBSD, PyPy).
 
 ## Commands
 
@@ -52,7 +52,17 @@ facing files (`llms.txt`, `llms-full.txt` and the markdown of every page) into
 **`omex.py` — COMBINE archive.** The main module. `Omex` holds a temporary directory
 plus a `Manifest` of `ManifestEntry` pydantic models; archives are created/read via
 `Omex.from_omex`, `from_url`, `from_directory` and written via `to_omex`,
-`to_directory`. `EntryFormat` is a large enum mapping formats to
+`to_directory`. Since 0.9.0 the container itself is the Rust core, reached through
+`_core_bridge.py`, the only module which imports `pymetadata_core` and which
+translates its errors into `ValueError`/`KeyError` plus `PasswordError` and
+`ConcurrentUseError` (both re-exported from `omex.py`). Reading is lazy: `from_omex`
+opens the archive, keeps it in `Omex._archive` and takes the manifest from it, while
+a member is extracted into the temporary directory when `get_path` asks for it (an
+unlisted `.xml` member is inflated at open to classify its format). Writing copies
+every member which was neither replaced nor extracted as the compressed blob it is
+and applies the manifest's removals to that archive, so a write changes it. The
+calls which reach the core hold `Omex._lock`, an `RLock` per instance, because the
+core gives one archive to one thread at a time. `EntryFormat` is a large enum mapping formats to
 `http://identifiers.org/combine.specifications/*` or `https://purl.org/NET/mediatypes/*`
 URIs; `guess_format`/`lookup_format` resolve a file suffix to such a URI. Manifest
 locations are normalized to `./`-prefixed relative paths. `oven/omex_v2.py` is only a
