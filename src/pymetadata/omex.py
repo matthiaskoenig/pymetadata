@@ -67,14 +67,23 @@ import zipfile
 from enum import Enum
 from pathlib import Path, PurePosixPath
 from types import TracebackType
-from typing import Any
+from typing import TYPE_CHECKING, Any
 from urllib.parse import urlparse
 from xml.sax.saxutils import quoteattr
 
 from pydantic import BaseModel, ConfigDict, PrivateAttr, field_validator
 
+from pymetadata._core_bridge import (
+    DERIVED_LOCATIONS,
+    entries_for_archive,
+    materialize,
+    open_archive,
+)
 from pymetadata._files import set_regular_file_mode
 from pymetadata.webservices.webservice import get_session
+
+if TYPE_CHECKING:
+    from pymetadata_core import Archive
 
 logger = logging.getLogger(__name__)
 
@@ -84,6 +93,9 @@ __all__ = ["EntryFormat", "Manifest", "ManifestEntry", "Omex"]
 
 IDENTIFIERS_PREFIX = "http://identifiers.org/combine.specifications/"
 PURL_PREFIX = "https://purl.org/NET/mediatypes/"
+
+#: compression methods the specification allows for a member of an archive
+_ALLOWED_METHODS = frozenset({zipfile.ZIP_STORED, zipfile.ZIP_DEFLATED})
 
 
 class EntryFormat(str, Enum):
@@ -592,7 +604,7 @@ class Manifest(BaseModel):
         """Remove entry for given location."""
         location = normalize_location(location)
 
-        if location in [".", "./manifest.xml"]:
+        if location in DERIVED_LOCATIONS:
             logger.error(
                 "Core location cannot be removed from manifest: '%s'.", location
             )
@@ -609,8 +621,13 @@ class Omex:
     """COMBINE archive (OMEX), version 1.
 
     The content of the archive is kept in a temporary directory, `manifest`
-    holds the corresponding entries. Use the `from_*` constructors to read an
-    archive and the `to_*` methods to write one:
+    holds the corresponding entries. An archive read with `Omex.from_omex` or
+    `Omex.from_url` is read lazily: its `manifest` is complete at once, while
+    the file of an entry appears in the temporary directory when a caller asks
+    for it, see `Omex.get_path`.
+
+    Use the `from_*` constructors to read an archive and the `to_*` methods to
+    write one:
 
     | read | write |
     | --- | --- |
@@ -644,14 +661,25 @@ class Omex:
         self._finalizer = weakref.finalize(
             self, shutil.rmtree, self._tmp_dir, ignore_errors=True
         )
+        #: the archive this one was read from, None for an archive built by hand
+        self._archive: Archive | None = None
+        #: locations whose file was extracted from `_archive`
+        self._materialized: set[str] = set()
+        #: file in the temporary directory of every location whose content was
+        #: added or replaced by hand, i.e., the copy the archive owns
+        self._changed: dict[str, Path] = {}
+        #: locations removed since `_archive` was read
+        self._removed: set[str] = set()
 
     def close(self) -> None:
         """Remove the temporary directory with the archive content.
 
-        The archive cannot be used afterwards. Calling `close` more than once
-        has no effect.
+        The content which was read from a file is released as well, so that
+        nothing is extracted into the removed directory afterwards. The archive
+        cannot be used afterwards. Calling `close` more than once has no effect.
         """
         self._finalizer()
+        self._archive = None
 
     def __enter__(self) -> "Omex":
         """Enter the context manager."""
@@ -673,6 +701,9 @@ class Omex:
     def get_path(self, location: str) -> Path:
         """Get the path of an entry in the extracted archive.
 
+        The file of an entry of a read archive is extracted into the temporary
+        directory here, i.e., when it is asked for the first time.
+
         Args:
             location: location of the entry, e.g., `./model.xml`
 
@@ -682,10 +713,48 @@ class Omex:
 
         Raises:
             KeyError: if no entry exists for the location
+            ValueError: if the content of the entry cannot be read, e.g., for a
+                member compressed with a method which is not supported
         """
         # check that entry exists (raises KeyError)
         entry = self.manifest[location]
-        return self._tmp_dir / entry.location
+        return self._materialize(entry.location)
+
+    def _materialize(self, location: str) -> Path:
+        """Get the path of an entry, extracting it from the read archive if needed.
+
+        The path is returned as it is for an archive which was not read from a
+        file, for a location whose content was added or replaced by hand, for
+        the derived locations, which have no file, and for an entry the read
+        archive has no content for; a caller which reads such a path sees the
+        error of the file system, as it did before the content was read lazily.
+
+        Args:
+            location: normalized location of an entry, e.g., `./model.xml`
+
+        Returns:
+            Path of the file in the temporary directory of the archive.
+
+        Raises:
+            ValueError: if the content of the entry cannot be read
+        """
+        path = self._tmp_dir / location
+        archive = self._archive
+        if (
+            archive is None
+            or location in DERIVED_LOCATIONS
+            or location in self._materialized
+            or location in self._changed
+        ):
+            return path
+
+        try:
+            materialize(archive, location, path)
+        except KeyError:
+            logger.debug("No content in the archive for location: '%s'", location)
+            return path
+        self._materialized.add(location)
+        return path
 
     @staticmethod
     def _check_omex_path(omex_path: Path) -> Path:
@@ -702,10 +771,38 @@ class Omex:
         return omex_path
 
     @staticmethod
+    def _open_archive(omex_path: Path, password: bytes | None) -> "Archive":
+        """Open the archive of a path, without extracting any of its entries.
+
+        Args:
+            omex_path: path of the omex file
+            password: password of an encrypted archive
+
+        Returns:
+            The opened archive.
+
+        Raises:
+            ValueError: if the path does not exist, is not a file or is not a
+                COMBINE archive, i.e., a zip archive with a `manifest.xml`, or
+                if the password is wrong or missing
+        """
+        omex_path = Omex._check_omex_path(omex_path)
+        try:
+            return open_archive(omex_path.read_bytes(), password)
+        except ValueError as error:
+            # the bridge reports the content, the caller gave a path. The type
+            # is kept, so a caller still tells a `PasswordError` from the rest.
+            raise type(error)(f"{error}: '{omex_path}'.") from error
+
+    @staticmethod
     def is_omex(omex_path: Path) -> bool:
         """Check if the path is a COMBINE archive.
 
-        The file must be a zip archive containing a `manifest.xml`.
+        The file must be a zip archive containing a `manifest.xml`. This is a
+        question about the structure of the file: it is answered from the
+        central directory of the zip, so it does not depend on the size of the
+        file and does not read any member. An encrypted archive is a COMBINE
+        archive as well, its manifest is only not readable without the password.
 
         Args:
             omex_path: path to check
@@ -725,18 +822,22 @@ class Omex:
         with zipfile.ZipFile(omex_path, mode="r") as zf:
             try:
                 zf.getinfo("manifest.xml")
-                return True
             except KeyError:
                 # manifest does not exist in archive
                 logger.warning("No 'manifest.xml' in '%s'.", omex_path)
                 return False
 
+        return True
+
     @staticmethod
     def from_omex(omex_path: Path, password: bytes | None = None) -> "Omex":
         """Read a COMBINE archive from a path.
 
-        The archive is extracted into a temporary directory; the entries are
-        taken from the `manifest.xml` of the archive.
+        The entries are taken from the `manifest.xml` of the archive, followed
+        by the members the manifest does not list, sorted by their location; an
+        entry of the manifest which no member provides is dropped. The content
+        of an entry is extracted into the temporary directory of the archive
+        when it is asked for, see `Omex.get_path`.
 
         Args:
             omex_path: path of the omex file
@@ -747,47 +848,36 @@ class Omex:
 
         Raises:
             ValueError: if the path does not exist, is not a file or is not a
-                COMBINE archive, i.e., a zip archive with a `manifest.xml`
+                COMBINE archive, i.e., a zip archive with a `manifest.xml`, or
+                if the password is wrong or missing
 
         Example:
             ```python
             omex = Omex.from_omex(Path("archive.omex"))
             ```
         """
-        if not Omex.is_omex(omex_path):
-            raise ValueError(
-                f"'omex_path' is not a COMBINE archive, i.e., a zip archive with "
-                f"a 'manifest.xml': '{omex_path}'."
-            )
+        archive = Omex._open_archive(omex_path, password)
 
         omex = Omex()
         try:
-            # the archive is extracted into the temporary directory of the
-            # archive, so its files do not have to be copied again
-            with zipfile.ZipFile(omex_path, "r") as zf:
-                for info in zf.infolist():
-                    if info.compress_type not in {
-                        zipfile.ZIP_DEFLATED,
-                        zipfile.ZIP_STORED,
-                    }:
-                        logger.warning(
-                            "Compression of '%s' is not deflate, as required by "
-                            "the specification: '%s'",
-                            info.filename,
-                            info.compress_type,
-                        )
-                # `extractall` removes `..` and absolute prefixes from the names
-                zf.extractall(omex._tmp_dir, pwd=password)
+            omex._archive = archive
+            for location, _, _, method in archive.members:
+                if method not in _ALLOWED_METHODS:
+                    logger.warning(
+                        "Compression of '%s' is not deflate, as required by "
+                        "the specification: '%s'",
+                        location,
+                        method,
+                    )
 
-            for file_path, entry in Omex._entries_for_directory(omex._tmp_dir):
-                destination = omex._tmp_dir / entry.location
-                if file_path != destination:
-                    # names which are normalized, e.g., with backslashes
-                    destination.parent.mkdir(parents=True, exist_ok=True)
-                    file_path.replace(destination)
-                omex.manifest.add_entry(entry)
-            # the manifest is created from the entries when the archive is written
-            (omex._tmp_dir / "manifest.xml").unlink(missing_ok=True)
+            for entry in entries_for_archive(archive, format_from_suffix_and_head):
+                omex.manifest.add_entry(
+                    ManifestEntry(
+                        location=str(entry["location"]),
+                        format=str(entry["format"]),
+                        master=bool(entry["master"]),
+                    )
+                )
         except BaseException:
             omex.close()
             raise
@@ -1011,6 +1101,12 @@ class Omex:
         destination.parent.mkdir(parents=True, exist_ok=True)
         shutil.copy2(src=entry_path, dst=destination)
 
+        # the copy is the content of the entry, not what a read archive holds
+        # and not the file of the caller, which may change or be removed
+        self._changed[entry.location] = destination
+        self._removed.discard(entry.location)
+        self._materialized.discard(entry.location)
+
         # add entry
         self.manifest.add_entry(entry)
 
@@ -1026,6 +1122,9 @@ class Omex:
         entry = self.manifest.remove_entry_for_location(location)
         if entry:
             (self._tmp_dir / entry.location).unlink(missing_ok=True)
+            self._removed.add(entry.location)
+            self._changed.pop(entry.location, None)
+            self._materialized.discard(entry.location)
         return entry
 
     def to_omex(
@@ -1085,7 +1184,9 @@ class Omex:
                     if e.location == "./manifest.xml":
                         zf.writestr(arcname, self.manifest.to_manifest_xml())
                     else:
-                        zf.write(filename=self._tmp_dir / e.location, arcname=arcname)
+                        zf.write(
+                            filename=self._materialize(e.location), arcname=arcname
+                        )
             set_regular_file_mode(tmp_path)
             tmp_path.replace(omex_path)
         except BaseException:
@@ -1116,9 +1217,9 @@ class Omex:
 
         # iterate over all locations and copy to destination
         for entry in self.manifest.entries:
-            if entry.location in [".", "./manifest.xml"]:
+            if entry.location in DERIVED_LOCATIONS:
                 continue
-            src = self._tmp_dir / entry.location
+            src = self._materialize(entry.location)
             destination = output_dir / entry.location
             destination.parent.mkdir(parents=True, exist_ok=True)
             logger.debug("'%s' -> '%s", src, destination)

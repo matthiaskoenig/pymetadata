@@ -23,8 +23,20 @@ logger = logging.getLogger(__name__)
 
 _MANIFEST = "./manifest.xml"
 _ARCHIVE = "."
-# the locations the core writes itself, they are never set or removed by hand
-_DERIVED = frozenset({_ARCHIVE, _MANIFEST})
+#: the locations the core writes itself, they are never set or removed by hand and
+#: hold no file of their own; `pymetadata.omex` shares this one definition
+DERIVED_LOCATIONS = frozenset({_ARCHIVE, _MANIFEST})
+
+
+class PasswordError(ValueError):
+    """A member of an archive which the given password does not open.
+
+    A subclass of `ValueError`, so code which catches the `ValueError` of the
+    bridge keeps working. It is raised for a password which is wrong and for a
+    password which is missing, and it proves that the member exists: a caller
+    which only asks whether a file is an archive, such as `Omex.is_omex`, reads
+    it as a yes.
+    """
 
 
 def _is_sedml(format: str) -> bool:
@@ -51,18 +63,25 @@ def _map_error(error: OmexError, *, opening: bool = False) -> ValueError:
     archive is reported as one without a readable manifest, as the manifest is
     what makes a zip an archive.
 
+    A refusal over a password becomes a `PasswordError`, so that a caller can
+    tell a member it may not read from a member which is not there. This is the
+    one place which reads the wording of the core, so it is the one place to
+    change when the core gains a typed error.
+
     Args:
         error: the error of the core
         opening: whether the archive was being opened
 
     Returns:
-        The `ValueError` to raise.
+        The `ValueError` to raise, a `PasswordError` for a refused password.
     """
     message = str(error)
     if message.startswith("malformed") and opening:
         return ValueError(f"Not an OMEX archive, no readable manifest.xml: {message}")
     # spell a member the way pymetadata spells a location
     message = re.sub(r'member "(?!\./)([^"]+)"', r'member "./\1"', message)
+    if message.startswith("refused") and "password" in message:
+        return PasswordError(message)
     return ValueError(message)
 
 
@@ -77,9 +96,10 @@ def open_archive(data: bytes, password: bytes | None) -> Archive:
         The archive.
 
     Raises:
+        PasswordError: if the password is wrong or missing, which proves that
+            `manifest.xml` is a member of the container.
         ValueError: if the data is not a zip or has no readable `manifest.xml`
-            (the message names the manifest), if the password is wrong or missing
-            (the message names the password). An unsupported compression method
+            (the message names the manifest). An unsupported compression method
             and a member over the inflate cap are refused when the bytes of a
             member are read, see `materialize`, except for `manifest.xml`, which
             is read here and named as `./manifest.xml`. The declared entries of the
@@ -113,6 +133,12 @@ def entries_for_archive(
     `declared_entries` is fixed when the archive is opened, so the declared half
     is the same after a `set_entry` or a `remove_entry`.
 
+    A member whose bytes the core refuses, e.g. one compressed with an
+    unsupported method or one over the inflate cap, does not make this fail: the
+    format is classified from the suffix alone, which is all the information
+    there is for a member nothing can read, and the refusal reaches the caller
+    when the bytes are asked for, see `materialize`.
+
     Args:
         archive: the opened archive
         guess_format: classifier of an unlisted member, called with the lower
@@ -126,7 +152,7 @@ def entries_for_archive(
     declared: set[str] = set()
     for location, format, master in archive.declared_entries:
         declared.add(location)
-        if location in _DERIVED:
+        if location in DERIVED_LOCATIONS:
             continue
         if not archive.has_bytes(location):
             logger.warning("Entry in manifest.xml without a file: '%s'", location)
@@ -136,17 +162,48 @@ def entries_for_archive(
     unlisted = sorted(
         location
         for location, _, _, _ in archive.members
-        if location not in declared and location not in _DERIVED
+        if location not in declared and location not in DERIVED_LOCATIONS
     )
     for location in unlisted:
         logger.warning("Entry with location missing in manifest.xml: '%s'", location)
         suffix = Path(location).suffix[1:].lower()
-        head = archive.entry_bytes(location)[:256] if suffix == "xml" else b""
-        format = guess_format(suffix, head)
+        format = guess_format(suffix, _head_of(archive, location, suffix))
         entries.append(
             {"location": location, "format": format, "master": _is_sedml(format)}
         )
     return entries
+
+
+def _head_of(archive: Archive, location: str, suffix: str) -> bytes:
+    """Return the first bytes of a member, for the suffixes which need them.
+
+    The bytes of a member the core refuses cannot be read, here no more than
+    anywhere else; the refusal is logged and no head is returned, so that an
+    archive with such a member can still be read. Only the classification of
+    that one member is less precise, and its refusal reaches the caller when
+    its bytes are asked for.
+
+    Args:
+        archive: the opened archive
+        location: the location of the member
+        suffix: the lower case suffix of the location, without the dot
+
+    Returns:
+        The first 256 bytes of the member for an `xml` suffix, nothing for
+        every other suffix and for a member which cannot be read.
+    """
+    if suffix != "xml":
+        return b""
+    try:
+        return archive.entry_bytes(location)[:256]
+    except OmexError as error:
+        logger.warning(
+            "The format of '%s' is guessed from its suffix, its content cannot be "
+            "read: %s",
+            location,
+            _map_error(error),
+        )
+        return b""
 
 
 def materialize(archive: Archive, location: str, target: Path) -> None:
@@ -167,7 +224,7 @@ def materialize(archive: Archive, location: str, target: Path) -> None:
             bytes are read, not when the archive is opened (`manifest.xml` is
             the exception); the message names the member as `./location`.
     """
-    if location in _DERIVED:
+    if location in DERIVED_LOCATIONS:
         raise KeyError(location)
     try:
         data = archive.entry_bytes(location)
@@ -213,10 +270,10 @@ def write_archive(
     Raises:
         ValueError: if the core refuses an entry or a member cannot be read.
     """
-    wanted = {e.location: e for e in entries if e.location not in _DERIVED}
+    wanted = {e.location: e for e in entries if e.location not in DERIVED_LOCATIONS}
     try:
         for location in sorted(removed | set(_locations(archive) - set(wanted))):
-            if location not in _DERIVED:
+            if location not in DERIVED_LOCATIONS:
                 archive.remove_entry(location)
         current = {loc: (fmt, master) for loc, fmt, master in archive.entries}
         for location, entry in wanted.items():

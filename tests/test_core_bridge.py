@@ -10,6 +10,7 @@ import pytest
 from pymetadata_core import Archive
 
 from pymetadata._core_bridge import (
+    PasswordError,
     entries_for_archive,
     materialize,
     open_archive,
@@ -82,6 +83,28 @@ def test_a_wrong_password_is_a_value_error_naming_the_password(tmp_path: Path) -
         with pytest.raises(ValueError, match="password"):
             open_archive(data, password)
     assert open_archive(data, b"secret").has_bytes("./a.txt")
+
+
+@pytest.mark.skipif(
+    shutil.which("zip") is None,
+    reason="needs the zip tool to make a ZipCrypto archive, absent on Windows",
+)
+def test_a_refused_password_is_told_apart_from_a_manifest_which_is_absent(
+    tmp_path: Path,
+) -> None:
+    """A protected `manifest.xml` is a member, a missing one is not.
+
+    A caller which only asks whether a file is an archive reads the one as a
+    yes and the other as a no, see `Omex.is_omex`.
+    """
+    data = _encrypted(tmp_path)
+    for password in (None, b"wrong"):
+        with pytest.raises(PasswordError):
+            open_archive(data, password)
+
+    with pytest.raises(ValueError, match="manifest") as error:
+        open_archive(_zip({"a.txt": b"x"}), None)
+    assert not isinstance(error.value, PasswordError)
 
 
 def test_entries_drop_a_manifest_entry_without_bytes() -> None:
