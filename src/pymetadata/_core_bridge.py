@@ -236,59 +236,96 @@ def materialize(archive: Archive, location: str, target: Path) -> None:
     target.write_bytes(data)
 
 
+def has_bytes(archive: Archive, location: str) -> bool:
+    """Return whether the archive holds the bytes of a location.
+
+    Nothing is inflated: the question is whether the content of that location
+    can be written without a file, which holds for a member of the container
+    the archive was opened from and for a location which was set into it. It is
+    false for the derived locations and for a declared entry no member provides.
+
+    Args:
+        archive: the archive
+        location: the location of an entry
+
+    Returns:
+        True if the archive can write the content of the location by itself. A
+        location the core cannot normalize, which a `ManifestEntry` cannot
+        carry, is reported as one without bytes.
+    """
+    try:
+        return archive.has_bytes(location)
+    except OmexError:
+        return False
+
+
 def write_archive(
-    archive: Archive,
+    archive: Archive | None,
     entries: list[ManifestEntry],
-    changed: dict[str, Path],
-    removed: set[str],
+    files: dict[str, Path],
+    *,
+    recompress: bool = False,
+    level: int = 9,
 ) -> bytes:
     """Apply the changes of an `Omex` to the archive and write it.
 
     Every entry of `entries` is the manifest of the result: a location of the
-    archive which is not in `entries` is removed, a location in `changed` is set
-    from the file, and an entry whose format or master flag differ from the
-    archive is set again with its current bytes. The unchanged rest is copied by
-    the core as the compressed blobs they are.
+    archive which is not in `entries` is removed, a location in `files` is set
+    from that file, and an entry whose format or master flag differ from the
+    archive is set again with its current bytes. The rest is copied by the core
+    as the compressed blobs they are, unless `recompress` asks for all of them
+    to be deflated again.
 
-    A location in `removed` which the archive does not have is ignored
-    (`remove_entry` returns false instead of raising), so adding and then
-    removing an entry before a write is safe.
+    A removal is derived from `entries` alone, so a location which was removed
+    and declared again keeps the member it has, and an entry can be added and
+    removed again before a write without losing anything.
 
     The core serializes `manifest.xml` from the entries set into the archive, so
     the entries are the contract. `Manifest.to_manifest_xml` remains the
     authority for `to_directory`.
 
     Args:
-        archive: the archive the `Omex` was opened from, or an empty one
+        archive: the archive the `Omex` was opened from, or None for an archive
+            which was built by hand and is written from its files alone. It is
+            changed in place as the write proceeds, so a write is not free of
+            side effects: a second write of the same `Omex` after further
+            changes of its manifest can fail on a member whose bytes the
+            archive no longer holds, e.g. a location which was removed, written
+            and declared again, which fails with the `FileNotFoundError` of its
+            missing file. A write which repeats the same entries is unaffected
+            and gives the same bytes again.
         entries: the manifest entries of the `Omex`
-        changed: file of every location whose content was added or replaced
-        removed: locations removed since the archive was opened
+        files: the file of every location whose content is written from one
+            instead of being copied from the archive
+        recompress: deflate every member again, instead of copying the members
+            which were not replaced
+        level: the deflate level, 0 to 9, used with `recompress`
 
     Returns:
         The bytes of the archive.
 
     Raises:
-        ValueError: if the core refuses an entry or a member cannot be read.
+        FileNotFoundError: if a file of `files` does not exist, which is what a
+            manifest entry without content gives, as it did before the swap.
+        ValueError: if the core refuses an entry, if `level` is outside of 0 to
+            9 or if a member cannot be read, which includes an entry with
+            neither a file in `files` nor bytes in the archive.
     """
+    target = Archive() if archive is None else archive
     wanted = {e.location: e for e in entries if e.location not in DERIVED_LOCATIONS}
     try:
-        for location in sorted(removed | set(_locations(archive) - set(wanted))):
+        for location in sorted(_locations(target) - set(wanted)):
             if location not in DERIVED_LOCATIONS:
-                archive.remove_entry(location)
-        current = {loc: (fmt, master) for loc, fmt, master in archive.entries}
+                target.remove_entry(location)
+        current = {loc: (fmt, master) for loc, fmt, master in target.entries}
         for location, entry in wanted.items():
             format, master = str(entry.format), bool(entry.master)
-            if location in changed:
-                archive.set_entry(
-                    location, format, master, changed[location].read_bytes()
-                )
-            elif current.get(location) != (format, master) and archive.has_bytes(
-                location
-            ):
-                archive.set_entry(
-                    location, format, master, archive.entry_bytes(location)
-                )
-        data = archive.to_bytes()
+            path = files.get(location)
+            if path is not None:
+                target.set_entry(location, format, master, path.read_bytes())
+            elif current.get(location) != (format, master):
+                target.set_entry(location, format, master, target.entry_bytes(location))
+        data = target.to_bytes(recompress=recompress, level=level)
     except OmexError as error:
         raise _map_error(error) from error
     return data

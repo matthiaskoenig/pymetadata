@@ -1,14 +1,16 @@
-"""Tests of the archive `Omex` reads through `pymetadata-core`.
+"""Tests of the archive `Omex` reads and writes through `pymetadata-core`.
 
 The public behaviour of `pymetadata.omex` is pinned by `tests/test_omex.py`;
-these are the tests of the core backed read path: nothing is extracted before a
-caller asks for it, the order and the count of the entries are the ones
-`pymetadata` reported before the swap, and the local changes of an archive are
-recorded for the write path.
+these are the tests of the core backed read and write path: nothing is extracted
+before a caller asks for it, the order and the count of the entries are the ones
+`pymetadata` reported before the swap, and a member nobody touched is copied as
+the compressed blob it is instead of being inflated and deflated again.
 """
 
 import logging
+import os
 import shutil
+import stat
 import subprocess
 import zipfile
 from pathlib import Path
@@ -142,16 +144,50 @@ def test_get_path_raises_key_error_for_an_unknown_location() -> None:
         omex.get_path("./nope.txt")
 
 
-def test_to_directory_materializes_every_entry(tmp_path: Path) -> None:
-    """Every entry lands in the directory with the bytes of its member."""
-    with Omex.from_omex(COMPMODELS) as omex, zipfile.ZipFile(COMPMODELS) as zf:
+@pytest.mark.parametrize("name", FIXTURES)
+def test_to_directory_writes_every_entry(name: str, tmp_path: Path) -> None:
+    """Every entry lands in the directory with the bytes of its member.
+
+    Every fixture: the unlisted members and the nesting of `iCGB21FR` are
+    written as the listed ones, and its dangling entry, which the read dropped,
+    does not make the write fail.
+    """
+    omex_path = DATA / f"{name}.omex"
+    with Omex.from_omex(omex_path) as omex, zipfile.ZipFile(omex_path) as zf:
         omex.to_directory(tmp_path)
+        written = []
         for entry in omex.manifest.entries:
             if entry.location in (".", "./manifest.xml"):
                 continue
-            name = entry.location.removeprefix("./")
-            assert (tmp_path / name).read_bytes() == zf.read(name)
-    assert "manifest.xml" in _files_in(tmp_path)
+            member = entry.location.removeprefix("./")
+            assert (tmp_path / member).read_bytes() == zf.read(member)
+            written.append(member)
+    assert _files_in(tmp_path) == sorted([*written, "manifest.xml"])
+
+
+@pytest.mark.parametrize("name", FIXTURES)
+def test_to_directory_writes_every_member_once(name: str, tmp_path: Path) -> None:
+    """The destination is written straight from the archive, not through a copy.
+
+    The temporary directory of the archive stays empty: a member which was not
+    extracted before is written to its destination, nowhere else.
+    """
+    with Omex.from_omex(DATA / f"{name}.omex") as omex:
+        omex.to_directory(tmp_path)
+        assert list(omex._tmp_dir.rglob("*")) == []
+        assert omex._materialized == set()
+
+
+def test_to_directory_writes_an_extracted_entry_from_its_file(tmp_path: Path) -> None:
+    """A file in the temporary directory is the content of its entry.
+
+    A caller which changed the file of an extracted entry sees the change in the
+    directory, as it did before the content was read lazily.
+    """
+    with Omex.from_omex(COMPMODELS) as omex:
+        omex.get_path("./README.md").write_text("edited", encoding="utf-8")
+        omex.to_directory(tmp_path)
+    assert (tmp_path / "README.md").read_text(encoding="utf-8") == "edited"
 
 
 def test_close_releases_the_archive() -> None:
@@ -221,6 +257,30 @@ def test_from_omex_of_a_password_protected_archive(tmp_path: Path) -> None:
         with pytest.raises(PasswordError, match="password") as error:
             Omex.from_omex(omex_path, password=password)
         assert str(omex_path) in str(error.value)
+
+
+@pytest.mark.skipif(
+    shutil.which("zip") is None,
+    reason="needs the zip tool to make a ZipCrypto archive, absent on Windows",
+)
+def test_to_omex_of_a_password_protected_archive(tmp_path: Path) -> None:
+    """A protected archive is written plain, not as half of an encrypted one.
+
+    Encrypted archives cannot be written: the members of the written archive are
+    deflated from the bytes which were read, with no member left encrypted, and
+    the result is read back without a password.
+    """
+    omex_path = _encrypted(tmp_path, "manifest.xml", "a.txt")
+    target = tmp_path / "plain.omex"
+    with Omex.from_omex(omex_path, password=b"secret") as omex:
+        omex.to_omex(target)
+
+    with zipfile.ZipFile(target) as zf:
+        # bit 0 of the general purpose flags marks an encrypted member
+        assert [info.filename for info in zf.infolist() if info.flag_bits & 0x1] == []
+    with Omex.from_omex(target) as result:
+        assert "./a.txt" in result.manifest
+        assert result.get_path("./a.txt").read_text(encoding="utf-8") == "hi"
 
 
 @pytest.mark.skipif(
@@ -394,7 +454,6 @@ def test_add_entry_records_the_copy_of_the_archive(tmp_path: Path) -> None:
     with Omex.from_omex(COMPMODELS) as omex:
         omex.add_entry(source, ManifestEntry(location="./new.txt", format="txt"))
         assert omex._changed == {"./new.txt": omex._tmp_dir / "new.txt"}
-        assert omex._removed == set()
 
         source.write_text("changed", encoding="utf-8")
         assert omex.get_path("./new.txt").read_text(encoding="utf-8") == "new"
@@ -416,14 +475,13 @@ def test_add_entry_over_an_entry_of_the_source_archive_replaces_it(
         assert omex.get_path("./README.md").read_text(encoding="utf-8") == "replaced"
 
 
-def test_remove_entry_for_location_records_the_removal() -> None:
-    """A removed location is recorded and its file is gone."""
+def test_remove_entry_for_location_drops_the_file_of_the_entry() -> None:
+    """A removed location loses its file and is materialized no more."""
     with Omex.from_omex(COMPMODELS) as omex:
         path = omex.get_path("README.md")
         assert omex._materialized == {"./README.md"}
 
         assert omex.remove_entry_for_location("README.md")
-        assert omex._removed == {"./README.md"}
         assert omex._materialized == set()
         assert not path.exists()
 
@@ -436,13 +494,13 @@ def test_remove_entry_for_location_forgets_an_added_file(tmp_path: Path) -> None
         omex.add_entry(source, ManifestEntry(location="./new.txt", format="txt"))
         omex.remove_entry_for_location("./new.txt")
         assert omex._changed == {}
-        assert omex._removed == {"./new.txt"}
 
 
-def test_add_entry_after_a_removal_forgets_the_removal(tmp_path: Path) -> None:
-    """A location which is removed and added again is not removed on a write."""
+def test_add_entry_after_a_removal_keeps_the_added_file(tmp_path: Path) -> None:
+    """A location which is removed and added again is written from the new file."""
     source = tmp_path / "README.md"
     source.write_text("replaced", encoding="utf-8")
+    target = tmp_path / "out.omex"
     with Omex.from_omex(COMPMODELS) as omex:
         omex.remove_entry_for_location("./README.md")
         omex.add_entry(
@@ -450,7 +508,10 @@ def test_add_entry_after_a_removal_forgets_the_removal(tmp_path: Path) -> None:
             ManifestEntry(location="./README.md", format=EntryFormat.MARKDOWN),
         )
         assert omex._changed == {"./README.md": omex._tmp_dir / "README.md"}
-        assert omex._removed == set()
+        omex.to_omex(target)
+
+    with zipfile.ZipFile(target) as zf:
+        assert zf.read("README.md") == b"replaced"
 
 
 def test_get_path_of_an_entry_the_archive_has_no_content_for() -> None:
@@ -458,3 +519,348 @@ def test_get_path_of_an_entry_the_archive_has_no_content_for() -> None:
     with Omex.from_omex(COMPMODELS) as omex:
         omex.manifest.add_entry(ManifestEntry(location="./ghost.txt", format="txt"))
         assert not omex.get_path("./ghost.txt").exists()
+
+
+def _blobs(omex_path: Path) -> dict[str, tuple[int, int, int]]:
+    """Return method, compressed size and CRC of every file member of a zip.
+
+    The directory members some containers hold are left out: they are no entry
+    of an archive and are not written back.
+
+    Args:
+        omex_path: path of the zip container
+
+    Returns:
+        The method, the compressed size and the CRC per member name.
+    """
+    with zipfile.ZipFile(omex_path) as zf:
+        return {
+            info.filename: (info.compress_type, info.compress_size, info.CRC)
+            for info in zf.infolist()
+            if not info.is_dir()
+        }
+
+
+@pytest.mark.parametrize("name", FIXTURES)
+def test_a_write_without_a_change_copies_every_member(
+    name: str, tmp_path: Path
+) -> None:
+    """Read an archive and write it back: every member keeps its compressed blob.
+
+    Nothing is inflated and nothing is deflated again, which is what the swap
+    exists for; only the `manifest.xml` is written anew.
+    """
+    omex_path = DATA / f"{name}.omex"
+    target = tmp_path / "out.omex"
+    with Omex.from_omex(omex_path) as omex:
+        omex.to_omex(target)
+
+    before = _blobs(omex_path)
+    del before["manifest.xml"]
+    after = _blobs(target)
+    assert {member: after[member] for member in before} == before
+
+
+def test_an_untouched_member_is_copied_as_its_compressed_blob(tmp_path: Path) -> None:
+    """Read, change one entry, write: every other member keeps its blob."""
+    source = tmp_path / "README.md"
+    source.write_text("replaced", encoding="utf-8")
+    target = tmp_path / "out.omex"
+    with Omex.from_omex(COMPMODELS) as omex:
+        omex.add_entry(
+            source, ManifestEntry(location="./README.md", format=EntryFormat.MARKDOWN)
+        )
+        omex.to_omex(target)
+
+    before, after = _blobs(COMPMODELS), _blobs(target)
+    untouched = {
+        member: blob
+        for member, blob in before.items()
+        if member not in ("README.md", "manifest.xml")
+    }
+    assert len(untouched) == 3
+    assert {member: after[member] for member in untouched} == untouched
+    assert after["README.md"] != before["README.md"]
+
+
+def test_a_changed_entry_is_written_from_the_new_bytes(tmp_path: Path) -> None:
+    """The file of the changed entry is the content of its member."""
+    source = tmp_path / "README.md"
+    source.write_text("replaced", encoding="utf-8")
+    target = tmp_path / "out.omex"
+    with Omex.from_omex(COMPMODELS) as omex:
+        omex.add_entry(
+            source, ManifestEntry(location="./README.md", format=EntryFormat.MARKDOWN)
+        )
+        omex.to_omex(target)
+
+    with zipfile.ZipFile(target) as zf:
+        assert zf.read("README.md") == b"replaced"
+    with Omex.from_omex(target) as result:
+        assert result.manifest["./README.md"].format == EntryFormat.MARKDOWN.value
+
+
+def test_a_member_changed_in_place_is_written_from_its_file(tmp_path: Path) -> None:
+    """A file a caller changed in the temporary directory is written.
+
+    The temporary directory is the working copy of the archive: a file which is
+    in it wins over the member of the archive it was read from, which is what
+    `to_omex` did before the content was read lazily.
+    """
+    target = tmp_path / "out.omex"
+    with Omex.from_omex(COMPMODELS) as omex:
+        omex.get_path("./README.md").write_text("edited", encoding="utf-8")
+        omex.to_omex(target)
+
+    with zipfile.ZipFile(target) as zf:
+        assert zf.read("README.md") == b"edited"
+
+
+def test_a_manifest_entry_whose_file_is_missing_still_raises_file_not_found(
+    tmp_path: Path,
+) -> None:
+    """An entry the caller appended without a file is no silent empty member."""
+    target = tmp_path / "out.omex"
+    with Omex.from_omex(COMPMODELS) as omex:
+        omex.manifest.add_entry(
+            ManifestEntry(location="./ghost.txt", format=EntryFormat.TXT)
+        )
+        with pytest.raises(FileNotFoundError):
+            omex.to_omex(target)
+
+    assert list(tmp_path.iterdir()) == []
+
+
+def test_the_target_is_untouched_when_the_write_fails(tmp_path: Path) -> None:
+    """A failing write keeps the existing archive and leaves no temporary file."""
+    target = tmp_path / "out.omex"
+    target.write_bytes(b"existing")
+    with Omex.from_omex(COMPMODELS) as omex:
+        omex.manifest.add_entry(
+            ManifestEntry(location="./ghost.txt", format=EntryFormat.TXT)
+        )
+        with pytest.raises(FileNotFoundError):
+            omex.to_omex(target)
+
+    assert target.read_bytes() == b"existing"
+    assert list(tmp_path.iterdir()) == [target]
+
+
+def test_a_location_removed_and_declared_again_keeps_its_member(
+    tmp_path: Path,
+) -> None:
+    """A location the manifest declares again is written, not dropped.
+
+    `Manifest` is public and mutable: a location which is removed and declared
+    again by hand is wanted, and its member is still in the archive, so it is
+    written with the bytes it has.
+    """
+    target = tmp_path / "out.omex"
+    with Omex.from_omex(COMPMODELS) as omex, zipfile.ZipFile(COMPMODELS) as zf:
+        omex.remove_entry_for_location("./README.md")
+        omex.manifest.add_entry(
+            ManifestEntry(location="./README.md", format=EntryFormat.MARKDOWN)
+        )
+        omex.to_omex(target)
+        expected = zf.read("README.md")
+
+    with zipfile.ZipFile(target) as zf:
+        assert zf.read("README.md") == expected
+
+
+def test_a_removed_location_is_not_written(tmp_path: Path) -> None:
+    """A removed entry and its member are gone from the written archive."""
+    target = tmp_path / "out.omex"
+    with Omex.from_omex(COMPMODELS) as omex:
+        omex.remove_entry_for_location("./README.md")
+        omex.to_omex(target)
+
+    assert "README.md" not in _blobs(target)
+    with Omex.from_omex(target) as result:
+        assert "./README.md" not in result.manifest
+        assert len(result.manifest) == 5
+
+
+def test_a_dangling_entry_of_the_source_archive_does_not_make_a_write_raise(
+    tmp_path: Path,
+) -> None:
+    """iCGB21FR declares `./iCGB21FR_memote.html`, which no member provides."""
+    target = tmp_path / "out.omex"
+    with Omex.from_omex(ICGB21FR) as omex:
+        omex.to_omex(target)
+
+    with Omex.from_omex(target) as result:
+        assert "./iCGB21FR_memote.html" not in result.manifest
+        assert sorted(e.location for e in result.manifest.entries) == sorted(
+            ICGB21FR_LOCATIONS
+        )
+
+
+@pytest.mark.parametrize("name", FIXTURES)
+def test_a_round_trip_keeps_every_entry_with_its_format_and_master_flag(
+    name: str, tmp_path: Path
+) -> None:
+    """Read, write, read: the same entries with the same formats and flags.
+
+    The `manifest.xml` of a written archive is serialized by the core from the
+    entries `Omex` holds, and the format which `pymetadata` guesses for a member
+    no manifest lists is not the one the core invents for it, which comes from
+    the suffix alone. The entries of `pymetadata` are the ones which have to
+    survive a write, formats and master flags included. The order of the entries
+    is the one of the container, so they are compared as a set.
+    """
+    target = tmp_path / "out.omex"
+    with Omex.from_omex(DATA / f"{name}.omex") as omex:
+        before = {(e.location, e.format, e.master) for e in omex.manifest.entries}
+        omex.to_omex(target)
+
+    with Omex.from_omex(target) as result:
+        after = {(e.location, e.format, e.master) for e in result.manifest.entries}
+    assert after == before
+
+
+@pytest.mark.skipif(os.name == "nt", reason="POSIX file modes")
+def test_the_written_archive_has_the_mode_of_a_freshly_created_file(
+    tmp_path: Path,
+) -> None:
+    """The archive is created with the permissions of a regular new file."""
+    target = tmp_path / "out.omex"
+    with Omex.from_omex(COMPMODELS) as omex:
+        omex.to_omex(target)
+    reference = tmp_path / "reference"
+    reference.touch()
+
+    assert stat.S_IMODE(target.stat().st_mode) == stat.S_IMODE(reference.stat().st_mode)
+
+
+def test_to_omex_of_an_archive_built_from_a_directory(tmp_path: Path) -> None:
+    """An archive without a source container is written from its files."""
+    directory = tmp_path / "study"
+    (directory / "models").mkdir(parents=True)
+    (directory / "models" / "model.xml").write_text("<sbml/>", encoding="utf-8")
+    (directory / "README.md").write_text("# study", encoding="utf-8")
+    target = tmp_path / "out.omex"
+    with Omex.from_directory(directory) as omex:
+        locations = [e.location for e in omex.manifest.entries]
+        omex.to_omex(target)
+
+    with Omex.from_omex(target) as result:
+        assert [e.location for e in result.manifest.entries] == locations
+        assert (
+            result.get_path("./models/model.xml").read_text(encoding="utf-8")
+            == "<sbml/>"
+        )
+    assert set(_blobs(target)) == {
+        "manifest.xml",
+        "README.md",
+        "models/model.xml",
+    }
+
+
+def test_a_location_with_xml_special_characters_round_trips_through_the_core(
+    tmp_path: Path,
+) -> None:
+    """The manifest of the core escapes a location, as `pymetadata` does."""
+    # `"`, `<` and `>` are not allowed in file names on Windows
+    location = "./a&b 'c'.txt" if os.name == "nt" else "./a&b \"c\" <d> 'e'.txt"
+    source = tmp_path / "source.txt"
+    source.write_text("content", encoding="utf-8")
+    target = tmp_path / "special.omex"
+    with Omex() as omex:
+        omex.add_entry(source, ManifestEntry(location=location, format=EntryFormat.TXT))
+        omex.to_omex(target)
+
+    with Omex.from_omex(target) as result:
+        assert location in result.manifest
+        assert result.get_path(location).read_text(encoding="utf-8") == "content"
+
+
+def test_a_backslash_location_is_normalized_before_it_reaches_the_core(
+    tmp_path: Path,
+) -> None:
+    r"""`a\b.xml` is the location `./a/b.xml` in the written manifest."""
+    source = tmp_path / "source.xml"
+    source.write_text("<sbml/>", encoding="utf-8")
+    target = tmp_path / "backslash.omex"
+    with Omex() as omex:
+        omex.add_entry(source, ManifestEntry(location="a\\b.xml", format="sbml"))
+        omex.to_omex(target)
+
+    with zipfile.ZipFile(target) as zf:
+        assert 'location="./a/b.xml"' in zf.read("manifest.xml").decode("utf-8")
+        assert zf.read("a/b.xml") == b"<sbml/>"
+
+
+def test_zip_stored_is_written_deflated_at_level_zero(tmp_path: Path) -> None:
+    """The core has no stored path, so `ZIP_STORED` is deflate at level 0.
+
+    The parameter is kept and nothing fails; a COMBINE archive is deflated by
+    definition, so the request is logged and the members are not compressed.
+    """
+    target = tmp_path / "stored.omex"
+    with Omex.from_omex(COMPMODELS) as omex:
+        omex.to_omex(target, compression=zipfile.ZIP_STORED)
+
+    blobs = _blobs(target)
+    assert {method for method, _, _ in blobs.values()} == {zipfile.ZIP_DEFLATED}
+    assert (
+        blobs["models/omex_comp.xml"][1] > _blobs(COMPMODELS)["models/omex_comp.xml"][1]
+    )
+    with Omex.from_omex(target) as result:
+        assert len(result.manifest) == 6
+
+
+def test_a_compression_level_other_than_nine_recompresses_every_member(
+    tmp_path: Path,
+) -> None:
+    """A caller which asks for a level gets it, for every member.
+
+    The yardstick is an archive which holds the same content and was written at
+    the same level with nothing to copy: every member of the recompressed write
+    has the size that level gives it, where a copied member would still have the
+    size of the source archive.
+    """
+    target = tmp_path / "level.omex"
+    with Omex.from_omex(COMPMODELS) as omex:
+        omex.to_omex(target, compresslevel=1)
+
+    directory = tmp_path / "content"
+    built = tmp_path / "built.omex"
+    with Omex.from_omex(COMPMODELS) as omex:
+        omex.to_directory(directory)
+    with Omex.from_directory(directory) as fresh:
+        fresh.to_omex(built, compresslevel=1)
+
+    def members(path: Path) -> dict[str, tuple[int, int, int]]:
+        """Return the blobs of the data members, i.e., without the manifest."""
+        return {
+            name: blob for name, blob in _blobs(path).items() if name != "manifest.xml"
+        }
+
+    assert len(members(target)) == 4
+    assert members(target) == members(built)
+    assert members(target) != members(COMPMODELS)
+    assert {method for method, _, _ in _blobs(target).values()} == {
+        zipfile.ZIP_DEFLATED
+    }
+
+
+def test_a_changed_format_is_written_without_a_file_from_the_caller(
+    tmp_path: Path,
+) -> None:
+    """A format or a master flag a caller assigned reaches the written manifest.
+
+    The entries are the contract of the write: the content of such an entry is
+    the one it has, the manifest of the archive is the one of `Omex`.
+    """
+    target = tmp_path / "out.omex"
+    with Omex.from_omex(COMPMODELS) as omex:
+        omex.manifest["./README.md"].format = EntryFormat.PLAIN
+        omex.manifest["./models/omex_comp.xml"].master = True
+        omex.to_omex(target)
+
+    with Omex.from_omex(target) as result:
+        assert result.manifest["./README.md"].format == EntryFormat.PLAIN.value
+        assert result.manifest["./models/omex_comp.xml"].master is True
+    with zipfile.ZipFile(COMPMODELS) as source, zipfile.ZipFile(target) as written:
+        assert written.read("README.md") == source.read("README.md")

@@ -76,8 +76,10 @@ from pydantic import BaseModel, ConfigDict, PrivateAttr, field_validator
 from pymetadata._core_bridge import (
     DERIVED_LOCATIONS,
     entries_for_archive,
+    has_bytes,
     materialize,
     open_archive,
+    write_archive,
 )
 from pymetadata._files import set_regular_file_mode
 from pymetadata.webservices.webservice import get_session
@@ -624,7 +626,10 @@ class Omex:
     holds the corresponding entries. An archive read with `Omex.from_omex` or
     `Omex.from_url` is read lazily: its `manifest` is complete at once, while
     the file of an entry appears in the temporary directory when a caller asks
-    for it, see `Omex.get_path`.
+    for it, see `Omex.get_path`. Writing it back with `Omex.to_omex` copies
+    every entry which was neither replaced nor asked for as the compressed
+    blob it is, so reading an archive and changing one entry does not inflate
+    and deflate the rest.
 
     Use the `from_*` constructors to read an archive and the `to_*` methods to
     write one:
@@ -668,8 +673,6 @@ class Omex:
         #: file in the temporary directory of every location whose content was
         #: added or replaced by hand, i.e., the copy the archive owns
         self._changed: dict[str, Path] = {}
-        #: locations removed since `_archive` was read
-        self._removed: set[str] = set()
 
     def close(self) -> None:
         """Remove the temporary directory with the archive content.
@@ -755,6 +758,85 @@ class Omex:
             return path
         self._materialized.add(location)
         return path
+
+    def _source_file(self, location: str) -> Path:
+        """Get the file the content of an entry is written from.
+
+        Args:
+            location: normalized location of an entry, e.g., `./model.xml`
+
+        Returns:
+            The file in the temporary directory which holds the content of the
+            entry. It does not have to exist: the content of an entry which was
+            not changed is in the archive this one was read from.
+        """
+        return self._changed.get(location, self._tmp_dir / location)
+
+    def _has_content(self, location: str) -> bool:
+        """Check if the archive this one was read from holds the content of an entry.
+
+        Args:
+            location: normalized location of an entry, e.g., `./model.xml`
+
+        Returns:
+            True if the content can be written without a file. Nothing is
+            inflated to answer this.
+        """
+        return self._archive is not None and has_bytes(self._archive, location)
+
+    def _write_sources(self) -> dict[str, Path]:
+        """Get the file of every entry which is written from a file.
+
+        An entry whose content was added or replaced by hand, and an entry whose
+        file was extracted into the temporary directory, where a caller may have
+        changed it, are written from that file. The content of every other entry
+        is copied from the archive this one was read from, as the compressed
+        blob it already is. An entry with neither a file nor content in the
+        archive is listed with its missing file, so that a write fails with the
+        `FileNotFoundError` of that file, as it did before the swap.
+
+        Returns:
+            The file per location, for the locations which are written from one.
+        """
+        sources: dict[str, Path] = {}
+        for entry in self.manifest.entries:
+            location = entry.location
+            if location in DERIVED_LOCATIONS:
+                continue
+            path = self._source_file(location)
+            if path.is_file() or not self._has_content(location):
+                sources[location] = path
+        return sources
+
+    def _extract(self, location: str, destination: Path) -> None:
+        """Write the content of one entry to a file outside of the archive.
+
+        The bytes of an entry which was not extracted before are written to the
+        destination, not into the temporary directory and from there to the
+        destination, so that every entry is written once.
+
+        Args:
+            location: normalized location of an entry, e.g., `./model.xml`
+            destination: file to write, its parents are created
+
+        Raises:
+            FileNotFoundError: if the entry has no content, which holds for an
+                entry a caller appended to the manifest without adding a file
+            ValueError: if the content of the entry cannot be read
+        """
+        source = self._source_file(location)
+        archive = self._archive
+        if not source.is_file() and archive is not None:
+            try:
+                materialize(archive, location, destination)
+            except KeyError:
+                logger.debug("No content in the archive for location: '%s'", location)
+            else:
+                return
+
+        destination.parent.mkdir(parents=True, exist_ok=True)
+        logger.debug("'%s' -> '%s'", source, destination)
+        shutil.copy2(src=str(source), dst=str(destination))
 
     @staticmethod
     def _check_omex_path(omex_path: Path) -> Path:
@@ -1104,7 +1186,6 @@ class Omex:
         # the copy is the content of the entry, not what a read archive holds
         # and not the file of the caller, which may change or be removed
         self._changed[entry.location] = destination
-        self._removed.discard(entry.location)
         self._materialized.discard(entry.location)
 
         # add entry
@@ -1122,7 +1203,6 @@ class Omex:
         entry = self.manifest.remove_entry_for_location(location)
         if entry:
             (self._tmp_dir / entry.location).unlink(missing_ok=True)
-            self._removed.add(entry.location)
             self._changed.pop(entry.location, None)
             self._materialized.discard(entry.location)
         return entry
@@ -1141,13 +1221,30 @@ class Omex:
         temporary file first, so a failing write does not leave a broken file
         or destroy an existing one.
 
+        An entry of an archive which was read from a file and whose content was
+        neither replaced nor extracted is copied as the compressed blob it is:
+        it is neither inflated nor deflated again and keeps the compression of
+        the archive it came from, which is what makes writing an archive back
+        cheap. A `compresslevel` other than the default and a `compression`
+        other than `ZIP_DEFLATED` deflate every entry again instead.
+
         Args:
             omex_path: path of the omex file to write
             password: unused, encrypted archives cannot be written yet
-            compression: zipfile compression algorithm
-            compresslevel: level of compression. Has no effect for `ZIP_STORED`
-                and `ZIP_LZMA`; 0-9 for `ZIP_DEFLATED` (see zlib) and 1-9 for
-                `ZIP_BZIP2` (see bz2). Larger values compress better.
+            compression: zipfile compression algorithm. A COMBINE archive is
+                deflated by definition and nothing else is written: a request
+                for another algorithm is logged and the entries are deflated,
+                `ZIP_STORED` at level 0.
+            compresslevel: level of compression, 0-9 (see zlib). Larger values
+                compress better. Only a level other than the default deflates
+                the entries again.
+
+        Raises:
+            FileNotFoundError: if an entry of the manifest has no content, i.e.,
+                neither a file in the temporary directory nor content in the
+                archive this one was read from
+            ValueError: if the content of an entry cannot be read or the core
+                refuses an entry
 
         Example:
             ```python
@@ -1161,32 +1258,32 @@ class Omex:
         if omex_path.exists():
             logger.warning("Existing omex is overwritten: '%s'", omex_path)
 
+        level = compresslevel
+        if compression != zipfile.ZIP_DEFLATED:
+            # the core writes deflate alone; stored members are deflated at 0
+            level = 0 if compression == zipfile.ZIP_STORED else compresslevel
+            logger.warning(
+                "A COMBINE archive is deflated, the compression '%s' is not "
+                "written: the entries are deflated at level %s.",
+                compression,
+                level,
+            )
+        data = write_archive(
+            self._archive,
+            self.manifest.entries,
+            self._write_sources(),
+            recompress=level != 9 or compression != zipfile.ZIP_DEFLATED,
+            level=level,
+        )
+
         omex_path.parent.mkdir(parents=True, exist_ok=True)
         fd, tmp_name = tempfile.mkstemp(
             dir=omex_path.parent, prefix=f".{omex_path.name}."
         )
         tmp_path = Path(tmp_name)
         try:
-            with (
-                os.fdopen(fd, "wb") as tmp,
-                zipfile.ZipFile(
-                    tmp,
-                    mode="w",
-                    compression=compression,
-                    compresslevel=compresslevel,
-                ) as zf,
-            ):
-                for e in self.manifest.entries:
-                    # zip names are relative without the `./` prefix
-                    arcname = e.location.removeprefix("./")
-                    if e.location == ".":
-                        continue
-                    if e.location == "./manifest.xml":
-                        zf.writestr(arcname, self.manifest.to_manifest_xml())
-                    else:
-                        zf.write(
-                            filename=self._materialize(e.location), arcname=arcname
-                        )
+            with os.fdopen(fd, "wb") as tmp:
+                tmp.write(data)
             set_regular_file_mode(tmp_path)
             tmp_path.replace(omex_path)
         except BaseException:
@@ -1197,10 +1294,18 @@ class Omex:
         """Extract the archive to a directory.
 
         The `manifest.xml` is written next to the files, so the result can be
-        read back with `Omex.from_directory`.
+        read back with `Omex.from_directory`. Every entry is written once: the
+        content of an entry which was not extracted before goes from the
+        archive to the directory, not through the temporary directory.
 
         Args:
             output_dir: directory to write to, created if it does not exist
+
+        Raises:
+            FileNotFoundError: if an entry of the manifest has no content, i.e.,
+                neither a file in the temporary directory nor content in the
+                archive this one was read from
+            ValueError: if the content of an entry cannot be read
 
         Example:
             ```python
@@ -1215,15 +1320,11 @@ class Omex:
             logger.warning("Creating working directory: %s", output_dir)
             output_dir.mkdir(parents=True, exist_ok=True)
 
-        # iterate over all locations and copy to destination
+        # iterate over all locations and write them to the destination
         for entry in self.manifest.entries:
             if entry.location in DERIVED_LOCATIONS:
                 continue
-            src = self._materialize(entry.location)
-            destination = output_dir / entry.location
-            destination.parent.mkdir(parents=True, exist_ok=True)
-            logger.debug("'%s' -> '%s", src, destination)
-            shutil.copy2(src=str(src), dst=str(destination))
+            self._extract(entry.location, output_dir / entry.location)
 
         # write manifest.xml
         self.manifest.to_manifest(manifest_path=output_dir / "manifest.xml")

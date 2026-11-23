@@ -12,6 +12,7 @@ from pymetadata_core import Archive
 from pymetadata._core_bridge import (
     PasswordError,
     entries_for_archive,
+    has_bytes,
     materialize,
     open_archive,
     write_archive,
@@ -293,7 +294,7 @@ def test_write_archive_applies_removals_changes_and_the_manifest(
     entries.append(
         ManifestEntry(location="./new.txt", format=EntryFormat.TXT, master=False)
     )
-    data = write_archive(archive, entries, {"./new.txt": new_file}, {removed.location})
+    data = write_archive(archive, entries, {"./new.txt": new_file})
     result = open_archive(data, None)
     assert result.entry_bytes("./new.txt") == b"new"
     assert not result.has_bytes(removed.location)
@@ -301,3 +302,46 @@ def test_write_archive_applies_removals_changes_and_the_manifest(
         str(e["location"])
         for e in entries_for_archive(result, format_from_suffix_and_head)
     }
+
+
+def test_write_archive_without_an_archive_writes_the_files_alone(
+    tmp_path: Path,
+) -> None:
+    """An `Omex` which was built by hand has no archive to copy from."""
+    source = tmp_path / "model.xml"
+    source.write_bytes(b"<sbml/>")
+    entries = [
+        ManifestEntry(location=".", format=EntryFormat.OMEX),
+        ManifestEntry(location="./manifest.xml", format=EntryFormat.OMEX_MANIFEST),
+        ManifestEntry(location="./model.xml", format=EntryFormat.SBML_L3V2),
+    ]
+    data = write_archive(None, entries, {"./model.xml": source})
+    result = open_archive(data, None)
+    assert result.entry_bytes("./model.xml") == b"<sbml/>"
+    assert [
+        e["location"] for e in entries_for_archive(result, format_from_suffix_and_head)
+    ] == ["./model.xml"]
+
+
+def test_write_archive_raises_file_not_found_for_a_file_which_is_gone(
+    tmp_path: Path,
+) -> None:
+    """A manifest entry whose file does not exist is an error, not an empty member."""
+    entries = [ManifestEntry(location="./gone.txt", format=EntryFormat.TXT)]
+    with pytest.raises(FileNotFoundError):
+        write_archive(None, entries, {"./gone.txt": tmp_path / "gone.txt"})
+
+
+def test_write_archive_refuses_a_level_outside_of_the_range() -> None:
+    """The core checks the deflate level, the bridge reports it as a `ValueError`."""
+    with pytest.raises(ValueError, match="level"):
+        write_archive(None, [], {}, recompress=True, level=10)
+
+
+def test_has_bytes_is_false_for_a_location_the_archive_has_no_content_for() -> None:
+    """A dangling entry, a derived location and a location nothing can normalize."""
+    archive = _open("iCGB21FR")
+    assert has_bytes(archive, "./iCGB21FR.xml") is True
+    assert has_bytes(archive, "./iCGB21FR_memote.html") is False
+    assert has_bytes(archive, "./manifest.xml") is False
+    assert has_bytes(archive, "../outside.txt") is False
