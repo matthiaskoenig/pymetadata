@@ -60,6 +60,7 @@ References:
     https://doi.org/10.2390/biecoll-jib-2015-261
 """
 
+import errno
 import logging
 import os
 import pprint
@@ -885,7 +886,8 @@ class Omex:
         Raises:
             FileNotFoundError: if the entry has no content, which holds for an
                 entry a caller appended to the manifest without adding a file
-                and for an entry whose file a caller removed
+                and for an entry whose file a caller removed. It names the
+                missing file and sets `filename`, on every platform.
             ValueError: if the content of the entry cannot be read
         """
         with self._lock:
@@ -904,6 +906,16 @@ class Omex:
                     )
                 else:
                     return
+
+            if not source.exists():
+                # the missing file is raised about here, not by `shutil.copy2`:
+                # on windows `copy2` copies through the `CopyFile2` API, whose
+                # error names no file at all ("[WinError 2] The system cannot
+                # find the file specified"), and the file of which entry went
+                # missing is the whole information a caller needs
+                raise FileNotFoundError(
+                    errno.ENOENT, os.strerror(errno.ENOENT), str(source)
+                )
 
             destination.parent.mkdir(parents=True, exist_ok=True)
             logger.debug("'%s' -> '%s'", source, destination)
@@ -1408,7 +1420,8 @@ class Omex:
             FileNotFoundError: if an entry of the manifest has no content, i.e.,
                 neither a file in the temporary directory nor content in the
                 archive this one was read from, which includes an entry whose
-                file a caller added or extracted and then removed
+                file a caller added or extracted and then removed. It names the
+                missing file and sets `filename`, on every platform.
             ValueError: if the content of an entry cannot be read
             ConcurrentUseError: if the same archive is used by another thread
                 outside of this `Omex`

@@ -963,10 +963,15 @@ def test_a_removed_file_of_an_extracted_entry_is_not_written_from_the_archive(
     """
     target = tmp_path / "out.omex"
     with Omex.from_omex(COMPMODELS) as omex:
-        omex.get_path("./README.md").unlink()
-        with pytest.raises(FileNotFoundError, match=r"README\.md"):
+        missing = omex.get_path("./README.md")
+        missing.unlink()
+        with pytest.raises(FileNotFoundError, match=r"README\.md") as error:
             omex.to_omex(target)
 
+    # the file is named in the message and in `filename`, which is what a
+    # caller needs to tell which entry went missing. `match` is on the message
+    # of `open`, which names the file on every platform
+    assert error.value.filename == str(missing)
     assert not target.exists()
 
 
@@ -988,21 +993,31 @@ def test_a_removed_file_of_an_added_entry_does_not_resurrect_the_original(
                 location="./README.md", format=EntryFormat.MARKDOWN, master=False
             ),
         )
-        omex.get_path("./README.md").unlink()
-        with pytest.raises(FileNotFoundError, match=r"README\.md"):
+        missing = omex.get_path("./README.md")
+        missing.unlink()
+        with pytest.raises(FileNotFoundError, match=r"README\.md") as error:
             omex.to_omex(target)
 
+    assert error.value.filename == str(missing)
     assert not target.exists()
 
 
 def test_to_directory_does_not_write_the_archive_content_of_a_removed_file(
     tmp_path: Path,
 ) -> None:
-    """`to_directory` fails for a removed file instead of falling back."""
+    """`to_directory` fails for a removed file instead of falling back.
+
+    The error names the missing file on every platform: `shutil.copy2` copies
+    through the `CopyFile2` API on windows, whose error names no file, so
+    `Omex._extract` raises about the file itself.
+    """
     with Omex.from_omex(COMPMODELS) as omex:
-        omex.get_path("./README.md").unlink()
-        with pytest.raises(FileNotFoundError, match=r"README\.md"):
+        missing = omex.get_path("./README.md")
+        missing.unlink()
+        with pytest.raises(FileNotFoundError, match=r"README\.md") as error:
             omex.to_directory(tmp_path / "out")
+
+    assert error.value.filename == str(missing)
 
 
 def test_is_omex_of_a_container_whose_manifest_is_named_with_a_prefix(
