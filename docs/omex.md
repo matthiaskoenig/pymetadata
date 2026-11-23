@@ -38,11 +38,15 @@ omex = Omex.from_url(
 )
 ```
 
-Reading extracts the archive into a temporary directory, so the content can be inspected without unpacking it by hand. `Omex.get_path(location)` returns the path of a single entry, which is what you pass on to a model reader:
+Reading is lazy. The archive is opened through [`pymetadata-core`](https://pypi.org/project/pymetadata-core/), which reads the central directory and the `manifest.xml`, so the entries are available at once, but no member is extracted. `Omex.get_path(location)` extracts a single entry into a temporary directory when it is asked for and returns its path, which is what you pass on to a model reader:
 
 ```python
 model_path = omex.get_path("./model.xml")
 ```
+
+One exception to the laziness: an `.xml` member which the `manifest.xml` does not list is inflated in memory when the archive is opened, because its format is classified from its first bytes and there is no partial read. Its bytes are cached, so asking for that member later does not inflate it again.
+
+One `Omex` can be used from several threads. The core gives access to one archive to one thread at a time, so `get_path`, `to_omex` and `to_directory` are serialized with a lock of the instance: they keep working from a thread pool, they are not faster in one.
 
 Encrypted archives can be opened by passing the password; writing encrypted archives is not supported:
 
@@ -50,7 +54,17 @@ Encrypted archives can be opened by passing the password; writing encrypted arch
 omex = Omex.from_omex(Path("archive.omex"), password=b"secret")
 ```
 
-To check whether a file is a COMBINE archive at all, use `Omex.is_omex(path)`.
+A wrong or missing password raises a `PasswordError`, a subclass of `ValueError`.
+
+To check whether a file is a COMBINE archive at all, use `Omex.is_omex(path)`. It answers from the structure of the zip file, i.e., whether one of its names normalizes to `./manifest.xml`, and reads no member.
+
+### What the core refuses
+
+- A member whose name is absolute or points outside of the archive is refused when the archive is opened, with a `ValueError`.
+- A member with a compression method other than stored or deflate, or one which inflates beyond 1 GiB, is refused when its bytes are read, i.e., at `get_path`, with a `ValueError` naming the location. Opening the archive and listing its entries works, and a member the manifest does not list gets its format guessed from its suffix alone.
+- A manifest entry for which the archive has no member is dropped with a warning.
+
+The whole file is read into memory when the archive is opened, so the memory needed is the size of the archive.
 
 ## Working with the manifest
 
@@ -123,7 +137,7 @@ Omex.lookup_format("sbml")  # from a format key
 
 ## Cleaning up
 
-Reading an archive extracts it into a temporary directory. Using the archive as a context manager removes that directory when the block is left, which matters when many archives are processed in one run:
+Members which were extracted by `get_path` live in a temporary directory. Using the archive as a context manager removes that directory when the block is left, which matters when many archives are processed in one run:
 
 ```python
 with Omex.from_omex(Path("archive.omex")) as omex:
@@ -142,7 +156,19 @@ omex.to_omex(Path("archive.omex"))  # write a COMBINE archive
 omex.to_directory(Path("./unpacked"))  # extract, including the manifest.xml
 ```
 
-`to_directory` writes the `manifest.xml` next to the files, so the result is a valid input for `Omex.from_directory` again.
+`to_directory` writes the `manifest.xml` next to the files, so the result is a valid input for `Omex.from_directory` again. Each member is written once, straight to its destination.
+
+### Reading an archive and writing it back
+
+A member which nobody touched is copied compressed to the new archive, without being inflated and compressed again, and keeps its compression method, compressed size and CRC. Reading an archive and writing it back is therefore cheap, also for a large archive. A member is written anew when its file was added with `add_entry` or when an entry changed its format or `master` flag, and every member extracted by `get_path` is written from its file.
+
+The `manifest.xml` of the written archive is serialized by the core: `master` is written only when it is true, and the entries are in the order of the container. A `compresslevel` other than the default, and any `compression` other than `ZIP_DEFLATED`, compress every member again. The core has no stored path, so `ZIP_STORED` is written as deflate at level 0 with a warning. The archive is built in memory before it is written.
+
+The two writers spell the manifest differently: `to_omex` writes the one the core serializes, `to_directory` writes the one of `Manifest.to_manifest_xml`, which quotes the XML declaration with double quotes and writes `master="false"` as well. Both read back to the same entries, so an archive and the directory it was extracted to can have two spellings of its `manifest.xml`.
+
+A write applies the removals of the manifest to the archive the `Omex` was read from, so it is not free of side effects: an entry which was removed from `manifest` loses its content when the archive is written. Declaring that location again afterwards and writing a second time fails with a `FileNotFoundError`, because neither a file nor the content of the archive is left for it. A write which repeats the same entries writes the same bytes again.
+
+The timing of reading and writing the archives in `tests/data/omex` is printed by `uv run python scripts/omex_timing.py`.
 
 ## Examples
 

@@ -1,6 +1,22 @@
 # Installation
 
-`pymetadata` requires python >= 3.11 and is available from [pypi](https://pypi.python.org/pypi/pymetadata). It is pure python and tested with python 3.11 to 3.15: continuous integration tests python 3.14 on Linux, macOS and Windows, all supported versions are tested locally on Linux before every pull request. The only compiled dependency is `pydantic-core`, which comes with [pydantic](https://docs.pydantic.dev/) and is installed from a wheel; for python 3.15 these wheels are part of pydantic 2.14, with an older pydantic it is built from source, which requires a Rust toolchain.
+`pymetadata` requires python >= 3.11 and is available from [pypi](https://pypi.python.org/pypi/pymetadata). It is tested with python 3.11 to 3.15: continuous integration tests python 3.14 on Linux, macOS and Windows, all supported versions are tested locally on Linux before every pull request.
+
+## Compiled dependencies
+
+`pymetadata` is not pure python. COMBINE archives are read and written by [`pymetadata-core`](https://pypi.org/project/pymetadata-core/), a Rust extension which is a hard dependency of the package since 0.9.0; there is no pure-python fallback. It ships one abi3 wheel per platform, which every CPython from 3.11 on installs:
+
+| platform | wheel |
+| --- | --- |
+| Linux x86_64 (glibc) | `manylinux2014_x86_64` |
+| Linux aarch64 (glibc) | `manylinux2014_aarch64` |
+| macOS Intel | `macosx_10_12_x86_64` |
+| macOS Apple silicon | `macosx_11_0_arm64` |
+| Windows x86_64 | `win_amd64` |
+
+On any other platform, e.g. musl based linux (Alpine), linux on armv7, ppc64le or s390x, FreeBSD, 32 bit or ARM Windows, or an implementation other than CPython such as PyPy, pip and uv fall back to the source distribution of `pymetadata-core` and compile it, which needs a [Rust toolchain](https://rustup.rs), i.e. `cargo`; without one the build fails. It fails while `pymetadata-core` is built, not while `pymetadata` is installed, which is worth knowing when the output is read.
+
+`pydantic-core` is compiled as well. It comes with [pydantic](https://docs.pydantic.dev/) and is installed from a wheel; for python 3.15 these wheels are part of pydantic 2.14, with an older pydantic it is built from source, which requires a Rust toolchain too.
 
 ## With uv
 
