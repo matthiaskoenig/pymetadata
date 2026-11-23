@@ -358,6 +358,28 @@ _XML_ROOT_FORMATS: tuple[tuple[bytes, str], ...] = (
 )
 
 
+def format_from_suffix_and_head(suffix: str, head: bytes) -> str:
+    """Classify a file by its suffix and, for `.xml`, its first bytes.
+
+    The start of `.xml` files is inspected to tell SBML, SED-ML, CellML and
+    COPASI apart; for every other file the suffix decides.
+
+    Args:
+        suffix: lower case suffix without the dot, e.g., `xml`
+        head: first bytes of the file, only inspected for `xml`
+
+    Returns:
+        The format URI, or the URI for an unknown media type if the format
+        cannot be determined.
+    """
+    if suffix == "xml":
+        for tag, format_key in _XML_ROOT_FORMATS:
+            if tag in head:
+                return Omex.lookup_format(format_key)
+
+    return Omex.lookup_format(suffix)
+
+
 def normalize_location(location: str) -> str:
     """Normalize the location of an entry in a COMBINE archive.
 
@@ -1160,12 +1182,9 @@ class Omex:
             cannot be determined.
         """
         extension = path.suffix[1:].lower()
+        head = b""
         if extension == "xml":
             # bytes, so the guess does not depend on the encoding of the file
             with open(path, "rb") as f_in:
                 head = f_in.read(256)
-            for tag, format_key in _XML_ROOT_FORMATS:
-                if tag in head:
-                    return Omex.lookup_format(format_key)
-
-        return Omex.lookup_format(extension)
+        return format_from_suffix_and_head(extension, head)
