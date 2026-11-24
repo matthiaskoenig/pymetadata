@@ -1172,7 +1172,7 @@ requires-dist = [
     { name = "pronto", marker = "extra == 'dev'", specifier = ">=2.7.3" },
     { name = "pronto", marker = "extra == 'ontology'", specifier = ">=2.7.3" },
     { name = "pydantic", specifier = ">=2.12" },
-    { name = "pymetadata-core", specifier = ">=0.2.0" },
+    { name = "pymetadata-core", specifier = ">=0.3.0" },
     { name = "pytest", marker = "extra == 'dev'", specifier = ">=9.1.1" },
     { name = "pytest-cov", marker = "extra == 'dev'", specifier = ">=7.1.0" },
     { name = "requests", specifier = ">=2.34.2" },
@@ -1187,15 +1187,15 @@ provides-extras = ["dev", "ontology"]
 
 [[package]]
 name = "pymetadata-core"
-version = "0.2.0"
+version = "0.3.0"
 source = { registry = "https://pypi.org/simple" }
-sdist = { url = "https://files.pythonhosted.org/packages/81/4d/8b797e3eca73e2d235dbe15aad81fa215624d8c903401eac828ca537a32c/pymetadata_core-0.2.0.tar.gz", hash = "sha256:fc55450a8dd2d747b04b056bf64c44edaadb4661edc04ee2a53bc0d46c660aa5", size = 2863023, upload-time = "2026-11-23T21:00:57.527Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/0f/11/836807b7f9cf9ae99278dab744a9a00412a6c073f8d10559e62fe25c9517/pymetadata_core-0.3.0.tar.gz", hash = "sha256:7bc5162f2cc8d91084ce2189d87486a79e352ae238a13cc3dd897d99b7c23fbb", size = 2875091, upload-time = "2026-11-24T00:12:18.474Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/83/da/cab66714c8406d9b0977343cd5de90ae564758edf22463214f1d6c516f38/pymetadata_core-0.2.0-cp311-abi3-macosx_10_12_x86_64.whl", hash = "sha256:cf3224576ba25395ed9ec68ab46929a2e34be9e12f7a826fd56ead4f120173f3", size = 365299, upload-time = "2026-11-23T21:00:51.293Z" },
-    { url = "https://files.pythonhosted.org/packages/8a/04/152d9d4a7477ef8db5e3306229c5d6b541bb78f8ce92472709e4ff2c70a8/pymetadata_core-0.2.0-cp311-abi3-macosx_11_0_arm64.whl", hash = "sha256:052a49e96097d8eebb0f7bce361cce4169259728db1f746bc34fc465fc299103", size = 338573, upload-time = "2026-11-23T21:00:52.483Z" },
-    { url = "https://files.pythonhosted.org/packages/5f/84/d41456fcff928812bb5a5880ae4d8c5f9606e50ac974a9b4e36dc82179e3/pymetadata_core-0.2.0-cp311-abi3-manylinux2014_aarch64.manylinux_2_17_aarch64.whl", hash = "sha256:f22eac69c111ee7f9652bb5f9d32bef698239aae1214f49b81fed6aa73b72ea7", size = 368681, upload-time = "2026-11-23T21:00:53.712Z" },
-    { url = "https://files.pythonhosted.org/packages/8d/c6/87cdbffe496961fa2adf6279d5cc97b0777fa7843f7da53b3b17e969b261/pymetadata_core-0.2.0-cp311-abi3-manylinux2014_x86_64.manylinux_2_17_x86_64.whl", hash = "sha256:286e0738be52e391e046c073a2e3572046ceb56f1ba890501675479e5cb32a2b", size = 379362, upload-time = "2026-11-23T21:00:54.942Z" },
-    { url = "https://files.pythonhosted.org/packages/44/aa/9b5a0483aba4954cc5e21d06f30a870171dcb5fc2d02d844c39e42386576/pymetadata_core-0.2.0-cp311-abi3-win_amd64.whl", hash = "sha256:58436779eccafa09bc99c62e4d0b3f16df5da9470fac60c378f4ff195bb4dc87", size = 296837, upload-time = "2026-11-23T21:00:56.122Z" },
+    { url = "https://files.pythonhosted.org/packages/f4/43/f6eb66721fa76520a8c943a8b0ae829ace6f2cceeb77846d19410a36e9f2/pymetadata_core-0.3.0-cp311-abi3-macosx_10_12_x86_64.whl", hash = "sha256:aa811baa195f88c0770b0dae422fcdfb5fa1b930bc015f98ca14c698d7b95ef6", size = 387745, upload-time = "2026-11-24T00:12:10.476Z" },
+    { url = "https://files.pythonhosted.org/packages/2b/29/3e45cae19d1f56d1fe59f5c2a26a3d17eb12a5899832f16e7c465a4af031/pymetadata_core-0.3.0-cp311-abi3-macosx_11_0_arm64.whl", hash = "sha256:1dd42984f7961f5bb8626ece4afe8d41f0715e997d27428030c5c9658c06a41b", size = 361408, upload-time = "2026-11-24T00:12:12.103Z" },
+    { url = "https://files.pythonhosted.org/packages/33/c5/eb680a471f2d489003bbf1da3595c1cb44e69c6ad8ab56188b026ecead5d/pymetadata_core-0.3.0-cp311-abi3-manylinux2014_aarch64.manylinux_2_17_aarch64.whl", hash = "sha256:14fda53c506d33abbf5dfc5958a7cb17cbe756972a731beeacdeb4b92ac0a2a6", size = 390344, upload-time = "2026-11-24T00:12:13.644Z" },
+    { url = "https://files.pythonhosted.org/packages/ff/d7/8c70bb7b5c4701d848c7fbb0d0998d68a41ee099a8b4ae184cc4ca4c2ebb/pymetadata_core-0.3.0-cp311-abi3-manylinux2014_x86_64.manylinux_2_17_x86_64.whl", hash = "sha256:43a5f3ceca948aae398bf6dc07cf2a441308f6b4d12ea837ecfa9aea665974fb", size = 402756, upload-time = "2026-11-24T00:12:15.238Z" },
+    { url = "https://files.pythonhosted.org/packages/c0/d1/40667e9e981d9c209f3bba54cce6162e1f3a67a53325739392c1ee4b8114/pymetadata_core-0.3.0-cp311-abi3-win_amd64.whl", hash = "sha256:83c5103d3e4be5d699202ab66c653380b03d091c980338f4a1065cf041c7a5cc", size = 324482, upload-time = "2026-11-24T00:12:16.796Z" },
 ]
 
 [[package]]

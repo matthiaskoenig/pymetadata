@@ -45,7 +45,7 @@ dependencies = [
 	# with the compromised emSign intermediates, GHSA-6q48-6c7w-9gw2
 	"certifi>=2026.10.19",
 	"pydantic>=2.12",
-	"pymetadata-core>=0.2.0",
+	"pymetadata-core>=0.3.0",
 ]
 
 [project.optional-dependencies]
