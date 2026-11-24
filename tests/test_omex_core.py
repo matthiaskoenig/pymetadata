@@ -9,9 +9,11 @@ the compressed blob it is instead of being inflated and deflated again.
 
 import logging
 import os
+import random
 import shutil
 import stat
 import subprocess
+import tracemalloc
 import zipfile
 from concurrent.futures import Future, ThreadPoolExecutor
 from pathlib import Path
@@ -1137,3 +1139,55 @@ def test_a_changed_format_of_an_added_entry_keeps_its_bytes(tmp_path: Path) -> N
     omex.to_omex(second)
 
     assert _blobs(second)["added.txt"] == _blobs(first)["added.txt"]
+
+
+def test_to_omex_does_not_hold_the_archive_in_memory(tmp_path: Path) -> None:
+    """The write streams into the file, so python never holds the archive.
+
+    The members are incompressible, so the archive is about as large as they
+    are, and large enough that holding it would show. What python allocates
+    while the archive is written is the staging of the entries and the buffers
+    of the core's call, not the archive.
+    """
+    source = tmp_path / "members"
+    source.mkdir()
+    block = random.randbytes(1 << 20)
+    for index in range(8):
+        (source / f"data{index}.bin").write_bytes(block)
+    omex = Omex()
+    for index in range(8):
+        omex.add_entry(
+            source / f"data{index}.bin",
+            ManifestEntry(location=f"./data{index}.bin", format=EntryFormat.BIN),
+        )
+    target = tmp_path / "big.omex"
+
+    tracemalloc.start()
+    omex.to_omex(target)
+    peak = tracemalloc.get_traced_memory()[1]
+    tracemalloc.stop()
+
+    size = target.stat().st_size
+    assert size > 8 * (1 << 20) // 2, size
+    assert peak * 4 < size, (peak, size)
+    assert Omex.is_omex(target)
+
+
+def test_to_omex_raises_os_error_when_the_file_cannot_be_written(
+    tmp_path: Path,
+) -> None:
+    """A sink which cannot take the bytes is an `OSError`, not a `ValueError`."""
+    if os.name == "nt":  # a read only directory does not stop a write on windows
+        pytest.skip("the mode of a directory does not refuse a write on windows")
+    directory = tmp_path / "locked"
+    directory.mkdir()
+    directory.chmod(stat.S_IRUSR | stat.S_IXUSR)
+    try:
+        with Omex.from_omex(COMPMODELS) as omex:
+            with pytest.raises(OSError) as error:
+                omex.to_omex(directory / "out.omex")
+            assert not isinstance(error.value, ValueError)
+    finally:
+        directory.chmod(stat.S_IRWXU)
+
+    assert list(directory.iterdir()) == []

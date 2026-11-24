@@ -397,6 +397,88 @@ def write_archive(
             neither a file in `files` nor bytes in the archive.
         ConcurrentUseError: if another thread uses the same archive.
     """
+    target = _staged(archive, entries, files)
+    try:
+        data = target.to_bytes(recompress=recompress, level=level)
+    except ArchiveBusyError as error:
+        raise _busy_error(error) from error
+    except OmexError as error:
+        raise _map_error(error) from error
+    return data
+
+
+def write_archive_to_path(
+    archive: Archive | None,
+    entries: list[ManifestEntry],
+    files: dict[str, Path],
+    target_path: Path,
+    *,
+    recompress: bool = False,
+    level: int = 9,
+) -> int:
+    """Apply the changes of an `Omex` to the archive and write it to a file.
+
+    This is `write_archive` into a file: the core hands every member to the file
+    as it produces it, so the memory a write needs is the largest member and not
+    the whole archive. The file holds the bytes `write_archive` returns for the
+    same `Omex`, so the two are the same write.
+
+    Args:
+        archive: the archive the `Omex` was opened from, or None, see
+            `write_archive`, whose side effects on it are the ones described there
+        entries: the manifest entries of the `Omex`, and the order of the result
+        files: the file of every location whose content is written from one
+        target_path: the file to write, created or truncated
+        recompress: deflate every member again, instead of copying the members
+            which were not replaced
+        level: the deflate level, 0 to 9, used with `recompress`
+
+    Returns:
+        The number of bytes written.
+
+    Raises:
+        FileNotFoundError: if a file of `files` does not exist, as `write_archive`
+            raises, which is what a manifest entry without content gives.
+        ValueError: as `write_archive` raises, for the archive itself.
+        OSError: if the file cannot be created or written. A write which fails
+            part way leaves what it had written behind, so a caller which needs
+            the file to be the archive or nothing writes to a temporary file and
+            moves it, which is what `Omex.to_omex` does.
+        ConcurrentUseError: if another thread uses the same archive.
+    """
+    target = _staged(archive, entries, files)
+    try:
+        return target.to_path(target_path, recompress=recompress, level=level)
+    except ArchiveBusyError as error:
+        raise _busy_error(error) from error
+    except OmexError as error:
+        raise _map_error(error) from error
+
+
+def _staged(
+    archive: Archive | None,
+    entries: list[ManifestEntry],
+    files: dict[str, Path],
+) -> Archive:
+    """Apply the entries and the files of an `Omex` to the archive it writes.
+
+    The archive is changed in place and is the one to write afterwards; see
+    `write_archive` for what the changes are and what they cost.
+
+    Args:
+        archive: the archive the `Omex` was opened from, or None for one which
+            is written from its files alone
+        entries: the manifest entries of the `Omex`, and the order of the result
+        files: the file of every location whose content comes from one
+
+    Returns:
+        The archive to write.
+
+    Raises:
+        FileNotFoundError: if a file of `files` does not exist.
+        ValueError: if the core refuses an entry or a member cannot be read.
+        ConcurrentUseError: if another thread uses the same archive.
+    """
     target = Archive() if archive is None else archive
     wanted = {e.location: e for e in entries if e.location not in DERIVED_LOCATIONS}
     try:
@@ -419,12 +501,11 @@ def write_archive(
         # core would write its own order, which for an opened archive is what its
         # `manifest.xml` declared and then the members it did not list
         target.reorder_entries([entry.location for entry in entries])
-        data = target.to_bytes(recompress=recompress, level=level)
     except ArchiveBusyError as error:
         raise _busy_error(error) from error
     except OmexError as error:
         raise _map_error(error) from error
-    return data
+    return target
 
 
 def declares_manifest(path: Path) -> bool:
