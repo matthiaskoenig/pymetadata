@@ -4,7 +4,7 @@ This file provides guidance when working with code in this repository.
 
 ## Project
 
-`pymetadata` is a python library for metadata in the context of COMBINE standards: COMBINE archives (OMEX), MIRIAM/RDF annotations, and ontology terms (SBO, KISAO, PBPKO). Pure library, no CLI entry points. Requires python >= 3.11, packaged with hatchling (version is read from `src/pymetadata/__init__.py`). Runtime dependencies are `pymetadata-core>=0.3.0`, `rich`, `requests` and `pydantic`, plus the floors of `urllib3` and `certifi`, which are not imported but reached through `requests` (`certifi>=2026.10.19` excludes the CA store with the compromised emSign intermediates, GHSA-6q48-6c7w-9gw2); `pronto` is the optional `ontology` extra, needed only to regenerate the ontology modules. `pymetadata-core` is the Rust core of the OMEX reading and writing, so the package is not pure python: it is a hard dependency without a pure-python fallback, shipped as one abi3 wheel for CPython 3.11+ on five targets (`manylinux2014_x86_64`, `manylinux2014_aarch64`, `macosx_10_12_x86_64`, `macosx_11_0_arm64`, `win_amd64`), and built from its sdist with a Rust toolchain everywhere else (musl linux, other linux architectures, FreeBSD, PyPy).
+`pymetadata` is a python library for metadata in the context of COMBINE standards: COMBINE archives (OMEX), MIRIAM/RDF annotations, and ontology terms (SBO, KISAO, PBPKO). Pure library, no CLI entry points. Requires python >= 3.11, packaged with hatchling (version is read from `src/pymetadata/__init__.py`). Runtime dependencies are `pymetadata-core>=0.4.0`, `rich`, `requests` and `pydantic`, plus the floors of `urllib3` and `certifi`, which are not imported but reached through `requests` (`certifi>=2026.10.19` excludes the CA store with the compromised emSign intermediates, GHSA-6q48-6c7w-9gw2); `pronto` is the optional `ontology` extra, needed only to regenerate the ontology modules. `pymetadata-core` is the Rust core of the OMEX reading and writing, so the package is not pure python: it is a hard dependency without a pure-python fallback, shipped as one abi3 wheel for CPython 3.11+ on five targets (`manylinux2014_x86_64`, `manylinux2014_aarch64`, `macosx_10_12_x86_64`, `macosx_11_0_arm64`, `win_amd64`), and built from its sdist with a Rust toolchain everywhere else (musl linux, other linux architectures, FreeBSD, PyPy).
 
 ## Commands
 
@@ -65,7 +65,9 @@ inflates no more than those). Writing copies every member which was neither repl
 nor extracted as the compressed blob it is, changes the format or master flag of an
 entry with `set_entry_format` so its member stays that blob, lays the entries into
 the order `Omex` holds them with `reorder_entries`, and applies the manifest's
-removals to that archive, so a write changes it. `Omex.is_omex` asks the core's
+removals to that archive, so a write changes it. `to_omex` writes through the core's
+`Archive.to_path`, into a temporary file next to the target which is moved over it, so
+the archive is never in memory as a whole and the target is the archive or untouched. `Omex.is_omex` asks the core's
 `has_manifest`, which reads the end of the file and its central directory and no
 member at all. The
 calls which reach the core hold `Omex._lock`, an `RLock` per instance, because the

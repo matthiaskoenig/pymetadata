@@ -89,7 +89,7 @@ from pymetadata._core_bridge import (
     has_bytes,
     materialize,
     open_archive,
-    write_archive,
+    write_archive_to_path,
 )
 from pymetadata._files import set_regular_file_mode
 from pymetadata.webservices.webservice import get_session
@@ -1374,23 +1374,24 @@ class Omex:
                 compression,
                 level,
             )
-        with self._lock:
-            data = write_archive(
-                self._archive,
-                self.manifest.entries,
-                self._write_sources(),
-                recompress=level != 9 or compression != zipfile.ZIP_DEFLATED,
-                level=level,
-            )
-
         omex_path.parent.mkdir(parents=True, exist_ok=True)
         fd, tmp_name = tempfile.mkstemp(
             dir=omex_path.parent, prefix=f".{omex_path.name}."
         )
         tmp_path = Path(tmp_name)
+        # the core opens the path itself, so the descriptor of the temporary file is
+        # closed first: on windows a file which is open cannot be opened again
+        os.close(fd)
         try:
-            with os.fdopen(fd, "wb") as tmp:
-                tmp.write(data)
+            with self._lock:
+                write_archive_to_path(
+                    self._archive,
+                    self.manifest.entries,
+                    self._write_sources(),
+                    tmp_path,
+                    recompress=level != 9 or compression != zipfile.ZIP_DEFLATED,
+                    level=level,
+                )
             set_regular_file_mode(tmp_path)
             tmp_path.replace(omex_path)
         except BaseException:
