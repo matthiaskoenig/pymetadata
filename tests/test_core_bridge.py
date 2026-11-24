@@ -11,8 +11,11 @@ import pytest
 from pymetadata_core import Archive, ArchiveBusyError
 
 from pymetadata._core_bridge import (
+    HEAD_SIZE,
     ConcurrentUseError,
     PasswordError,
+    _head_of,
+    declares_manifest,
     entries_for_archive,
     has_bytes,
     materialize,
@@ -410,3 +413,121 @@ def test_write_archive_of_a_busy_archive_raises_concurrent_use() -> None:
     entries = [ManifestEntry(location="./a.txt", format=EntryFormat.TXT)]
     with pytest.raises(ConcurrentUseError, match="concurrently"):
         write_archive(_busy(), entries, {})
+
+
+class _HeadOnly:
+    """An archive which serves a head and fails if the whole member is read."""
+
+    def __init__(self, head: bytes) -> None:
+        """Remember the head to serve and record the calls.
+
+        Args:
+            head: the bytes to answer a head with
+        """
+        self.head_bytes = head
+        self.limits: list[int] = []
+
+    def head(self, location: str, limit: int) -> bytes:
+        """Answer the head, recording the limit it was asked with.
+
+        Args:
+            location: the location of the member
+            limit: how many bytes the caller wants
+
+        Returns:
+            The head, cut to the limit.
+        """
+        self.limits.append(limit)
+        return self.head_bytes[:limit]
+
+    def entry_bytes(self, location: str) -> bytes:
+        """Fail: the format is told from a head, not from the whole member.
+
+        Args:
+            location: the location of the member
+
+        Raises:
+            AssertionError: always, this must not be called
+        """
+        raise AssertionError(f"the whole member was inflated for '{location}'")
+
+
+def test_the_format_is_guessed_from_a_head_not_from_the_whole_member() -> None:
+    """`_head_of` reads a bounded head, where it used to inflate everything."""
+    archive = _HeadOnly(
+        b'<?xml version="1.0"?><sbml level="3" version="1">' + b"x" * 4096
+    )
+    head = _head_of(cast(Archive, archive), "./model.xml", "xml")
+
+    assert archive.limits == [HEAD_SIZE]
+    assert len(head) == HEAD_SIZE
+    assert ManifestEntry.is_format("sbml", _format_from_suffix_and_head("xml", head))
+
+
+def test_no_head_is_read_for_a_suffix_which_does_not_need_one() -> None:
+    """A suffix which decides the format alone costs no read at all."""
+    archive = _HeadOnly(b"ignored")
+    assert _head_of(cast(Archive, archive), "./table.tsv", "tsv") == b""
+    assert archive.limits == []
+
+
+def test_the_format_of_a_huge_unlisted_xml_member_is_read_from_its_head(
+    tmp_path: Path,
+) -> None:
+    """A member too large to inflate still has a head, so it is classified.
+
+    The core refuses to inflate a member above its 1 GiB cap, which is what
+    `materialize` reports for one. A head is bounded by its own limit, so the
+    cap does not apply to it: the format of such a member comes from its
+    content, where before the whole member had to be inflated for it and the
+    suffix was all that was left.
+    """
+    buffer = io.BytesIO()
+    with zipfile.ZipFile(buffer, "w", zipfile.ZIP_DEFLATED) as zf:
+        zf.writestr("manifest.xml", MANIFEST)
+        with zf.open("huge.xml", "w", force_zip64=True) as f:
+            f.write(b'<?xml version="1.0"?><sbml level="3" version="1">')
+            block = bytes(1 << 24)
+            for _ in range(65):
+                f.write(block)
+    archive = open_archive(buffer.getvalue(), None)
+
+    (entry,) = entries_for_archive(archive, _format_from_suffix_and_head)
+    assert entry["location"] == "./huge.xml"
+    assert ManifestEntry.is_format("sbml", str(entry["format"]))
+    # the member itself is still beyond the cap of the reader
+    with pytest.raises(ValueError, match=r"\./huge\.xml"):
+        materialize(archive, "./huge.xml", tmp_path / "huge.xml")
+
+
+def test_declares_manifest_answers_from_the_structure(tmp_path: Path) -> None:
+    """The probe recognizes an archive without reading a member of it."""
+    assert declares_manifest(DATA / "CompModels.omex") is True
+
+    plain = tmp_path / "plain.txt"
+    plain.write_text("not a zip at all, but long enough", encoding="utf-8")
+    assert declares_manifest(plain) is False
+
+    without = tmp_path / "without.zip"
+    without.write_bytes(_zip({"a.txt": b"x"}))
+    assert declares_manifest(without) is False
+
+
+@pytest.mark.skipif(
+    shutil.which("zip") is None,
+    reason="the `zip` tool builds the ZipCrypto fixture",
+)
+def test_declares_manifest_of_an_archive_it_cannot_open(tmp_path: Path) -> None:
+    """An encrypted archive is an archive: its manifest is declared."""
+    encrypted = tmp_path / "enc.omex"
+    encrypted.write_bytes(_encrypted(tmp_path))
+
+    assert declares_manifest(encrypted) is True
+    with pytest.raises(PasswordError):
+        open_archive(encrypted.read_bytes(), None)
+
+
+def test_declares_manifest_raises_for_a_file_it_cannot_read(tmp_path: Path) -> None:
+    """Being unable to read a file is no answer about its content."""
+    with pytest.raises(OSError):
+        declares_manifest(tmp_path / "missing.omex")

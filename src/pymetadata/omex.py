@@ -82,9 +82,9 @@ from pydantic import BaseModel, ConfigDict, PrivateAttr, field_validator
 
 from pymetadata._core_bridge import (
     DERIVED_LOCATIONS,
-    MANIFEST_LOCATION,
     ConcurrentUseError,
     PasswordError,
+    declares_manifest,
     entries_for_archive,
     has_bytes,
     materialize,
@@ -985,24 +985,16 @@ class Omex:
 
         Raises:
             ValueError: if the path does not exist or is not a file
+            OSError: if the file exists and cannot be read
         """
         omex_path = Omex._check_omex_path(omex_path)
 
-        if not zipfile.is_zipfile(str(omex_path)):
-            logger.warning("Omex path '%s' is not a zip archive.", omex_path)
-            return False
+        if declares_manifest(omex_path):
+            return True
 
-        with zipfile.ZipFile(omex_path, mode="r") as zf:
-            for name in zf.namelist():
-                try:
-                    location = normalize_location(name)
-                except ValueError:
-                    continue
-                if location == MANIFEST_LOCATION:
-                    return True
-
-        # manifest does not exist in archive
-        logger.warning("No 'manifest.xml' in '%s'.", omex_path)
+        logger.warning(
+            "No 'manifest.xml' in '%s', it is no COMBINE archive.", omex_path
+        )
         return False
 
     @staticmethod

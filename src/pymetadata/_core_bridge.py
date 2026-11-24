@@ -16,7 +16,15 @@ from collections.abc import Callable
 from pathlib import Path
 from typing import TYPE_CHECKING
 
-from pymetadata_core import Archive, ArchiveBusyError, OmexError
+from pymetadata_core import (
+    Archive,
+    ArchiveBusyError,
+    MalformedError,
+    NotFoundError,
+    OmexError,
+    has_manifest,
+)
+from pymetadata_core import PasswordError as CorePasswordError
 
 if TYPE_CHECKING:
     from pymetadata.omex import ManifestEntry
@@ -30,6 +38,11 @@ _ARCHIVE = "."
 #: the locations the core writes itself, they are never set or removed by hand and
 #: hold no file of their own; `pymetadata.omex` shares this one definition
 DERIVED_LOCATIONS = frozenset({_ARCHIVE, MANIFEST_LOCATION})
+
+
+#: how many bytes of a member the format is guessed from; an XML declaration and
+#: the root element of an SBML, SED-ML or CellML document fit in them
+HEAD_SIZE = 256
 
 
 class PasswordError(ValueError):
@@ -101,9 +114,11 @@ def _map_error(error: OmexError, *, opening: bool = False) -> ValueError:
     what makes a zip an archive.
 
     A refusal over a password becomes a `PasswordError`, so that a caller can
-    tell a member it may not read from a member which is not there. This is the
-    one place which reads the wording of the core, so it is the one place to
-    change when the core gains a typed error.
+    tell a member it may not read from a member which is not there. The kind of
+    a failure is the class the core raises, not the start of its message: since
+    `pymetadata-core` 0.3.0 every kind has a class of its own, so nothing here
+    depends on the wording. The message is still passed on, because it names
+    the member and the password, which the class does not.
 
     Args:
         error: the error of the core
@@ -113,11 +128,11 @@ def _map_error(error: OmexError, *, opening: bool = False) -> ValueError:
         The `ValueError` to raise, a `PasswordError` for a refused password.
     """
     message = str(error)
-    if message.startswith("malformed") and opening:
+    if isinstance(error, MalformedError) and opening:
         return ValueError(f"Not an OMEX archive, no readable manifest.xml: {message}")
     # spell a member the way pymetadata spells a location
     message = re.sub(r'member "(?!\./)([^"]+)"', r'member "./\1"', message)
-    if message.startswith("refused") and "password" in message:
+    if isinstance(error, CorePasswordError):
         return PasswordError(message)
     return ValueError(message)
 
@@ -234,8 +249,8 @@ def _head_of(archive: Archive, location: str, suffix: str) -> bytes:
         suffix: the lower case suffix of the location, without the dot
 
     Returns:
-        The first 256 bytes of the member for an `xml` suffix, nothing for
-        every other suffix and for a member which cannot be read.
+        The first `HEAD_SIZE` bytes of the member for an `xml` suffix, nothing
+        for every other suffix and for a member which cannot be read.
 
     Raises:
         ArchiveBusyError: if another thread uses the same archive; the caller
@@ -244,7 +259,9 @@ def _head_of(archive: Archive, location: str, suffix: str) -> bytes:
     if suffix != "xml":
         return b""
     try:
-        return archive.entry_bytes(location)[:256]
+        # the head stops after `HEAD_SIZE` bytes, where `entry_bytes` would
+        # inflate the whole member to look at its first bytes
+        return archive.head(location, HEAD_SIZE)
     except OmexError as error:
         logger.warning(
             "The format of '%s' is guessed from its suffix, its content cannot be "
@@ -280,9 +297,9 @@ def materialize(archive: Archive, location: str, target: Path) -> None:
         data = archive.entry_bytes(location)
     except ArchiveBusyError as error:
         raise _busy_error(error) from error
+    except NotFoundError as error:
+        raise KeyError(location) from error
     except OmexError as error:
-        if str(error).startswith("not found"):
-            raise KeyError(location) from error
         raise _map_error(error) from error
     target.parent.mkdir(parents=True, exist_ok=True)
     target.write_bytes(data)
@@ -343,6 +360,13 @@ def write_archive(
     the entries are the contract. `Manifest.to_manifest_xml` remains the
     authority for `to_directory`.
 
+    `entries` is also the order of the result: its locations are laid into the
+    archive in that order, so the written `manifest.xml` lists them as `Omex`
+    holds them and the members follow that order, as they did before the swap.
+    An entry whose format or master flag changed keeps its member: the manifest
+    entry is set alone, without inflating and deflating content which does not
+    change.
+
     Args:
         archive: the archive the `Omex` was opened from, or None for an archive
             which was built by hand and is written from its files alone. It is
@@ -386,13 +410,47 @@ def write_archive(
             if path is not None:
                 target.set_entry(location, format, master, path.read_bytes())
             elif current.get(location) != (format, master):
-                target.set_entry(location, format, master, target.entry_bytes(location))
+                # only the manifest entry changes, so the member stays the
+                # compressed blob the write copies; `set_entry` would inflate
+                # it and deflate it again for a change it does not carry
+                target.set_entry_format(location, format, master)
+        # the manifest of the result is written in the order of `entries`, which
+        # is the order `Omex` keeps and the order a caller sees; without this the
+        # core would write its own order, which for an opened archive is what its
+        # `manifest.xml` declared and then the members it did not list
+        target.reorder_entries([entry.location for entry in entries])
         data = target.to_bytes(recompress=recompress, level=level)
     except ArchiveBusyError as error:
         raise _busy_error(error) from error
     except OmexError as error:
         raise _map_error(error) from error
     return data
+
+
+def declares_manifest(path: Path) -> bool:
+    """Return whether the file is a COMBINE archive, by its structure alone.
+
+    The core reads the end of the file, which says where the central directory
+    is, and then that directory, which lists the names of the members; a name
+    is normalized as `Omex` normalizes a location, and a container which
+    declares `./manifest.xml` is an archive. No member is inflated and none is
+    decrypted, so the answer costs the size of the central directory rather
+    than the size of the archive, and an encrypted archive is an archive: its
+    manifest is declared whether or not a caller can read it.
+
+    Args:
+        path: the file to look at, which must exist
+
+    Returns:
+        True if the container declares a `manifest.xml`. False for a file which
+        is no zip container and for a container without one, as
+        `zipfile.is_zipfile` answers False for what is not a zip.
+
+    Raises:
+        OSError: if the file cannot be opened or read. Being unable to read a
+            file is not an answer about its content.
+    """
+    return has_manifest(path)
 
 
 def _locations(archive: Archive) -> set[str]:

@@ -1041,3 +1041,99 @@ def test_is_omex_of_a_container_whose_manifest_is_named_with_a_prefix(
             "./manifest.xml",
             "./a.txt",
         ]
+
+
+def _manifest_order(omex_path: Path) -> list[str]:
+    """Return the locations of the `manifest.xml` of a container, in its order.
+
+    Args:
+        omex_path: path of the zip container
+
+    Returns:
+        The locations of the `content` elements, in document order.
+    """
+    import re
+
+    with zipfile.ZipFile(omex_path) as zf:
+        xml = zf.read("manifest.xml").decode("utf-8")
+    return re.findall(r'location="([^"]+)"', xml)
+
+
+def test_the_written_manifest_is_in_the_order_of_the_entries(tmp_path: Path) -> None:
+    """A written archive lists its entries in the order the `Omex` holds them.
+
+    `iCGB21FR.omex` is the case which tells the two orders apart: its manifest
+    declares 8 entries and the container holds 22 members, so the entries the
+    archive did not list are many and their container order is not their sorted
+    order. The core writes the order of its own manifest unless it is told
+    otherwise, which is what `write_archive` does.
+    """
+    omex = Omex.from_omex(DATA / "iCGB21FR.omex")
+    expected = [entry.location for entry in omex.manifest.entries]
+    target = tmp_path / "written.omex"
+    omex.to_omex(target)
+
+    assert _manifest_order(target) == expected
+    # the members follow the manifest, so a reader walks them in that order too
+    members = [name for name in _blobs(target) if not name.endswith("/")]
+    assert members == [location[2:] for location in expected if location != "."]
+
+
+def test_the_written_order_survives_a_round_trip(tmp_path: Path) -> None:
+    """Reading a written archive gives the entries in the same order again."""
+    first = tmp_path / "first.omex"
+    Omex.from_omex(DATA / "iCGB21FR.omex").to_omex(first)
+    second = tmp_path / "second.omex"
+    omex = Omex.from_omex(first)
+    locations = [entry.location for entry in omex.manifest.entries]
+    omex.to_omex(second)
+
+    assert _manifest_order(second) == locations
+    assert _manifest_order(first) == _manifest_order(second)
+
+
+def test_a_changed_format_keeps_the_member_as_it_is(tmp_path: Path) -> None:
+    """Changing the metadata of an entry does not rewrite its content.
+
+    The format and the master flag live in the manifest, not in the member, so
+    an entry whose format changes keeps the compressed blob it has: the member
+    is copied, not inflated and deflated again.
+    """
+    source = DATA / "BIOMD0000000001.omex"
+    omex = Omex.from_omex(source)
+    entry = next(
+        e
+        for e in omex.manifest.entries
+        if e.location.endswith(".xml") and e.location != "./manifest.xml"
+    )
+    entry.format = EntryFormat.XML
+    entry.master = not entry.master
+    target = tmp_path / "changed.omex"
+    omex.to_omex(target)
+
+    name = entry.location[2:]
+    assert _blobs(target)[name] == _blobs(source)[name]
+    manifest = _manifest_order(target)
+    assert entry.location in manifest
+    with zipfile.ZipFile(target) as zf:
+        xml = zf.read("manifest.xml").decode("utf-8")
+    assert f'location="{entry.location}" format="{EntryFormat.XML.value}"' in xml
+
+
+def test_a_changed_format_of_an_added_entry_keeps_its_bytes(tmp_path: Path) -> None:
+    """The same holds for a member which was added in this session."""
+    source = tmp_path / "added.txt"
+    source.write_text("content", encoding="utf-8")
+    omex = Omex()
+    omex.add_entry(
+        source, ManifestEntry(location="./added.txt", format=EntryFormat.TXT)
+    )
+    first = tmp_path / "first.omex"
+    omex.to_omex(first)
+
+    omex = Omex.from_omex(first)
+    omex.manifest.entries[-1].master = True
+    second = tmp_path / "second.omex"
+    omex.to_omex(second)
+
+    assert _blobs(second)["added.txt"] == _blobs(first)["added.txt"]
