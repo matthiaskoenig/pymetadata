@@ -55,12 +55,19 @@ plus a `Manifest` of `ManifestEntry` pydantic models; archives are created/read 
 `to_directory`. Since 0.9.0 the container itself is the Rust core, reached through
 `_core_bridge.py`, the only module which imports `pymetadata_core` and which
 translates its errors into `ValueError`/`KeyError` plus `PasswordError` and
-`ConcurrentUseError` (both re-exported from `omex.py`). Reading is lazy: `from_omex`
-opens the archive, keeps it in `Omex._archive` and takes the manifest from it, while
-a member is extracted into the temporary directory when `get_path` asks for it (an
-unlisted `.xml` member is inflated at open to classify its format). Writing copies
-every member which was neither replaced nor extracted as the compressed blob it is
-and applies the manifest's removals to that archive, so a write changes it. The
+`ConcurrentUseError` (both re-exported from `omex.py`); the kind of a failure is the
+class the core raises (`MalformedError`, `NotFoundError`, `PasswordError`, ...), never
+the wording of its message. Reading is lazy: `from_omex` opens the archive, keeps it
+in `Omex._archive` and takes the manifest from it, while a member is extracted into
+the temporary directory when `get_path` asks for it (an unlisted `.xml` member is
+classified at open from its first `HEAD_SIZE` bytes, read with `Archive.head`, which
+inflates no more than those). Writing copies every member which was neither replaced
+nor extracted as the compressed blob it is, changes the format or master flag of an
+entry with `set_entry_format` so its member stays that blob, lays the entries into
+the order `Omex` holds them with `reorder_entries`, and applies the manifest's
+removals to that archive, so a write changes it. `Omex.is_omex` asks the core's
+`has_manifest`, which reads the end of the file and its central directory and no
+member at all. The
 calls which reach the core hold `Omex._lock`, an `RLock` per instance, because the
 core gives one archive to one thread at a time. `EntryFormat` is a large enum mapping formats to
 `http://identifiers.org/combine.specifications/*` or `https://purl.org/NET/mediatypes/*`
