@@ -162,6 +162,27 @@ repr(term)
 # <SBO.SBO_0000247: 'simple chemical'>
 ```
 
+`url` is the url which resolves the term: the identifiers.org url if the [identifiers.org registry](https://registry.identifiers.org) has the collection of the term, otherwise the [bioregistry.io](https://bioregistry.io) url. identifiers.org registers neither PBPKO nor KISAO under its prefix, nor some of the ontologies PBPKO imports terms from, such as COB, BFO and NCBITaxon:
+
+```python
+from pymetadata.ontologies import PBPKO
+
+PBPKO.PHYSIOLOGICALLY_BASED_PHARMACOKINETIC_MODEL.url
+# 'https://bioregistry.io/PBPKO:00003'
+PBPKO.MOLECULE.url  # a term of COB which PBPKO imports
+# 'https://bioregistry.io/COB:0000013'
+```
+
+A term is a resource of an annotation and is written as its `url`. Its identifier alone, `COB_0000013`, names no collection, so a term is passed as the term, not as its identifier:
+
+```python
+from pymetadata.core.annotation import RDFAnnotation
+from pymetadata.core.miriam import BQB
+
+RDFAnnotation(qualifier=BQB.IS, resource=PBPKO.MOLECULE).resource_normalized
+# 'https://bioregistry.io/COB:0000013'
+```
+
 `get_term` resolves a term given as a string, and the ontology behaves like the enum it replaces, i.e., it can be iterated, asked for its length and indexed:
 
 ```python

@@ -1,6 +1,7 @@
 """Test annotations."""
 
 import dataclasses
+import logging
 from types import SimpleNamespace
 from typing import Any
 
@@ -14,6 +15,7 @@ from pymetadata.core.annotation import (
 )
 from pymetadata.core.miriam import BQB, BQM
 from pymetadata.core.xref import is_url
+from pymetadata.ontologies import KISAO, PBPKO, SBO, OntologyTerm
 from pymetadata.webservices.registry import Namespace, Registry, Resource
 
 rdf_annotation_data = [
@@ -195,6 +197,53 @@ def test_check_bioregistry() -> None:
         qualifier=BQB.IS, resource="https://bioregistry.io/CHEBI:000012"
     )
     assert not rdf_annotation.check_miriam_term()
+
+
+@pytest.mark.parametrize(
+    "term, collection, resource",
+    [
+        (SBO.SIMPLE_CHEMICAL, "sbo", "https://identifiers.org/SBO:0000247"),
+        (PBPKO.OBI_0000014, "obi", "https://identifiers.org/obi:OBI_0000014"),
+        (
+            PBPKO.PHYSIOLOGICALLY_BASED_PHARMACOKINETIC_MODEL,
+            "pbpko",
+            "https://bioregistry.io/PBPKO:00003",
+        ),
+        (PBPKO.MOLECULE, "cob", "https://bioregistry.io/COB:0000013"),
+    ],
+)
+def test_rdf_annotation_ontology_term(
+    term: OntologyTerm,
+    collection: str,
+    resource: str,
+    caplog: pytest.LogCaptureFixture,
+) -> None:
+    """Test that a term of an ontology is split and written as its url.
+
+    The identifier of a term, `COB_0000013`, names no collection, so the term
+    is the resource it resolves at, not its identifier.
+    """
+    with caplog.at_level(logging.WARNING):
+        annotation = RDFAnnotation(qualifier=BQB.IS, resource=term)
+
+        assert annotation.collection == collection
+        assert annotation.resource_normalized == resource
+        assert annotation.validate()
+    assert not caplog.records
+
+
+@pytest.mark.parametrize("ontology", [SBO, KISAO, PBPKO], ids=lambda o: o.__name__)
+def test_rdf_annotation_every_ontology_term(
+    ontology: type[OntologyTerm], caplog: pytest.LogCaptureFixture
+) -> None:
+    """Test that every term of the packaged ontologies is a valid resource."""
+    with caplog.at_level(logging.WARNING):
+        for term in ontology:
+            annotation = RDFAnnotation(qualifier=BQB.IS, resource=term)
+            assert annotation.collection, term
+            assert annotation.resource_normalized == term.url, term
+            assert annotation.validate(), term
+    assert not caplog.records
 
 
 resource_normalized_data = [

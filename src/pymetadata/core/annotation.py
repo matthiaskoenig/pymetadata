@@ -29,6 +29,7 @@ from typing import Any, ClassVar, Final
 
 from pymetadata.core.miriam import BQB, BQM
 from pymetadata.core.xref import CrossReference, is_url
+from pymetadata.ontologies.term import OntologyTerm
 from pymetadata.webservices.ols import ONTOLOGIES, OLSQuery
 from pymetadata.webservices.registry import Namespace, Resource, get_registry
 
@@ -160,6 +161,8 @@ class RDFAnnotation:
         - `http(s)://arbitrary.url`, an arbitrary URL
         - urn:miriam:uniprot:P03023
         - https://bioregistry.io/chebi:15996 urls via the bioregistry provider
+        - a term of `pymetadata.ontologies`, e.g., `PBPKO.MOLECULE`, which is
+          its url (`OntologyTerm.url`)
     """
 
     replaced_collections: ClassVar[dict[str, str]] = {
@@ -176,13 +179,18 @@ class RDFAnnotation:
                 (`https://identifiers.org/CHEBI:33699`), a bioregistry.io url,
                 a compact identifier (`CHEBI:33699`), a collection and term
                 (`chebi/CHEBI:33699`), a MIRIAM urn
-                (`urn:miriam:chebi:CHEBI%3A33699`) or an arbitrary url
+                (`urn:miriam:chebi:CHEBI%3A33699`), an arbitrary url or a term
+                of `pymetadata.ontologies` (`PBPKO.MOLECULE`), which is its url:
+                the identifier of a term (`COB_0000013`) names no collection
             validate: log warnings and errors for an invalid annotation
 
         Raises:
             ValueError: if the qualifier or the resource is missing, or if the
                 resource is not a string
         """
+        if isinstance(resource, OntologyTerm):
+            resource = resource.url
+
         self.qualifier: BQB | BQM = qualifier
         self.collection: str | None = None
         self.term: str | None = None

@@ -97,6 +97,31 @@ def test_term_information() -> None:
     assert term.deprecated is False
 
 
+@pytest.mark.parametrize(
+    "term, url",
+    [
+        # identifiers.org registers the collection, the prefix is in the term
+        (SBO.SIMPLE_CHEMICAL, "https://identifiers.org/SBO:0000247"),
+        (PBPKO.CHEBI_16670, "https://identifiers.org/CHEBI:16670"),
+        # identifiers.org registers the collection, the prefix is not in the
+        # term, the accession or the identifier of the term matches the pattern
+        (PBPKO.IAO_0000030, "https://identifiers.org/iao:0000030"),
+        (PBPKO.OBI_0000014, "https://identifiers.org/obi:OBI_0000014"),
+        # identifiers.org does not register the collection
+        (
+            PBPKO.PHYSIOLOGICALLY_BASED_PHARMACOKINETIC_MODEL,
+            "https://bioregistry.io/PBPKO:00003",
+        ),
+        (PBPKO.MOLECULE, "https://bioregistry.io/COB:0000013"),
+        (PBPKO.BFO_0000001, "https://bioregistry.io/BFO:0000001"),
+        (KISAO.CVODE, "https://bioregistry.io/KISAO:0000019"),
+    ],
+)
+def test_term_url(term: OntologyTerm, url: str) -> None:
+    """Test that the url of a term is the one which resolves it."""
+    assert term.url == url
+
+
 def test_term_synonyms() -> None:
     """Test that the synonyms of a term are available."""
     term = KISAO.CVODE
