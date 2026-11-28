@@ -17,6 +17,9 @@ term.curie             # 'SBO:0000247'
 term.url               # 'https://identifiers.org/SBO:0000247'
 ```
 
+A term is a valid resource of an annotation, `(BQB.IS, PBPKO.MOLECULE)`, which
+is written as its `url`.
+
 Every term exists under its identifier (`SBO.SBO_0000247`) and under its name
 (`SBO.SIMPLE_CHEMICAL`), both are the same object. The generated modules declare
 the terms with their definition as docstring, so that an editor shows it when
@@ -27,12 +30,32 @@ term can be looked up with `SBO["SBO_0000247"]` or `SBO("SBO:0000247")`, and
 `validate` normalizes the notations of an identifier.
 """
 
+import re
 from collections.abc import Iterator
-from typing import Any, ClassVar
+from functools import lru_cache
+from typing import Any, ClassVar, Final
+
+from pymetadata.webservices.registry import get_registry
+
+IDENTIFIERS_ORG_URL: Final = "https://identifiers.org"
+BIOREGISTRY_URL: Final = "https://bioregistry.io"
 
 #: information of one term as it is registered by a generated module, i.e.
 #: `(id, names, label, definition, synonyms, deprecated)`
 TermData = tuple[str, tuple[str, ...], str, str | None, tuple[str, ...], bool]
+
+
+@lru_cache(maxsize=256)
+def _compile_pattern(pattern: str) -> re.Pattern[str]:
+    """Compile the pattern of a namespace of the identifiers.org registry.
+
+    Args:
+        pattern: regular expression of the namespace
+
+    Returns:
+        The compiled regular expression.
+    """
+    return re.compile(pattern)
 
 
 def _lookup(
@@ -222,12 +245,35 @@ class OntologyTerm(str, metaclass=OntologyMeta):
 
     @property
     def url(self) -> str:
-        """Identifiers.org URL of the term.
+        """Resolvable URL of the term.
+
+        The url is the identifiers.org url if the identifiers.org registry has
+        the collection of the term and the term matches its pattern, e.g.,
+        `https://identifiers.org/SBO:0000247` or
+        `https://identifiers.org/obi:OBI_0000070`, otherwise the bioregistry.io
+        url, e.g., `https://bioregistry.io/PBPKO:00003`. identifiers.org does
+        not register PBPKO, KISAO (only as `biomodels.kisao`) and some of the
+        ontologies PBPKO imports terms from, e.g., COB, BFO and NCBITaxon, so
+        their identifiers.org url would not resolve; bioregistry.io resolves
+        every OBO ontology.
 
         Returns:
-            The resolvable url, e.g., `https://identifiers.org/SBO:0000247`.
+            The resolvable url of the term.
         """
-        return f"https://identifiers.org/{self.curie}"
+        prefix, _, accession = self.curie.partition(":")
+        namespace = get_registry().ns_dict.get(prefix.lower())
+        if namespace is not None:
+            pattern = _compile_pattern(namespace.pattern)
+            if namespace.namespaceEmbeddedInLui:
+                if pattern.fullmatch(self.curie):
+                    return f"{IDENTIFIERS_ORG_URL}/{self.curie}"
+            else:
+                collection = namespace.prefix or prefix.lower()
+                for lui in (accession, self.id):
+                    if pattern.fullmatch(lui):
+                        return f"{IDENTIFIERS_ORG_URL}/{collection}:{lui}"
+
+        return f"{BIOREGISTRY_URL}/{self.curie}"
 
     def __repr__(self) -> str:
         """Represent the term with its ontology, identifier and label.
